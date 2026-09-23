@@ -37,10 +37,14 @@ ROD_W = v(AL["rod_half_spacing_m"])
 # Frame: +Z = joint axis pointing out of the output face; output mounting face at z = T_OUT (after the output disc);
 # housing occupies z in [-L_HOUSING, 0]; connector zone on the +Y side at the rear.
 ACT = {
+    # XL = RobStride RS04 envelope (120 x 56 mm, 1.42 kg, 120 N·m peak) — dims VERIFIED (official), bolt patterns ASSUMED
+    "XL": {"D": 0.120, "L_HOUSING": 0.050, "T_OUT": 0.006, "D_OUT": 0.078, "PILOT_D": 0.050, "PILOT_H": 0.002,
+           "PCD_OUT": 0.064, "N_OUT": 8, "HOLE_OUT": 0.0042, "PCD_REAR": 0.100, "N_REAR": 8, "HOLE_REAR": 0.0042,
+           "BOLT": "M5", "CONN": (0.026, 0.008, 0.020), "PRODUCT": "RobStride RS04", "MASS": 1.420},
     # L = RobStride RS03 envelope (106 x 56 mm, 0.88 kg, 60 N·m peak) — dims VERIFIED (official), bolt patterns ASSUMED
     "L": {"D": 0.106, "L_HOUSING": 0.050, "T_OUT": 0.006, "D_OUT": 0.068, "PILOT_D": 0.044, "PILOT_H": 0.002,
           "PCD_OUT": 0.056, "N_OUT": 8, "HOLE_OUT": 0.0033, "PCD_REAR": 0.086, "N_REAR": 8, "HOLE_REAR": 0.0033,
-          "BOLT": "M4", "CONN": (0.024, 0.010, 0.018), "PRODUCT": "RobStride RS03", "MASS": 0.880},
+          "BOLT": "M4", "CONN": (0.024, 0.008, 0.018), "PRODUCT": "RobStride RS03", "MASS": 0.880},
     # M = RobStride RS06 envelope (88 x 49 mm, 0.621 kg, 36 N·m peak)
     "M": {"D": 0.088, "L_HOUSING": 0.044, "T_OUT": 0.005, "D_OUT": 0.056, "PILOT_D": 0.034, "PILOT_H": 0.002,
           "PCD_OUT": 0.046, "N_OUT": 6, "HOLE_OUT": 0.0025, "PCD_REAR": 0.074, "N_REAR": 6, "HOLE_REAR": 0.0025,
@@ -57,16 +61,19 @@ ACT = {
 
 # ---------------------------------------------------------------- leg packaging (PKG, leg frame = hip centre, left leg)
 PKG = {
-    "yaw_out_z": 0.075,          # hip-yaw output mounting face height above hip centre (faces -Z)
-    "roll_out_x": -0.070,        # hip-roll output mounting face x (faces +X); housing behind it
+    "yaw_out_z": 0.082,          # hip-yaw output mounting face height above hip centre (faces -Z)
+    "roll_out_x": -0.076,        # hip-roll output mounting face x (faces +X); housing behind it
     "pitch_out_y": 0.036,        # hip-pitch output mounting face y (faces +Y, lateral); housing medial of it
     "knee_rear_y": 0.036,        # knee housing rear face y (lateral, bolted to thigh plate)
     "plate_t": 0.008,            # structural plate thickness (thigh/brackets)
     "shin_beam_w": 0.048,        # shin beam width in y (motor pockets pass through it)
     "shin_beam_d": 0.050,        # shin beam depth in x
-    "ankle_A_z": -0.110,         # ankle motor A axis below the knee axis (upper motor, output lateral +Y)
-    "ankle_B_z": -0.200,         # ankle motor B axis below the knee axis (lower motor, output medial -Y); 105 mm above ankle
+    "ankle_A_z": -0.118,         # ankle motor A axis below the knee axis (upper motor, output lateral +Y)
+    "ankle_B_z": -0.206,         # ankle motor B axis below the knee axis (lower motor, output medial -Y); 105 mm above ankle
     "shin_web_t": 0.010,         # central shin web thickness; motor rear faces bolt to either side
+    "pitch_class": "XL",         # hip pitch actuator class (RS04)
+    "knee_class": "XL",          # knee actuator class (RS04)
+    "thigh_knee_r": 0.056,       # thigh knee-end disc radius (covers XL rear bolt circle, clears ankle motor A to 120 deg)
     "rod_foot_w": 0.045,         # lateral offset of the foot rod-end posts (ankle frame)
     "rod_crank_w": 0.057,        # lateral offset of the crank ball studs (web/2 + M housing+output + crank/2)
     "ankle_class": "M",          # ankle motor class (RS06); crank 50 / foot lever 40 (reach-driven)

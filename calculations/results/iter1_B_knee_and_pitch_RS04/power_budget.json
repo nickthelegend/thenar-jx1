@@ -1,0 +1,134 @@
+{
+  "assumptions": {
+    "non_actuator_loads_W": {
+      "jetson_nano_10W_mode": 10.0,
+      "can_hub_mcu": 1.0,
+      "imu": 0.2,
+      "camera": 1.5,
+      "wifi_ethernet": 2.0,
+      "fans_leds_misc": 2.0
+    },
+    "dcdc_efficiency": 0.88,
+    "upper_body_allowance_W": {
+      "walk": 20.0,
+      "stand": 5.0
+    },
+    "bus_nominal_V": 46.800000000000004,
+    "bus_min_V": 41.6,
+    "actuator_standby_W": 23.9,
+    "regeneration": "none credited (conservative)"
+  },
+  "scenarios": {
+    "squat_0.20m_1.6s": {
+      "mean_W": 127.9,
+      "peak_W": 232.8,
+      "legs_mean_W": 65.0,
+      "mean_current_A_at_nominal": 2.73,
+      "peak_current_A_at_min_V": 5.6
+    },
+    "turn_15deg_per_step": {
+      "mean_W": 166.9,
+      "peak_W": 315.7,
+      "legs_mean_W": 104.0,
+      "mean_current_A_at_nominal": 3.57,
+      "peak_current_A_at_min_V": 7.6
+    },
+    "walk_fast_0.79ms": {
+      "mean_W": 288.9,
+      "peak_W": 966.8,
+      "legs_mean_W": 226.1,
+      "mean_current_A_at_nominal": 6.17,
+      "peak_current_A_at_min_V": 23.2
+    },
+    "walk_nominal_0.52ms": {
+      "mean_W": 204.0,
+      "peak_W": 488.5,
+      "legs_mean_W": 141.2,
+      "mean_current_A_at_nominal": 4.36,
+      "peak_current_A_at_min_V": 11.7
+    },
+    "walk_slow_0.30ms": {
+      "mean_W": 169.0,
+      "peak_W": 283.9,
+      "legs_mean_W": 106.2,
+      "mean_current_A_at_nominal": 3.61,
+      "peak_current_A_at_min_V": 6.8
+    },
+    "stand_idle": {
+      "mean_W": 79.4,
+      "legs_mean_W": 31.6
+    }
+  },
+  "thermal": {
+    "hip_yaw": {
+      "class": "M",
+      "worst_I_rms_A": 5.63,
+      "rated_I_rms_A": 10.11,
+      "utilisation": 0.56,
+      "scenario": "walk_fast_0.79ms"
+    },
+    "hip_roll": {
+      "class": "L",
+      "worst_I_rms_A": 5.64,
+      "rated_I_rms_A": 9.19,
+      "utilisation": 0.61,
+      "scenario": "walk_slow_0.30ms"
+    },
+    "hip_pitch": {
+      "class": "XL",
+      "worst_I_rms_A": 9.53,
+      "rated_I_rms_A": 19.09,
+      "utilisation": 0.5,
+      "scenario": "walk_fast_0.79ms"
+    },
+    "knee": {
+      "class": "XL",
+      "worst_I_rms_A": 10.82,
+      "rated_I_rms_A": 19.09,
+      "utilisation": 0.57,
+      "scenario": "walk_fast_0.79ms"
+    },
+    "ankle_motor": {
+      "class": "M",
+      "worst_I_rms_A": 2.43,
+      "rated_I_rms_A": 10.11,
+      "utilisation": 0.24,
+      "scenario": "walk_fast_0.79ms"
+    }
+  },
+  "packs": {
+    "13S1P Samsung 50S (5.0 Ah, 25 A cont.)": {
+      "energy_Wh": 234.0,
+      "usable_Wh_80pct": 187.0,
+      "runtime_walk_nominal_h": 0.92,
+      "runtime_standing_h": 2.36,
+      "cont_current_A": 25,
+      "peak_demand_A_at_min_V": 23.2,
+      "current_margin": 1.08,
+      "cell_mass_kg": 0.9,
+      "cell_cost_inr": 4719
+    },
+    "13S2P Molicel P45B (9.0 Ah, 2x45 A cont.)": {
+      "energy_Wh": 421.0,
+      "usable_Wh_80pct": 337.0,
+      "runtime_walk_nominal_h": 1.65,
+      "runtime_standing_h": 4.24,
+      "cont_current_A": 90,
+      "peak_demand_A_at_min_V": 23.2,
+      "current_margin": 3.87,
+      "cell_mass_kg": 1.82,
+      "cell_cost_inr": 12506
+    },
+    "13S2P Samsung 50S (10.0 Ah, 2x25 A cont.)": {
+      "energy_Wh": 468.0,
+      "usable_Wh_80pct": 374.0,
+      "runtime_walk_nominal_h": 1.84,
+      "runtime_standing_h": 4.71,
+      "cont_current_A": 50,
+      "peak_demand_A_at_min_V": 23.2,
+      "current_margin": 2.15,
+      "cell_mass_kg": 1.79,
+      "cell_cost_inr": 9438
+    }
+  }
+}

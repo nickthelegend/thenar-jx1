@@ -6,6 +6,25 @@ import math
 from swlib.part import Part
 
 NORMAL = {"x": ("Right Plane", "YZ"), "y": ("Top Plane", "XZ"), "z": ("Front Plane", "XY")}
+SIDE = [1]   # +1 left leg (as designed), -1 right leg: every helper mirrors y -> -y
+
+
+def set_side(sy):
+    SIDE[0] = 1 if sy >= 0 else -1
+
+
+def my(y):
+    return SIDE[0] * y
+
+
+def _m3(p3):
+    return (p3[0], SIDE[0] * p3[1], p3[2])
+
+
+def _span(normal, a0, a1):
+    if normal == "y" and SIDE[0] < 0:
+        return min(-a0, -a1), max(-a0, -a1)
+    return a0, a1
 
 
 def uv(axis_normal, p3):
@@ -40,7 +59,10 @@ def _plane(p: Part, normal, offset, tag):
 
 def plate(p: Part, name, normal, a0, a1, outline_model, holes=(), merge=True):
     """Extruded plate between a0 < a1 along `normal`. outline_model: list of 3D points (only the in-plane
-    coordinates matter); holes: list of (point3d, diameter). Returns the feature name."""
+    coordinates matter); holes: list of (point3d, diameter). Returns the feature name. Mirrored for SIDE = -1."""
+    a0, a1 = _span(normal, a0, a1)
+    outline_model = [_m3(q) for q in outline_model]
+    holes = [(_m3(q), d) for q, d in holes]
     plane = _plane(p, normal, a0, f"{name}_base")
     key = NORMAL[normal][1]
     with p.sketch(key, f"SK_{name}", plane_name=plane) as sk:
@@ -53,7 +75,11 @@ def plate(p: Part, name, normal, a0, a1, outline_model, holes=(), merge=True):
 
 
 def plate2d(p: Part, name, normal, a0, a1, outline_uv, holes_uv=()):
-    """Same as plate() but with outline/holes already in sketch (u, v) coordinates."""
+    """Same as plate() but with outline/holes already in sketch (u, v) coordinates (v = y for normals x and z)."""
+    a0, a1 = _span(normal, a0, a1)
+    if normal in ("x", "z") and SIDE[0] < 0:
+        outline_uv = [(u, -v) for (u, v) in outline_uv]
+        holes_uv = [(u, -v, d) for (u, v, d) in holes_uv]
     plane = _plane(p, normal, a0, f"{name}_base")
     key = NORMAL[normal][1]
     with p.sketch(key, f"SK_{name}", plane_name=plane) as sk:
@@ -66,6 +92,9 @@ def plate2d(p: Part, name, normal, a0, a1, outline_uv, holes_uv=()):
 
 def circle_cut(p: Part, name, normal, at, center_model, diameter, depth, into_positive=True):
     """Blind circular recess/hole starting on the plane normal=at, going +normal (into_positive) or -normal."""
+    center_model = _m3(center_model)
+    if normal == "y" and SIDE[0] < 0:
+        at, into_positive = -at, not into_positive
     plane = _plane(p, normal, at, f"{name}_base")
     key = NORMAL[normal][1]
     with p.sketch(key, f"SK_{name}", plane_name=plane) as sk:

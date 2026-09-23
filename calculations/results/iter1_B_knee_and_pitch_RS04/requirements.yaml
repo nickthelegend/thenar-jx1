@@ -1,0 +1,85 @@
+leg_joint_requirements:
+  hip_yaw:
+    dynamic_peak_torque_Nm: 24.85
+    static_peak_torque_Nm: 0.0
+    walking_rms_torque_Nm: 6.14
+    standing_torque_Nm: 0.0
+    peak_speed_rad_s: 1.36
+    REQ_peak_torque_Nm: 37.3
+    REQ_continuous_torque_Nm: 8.0
+    REQ_speed_rad_s: 6.0
+    label: CALCULATED (parametric model iteration iter1_B_knee_and_pitch_RS04)
+  hip_roll:
+    dynamic_peak_torque_Nm: 33.33
+    static_peak_torque_Nm: 32.3
+    walking_rms_torque_Nm: 13.29
+    standing_torque_Nm: 0.85
+    peak_speed_rad_s: 0.71
+    REQ_peak_torque_Nm: 50.0
+    REQ_continuous_torque_Nm: 17.3
+    REQ_speed_rad_s: 6.0
+    label: CALCULATED (parametric model iteration iter1_B_knee_and_pitch_RS04)
+  hip_pitch:
+    dynamic_peak_torque_Nm: 56.92
+    static_peak_torque_Nm: 6.6
+    walking_rms_torque_Nm: 19.92
+    standing_torque_Nm: 0.49
+    peak_speed_rad_s: 9.29
+    REQ_peak_torque_Nm: 85.4
+    REQ_continuous_torque_Nm: 25.9
+    REQ_speed_rad_s: 12.1
+    label: CALCULATED (parametric model iteration iter1_B_knee_and_pitch_RS04)
+  knee:
+    dynamic_peak_torque_Nm: 47.35
+    static_peak_torque_Nm: 41.08
+    walking_rms_torque_Nm: 22.72
+    standing_torque_Nm: 15.12
+    peak_speed_rad_s: 9.35
+    REQ_peak_torque_Nm: 71.0
+    REQ_continuous_torque_Nm: 29.5
+    REQ_speed_rad_s: 12.2
+    label: CALCULATED (parametric model iteration iter1_B_knee_and_pitch_RS04)
+  ankle_pitch:
+    dynamic_peak_torque_Nm: 10.46
+    static_peak_torque_Nm: 32.36
+    walking_rms_torque_Nm: 3.11
+    standing_torque_Nm: 1.92
+    peak_speed_rad_s: 9.0
+    REQ_peak_torque_Nm: 40.5
+    REQ_continuous_torque_Nm: 4.0
+    REQ_speed_rad_s: 11.7
+    label: CALCULATED (parametric model iteration iter1_B_knee_and_pitch_RS04)
+  ankle_roll:
+    dynamic_peak_torque_Nm: 3.82
+    static_peak_torque_Nm: 10.1
+    walking_rms_torque_Nm: 1.26
+    standing_torque_Nm: 0.0
+    peak_speed_rad_s: 0.71
+    REQ_peak_torque_Nm: 12.6
+    REQ_continuous_torque_Nm: 1.6
+    REQ_speed_rad_s: 6.0
+    label: CALCULATED (parametric model iteration iter1_B_knee_and_pitch_RS04)
+  ankle_motor:
+    dynamic_peak_torque_Nm: 8.51
+    static_peak_torque_Nm: 25.57
+    walking_rms_torque_Nm: 2.65
+    standing_torque_Nm: 1.25
+    peak_speed_rad_s: 6.77
+    REQ_peak_torque_Nm: 32.0
+    REQ_continuous_torque_Nm: 3.4
+    REQ_speed_rad_s: 8.8
+    label: CALCULATED (parametric model iteration iter1_B_knee_and_pitch_RS04)
+policy:
+  dynamic_peak_factor: 1.5
+  static_peak_factor: 1.25
+  continuous_factor: 1.3
+  speed_factor: 1.3
+  speed_floor_rad_s:
+    hip_yaw: 6.0
+    hip_roll: 6.0
+    hip_pitch: 10.0
+    knee: 10.0
+    ankle_pitch: 8.0
+    ankle_roll: 6.0
+  note: Floors guard against gaits faster than analysed (push recovery, RL exploration).
+    ASSUMED; revisit with reference data.

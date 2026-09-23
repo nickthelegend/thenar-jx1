@@ -2,7 +2,7 @@
 # Every value carries an evidence label: VERIFIED / MEASURED / CALCULATED / ESTIMATED / ASSUMED / UNVERIFIED.
 # Iteration history is recorded in calculations/README.md. SolidWorks global variables mirror the geometry block.
 meta:
-  version: "0.2"
+  version: "0.3"
   date: "2026-09-24"
   status: "Iteration 1 — actuator classes set to the RobStride envelopes selected in actuators/actuator_selection.md"
 
@@ -42,6 +42,7 @@ joint_ranges_deg:
 # Actuator classes (iteration 1): masses/dims VERIFIED from official RobStride specs (research/raw/actuator_technology_raw.md);
 # reflected inertia ESTIMATED (rotor inertia not published: scaled from motor size x ratio^2).
 actuator_classes:
+  XL: {mass_kg: 1.420, diameter_m: 0.120, length_m: 0.056, reflected_inertia_kgm2: 0.040, product: "RobStride RS04 (120/40 N·m, 9:1)", label: VERIFIED}
   L:  {mass_kg: 0.880, diameter_m: 0.106, length_m: 0.056, reflected_inertia_kgm2: 0.020, product: "RobStride RS03 (60/20 N·m, 9:1)", label: VERIFIED}
   M:  {mass_kg: 0.621, diameter_m: 0.088, length_m: 0.049, reflected_inertia_kgm2: 0.010, product: "RobStride RS06 (36/11 N·m, 9:1)", label: VERIFIED}
   S:  {mass_kg: 0.405, diameter_m: 0.0785, length_m: 0.0455, reflected_inertia_kgm2: 0.0035, product: "RobStride RS02 (17/6 N·m, 7.75:1)", label: VERIFIED}
@@ -50,8 +51,8 @@ actuator_classes:
 leg_actuator_assignment:
   hip_yaw: M
   hip_roll: L
-  hip_pitch: L
-  knee: L
+  hip_pitch: XL   # iteration-1 variant B: only configuration meeting peak/continuous/speed with policy factors
+  knee: XL
   ankle_A: M      # parallel ankle, two RS06 on the shin driving push rods (crank 50 / foot lever 40 mm)
   ankle_B: M
 
@@ -61,9 +62,9 @@ ankle_linkage:
   foot_lever_m: {value: 0.040, label: CALCULATED, note: "rod-end posts behind the ankle pitch axis"}
   rod_half_spacing_m: {value: 0.045, label: ASSUMED, note: "lateral offset of each rod end on the foot"}
   crank_half_spacing_m: {value: 0.057, label: CALCULATED, note: "web/2 + RS06 housing+output + crank/2; rods lean in 12 mm"}
-  motor_A_height_above_ankle_m: {value: 0.190, label: CALCULATED, note: "upper motor, output lateral; 110 mm below knee axis"}
-  motor_B_height_above_ankle_m: {value: 0.100, label: CALCULATED, note: "lower motor, output medial; 16 mm above the ankle fork"}
-  motor_height_above_ankle_m: {value: 0.145, label: CALCULATED, note: "mean, used by the lumped mass model"}
+  motor_A_height_above_ankle_m: {value: 0.182, label: CALCULATED, note: "upper motor, output lateral; 118 mm below knee axis (clears RS04 knee + thigh disc at 120 deg)"}
+  motor_B_height_above_ankle_m: {value: 0.094, label: CALCULATED, note: "lower motor, output medial; 10 mm above the ankle fork"}
+  motor_height_above_ankle_m: {value: 0.138, label: CALCULATED, note: "mean, used by the lumped mass model"}
 
 # Mass budget per link (structure + mounted actuator housings). COM in the link frame (m).
 # Link frames sit at the joint that drives them; legs hang along -z in the zero pose.

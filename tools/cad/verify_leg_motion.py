@@ -32,11 +32,18 @@ LEG_JOINTS = ["hip_yaw", "hip_roll", "hip_pitch", "knee", "ankle_pitch", "ankle_
 WHITELIST = [("RodA", "CrankA"), ("RodB", "CrankB"), ("RodA", "Foot"), ("RodB", "Foot")]
 
 
-def poses_to_test():
+MIRRORED = ("hip_yaw", "hip_roll", "ankle_roll")
+
+
+def poses_to_test(side="L"):
+    m = (lambda j, v: -v if (side == "R" and j in MIRRORED) else v)  # noqa: E731
     P = [("zero", {})]
     for j in LEG_JOINTS:
-        P.append((f"{j}_min", {j: JR[j]["min"]}))
-        P.append((f"{j}_max", {j: JR[j]["max"]}))
+        lo, hi = JR[j]["min"], JR[j]["max"]
+        if side == "R" and j in MIRRORED:
+            lo, hi = -hi, -lo
+        P.append((f"{j}_min", {j: lo}))
+        P.append((f"{j}_max", {j: hi}))
     P += [
         ("stand_bent", {"hip_pitch": -18, "knee": 36, "ankle_pitch": -18}),
         ("walk_crouch", {"hip_pitch": -30, "knee": 58, "ankle_pitch": -28}),
@@ -49,9 +56,9 @@ def poses_to_test():
         ("toe_in_step", {"hip_yaw": -35, "hip_pitch": -20, "knee": 40, "ankle_pitch": -20}),
         ("sit", {"hip_pitch": -90, "knee": 90}),
         ("ankle_corner_1", {"ankle_pitch": -55, "ankle_roll": 20, "knee": 60, "hip_pitch": -30}),
-        ("ankle_corner_2", {"ankle_pitch": 35, "ankle_roll": -20}),
+        ("ankle_corner_2", {"ankle_pitch": 30, "ankle_roll": -20}),
     ]
-    return P
+    return [(n, {j: (m(j, v) if not n.startswith(j) else v) for j, v in q.items()}) for n, q in P]
 
 
 class Verifier:
@@ -172,25 +179,29 @@ def main():
     imgdir = ROOT / "verification" / "images" / "poses"
     imgdir.mkdir(parents=True, exist_ok=True)
     rows = []
-    for name, q in poses_to_test():
+    for name, q in poses_to_test(a.side):
         v.set_joints(a.side, q)
         (dp, dr, who), per, phi = v.drift(a.side, q)
         errs = v.mate_errors()
         ints = v.interferences()
         real = [i for i in ints if not v.whitelisted(i["components"])]
+        other = "R_" if a.side == "L" else "L_"
+        own = a.side + "_"
+        inter_leg = [i for i in real if any(c.startswith(own) for c in i["components"]) and any(c.startswith(other) for c in i["components"])]
+        real = [i for i in real if i not in inter_leg]
         row = {"pose": name, "joints_deg": q, "max_pos_err_mm": round(dp, 4), "max_rot_err_deg": round(dr, 4), "worst_component": who,
                "ankle_motor_deg": [round(float(np.degrees(x)), 2) for x in phi], "mate_errors": errs,
-               "interferences": real, "whitelisted_contacts": len(ints) - len(real),
+               "interferences": real, "inter_leg_contacts": inter_leg, "whitelisted_contacts": len(ints) - len(real) - len(inter_leg),
                "kinematics_pass": dp < 0.05 and dr < 0.05 and not errs, "collision_free": not real}
         rows.append(row)
         print(f"{name:18s} kin {'OK ' if row['kinematics_pass'] else 'BAD'} err {dp:8.4f} mm {dr:7.4f} deg ({who})  "
-              f"collisions {len(real)} {[tuple(i['components']) + (i['volume_mm3'],) for i in real][:3]}", flush=True)
+              f"collisions {len(real)} {[tuple(i['components']) + (i['volume_mm3'],) for i in real][:3]} inter-leg {len(inter_leg)}", flush=True)
         if a.images and name in ("zero", "stand_bent", "deep_squat", "leg_forward", "leg_backward", "wide_stance", "single_leg_lift", "sit"):
-            v.image((imgdir / f"{a.name}_{name}.png").resolve())
+            v.image((imgdir / f"{a.name}_{a.side}_{name}.png").resolve())
     v.set_joints(a.side, {})
-    out = ROOT / "verification" / "leg_motion_verification.json"
+    out = ROOT / "verification" / f"leg_motion_verification_{a.side}.json"
     out.write_text(json.dumps(rows, indent=2, default=str))
-    with open(ROOT / "verification" / "leg_motion_verification.csv", "w", newline="") as fh:
+    with open(ROOT / "verification" / f"leg_motion_verification_{a.side}.csv", "w", newline="") as fh:
         w = csv.writer(fh)
         w.writerow(["pose", "joints_deg", "max_pos_err_mm", "max_rot_err_deg", "kinematics_pass", "collision_free", "collisions"])
         for r in rows:

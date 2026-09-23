@@ -1,0 +1,122 @@
+# JX1 actuator catalogue — selected RobStride classes (V1 baseline) with official datasheet values.
+# Source: RobStride official user manuals (revision "260713"), GitHub RobStride/Product_Information, read 2026-09-24:
+#   https://github.com/RobStride/Product_Information/tree/main/Product%20Literature/<MODEL>
+# Prices: official robstride.com international (USD) and China (CNY) list prices from research/raw/actuator_technology_raw.md.
+# Labels: VERIFIED = official manual/site; ESTIMATED = derived here (method given).
+source_date: "2026-09-24"
+classes:
+  XL:
+    product: RobStride RS04
+    joints: [hip_pitch, knee]
+    count: 4
+    rated_voltage_V: {value: 48, label: VERIFIED, range: "24-60 V"}
+    rated_torque_Nm: {value: 40, label: VERIFIED, note: "on 345x345 mm Al heat sink; 35 N·m on 220x200 mm"}
+    peak_torque_Nm: {value: 120, label: VERIFIED}
+    rated_phase_current_Apk: {value: 27, label: VERIFIED}
+    peak_phase_current_Apk: {value: 90, label: VERIFIED}
+    torque_constant_Nm_per_Arms: {value: 2.10, label: VERIFIED}
+    back_emf_Vrms_per_krpm: {value: 16.9, label: VERIFIED}
+    no_load_speed_rpm: {value: 200, label: VERIFIED, rad_s: 20.9}
+    gear_ratio: {value: 9, label: VERIFIED}
+    mass_kg: {value: 1.420, label: VERIFIED}
+    envelope_mm: {value: [120, 120, 56], label: VERIFIED}
+    standby_current_A: {value: 0.040, label: VERIFIED}
+    encoder: {value: "14-bit absolute (single turn)", label: VERIFIED}
+    bus: {value: "CAN 2.0B 1 Mbit/s, 29-bit extended ID; private, CANopen (DS402) and MIT protocols", label: VERIFIED}
+    connectors: {value: "XT30 power, GH1.25 2-pin CAN", label: VERIFIED}
+    winding_limit_C: {value: 145, label: VERIFIED}
+    phase_resistance_ohm: {value: 0.096, label: ESTIMATED, method: "loss at rated point = 20 % of rated mech. power at 100 rpm; P_cu = 3 I_rms^2 R"}
+    price_usd: {value: 255, label: VERIFIED}
+    price_cny: {value: 1199, label: VERIFIED}
+  L:
+    product: RobStride RS03
+    joints: [hip_roll]
+    count: 2
+    rated_voltage_V: {value: 48, label: VERIFIED, range: "24-60 V"}
+    rated_torque_Nm: {value: 20, label: VERIFIED, note: "on 215x220 mm Al heat sink, tested at 100 rpm"}
+    peak_torque_Nm: {value: 60, label: VERIFIED}
+    rated_phase_current_Apk: {value: 13, label: VERIFIED}
+    peak_phase_current_Apk: {value: 43, label: VERIFIED}
+    torque_constant_Nm_per_Arms: {value: 2.36, label: VERIFIED}
+    back_emf_Vrms_per_krpm: {value: 17.0, label: VERIFIED}
+    no_load_speed_rpm: {value: 200, label: VERIFIED, rad_s: 20.9}
+    gear_ratio: {value: 9, label: VERIFIED}
+    mass_kg: {value: 0.880, label: VERIFIED}
+    envelope_mm: {value: [106, 106, 56], label: VERIFIED}
+    standby_current_A: {value: 0.040, label: VERIFIED}
+    encoder: {value: "14-bit absolute (single turn)", label: VERIFIED}
+    bus: {value: "CAN 2.0B 1 Mbit/s", label: VERIFIED}
+    connectors: {value: "XT30 power (XT30APW-M board / XT30UW-F line), GH1.25 2-pin CAN", label: VERIFIED}
+    winding_limit_C: {value: 145, label: VERIFIED}
+    phase_resistance_ohm: {value: 0.205, label: ESTIMATED, method: "as XL"}
+    price_usd: {value: 225, label: VERIFIED}
+    price_cny: {value: 999, label: VERIFIED}
+  M:
+    product: RobStride RS06
+    joints: [hip_yaw, ankle_motor_A, ankle_motor_B, waist_yaw]
+    count: 7
+    rated_voltage_V: {value: 48, label: VERIFIED, range: "15-60 V"}
+    rated_torque_Nm: {value: 11, label: VERIFIED}
+    peak_torque_Nm: {value: 36, label: VERIFIED}
+    rated_phase_current_Apk: {value: 14.3, label: VERIFIED}
+    peak_phase_current_Apk: {value: 57.0, label: VERIFIED}
+    torque_constant_Nm_per_Arms: {value: 1.09, label: VERIFIED}
+    back_emf_Vrms_per_krpm: {value: 7.6, label: VERIFIED}
+    no_load_speed_rpm: {value: 480, label: VERIFIED, rad_s: 50.3}
+    gear_ratio: {value: 9, label: VERIFIED}
+    mass_kg: {value: 0.621, label: VERIFIED}
+    envelope_mm: {value: [88, 88, 49], label: VERIFIED}
+    standby_current_A: {value: 0.018, label: VERIFIED}
+    encoder: {value: "14-bit", label: VERIFIED}
+    bus: {value: "CAN 2.0B 1 Mbit/s", label: VERIFIED}
+    winding_limit_C: {value: 145, label: VERIFIED}
+    phase_resistance_ohm: {value: 0.095, label: ESTIMATED, method: "as XL"}
+    price_usd: {value: 210, label: VERIFIED}
+    price_cny: {value: 849, label: VERIFIED}
+  S:
+    product: RobStride RS02
+    joints: [shoulder_pitch, shoulder_roll]
+    count: 4
+    rated_voltage_V: {value: 48, label: VERIFIED}
+    rated_torque_Nm: {value: 6, label: VERIFIED}
+    peak_torque_Nm: {value: 17, label: VERIFIED}
+    rated_phase_current_Apk: {value: 7, label: VERIFIED}
+    peak_phase_current_Apk: {value: 23, label: VERIFIED}
+    torque_constant_Nm_per_Arms: {value: 1.22, label: VERIFIED}
+    back_emf_Vrms_per_krpm: {value: 9.6, label: VERIFIED}
+    no_load_speed_rpm: {value: 410, label: VERIFIED, rad_s: 42.9}
+    gear_ratio: {value: 7.75, label: VERIFIED}
+    mass_kg: {value: 0.380, label: VERIFIED, note: "robstride.com lists 405 g; manual 380 g"}
+    envelope_mm: {value: [78.5, 78.5, 45.5], label: VERIFIED}
+    standby_current_A: {value: 0.018, label: VERIFIED}
+    winding_limit_C: {value: 145, label: VERIFIED}
+    phase_resistance_ohm: {value: 0.45, label: ESTIMATED, method: "as XL"}
+    price_usd: {value: 145, label: VERIFIED}
+    price_cny: {value: 699, label: VERIFIED}
+  XS:
+    product: RobStride RS00
+    joints: [shoulder_yaw, elbow]
+    count: 4
+    rated_voltage_V: {value: 48, label: VERIFIED}
+    rated_torque_Nm: {value: 5, label: VERIFIED}
+    peak_torque_Nm: {value: 14, label: VERIFIED}
+    rated_phase_current_Apk: {value: 4.7, label: VERIFIED}
+    peak_phase_current_Apk: {value: 15.5, label: VERIFIED}
+    torque_constant_Nm_per_Arms: {value: 1.48, label: VERIFIED}
+    back_emf_Vrms_per_krpm: {value: 9.5, label: VERIFIED}
+    no_load_speed_rpm: {value: 315, label: VERIFIED, rad_s: 33.0}
+    gear_ratio: {value: 10, label: VERIFIED}
+    mass_kg: {value: 0.310, label: VERIFIED}
+    envelope_mm: {value: [57, 57, 51], label: VERIFIED}
+    standby_current_A: {value: 0.018, label: VERIFIED}
+    winding_limit_C: {value: 145, label: VERIFIED}
+    phase_resistance_ohm: {value: 0.85, label: ESTIMATED, method: "as XL"}
+    price_usd: {value: 125, label: VERIFIED}
+    price_cny: {value: 598, label: VERIFIED}
+  NECK:
+    product: Waveshare ST3215 serial bus servo
+    joints: [neck_yaw, neck_pitch]
+    count: 2
+    stall_torque_Nm: {value: 1.9, label: VERIFIED, note: "19.5 kg·cm at 7.4 V (Robu product page)"}
+    price_inr: {value: 2159, label: VERIFIED, supplier: "Robu.in SKU on 2026-09-24"}
+    mass_kg: {value: 0.055, label: ESTIMATED}

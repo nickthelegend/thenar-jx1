@@ -1,0 +1,339 @@
+meta:
+  version: '0.2'
+  date: '2026-09-24'
+  status: Iteration 1 — actuator classes set to the RobStride envelopes selected in
+    actuators/actuator_selection.md
+frames:
+  convention: 'ROS REP-103: x forward, y left, z up. Joint rotation positive by right-hand
+    rule about the listed axis.'
+  pelvis_origin: midpoint between the left and right hip centres (hip yaw/roll/pitch
+    axes intersect at each hip centre)
+  zero_pose: legs straight and vertical, feet flat and parallel, all joint angles
+    0
+overall:
+  height_m:
+    value: 1.2
+    label: ASSUMED
+    note: compact G1-class target envelope 1.1-1.3 m
+  mass_target_kg:
+    value: 25.0
+    label: ASSUMED
+geometry:
+  sole_to_ankle_m:
+    value: 0.05
+    label: ASSUMED
+    note: ankle pitch/roll intersection above sole (foot plate + rubber + bearing
+      block)
+  shin_m:
+    value: 0.3
+    label: CALCULATED
+    note: knee axis to ankle axis; sized to stack knee RS03 + two RS06 ankle motors
+      + fork (reference median 0.27, G1 0.300)
+  thigh_m:
+    value: 0.27
+    label: CALCULATED
+    note: hip centre to knee axis (reference median 0.28, Asimov 0.270)
+  hip_spacing_m:
+    value: 0.2
+    label: CALCULATED
+    note: gives 60 mm between the medial ankle motors (reference feet spacing 0.19-0.22)
+  foot:
+    length_m:
+      value: 0.21
+      label: ASSUMED
+    width_m:
+      value: 0.095
+      label: ASSUMED
+    ankle_from_heel_m:
+      value: 0.075
+      label: ASSUMED
+      note: ankle axis projected on sole, measured from heel
+    thickness_m:
+      value: 0.022
+      label: ASSUMED
+  torso:
+    pelvis_to_shoulder_m:
+      value: 0.4
+      label: ASSUMED
+    shoulder_width_m:
+      value: 0.3
+      label: ASSUMED
+joint_ranges_deg:
+  hip_yaw:
+    min: -40
+    max: 45
+    label: ASSUMED
+    note: + = toes turn outward (left leg)
+  hip_roll:
+    min: -25
+    max: 45
+    label: ASSUMED
+    note: + = abduction (left leg)
+  hip_pitch:
+    min: -115
+    max: 35
+    label: ASSUMED
+    note: '- = flexion (leg forward)'
+  knee:
+    min: 0
+    max: 120
+    label: CALCULATED
+    note: '+ = flexion; CAD sweep: thigh knee disc clears ankle motor A up to 120
+      deg (squat needs 117)'
+  ankle_pitch:
+    min: -55
+    max: 30
+    label: ASSUMED
+    note: '- = dorsiflexion (toes up)'
+  ankle_roll:
+    min: -20
+    max: 20
+    label: ASSUMED
+actuator_classes:
+  L:
+    mass_kg: 0.88
+    diameter_m: 0.106
+    length_m: 0.056
+    reflected_inertia_kgm2: 0.02
+    product: RobStride RS03 (60/20 N·m, 9:1)
+    label: VERIFIED
+  M:
+    mass_kg: 0.621
+    diameter_m: 0.088
+    length_m: 0.049
+    reflected_inertia_kgm2: 0.01
+    product: RobStride RS06 (36/11 N·m, 9:1)
+    label: VERIFIED
+  S:
+    mass_kg: 0.405
+    diameter_m: 0.0785
+    length_m: 0.0455
+    reflected_inertia_kgm2: 0.0035
+    product: RobStride RS02 (17/6 N·m, 7.75:1)
+    label: VERIFIED
+  XS:
+    mass_kg: 0.31
+    diameter_m: 0.057
+    length_m: 0.051
+    reflected_inertia_kgm2: 0.002
+    product: RobStride RS00 (14/5 N·m, 10:1)
+    label: VERIFIED
+  XL:
+    mass_kg: 1.42
+    diameter_m: 0.12
+    length_m: 0.056
+    reflected_inertia_kgm2: 0.04
+    product: RobStride RS04 (120/40 N·m, 9:1)
+    label: VERIFIED
+leg_actuator_assignment:
+  hip_yaw: M
+  hip_roll: L
+  hip_pitch: L
+  knee: XL
+  ankle_A: M
+  ankle_B: M
+ankle_linkage:
+  crank_radius_m:
+    value: 0.05
+    label: CALCULATED
+    note: 'reach sweep: -55..+35 pitch, +-20 roll reachable, cond(J) <= 1.17, crank
+      swing <= 59 deg'
+  foot_lever_m:
+    value: 0.04
+    label: CALCULATED
+    note: rod-end posts behind the ankle pitch axis
+  rod_half_spacing_m:
+    value: 0.045
+    label: ASSUMED
+    note: lateral offset of each rod end on the foot
+  crank_half_spacing_m:
+    value: 0.057
+    label: CALCULATED
+    note: web/2 + RS06 housing+output + crank/2; rods lean in 12 mm
+  motor_A_height_above_ankle_m:
+    value: 0.19
+    label: CALCULATED
+    note: upper motor, output lateral; 110 mm below knee axis
+  motor_B_height_above_ankle_m:
+    value: 0.1
+    label: CALCULATED
+    note: lower motor, output medial; 16 mm above the ankle fork
+  motor_height_above_ankle_m:
+    value: 0.145
+    label: CALCULATED
+    note: mean, used by the lumped mass model
+mass_budget:
+  pelvis:
+    structure_kg:
+      value: 0.9
+      label: ASSUMED
+    carries:
+    - hip_yaw
+    - hip_yaw
+    com_m:
+    - 0.0
+    - 0.0
+    - 0.05
+  upper_body:
+    mass_kg:
+      value: 12.0
+      label: ASSUMED
+      note: torso structure, waist, battery, Jetson, electronics, arms, head; lumped
+        rigid to pelvis for leg analysis
+    com_m:
+    - 0.0
+    - 0.0
+    - 0.26
+    inertia_box_m:
+    - 0.2
+    - 0.3
+    - 0.45
+  hip_yaw_link:
+    structure_kg:
+      value: 0.2
+      label: ASSUMED
+    carries:
+    - hip_roll
+    com_m:
+    - -0.01
+    - 0.0
+    - 0.02
+  hip_roll_link:
+    structure_kg:
+      value: 0.2
+      label: ASSUMED
+    carries:
+    - hip_pitch
+    com_m:
+    - 0.0
+    - 0.045
+    - 0.0
+  thigh:
+    structure_kg:
+      value: 0.45
+      label: ASSUMED
+    carries:
+    - knee
+    com_m:
+    - 0.0
+    - 0.0
+    - -0.205
+  shin:
+    structure_kg:
+      value: 0.45
+      label: ASSUMED
+      note: includes push rods
+    carries:
+    - ankle_A
+    - ankle_B
+    com_m:
+    - 0.0
+    - 0.0
+    - -0.095
+  ankle_cross:
+    structure_kg:
+      value: 0.05
+      label: ASSUMED
+    carries: []
+    com_m:
+    - 0.0
+    - 0.0
+    - 0.0
+  foot:
+    structure_kg:
+      value: 0.35
+      label: ASSUMED
+    carries: []
+    com_m:
+    - 0.03
+    - 0.0
+    - -0.035
+upper_body_geometry:
+  waist_yaw_origin:
+    value:
+    - 0.0
+    - 0.0
+    - 0.11
+    label: ASSUMED
+    note: pelvis -> torso yaw axis (vertical, through pelvis centre)
+  shoulder_pitch_origin:
+    value:
+    - 0.0
+    - 0.15
+    - 0.29
+    label: ASSUMED
+    note: torso -> left shoulder centre (right mirrors y)
+  shoulder_roll_offset:
+    value:
+    - 0.0
+    - 0.045
+    - 0.0
+    label: ASSUMED
+  shoulder_yaw_offset:
+    value:
+    - 0.0
+    - 0.0
+    - -0.07
+    label: ASSUMED
+  elbow_offset:
+    value:
+    - 0.0
+    - 0.0
+    - -0.13
+    label: ASSUMED
+    note: upper arm total 0.200 m shoulder centre -> elbow
+  hand_offset:
+    value:
+    - 0.0
+    - 0.0
+    - -0.18
+    label: ASSUMED
+    note: forearm length to gripper mount
+  neck_yaw_origin:
+    value:
+    - 0.0
+    - 0.0
+    - 0.33
+    label: ASSUMED
+  neck_pitch_offset:
+    value:
+    - 0.0
+    - 0.0
+    - 0.04
+    label: ASSUMED
+  head_top_above_neck_pitch_m:
+    value: 0.13
+    label: ASSUMED
+upper_body_joint_ranges_deg:
+  waist_yaw:
+    min: -90
+    max: 90
+    label: ASSUMED
+  shoulder_pitch:
+    min: -170
+    max: 60
+    label: ASSUMED
+    note: '- = arm raises forward'
+  shoulder_roll:
+    min: -10
+    max: 150
+    label: ASSUMED
+    note: + = abduction (left arm)
+  shoulder_yaw:
+    min: -90
+    max: 90
+    label: ASSUMED
+  elbow:
+    min: -135
+    max: 5
+    label: ASSUMED
+    note: '- = flexion (forearm lifts forward)'
+  neck_yaw:
+    min: -80
+    max: 80
+    label: ASSUMED
+  neck_pitch:
+    min: -30
+    max: 45
+    label: ASSUMED
+    note: + = look down

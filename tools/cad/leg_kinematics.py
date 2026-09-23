@@ -16,6 +16,7 @@ from jx1calc.ankle import ParallelAnkle  # noqa: E402
 from cad.params import ACT, PKG, THIGH, SHIN, HIP_Y, CRANK_R, FOOT_LEVER  # noqa: E402
 
 L, M = ACT["L"], ACT["M"]
+PC, KC = ACT[PKG["pitch_class"]], ACT[PKG["knee_class"]]
 AK = ACT[PKG["ankle_class"]]
 WEB = PKG["shin_web_t"]
 
@@ -47,6 +48,9 @@ RX90, RXm90, RY90, RX180 = rx(np.pi / 2), rx(-np.pi / 2), ry(np.pi / 2), rx(np.p
 # Output flanges of long-range joints are clocked 45 deg about their own axis (8-bolt pattern -> holes still align) so the
 # SolidWorks limit-mate window (housing Right Plane vs output Top Plane = 90 deg + rotation) stays inside (0, 180) deg.
 CLOCK = {"PitchO": np.radians(45.0), "KneeO": np.radians(45.0)}
+# Connector zones (local +Y of every housing) are clocked to face backwards (-X) for cable routing and clearance;
+# the matching output is clocked by the same angle so joint zero and limit windows are unchanged.
+CONN = rz(np.pi / 2)
 
 
 def ankle_model():
@@ -67,24 +71,25 @@ class LegCAD:
         # component: (part key, link, transform in the LINK frame at zero pose)
         # link frames at zero pose sit at: pelvis origin, hip centre (yaw/roll/thigh), knee (shin), ankle (cross/foot)
         c = {}
-        c["YawH"] = ("ACT_M_Housing", "pelvis", T(RX180, hip + [0, 0, PKG["yaw_out_z"] + M["T_OUT"]]))
-        c["YawO"] = ("ACT_M_Output", "hip_yaw", T(RX180, [0, 0, PKG["yaw_out_z"] + M["T_OUT"]]))
+        c["YawH"] = ("ACT_M_Housing", "pelvis", T(RX180 @ CONN, hip + [0, 0, PKG["yaw_out_z"] + M["T_OUT"]]))
+        c["YawO"] = ("ACT_M_Output", "hip_yaw", T(RX180 @ CONN, [0, 0, PKG["yaw_out_z"] + M["T_OUT"]]))
         c["HipYawBr"] = ("HipYawBracket", "hip_yaw", T())
         c["RollH"] = ("ACT_L_Housing", "hip_yaw", T(RY90, [PKG["roll_out_x"] - L["T_OUT"], 0, 0]))
         c["RollO"] = ("ACT_L_Output", "hip_roll", T(RY90, [PKG["roll_out_x"] - L["T_OUT"], 0, 0]))
         c["HipRollBr"] = ("HipRollBracket", "hip_roll", T())
-        c["PitchH"] = ("ACT_L_Housing", "hip_roll", T(RXm90 if s > 0 else RX90, [0, s * (PKG["pitch_out_y"] - L["T_OUT"]), 0]))
-        c["PitchO"] = ("ACT_L_Output", "thigh", T((RXm90 if s > 0 else RX90) @ rz(CLOCK["PitchO"]), [0, s * (PKG["pitch_out_y"] - L["T_OUT"]), 0]))
+        c["PitchH"] = ("ACT_" + PKG["pitch_class"] + "_Housing", "hip_roll", T((RXm90 if s > 0 else RX90) @ CONN, [0, s * (PKG["pitch_out_y"] - PC["T_OUT"]), 0]))
+        self.clock = {k: v * s for k, v in CLOCK.items()}   # clocking mirrors with the side (actuators face the other way)
+        c["PitchO"] = ("ACT_" + PKG["pitch_class"] + "_Output", "thigh", T((RXm90 if s > 0 else RX90) @ CONN @ rz(self.clock["PitchO"]), [0, s * (PKG["pitch_out_y"] - PC["T_OUT"]), 0]))
         c["Thigh"] = ("Thigh", "thigh", T())
-        kh_y = PKG["knee_rear_y"] - L["L_HOUSING"]
-        c["KneeH"] = ("ACT_L_Housing", "thigh", T(RX90 if s > 0 else RXm90, [0, s * kh_y, -THIGH]))
-        c["KneeO"] = ("ACT_L_Output", "shin", T((RX90 if s > 0 else RXm90) @ rz(CLOCK["KneeO"]), [0, s * kh_y, 0]))
+        kh_y = PKG["knee_rear_y"] - KC["L_HOUSING"]
+        c["KneeH"] = ("ACT_" + PKG["knee_class"] + "_Housing", "thigh", T((RX90 if s > 0 else RXm90) @ CONN, [0, s * kh_y, -THIGH]))
+        c["KneeO"] = ("ACT_" + PKG["knee_class"] + "_Output", "shin", T((RX90 if s > 0 else RXm90) @ CONN @ rz(self.clock["KneeO"]), [0, s * kh_y, 0]))
         c["Shin"] = ("Shin", "shin", T())
         # ankle motors: A upper (output lateral), B lower (output medial); rotors rotate by phi about the shin +y axis
-        c["AnkAH"] = ("ACT_" + PKG["ankle_class"] + "_Housing", "shin", T(RXm90 if s > 0 else RX90, [0, s * yA, PKG["ankle_A_z"]]))
-        c["AnkBH"] = ("ACT_" + PKG["ankle_class"] + "_Housing", "shin", T(RX90 if s > 0 else RXm90, [0, s * yB, PKG["ankle_B_z"]]))
-        c["AnkAO"] = ("ACT_" + PKG["ankle_class"] + "_Output", "rotorA", T(RXm90 if s > 0 else RX90, [0, s * yA, 0]))
-        c["AnkBO"] = ("ACT_" + PKG["ankle_class"] + "_Output", "rotorB", T(RX90 if s > 0 else RXm90, [0, s * yB, 0]))
+        c["AnkAH"] = ("ACT_" + PKG["ankle_class"] + "_Housing", "shin", T((RXm90 if s > 0 else RX90) @ CONN, [0, s * yA, PKG["ankle_A_z"]]))
+        c["AnkBH"] = ("ACT_" + PKG["ankle_class"] + "_Housing", "shin", T((RX90 if s > 0 else RXm90) @ CONN, [0, s * yB, PKG["ankle_B_z"]]))
+        c["AnkAO"] = ("ACT_" + PKG["ankle_class"] + "_Output", "rotorA", T((RXm90 if s > 0 else RX90) @ CONN, [0, s * yA, 0]))
+        c["AnkBO"] = ("ACT_" + PKG["ankle_class"] + "_Output", "rotorB", T((RX90 if s > 0 else RXm90) @ CONN, [0, s * yB, 0]))
         c["CrankA"] = ("AnkleCrank", "rotorA", T(RXm90 if s > 0 else RX90, [0, s * (yA + AK["T_OUT"]), 0]))
         c["CrankB"] = ("AnkleCrank", "rotorB", T(RX90 if s > 0 else RXm90, [0, s * (yB - AK["T_OUT"]), 0]))
         c["Cross"] = ("AnkleCross", "ankle_cross", T())

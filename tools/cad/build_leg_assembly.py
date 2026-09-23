@@ -29,6 +29,7 @@ from cad.leg_kinematics import LegCAD, CLOCK  # noqa: E402
 CAD = ROOT / "CAD"
 PARTS = {
     "Pelvis": CAD / "Pelvis/JX1_Pelvis.SLDPRT",
+    "ACT_XL_Housing": CAD / "Actuators/JX1_ACT_XL_Housing.SLDPRT", "ACT_XL_Output": CAD / "Actuators/JX1_ACT_XL_Output.SLDPRT",
     "ACT_L_Housing": CAD / "Actuators/JX1_ACT_L_Housing.SLDPRT", "ACT_L_Output": CAD / "Actuators/JX1_ACT_L_Output.SLDPRT",
     "ACT_M_Housing": CAD / "Actuators/JX1_ACT_M_Housing.SLDPRT", "ACT_M_Output": CAD / "Actuators/JX1_ACT_M_Output.SLDPRT",
     "ACT_S_Housing": CAD / "Actuators/JX1_ACT_S_Housing.SLDPRT", "ACT_S_Output": CAD / "Actuators/JX1_ACT_S_Output.SLDPRT",
@@ -319,7 +320,7 @@ def build(sides=("L",), name="JX1_LowerBody"):
         for joint, (hk, ok_, axis_world) in ACT_LIMITS.items():
             hz = zero[hk][:3, 2]
             sgn = 1 if float(np.dot(hz, axis_world)) > 0 else -1
-            kappa = math.degrees(CLOCK.get(ok_, 0.0))
+            kappa = math.degrees(leg.clock.get(ok_, 0.0))
             if joint.startswith("ankle_motor"):
                 lo, hi = -75.0, 75.0
             else:
