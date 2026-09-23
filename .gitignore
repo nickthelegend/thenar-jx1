@@ -19,3 +19,5 @@ simulation/**/_tmp/
 Thumbs.db
 desktop.ini
 .DS_Store
+tools/.sw_instance.json
+CAD/_scratch/
