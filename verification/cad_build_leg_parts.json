@@ -9,7 +9,8 @@
       "SK_Left_Wall": 3,
       "SK_Right_Wall": 3,
       "SK_Bottom_Plate": 3
-    }
+    },
+    "refpoints": {}
   },
   "JX1_HipYawBracket_L": {
     "bodies": 1,
@@ -19,7 +20,8 @@
       "SK_Yaw_Pilot_Recess": 3,
       "SK_Back_Plate": 3,
       "SK_Rib": 3
-    }
+    },
+    "refpoints": {}
   },
   "JX1_HipRollBracket_L": {
     "bodies": 1,
@@ -63,7 +65,8 @@
       "SK_Block": 3,
       "SK_Pitch_Bore": 3,
       "SK_Roll_Bore": 3
-    }
+    },
+    "refpoints": {}
   },
   "JX1_Foot_L": {
     "bodies": 1,
@@ -122,6 +125,70 @@
       "SK_Ends": [
         "Point1@SK_Ends",
         "Point3@SK_Ends"
+      ]
+    }
+  },
+  "JX1_HipYawBracket_R": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Top_Plate": 3,
+      "SK_Yaw_Pilot_Recess": 3,
+      "SK_Back_Plate": 3,
+      "SK_Rib": 3
+    },
+    "refpoints": {}
+  },
+  "JX1_HipRollBracket_R": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Back_Plate": 3,
+      "SK_Roll_Pilot_Recess": 3,
+      "SK_Medial_Plate": 3
+    },
+    "refpoints": {}
+  },
+  "JX1_Thigh_R": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Thigh_Plate": 3,
+      "SK_Pitch_Pilot_Recess": 3,
+      "SK_Front_Flange": 3,
+      "SK_Back_Flange": 3
+    },
+    "refpoints": {}
+  },
+  "JX1_Shin_R": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Knee_Plate": 3,
+      "SK_Knee_Pilot_Recess": 3,
+      "SK_Joggle": 3,
+      "SK_Web": 3,
+      "SK_Fork_Bar": 3,
+      "SK_Tine_Lat": 3,
+      "SK_Tine_Med": 3
+    },
+    "refpoints": {}
+  },
+  "JX1_Foot_R": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Sole_Plate": 3,
+      "SK_Clevis_Front": 3,
+      "SK_Clevis_Back": 3,
+      "SK_Post_Lat": 3,
+      "SK_Post_Med": 3,
+      "SK_RodBalls": 3
+    },
+    "refpoints": {
+      "SK_RodBalls": [
+        "Point1@SK_RodBalls",
+        "Point3@SK_RodBalls"
       ]
     }
   }

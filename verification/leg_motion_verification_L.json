@@ -7,21 +7,14 @@
     "worst_component": "RodB",
     "ankle_motor_deg": [
       0.0,
-      -0.0
+      0.0
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "hip_yaw_min",
@@ -30,24 +23,17 @@
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "RodA",
+    "worst_component": "RodB",
     "ankle_motor_deg": [
       0.0,
-      -0.0
+      0.0
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "hip_yaw_max",
@@ -56,24 +42,17 @@
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "RodA",
+    "worst_component": "RodB",
     "ankle_motor_deg": [
       0.0,
-      -0.0
+      0.0
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "hip_roll_min",
@@ -82,24 +61,179 @@
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "RodA",
+    "worst_component": "RodB",
     "ankle_motor_deg": [
       0.0,
-      -0.0
+      0.0
     ],
     "mate_errors": [],
-    "interferences": [
+    "interferences": [],
+    "inter_leg_contacts": [
       {
         "components": [
-          "L_RollO",
-          "L_HipRollBr"
+          "L_AnkBH",
+          "R_AnkAH"
         ],
-        "volume_mm3": 49.343
+        "volume_mm3": 122870.016
+      },
+      {
+        "components": [
+          "L_Shin",
+          "R_Shin"
+        ],
+        "volume_mm3": 19288.422
+      },
+      {
+        "components": [
+          "L_AnkBH",
+          "R_Shin"
+        ],
+        "volume_mm3": 17960.677
+      },
+      {
+        "components": [
+          "L_AnkBO",
+          "R_AnkAH"
+        ],
+        "volume_mm3": 7434.882
+      },
+      {
+        "components": [
+          "L_CrankB",
+          "R_AnkAH"
+        ],
+        "volume_mm3": 5842.5
+      },
+      {
+        "components": [
+          "L_Foot",
+          "R_Shin"
+        ],
+        "volume_mm3": 2821.52
+      },
+      {
+        "components": [
+          "L_Shin",
+          "R_Shin"
+        ],
+        "volume_mm3": 2425.392
+      },
+      {
+        "components": [
+          "L_Shin",
+          "R_Shin"
+        ],
+        "volume_mm3": 2296.671
+      },
+      {
+        "components": [
+          "L_CrankB",
+          "R_AnkAO"
+        ],
+        "volume_mm3": 2217.285
+      },
+      {
+        "components": [
+          "L_CrankB",
+          "R_CrankA"
+        ],
+        "volume_mm3": 1829.49
+      },
+      {
+        "components": [
+          "L_AnkBO",
+          "R_AnkAO"
+        ],
+        "volume_mm3": 1232.693
+      },
+      {
+        "components": [
+          "L_RodB",
+          "R_RodA"
+        ],
+        "volume_mm3": 1174.831
+      },
+      {
+        "components": [
+          "L_Shin",
+          "R_Shin"
+        ],
+        "volume_mm3": 841.823
+      },
+      {
+        "components": [
+          "L_RodA",
+          "R_AnkBH"
+        ],
+        "volume_mm3": 756.606
+      },
+      {
+        "components": [
+          "L_CrankB",
+          "R_RodA"
+        ],
+        "volume_mm3": 511.097
+      },
+      {
+        "components": [
+          "L_Foot",
+          "R_Cross"
+        ],
+        "volume_mm3": 117.752
+      },
+      {
+        "components": [
+          "L_AnkBO",
+          "R_CrankA"
+        ],
+        "volume_mm3": 102.737
+      },
+      {
+        "components": [
+          "L_RodB",
+          "R_CrankA"
+        ],
+        "volume_mm3": 76.301
+      },
+      {
+        "components": [
+          "L_Shin",
+          "R_AnkAH"
+        ],
+        "volume_mm3": 5.555
+      },
+      {
+        "components": [
+          "L_Shin",
+          "R_AnkAH"
+        ],
+        "volume_mm3": 5.555
+      },
+      {
+        "components": [
+          "L_CrankB",
+          "R_RodA"
+        ],
+        "volume_mm3": 0.768
+      },
+      {
+        "components": [
+          "L_RodA",
+          "R_Shin"
+        ],
+        "volume_mm3": 0.652
+      },
+      {
+        "components": [
+          "L_RodA",
+          "R_Shin"
+        ],
+        "volume_mm3": 0.001
       }
     ],
-    "whitelisted_contacts": 4,
+    "whitelisted_contacts": 9,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "hip_roll_max",
@@ -108,24 +242,17 @@
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "RodA",
+    "worst_component": "RodB",
     "ankle_motor_deg": [
       0.0,
-      -0.0
+      0.0
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "hip_pitch_min",
@@ -134,24 +261,17 @@
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "RodA",
+    "worst_component": "RodB",
     "ankle_motor_deg": [
       0.0,
-      -0.0
+      0.0
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "hip_pitch_max",
@@ -160,31 +280,17 @@
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "CrankA",
+    "worst_component": "Cross",
     "ankle_motor_deg": [
       0.0,
-      -0.0
+      0.0
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_HipRollBr",
-          "L_Thigh"
-        ],
-        "volume_mm3": 483.395
-      },
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "knee_min",
@@ -193,24 +299,17 @@
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "RodB",
+    "worst_component": "RodA",
     "ankle_motor_deg": [
       0.0,
-      -0.0
+      0.0
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "knee_max",
@@ -219,24 +318,17 @@
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "RodA",
+    "worst_component": "CrankA",
     "ankle_motor_deg": [
       0.0,
-      -0.0
+      0.0
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "ankle_pitch_min",
@@ -245,24 +337,17 @@
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "RodA",
+    "worst_component": "AnkBO",
     "ankle_motor_deg": [
-      -41.39,
-      -41.76
+      -41.41,
+      -41.8
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "ankle_pitch_max",
@@ -274,21 +359,14 @@
     "worst_component": "RodA",
     "ankle_motor_deg": [
       23.49,
-      23.41
+      23.4
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "ankle_roll_min",
@@ -299,22 +377,15 @@
     "max_rot_err_deg": 0.0,
     "worst_component": "RodB",
     "ankle_motor_deg": [
-      -18.02,
-      17.74
+      -18.03,
+      17.73
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "ankle_roll_max",
@@ -323,24 +394,17 @@
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "RodB",
+    "worst_component": "RodA",
     "ankle_motor_deg": [
       17.83,
-      -18.1
+      -18.11
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "stand_bent",
@@ -357,18 +421,11 @@
       -14.36
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "walk_crouch",
@@ -385,18 +442,11 @@
       -22.19
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "deep_squat",
@@ -409,22 +459,15 @@
     "max_rot_err_deg": 0.0,
     "worst_component": "Foot",
     "ankle_motor_deg": [
-      -38.12,
-      -38.39
+      -38.14,
+      -38.42
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "leg_forward",
@@ -434,24 +477,17 @@
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "RodA",
+    "worst_component": "Foot",
     "ankle_motor_deg": [
       0.0,
-      -0.0
+      0.0
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "leg_backward",
@@ -462,24 +498,17 @@
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "RodB",
+    "worst_component": "RodA",
     "ankle_motor_deg": [
       -11.97,
       -11.98
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "wide_stance",
@@ -491,22 +520,15 @@
     "max_rot_err_deg": 0.0,
     "worst_component": "RodA",
     "ankle_motor_deg": [
-      -18.02,
-      17.74
+      -18.03,
+      17.73
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "single_leg_lift",
@@ -524,18 +546,11 @@
       -15.94
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "toe_out_step",
@@ -547,24 +562,17 @@
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "AnkBH",
+    "worst_component": "RodA",
     "ankle_motor_deg": [
       -15.91,
       -15.94
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "toe_in_step",
@@ -576,24 +584,17 @@
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "AnkAO",
+    "worst_component": "RodA",
     "ankle_motor_deg": [
       -15.91,
       -15.94
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "sit",
@@ -606,21 +607,14 @@
     "worst_component": "RodA",
     "ankle_motor_deg": [
       0.0,
-      -0.0
+      0.0
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "ankle_corner_1",
@@ -632,51 +626,30 @@
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "RodA",
+    "worst_component": "CrankA",
     "ankle_motor_deg": [
       -28.75,
-      -58.63
+      -58.76
     ],
     "mate_errors": [],
-    "interferences": [
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      },
-      {
-        "components": [
-          "L_Shin",
-          "L_Foot"
-        ],
-        "volume_mm3": 0.412
-      },
-      {
-        "components": [
-          "L_Shin",
-          "L_Foot"
-        ],
-        "volume_mm3": 0.021
-      }
-    ],
-    "whitelisted_contacts": 4,
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
-    "collision_free": false
+    "collision_free": true
   },
   {
     "pose": "ankle_corner_2",
     "joints_deg": {
-      "ankle_pitch": 35,
+      "ankle_pitch": 30,
       "ankle_roll": -20
     },
     "max_pos_err_mm": 0.0,
     "max_rot_err_deg": 0.0,
-    "worst_component": "AnkBH",
+    "worst_component": "RodA",
     "ankle_motor_deg": [
-      11.85,
-      44.42
+      7.59,
+      41.09
     ],
     "mate_errors": [],
     "interferences": [
@@ -685,24 +658,11 @@
           "L_AnkBH",
           "L_RodB"
         ],
-        "volume_mm3": 767.569
-      },
-      {
-        "components": [
-          "L_RollO",
-          "L_HipRollBr"
-        ],
-        "volume_mm3": 49.343
-      },
-      {
-        "components": [
-          "L_AnkBO",
-          "L_RodB"
-        ],
-        "volume_mm3": 13.814
+        "volume_mm3": 696.021
       }
     ],
-    "whitelisted_contacts": 4,
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
     "kinematics_pass": true,
     "collision_free": false
   }

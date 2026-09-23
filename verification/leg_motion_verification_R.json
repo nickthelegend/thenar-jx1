@@ -1,0 +1,669 @@
+[
+  {
+    "pose": "zero",
+    "joints_deg": {},
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "AnkBO",
+    "ankle_motor_deg": [
+      0.0,
+      0.0
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "hip_yaw_min",
+    "joints_deg": {
+      "hip_yaw": -45
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "CrankB",
+    "ankle_motor_deg": [
+      0.0,
+      0.0
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "hip_yaw_max",
+    "joints_deg": {
+      "hip_yaw": 40
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "CrankB",
+    "ankle_motor_deg": [
+      0.0,
+      0.0
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "hip_roll_min",
+    "joints_deg": {
+      "hip_roll": -45
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "RodB",
+    "ankle_motor_deg": [
+      0.0,
+      0.0
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "hip_roll_max",
+    "joints_deg": {
+      "hip_roll": 25
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "RodB",
+    "ankle_motor_deg": [
+      0.0,
+      0.0
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [
+      {
+        "components": [
+          "L_AnkAH",
+          "R_AnkBH"
+        ],
+        "volume_mm3": 122870.016
+      },
+      {
+        "components": [
+          "L_Shin",
+          "R_Shin"
+        ],
+        "volume_mm3": 19288.154
+      },
+      {
+        "components": [
+          "L_Shin",
+          "R_AnkBH"
+        ],
+        "volume_mm3": 17960.7
+      },
+      {
+        "components": [
+          "L_AnkAH",
+          "R_AnkBO"
+        ],
+        "volume_mm3": 7434.882
+      },
+      {
+        "components": [
+          "L_AnkAH",
+          "R_CrankB"
+        ],
+        "volume_mm3": 5842.5
+      },
+      {
+        "components": [
+          "L_Shin",
+          "R_Foot"
+        ],
+        "volume_mm3": 2821.52
+      },
+      {
+        "components": [
+          "L_Shin",
+          "R_Shin"
+        ],
+        "volume_mm3": 2425.391
+      },
+      {
+        "components": [
+          "L_Shin",
+          "R_Shin"
+        ],
+        "volume_mm3": 2296.671
+      },
+      {
+        "components": [
+          "L_AnkAO",
+          "R_CrankB"
+        ],
+        "volume_mm3": 2217.287
+      },
+      {
+        "components": [
+          "L_CrankA",
+          "R_CrankB"
+        ],
+        "volume_mm3": 1829.49
+      },
+      {
+        "components": [
+          "L_AnkAO",
+          "R_AnkBO"
+        ],
+        "volume_mm3": 1232.693
+      },
+      {
+        "components": [
+          "L_RodA",
+          "R_RodB"
+        ],
+        "volume_mm3": 1174.833
+      },
+      {
+        "components": [
+          "L_Shin",
+          "R_Shin"
+        ],
+        "volume_mm3": 841.823
+      },
+      {
+        "components": [
+          "L_AnkBH",
+          "R_RodA"
+        ],
+        "volume_mm3": 755.763
+      },
+      {
+        "components": [
+          "L_RodA",
+          "R_CrankB"
+        ],
+        "volume_mm3": 511.113
+      },
+      {
+        "components": [
+          "L_Cross",
+          "R_Foot"
+        ],
+        "volume_mm3": 117.751
+      },
+      {
+        "components": [
+          "L_CrankA",
+          "R_AnkBO"
+        ],
+        "volume_mm3": 102.737
+      },
+      {
+        "components": [
+          "L_CrankA",
+          "R_RodB"
+        ],
+        "volume_mm3": 76.301
+      },
+      {
+        "components": [
+          "L_AnkAH",
+          "R_Shin"
+        ],
+        "volume_mm3": 5.555
+      },
+      {
+        "components": [
+          "L_AnkAH",
+          "R_Shin"
+        ],
+        "volume_mm3": 5.555
+      },
+      {
+        "components": [
+          "L_RodA",
+          "R_CrankB"
+        ],
+        "volume_mm3": 0.768
+      },
+      {
+        "components": [
+          "L_Shin",
+          "R_RodA"
+        ],
+        "volume_mm3": 0.652
+      },
+      {
+        "components": [
+          "L_Shin",
+          "R_RodA"
+        ],
+        "volume_mm3": 0.001
+      }
+    ],
+    "whitelisted_contacts": 9,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "hip_pitch_min",
+    "joints_deg": {
+      "hip_pitch": -115
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "RodB",
+    "ankle_motor_deg": [
+      0.0,
+      0.0
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "hip_pitch_max",
+    "joints_deg": {
+      "hip_pitch": 35
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "CrankB",
+    "ankle_motor_deg": [
+      0.0,
+      0.0
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "knee_min",
+    "joints_deg": {
+      "knee": 0
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "RodB",
+    "ankle_motor_deg": [
+      0.0,
+      0.0
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "knee_max",
+    "joints_deg": {
+      "knee": 120
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "AnkBO",
+    "ankle_motor_deg": [
+      0.0,
+      0.0
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "ankle_pitch_min",
+    "joints_deg": {
+      "ankle_pitch": -55
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "Foot",
+    "ankle_motor_deg": [
+      -41.41,
+      -41.8
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "ankle_pitch_max",
+    "joints_deg": {
+      "ankle_pitch": 30
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "Foot",
+    "ankle_motor_deg": [
+      23.49,
+      23.4
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "ankle_roll_min",
+    "joints_deg": {
+      "ankle_roll": -20
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "CrankB",
+    "ankle_motor_deg": [
+      17.83,
+      -18.11
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "ankle_roll_max",
+    "joints_deg": {
+      "ankle_roll": 20
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "Cross",
+    "ankle_motor_deg": [
+      -18.03,
+      17.73
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "stand_bent",
+    "joints_deg": {
+      "hip_pitch": -18,
+      "knee": 36,
+      "ankle_pitch": -18
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "Cross",
+    "ankle_motor_deg": [
+      -14.34,
+      -14.36
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "walk_crouch",
+    "joints_deg": {
+      "hip_pitch": -30,
+      "knee": 58,
+      "ankle_pitch": -28
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "RodB",
+    "ankle_motor_deg": [
+      -22.13,
+      -22.19
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "deep_squat",
+    "joints_deg": {
+      "hip_pitch": -70,
+      "knee": 120,
+      "ankle_pitch": -50
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "Cross",
+    "ankle_motor_deg": [
+      -38.14,
+      -38.42
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "leg_forward",
+    "joints_deg": {
+      "hip_pitch": -60,
+      "knee": 20
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "AnkBH",
+    "ankle_motor_deg": [
+      0.0,
+      0.0
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "leg_backward",
+    "joints_deg": {
+      "hip_pitch": 30,
+      "knee": 30,
+      "ankle_pitch": -15
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "Cross",
+    "ankle_motor_deg": [
+      -11.97,
+      -11.98
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "wide_stance",
+    "joints_deg": {
+      "hip_roll": -30,
+      "ankle_roll": 20
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "AnkBO",
+    "ankle_motor_deg": [
+      -18.03,
+      17.73
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "single_leg_lift",
+    "joints_deg": {
+      "hip_pitch": -45,
+      "knee": 90,
+      "ankle_pitch": -20,
+      "hip_roll": -5
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "RodB",
+    "ankle_motor_deg": [
+      -15.91,
+      -15.94
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "toe_out_step",
+    "joints_deg": {
+      "hip_yaw": -40,
+      "hip_pitch": -20,
+      "knee": 40,
+      "ankle_pitch": -20
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "Foot",
+    "ankle_motor_deg": [
+      -15.91,
+      -15.94
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "toe_in_step",
+    "joints_deg": {
+      "hip_yaw": 35,
+      "hip_pitch": -20,
+      "knee": 40,
+      "ankle_pitch": -20
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "Foot",
+    "ankle_motor_deg": [
+      -15.91,
+      -15.94
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "sit",
+    "joints_deg": {
+      "hip_pitch": -90,
+      "knee": 90
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "RodA",
+    "ankle_motor_deg": [
+      0.0,
+      0.0
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "ankle_corner_1",
+    "joints_deg": {
+      "ankle_pitch": -55,
+      "ankle_roll": -20,
+      "knee": 60,
+      "hip_pitch": -30
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "RodA",
+    "ankle_motor_deg": [
+      -28.75,
+      -58.76
+    ],
+    "mate_errors": [],
+    "interferences": [],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": true
+  },
+  {
+    "pose": "ankle_corner_2",
+    "joints_deg": {
+      "ankle_pitch": 30,
+      "ankle_roll": 20
+    },
+    "max_pos_err_mm": 0.0,
+    "max_rot_err_deg": 0.0,
+    "worst_component": "AnkBO",
+    "ankle_motor_deg": [
+      7.59,
+      41.09
+    ],
+    "mate_errors": [],
+    "interferences": [
+      {
+        "components": [
+          "R_AnkBH",
+          "R_RodB"
+        ],
+        "volume_mm3": 696.084
+      }
+    ],
+    "inter_leg_contacts": [],
+    "whitelisted_contacts": 8,
+    "kinematics_pass": true,
+    "collision_free": false
+  }
+]

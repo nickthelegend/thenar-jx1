@@ -1,7 +1,7 @@
 {
   "assembly": "D:\\Project\\thenar-jx1\\CAD\\Assemblies\\JX1_LowerBody.SLDASM",
-  "components": 23,
-  "mates": 38,
+  "components": 45,
+  "mates": 76,
   "mate_errors_initial": [],
   "limit_calibration": {
     "L_hip_yaw_LIMIT": {
@@ -29,7 +29,7 @@
         -25,
         45
       ],
-      "measured_sin_for_+0.1rad": 0.09983341664682807,
+      "measured_sin_for_+0.1rad": 0.0998334166468282,
       "sign_check_pass": true
     },
     "L_hip_pitch_LIMIT": {
@@ -43,7 +43,7 @@
         -115,
         35
       ],
-      "measured_sin_for_+0.1rad": 0.09983341664682842,
+      "measured_sin_for_+0.1rad": 0.09983341664682785,
       "sign_check_pass": true
     },
     "L_knee_LIMIT": {
@@ -57,7 +57,7 @@
         0,
         120
       ],
-      "measured_sin_for_+0.1rad": 0.09983341664682788,
+      "measured_sin_for_+0.1rad": 0.0998334166468281,
       "sign_check_pass": true
     },
     "L_ankle_motorA_LIMIT": {
@@ -71,7 +71,7 @@
         -75.0,
         75.0
       ],
-      "measured_sin_for_+0.1rad": 0.09983341664682793,
+      "measured_sin_for_+0.1rad": 0.09983341664682788,
       "sign_check_pass": true
     },
     "L_ankle_motorB_LIMIT": {
@@ -85,7 +85,91 @@
         -75.0,
         75.0
       ],
+      "measured_sin_for_+0.1rad": 0.09983341664682772,
+      "sign_check_pass": true
+    },
+    "R_hip_yaw_LIMIT": {
+      "zero_deg": 90.0,
+      "sign": -1,
+      "sw_limits_deg": [
+        49.5,
+        135.5
+      ],
+      "robot_limits_deg": [
+        -45,
+        40
+      ],
+      "measured_sin_for_+0.1rad": 0.09983341664682809,
+      "sign_check_pass": true
+    },
+    "R_hip_roll_LIMIT": {
+      "zero_deg": 90.0,
+      "sign": 1,
+      "sw_limits_deg": [
+        44.5,
+        115.5
+      ],
+      "robot_limits_deg": [
+        -45,
+        25
+      ],
+      "measured_sin_for_+0.1rad": 0.0998334166468282,
+      "sign_check_pass": true
+    },
+    "R_hip_pitch_LIMIT": {
+      "zero_deg": 45.0,
+      "sign": -1,
+      "sw_limits_deg": [
+        9.5,
+        160.5
+      ],
+      "robot_limits_deg": [
+        -115,
+        35
+      ],
+      "measured_sin_for_+0.1rad": 0.0998334166468278,
+      "sign_check_pass": true
+    },
+    "R_knee_LIMIT": {
+      "zero_deg": 45.0,
+      "sign": 1,
+      "sw_limits_deg": [
+        44.5,
+        165.5
+      ],
+      "robot_limits_deg": [
+        0,
+        120
+      ],
       "measured_sin_for_+0.1rad": 0.0998334166468283,
+      "sign_check_pass": true
+    },
+    "R_ankle_motorA_LIMIT": {
+      "zero_deg": 90.0,
+      "sign": -1,
+      "sw_limits_deg": [
+        14.5,
+        165.5
+      ],
+      "robot_limits_deg": [
+        -75.0,
+        75.0
+      ],
+      "measured_sin_for_+0.1rad": 0.0998334166468281,
+      "sign_check_pass": true
+    },
+    "R_ankle_motorB_LIMIT": {
+      "zero_deg": 90.0,
+      "sign": 1,
+      "sw_limits_deg": [
+        14.5,
+        165.5
+      ],
+      "robot_limits_deg": [
+        -75.0,
+        75.0
+      ],
+      "measured_sin_for_+0.1rad": 0.09983341664682815,
       "sign_check_pass": true
     }
   },
@@ -98,11 +182,11 @@
     "L_RollH": "JX1_ACT_L_Housing-1",
     "L_RollO": "JX1_ACT_L_Output-1",
     "L_HipRollBr": "JX1_HipRollBracket_L-1",
-    "L_PitchH": "JX1_ACT_L_Housing-2",
-    "L_PitchO": "JX1_ACT_L_Output-2",
+    "L_PitchH": "JX1_ACT_XL_Housing-1",
+    "L_PitchO": "JX1_ACT_XL_Output-1",
     "L_Thigh": "JX1_Thigh_L-1",
-    "L_KneeH": "JX1_ACT_L_Housing-3",
-    "L_KneeO": "JX1_ACT_L_Output-3",
+    "L_KneeH": "JX1_ACT_XL_Housing-2",
+    "L_KneeO": "JX1_ACT_XL_Output-2",
     "L_Shin": "JX1_Shin_L-1",
     "L_AnkAH": "JX1_ACT_M_Housing-2",
     "L_AnkBH": "JX1_ACT_M_Housing-3",
@@ -113,6 +197,28 @@
     "L_Cross": "JX1_AnkleCross-1",
     "L_Foot": "JX1_Foot_L-1",
     "L_RodA": "JX1_AnkleRod_A-1",
-    "L_RodB": "JX1_AnkleRod_B-1"
+    "L_RodB": "JX1_AnkleRod_B-1",
+    "R_YawH": "JX1_ACT_M_Housing-4",
+    "R_YawO": "JX1_ACT_M_Output-4",
+    "R_HipYawBr": "JX1_HipYawBracket_R-1",
+    "R_RollH": "JX1_ACT_L_Housing-2",
+    "R_RollO": "JX1_ACT_L_Output-2",
+    "R_HipRollBr": "JX1_HipRollBracket_R-1",
+    "R_PitchH": "JX1_ACT_XL_Housing-3",
+    "R_PitchO": "JX1_ACT_XL_Output-3",
+    "R_Thigh": "JX1_Thigh_R-1",
+    "R_KneeH": "JX1_ACT_XL_Housing-4",
+    "R_KneeO": "JX1_ACT_XL_Output-4",
+    "R_Shin": "JX1_Shin_R-1",
+    "R_AnkAH": "JX1_ACT_M_Housing-5",
+    "R_AnkBH": "JX1_ACT_M_Housing-6",
+    "R_AnkAO": "JX1_ACT_M_Output-5",
+    "R_AnkBO": "JX1_ACT_M_Output-6",
+    "R_CrankA": "JX1_AnkleCrank-3",
+    "R_CrankB": "JX1_AnkleCrank-4",
+    "R_Cross": "JX1_AnkleCross-2",
+    "R_Foot": "JX1_Foot_R-1",
+    "R_RodA": "JX1_AnkleRod_A-2",
+    "R_RodB": "JX1_AnkleRod_B-2"
   }
 }
