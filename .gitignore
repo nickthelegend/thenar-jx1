@@ -1,0 +1,21 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# SolidWorks lock/temp/backup files
+~$*
+*.SLDBAK
+*.swbak
+**/SolidWorks Backups/
+CAD/**/_scratch/
+
+# Simulation/render scratch
+simulation/**/_tmp/
+*.log
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store

@@ -1,0 +1,16 @@
+* text=auto
+*.SLDPRT binary
+*.SLDASM binary
+*.SLDDRW binary
+*.sldprt binary
+*.sldasm binary
+*.slddrw binary
+*.STL binary
+*.stl binary
+*.3mf binary
+*.png binary
+*.jpg binary
+*.pdf binary
+*.STEP -diff
+*.step -diff
+*.obj -diff
