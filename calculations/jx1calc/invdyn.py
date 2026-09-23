@@ -60,16 +60,23 @@ def inverse_dynamics(model, qpos, qvel, qacc, contact, moment_weight=1.0e4, cop_
             k = active[0]
             w[k] = np.linalg.solve(J[k][:, :6].T, qf[:6])
         else:
+            # Double support. 1) any exact solution for the total wrench (least-norm), 2) redistribute by
+            # the lever rule: each foot's share of force follows the ZMP position along the segment between
+            # the two sole points, so load transfers continuously and the lifting foot unloads to zero.
             A = np.hstack([J[0][:, :6].T, J[1][:, :6].T])  # 6 x 12
             Winv = np.diag(1.0 / np.tile(Wdiag, 2))
             x = Winv @ A.T @ np.linalg.solve(A @ Winv @ A.T, qf[:6])
-            w[0], w[1] = x[:6], x[6:]
-            # unilateral fix: if one foot would pull, the other carries everything
-            for k in range(2):
-                if w[k, 2] < 0:
-                    o = 1 - k
-                    w[k] = 0
-                    w[o] = np.linalg.solve(J[o][:, :6].T, qf[:6])
+            w0 = np.array([x[:6], x[6:]])
+            sp = np.array([data.site_xpos[sid].copy() for sid in sites])
+            F = w0[0, :3] + w0[1, :3]
+            M = w0[0, 3:] + w0[1, 3:] + np.cross(sp[0], w0[0, :3]) + np.cross(sp[1], w0[1, :3])
+            zmp_xy = np.array([-M[1] / F[2], M[0] / F[2]]) if F[2] > 1e-6 else sp[:, :2].mean(axis=0)
+            seg = sp[0, :2] - sp[1, :2]
+            alpha = float(np.clip(np.dot(zmp_xy - sp[1, :2], seg) / max(np.dot(seg, seg), 1e-12), 0.0, 1.0))
+            share = np.array([alpha, 1.0 - alpha])
+            f = [share[k] * F for k in range(2)]
+            m_res = M - np.cross(sp[0], f[0]) - np.cross(sp[1], f[1])
+            w = np.array([np.r_[f[k], share[k] * m_res] for k in range(2)])
         gen = sum(J[k].T @ w[k] for k in range(2))
         sp = np.array([data.site_xpos[sid].copy() for sid in sites])
         site_pos[i] = sp

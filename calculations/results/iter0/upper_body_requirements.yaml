@@ -1,0 +1,81 @@
+arm_assumptions:
+  upper_arm_m: 0.2
+  forearm_m: 0.18
+  hand_m: 0.08
+  m_shoulder_roll_act: 0.35
+  m_shoulder_yaw_act: 0.3
+  m_elbow_act: 0.3
+  m_upper_arm_struct: 0.18
+  m_forearm_struct: 0.15
+  m_gripper: 0.25
+  payload_kg: 0.5
+torso_assumptions:
+  m_torso_above_waist: 9.5
+  Izz_torso_kgm2: 0.16
+  head_kg: 0.6
+  head_com_offset_m: 0.05
+policy:
+  dynamic_factor: 1.5
+  static_factor: 1.3
+  continuous_factor: 1.3
+  speed_floor_rad_s: 6.0
+arm_mass_incl_payload_kg: 2.03
+shoulder_inertia_kgm2: 0.1795
+elbow_inertia_kgm2: 0.0476
+requirements:
+  shoulder_pitch:
+    static_Nm: 4.72
+    dynamic_Nm: 11.9
+    continuous_Nm: 2.87
+    REQ_peak_torque_Nm: 17.9
+    REQ_continuous_torque_Nm: 3.7
+    REQ_speed_rad_s: 6.0
+    label: CALCULATED from ASSUMED masses (iteration iter0)
+  shoulder_roll:
+    static_Nm: 4.72
+    dynamic_Nm: 11.9
+    continuous_Nm: 2.87
+    REQ_peak_torque_Nm: 17.9
+    REQ_continuous_torque_Nm: 3.7
+    REQ_speed_rad_s: 6.0
+    label: CALCULATED from ASSUMED masses (iteration iter0)
+  shoulder_yaw:
+    static_Nm: 1.42
+    dynamic_Nm: 5.95
+    continuous_Nm: 0.57
+    REQ_peak_torque_Nm: 8.9
+    REQ_continuous_torque_Nm: 0.7
+    REQ_speed_rad_s: 6.0
+    label: CALCULATED from ASSUMED masses (iteration iter0)
+  elbow:
+    static_Nm: 1.95
+    dynamic_Nm: 3.85
+    continuous_Nm: 0.97
+    REQ_peak_torque_Nm: 5.8
+    REQ_continuous_torque_Nm: 1.3
+    REQ_speed_rad_s: 6.0
+    label: CALCULATED from ASSUMED masses (iteration iter0)
+  waist_yaw:
+    static_Nm: 2.0
+    dynamic_Nm: 14.0
+    continuous_Nm: 5.0
+    REQ_peak_torque_Nm: 21.0
+    REQ_continuous_torque_Nm: 6.5
+    REQ_speed_rad_s: 6.0
+    label: CALCULATED from ASSUMED masses (iteration iter0)
+  neck_yaw:
+    static_Nm: 0.05
+    dynamic_Nm: 0.2
+    continuous_Nm: 0.1
+    REQ_peak_torque_Nm: 0.3
+    REQ_continuous_torque_Nm: 0.1
+    REQ_speed_rad_s: 4.0
+    label: CALCULATED from ASSUMED masses (iteration iter0)
+  neck_pitch:
+    static_Nm: 0.37
+    dynamic_Nm: 0.49
+    continuous_Nm: 0.37
+    REQ_peak_torque_Nm: 0.7
+    REQ_continuous_torque_Nm: 0.5
+    REQ_speed_rad_s: 4.0
+    label: CALCULATED from ASSUMED masses (iteration iter0)
