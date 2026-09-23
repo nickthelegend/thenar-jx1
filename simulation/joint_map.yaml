@@ -1,0 +1,417 @@
+# JX1 joint map — generated, do not hand-edit (edit design_point.yaml and regenerate)
+robot: JX1
+version: '0.1'
+generated_by: tools/generate_joint_map.py
+conventions:
+  frames: 'ROS REP-103: x forward, y left, z up. Joint rotation positive by right-hand rule about the listed axis.'
+  base_link: pelvis — origin at the midpoint between the hip centres
+  zero_pose: 'all joints 0: legs straight and vertical, feet flat and parallel, arms hanging straight down beside the torso, head level'
+  units: metres, radians (degrees given for readability)
+  mirroring: right-side roll/yaw joints use the same +x/+z axes as the left, so their numeric limits are mirrored
+  ankle: ankle_pitch/ankle_roll are virtual serial joints; hardware uses two motors per ankle and parallel push-rods
+dof:
+  legs: 12
+  waist: 1
+  arms: 8
+  neck: 2
+  total_actuated: 23
+joints:
+- name: left_hip_yaw_joint
+  type: revolute
+  parent: pelvis
+  child: left_hip_yaw_link
+  origin_xyz_m: [0.0, 0.09, 0.0]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 0, 1]
+  lower_rad: -0.698132
+  upper_rad: 0.785398
+  lower_deg: -40
+  upper_deg: 45
+  zero: see zero_pose
+  sign: '+ rotates toes to +y (left): external rotation for left leg'
+  actuator_class: M
+  note: hip centre; yaw/roll/pitch axes intersect
+  origin_label: ASSUMED (design_point 0.1)
+- name: left_hip_roll_joint
+  type: revolute
+  parent: left_hip_yaw_link
+  child: left_hip_roll_link
+  origin_xyz_m: [0.0, 0.0, 0.0]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [1, 0, 0]
+  lower_rad: -0.436332
+  upper_rad: 0.785398
+  lower_deg: -25
+  upper_deg: 45
+  zero: see zero_pose
+  sign: '+ moves foot to +y: abduction for left leg, adduction for right'
+  actuator_class: L
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: left_hip_pitch_joint
+  type: revolute
+  parent: left_hip_roll_link
+  child: left_thigh_link
+  origin_xyz_m: [0.0, 0.0, 0.0]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 1, 0]
+  lower_rad: -2.007129
+  upper_rad: 0.610865
+  lower_deg: -115
+  upper_deg: 35
+  zero: see zero_pose
+  sign: '- = flexion (leg swings forward)'
+  actuator_class: L
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: left_knee_joint
+  type: revolute
+  parent: left_thigh_link
+  child: left_shin_link
+  origin_xyz_m: [0.0, 0.0, -0.28]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 1, 0]
+  lower_rad: 0.0
+  upper_rad: 2.356194
+  lower_deg: 0
+  upper_deg: 135
+  zero: see zero_pose
+  sign: + = flexion
+  actuator_class: L
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: left_ankle_pitch_joint
+  type: revolute
+  parent: left_shin_link
+  child: left_ankle_cross_link
+  origin_xyz_m: [0.0, 0.0, -0.28]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 1, 0]
+  lower_rad: -1.047198
+  upper_rad: 0.610865
+  lower_deg: -60
+  upper_deg: 35
+  zero: see zero_pose
+  sign: + = plantarflexion (toes down)
+  actuator_class: Mx2 via parallel push-rods
+  note: virtual serial joint; physical motors A/B map through jx1calc.ankle.ParallelAnkle
+  origin_label: ASSUMED (design_point 0.1)
+- name: left_ankle_roll_joint
+  type: revolute
+  parent: left_ankle_cross_link
+  child: left_foot_link
+  origin_xyz_m: [0.0, 0.0, 0.0]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [1, 0, 0]
+  lower_rad: -0.349066
+  upper_rad: 0.349066
+  lower_deg: -20
+  upper_deg: 20
+  zero: see zero_pose
+  sign: + lifts the +y edge of the sole
+  actuator_class: Mx2 via parallel push-rods
+  note: virtual serial joint (parallel linkage)
+  origin_label: ASSUMED (design_point 0.1)
+- name: right_hip_yaw_joint
+  type: revolute
+  parent: pelvis
+  child: right_hip_yaw_link
+  origin_xyz_m: [0.0, -0.09, 0.0]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 0, 1]
+  lower_rad: -0.785398
+  upper_rad: 0.698132
+  lower_deg: -45
+  upper_deg: 40
+  zero: see zero_pose
+  sign: '+ rotates toes to +y (left): external rotation for left leg'
+  actuator_class: M
+  note: hip centre; yaw/roll/pitch axes intersect
+  origin_label: ASSUMED (design_point 0.1)
+- name: right_hip_roll_joint
+  type: revolute
+  parent: right_hip_yaw_link
+  child: right_hip_roll_link
+  origin_xyz_m: [0.0, 0.0, 0.0]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [1, 0, 0]
+  lower_rad: -0.785398
+  upper_rad: 0.436332
+  lower_deg: -45
+  upper_deg: 25
+  zero: see zero_pose
+  sign: '+ moves foot to +y: abduction for left leg, adduction for right'
+  actuator_class: L
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: right_hip_pitch_joint
+  type: revolute
+  parent: right_hip_roll_link
+  child: right_thigh_link
+  origin_xyz_m: [0.0, 0.0, 0.0]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 1, 0]
+  lower_rad: -2.007129
+  upper_rad: 0.610865
+  lower_deg: -115
+  upper_deg: 35
+  zero: see zero_pose
+  sign: '- = flexion (leg swings forward)'
+  actuator_class: L
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: right_knee_joint
+  type: revolute
+  parent: right_thigh_link
+  child: right_shin_link
+  origin_xyz_m: [0.0, 0.0, -0.28]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 1, 0]
+  lower_rad: 0.0
+  upper_rad: 2.356194
+  lower_deg: 0
+  upper_deg: 135
+  zero: see zero_pose
+  sign: + = flexion
+  actuator_class: L
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: right_ankle_pitch_joint
+  type: revolute
+  parent: right_shin_link
+  child: right_ankle_cross_link
+  origin_xyz_m: [0.0, 0.0, -0.28]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 1, 0]
+  lower_rad: -1.047198
+  upper_rad: 0.610865
+  lower_deg: -60
+  upper_deg: 35
+  zero: see zero_pose
+  sign: + = plantarflexion (toes down)
+  actuator_class: Mx2 via parallel push-rods
+  note: virtual serial joint; physical motors A/B map through jx1calc.ankle.ParallelAnkle
+  origin_label: ASSUMED (design_point 0.1)
+- name: right_ankle_roll_joint
+  type: revolute
+  parent: right_ankle_cross_link
+  child: right_foot_link
+  origin_xyz_m: [0.0, 0.0, 0.0]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [1, 0, 0]
+  lower_rad: -0.349066
+  upper_rad: 0.349066
+  lower_deg: -20
+  upper_deg: 20
+  zero: see zero_pose
+  sign: + lifts the +y edge of the sole
+  actuator_class: Mx2 via parallel push-rods
+  note: virtual serial joint (parallel linkage)
+  origin_label: ASSUMED (design_point 0.1)
+- name: waist_yaw_joint
+  type: revolute
+  parent: pelvis
+  child: torso_link
+  origin_xyz_m: [0.0, 0.0, 0.11]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 0, 1]
+  lower_rad: -1.570796
+  upper_rad: 1.570796
+  lower_deg: -90
+  upper_deg: 90
+  zero: see zero_pose
+  sign: + turns torso to the left
+  actuator_class: M
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: left_shoulder_pitch_joint
+  type: revolute
+  parent: torso_link
+  child: left_shoulder_pitch_link
+  origin_xyz_m: [0.0, 0.15, 0.29]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 1, 0]
+  lower_rad: -2.96706
+  upper_rad: 1.047198
+  lower_deg: -170
+  upper_deg: 60
+  zero: see zero_pose
+  sign: '- raises the arm forward'
+  actuator_class: S
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: left_shoulder_roll_joint
+  type: revolute
+  parent: left_shoulder_pitch_link
+  child: left_shoulder_roll_link
+  origin_xyz_m: [0.0, 0.045, 0.0]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [1, 0, 0]
+  lower_rad: -0.174533
+  upper_rad: 2.617994
+  lower_deg: -10
+  upper_deg: 150
+  zero: see zero_pose
+  sign: + moves arm to +y
+  actuator_class: S
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: left_shoulder_yaw_joint
+  type: revolute
+  parent: left_shoulder_roll_link
+  child: left_upper_arm_link
+  origin_xyz_m: [0.0, 0.0, -0.07]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 0, 1]
+  lower_rad: -1.570796
+  upper_rad: 1.570796
+  lower_deg: -90
+  upper_deg: 90
+  zero: see zero_pose
+  sign: + rotates arm about its long axis toward +y
+  actuator_class: XS
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: left_elbow_joint
+  type: revolute
+  parent: left_upper_arm_link
+  child: left_forearm_link
+  origin_xyz_m: [0.0, 0.0, -0.13]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 1, 0]
+  lower_rad: -2.356194
+  upper_rad: 0.087266
+  lower_deg: -135
+  upper_deg: 5
+  zero: see zero_pose
+  sign: '- = flexion'
+  actuator_class: XS
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: right_shoulder_pitch_joint
+  type: revolute
+  parent: torso_link
+  child: right_shoulder_pitch_link
+  origin_xyz_m: [0.0, -0.15, 0.29]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 1, 0]
+  lower_rad: -2.96706
+  upper_rad: 1.047198
+  lower_deg: -170
+  upper_deg: 60
+  zero: see zero_pose
+  sign: '- raises the arm forward'
+  actuator_class: S
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: right_shoulder_roll_joint
+  type: revolute
+  parent: right_shoulder_pitch_link
+  child: right_shoulder_roll_link
+  origin_xyz_m: [0.0, -0.045, 0.0]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [1, 0, 0]
+  lower_rad: -2.617994
+  upper_rad: 0.174533
+  lower_deg: -150
+  upper_deg: 10
+  zero: see zero_pose
+  sign: + moves arm to +y
+  actuator_class: S
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: right_shoulder_yaw_joint
+  type: revolute
+  parent: right_shoulder_roll_link
+  child: right_upper_arm_link
+  origin_xyz_m: [0.0, 0.0, -0.07]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 0, 1]
+  lower_rad: -1.570796
+  upper_rad: 1.570796
+  lower_deg: -90
+  upper_deg: 90
+  zero: see zero_pose
+  sign: + rotates arm about its long axis toward +y
+  actuator_class: XS
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: right_elbow_joint
+  type: revolute
+  parent: right_upper_arm_link
+  child: right_forearm_link
+  origin_xyz_m: [0.0, 0.0, -0.13]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 1, 0]
+  lower_rad: -2.356194
+  upper_rad: 0.087266
+  lower_deg: -135
+  upper_deg: 5
+  zero: see zero_pose
+  sign: '- = flexion'
+  actuator_class: XS
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: neck_yaw_joint
+  type: revolute
+  parent: torso_link
+  child: neck_link
+  origin_xyz_m: [0.0, 0.0, 0.33]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 0, 1]
+  lower_rad: -1.396263
+  upper_rad: 1.396263
+  lower_deg: -80
+  upper_deg: 80
+  zero: see zero_pose
+  sign: + looks left
+  actuator_class: servo
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+- name: neck_pitch_joint
+  type: revolute
+  parent: neck_link
+  child: head_link
+  origin_xyz_m: [0.0, 0.0, 0.04]
+  origin_rpy_rad: [0.0, 0.0, 0.0]
+  axis: [0, 1, 0]
+  lower_rad: -0.523599
+  upper_rad: 0.785398
+  lower_deg: -30
+  upper_deg: 45
+  zero: see zero_pose
+  sign: + looks down
+  actuator_class: servo
+  note: ''
+  origin_label: ASSUMED (design_point 0.1)
+fixed_frames:
+- name: left_hand_fixed
+  type: fixed
+  parent: left_forearm_link
+  child: left_hand_link
+  origin_xyz_m: [0.0, 0.0, -0.18]
+  origin_rpy_rad: [0, 0, 0]
+- name: right_hand_fixed
+  type: fixed
+  parent: right_forearm_link
+  child: right_hand_link
+  origin_xyz_m: [0.0, 0.0, -0.18]
+  origin_rpy_rad: [0, 0, 0]
+- name: left_sole_fixed
+  type: fixed
+  parent: left_foot_link
+  child: left_sole_link
+  origin_xyz_m: [0, 0, -0.05]
+  origin_rpy_rad: [0, 0, 0]
+- name: right_sole_fixed
+  type: fixed
+  parent: right_foot_link
+  child: right_sole_link
+  origin_xyz_m: [0, 0, -0.05]
+  origin_rpy_rad: [0, 0, 0]
+- name: imu_fixed
+  type: fixed
+  parent: pelvis
+  child: imu_link
+  origin_xyz_m: [0, 0, 0.05]
+  origin_rpy_rad: [0, 0, 0]

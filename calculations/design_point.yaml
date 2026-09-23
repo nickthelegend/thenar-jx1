@@ -96,3 +96,24 @@ mass_budget:
     structure_kg: {value: 0.35, label: ASSUMED}
     carries: []
     com_m: [0.030, 0.0, -0.035]
+
+# Upper-body kinematic layout (ASSUMED iteration 0). Offsets are joint origins in the PARENT link frame (m).
+upper_body_geometry:
+  waist_yaw_origin: {value: [0.0, 0.0, 0.110], label: ASSUMED, note: "pelvis -> torso yaw axis (vertical, through pelvis centre)"}
+  shoulder_pitch_origin: {value: [0.0, 0.150, 0.290], label: ASSUMED, note: "torso -> left shoulder centre (right mirrors y)"}
+  shoulder_roll_offset: {value: [0.0, 0.045, 0.0], label: ASSUMED}
+  shoulder_yaw_offset: {value: [0.0, 0.0, -0.070], label: ASSUMED}
+  elbow_offset: {value: [0.0, 0.0, -0.130], label: ASSUMED, note: "upper arm total 0.200 m shoulder centre -> elbow"}
+  hand_offset: {value: [0.0, 0.0, -0.180], label: ASSUMED, note: "forearm length to gripper mount"}
+  neck_yaw_origin: {value: [0.0, 0.0, 0.330], label: ASSUMED}
+  neck_pitch_offset: {value: [0.0, 0.0, 0.040], label: ASSUMED}
+  head_top_above_neck_pitch_m: {value: 0.130, label: ASSUMED}
+
+upper_body_joint_ranges_deg:
+  waist_yaw:      {min: -90,  max: 90,  label: ASSUMED}
+  shoulder_pitch: {min: -170, max: 60,  label: ASSUMED, note: "- = arm raises forward"}
+  shoulder_roll:  {min: -10,  max: 150, label: ASSUMED, note: "+ = abduction (left arm)"}
+  shoulder_yaw:   {min: -90,  max: 90,  label: ASSUMED}
+  elbow:          {min: -135, max: 5,   label: ASSUMED, note: "- = flexion (forearm lifts forward)"}
+  neck_yaw:       {min: -80,  max: 80,  label: ASSUMED}
+  neck_pitch:     {min: -30,  max: 45,  label: ASSUMED, note: "+ = look down"}
