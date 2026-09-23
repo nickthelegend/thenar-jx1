@@ -2,9 +2,9 @@
 # Every value carries an evidence label: VERIFIED / MEASURED / CALCULATED / ESTIMATED / ASSUMED / UNVERIFIED.
 # Iteration history is recorded in calculations/README.md. SolidWorks global variables mirror the geometry block.
 meta:
-  version: "0.1"
+  version: "0.2"
   date: "2026-09-24"
-  status: "ASSUMED initial design point (iteration 0) — to be refined by reference study + actuator selection"
+  status: "Iteration 1 — actuator classes set to the RobStride envelopes selected in actuators/actuator_selection.md"
 
 frames:
   convention: "ROS REP-103: x forward, y left, z up. Joint rotation positive by right-hand rule about the listed axis."
@@ -17,9 +17,9 @@ overall:
 
 geometry:
   sole_to_ankle_m: {value: 0.050, label: ASSUMED, note: "ankle pitch/roll intersection above sole (foot plate + rubber + bearing block)"}
-  shin_m: {value: 0.280, label: ASSUMED, note: "knee axis to ankle axis"}
-  thigh_m: {value: 0.280, label: ASSUMED, note: "hip centre to knee axis"}
-  hip_spacing_m: {value: 0.180, label: ASSUMED, note: "lateral distance between left/right hip centres"}
+  shin_m: {value: 0.300, label: CALCULATED, note: "knee axis to ankle axis; sized to stack knee RS03 + two RS06 ankle motors + fork (reference median 0.27, G1 0.300)"}
+  thigh_m: {value: 0.270, label: CALCULATED, note: "hip centre to knee axis (reference median 0.28, Asimov 0.270)"}
+  hip_spacing_m: {value: 0.200, label: CALCULATED, note: "gives 60 mm between the medial ankle motors (reference feet spacing 0.19-0.22)"}
   foot:
     length_m: {value: 0.210, label: ASSUMED}
     width_m: {value: 0.095, label: ASSUMED}
@@ -36,30 +36,34 @@ joint_ranges_deg:
   hip_roll:    {min: -25,  max: 45,  label: ASSUMED, note: "+ = abduction (left leg)"}
   hip_pitch:   {min: -115, max: 35,  label: ASSUMED, note: "- = flexion (leg forward)"}
   knee:        {min: 0,    max: 135, label: ASSUMED, note: "+ = flexion"}
-  ankle_pitch: {min: -60,  max: 35,  label: ASSUMED, note: "- = dorsiflexion (toes up)"}
+  ankle_pitch: {min: -55,  max: 35,  label: ASSUMED, note: "- = dorsiflexion (toes up)"}
   ankle_roll:  {min: -20,  max: 20,  label: ASSUMED}
 
-# Placeholder actuator classes (iteration 0). Masses replaced after selection.
+# Actuator classes (iteration 1): masses/dims VERIFIED from official RobStride specs (research/raw/actuator_technology_raw.md);
+# reflected inertia ESTIMATED (rotor inertia not published: scaled from motor size x ratio^2).
 actuator_classes:
-  # reflected_inertia = rotor inertia x ratio^2 seen at the output (drives the armature term)
-  L: {mass_kg: 0.90, diameter_m: 0.100, length_m: 0.055, reflected_inertia_kgm2: 0.020, label: ASSUMED, note: "large leg joint class placeholder"}
-  M: {mass_kg: 0.55, diameter_m: 0.080, length_m: 0.045, reflected_inertia_kgm2: 0.010, label: ASSUMED, note: "medium class placeholder"}
-  S: {mass_kg: 0.35, diameter_m: 0.060, length_m: 0.040, reflected_inertia_kgm2: 0.004, label: ASSUMED}
+  L:  {mass_kg: 0.880, diameter_m: 0.106, length_m: 0.056, reflected_inertia_kgm2: 0.020, product: "RobStride RS03 (60/20 N·m, 9:1)", label: VERIFIED}
+  M:  {mass_kg: 0.621, diameter_m: 0.088, length_m: 0.049, reflected_inertia_kgm2: 0.010, product: "RobStride RS06 (36/11 N·m, 9:1)", label: VERIFIED}
+  S:  {mass_kg: 0.405, diameter_m: 0.0785, length_m: 0.0455, reflected_inertia_kgm2: 0.0035, product: "RobStride RS02 (17/6 N·m, 7.75:1)", label: VERIFIED}
+  XS: {mass_kg: 0.310, diameter_m: 0.057, length_m: 0.051, reflected_inertia_kgm2: 0.002, product: "RobStride RS00 (14/5 N·m, 10:1)", label: VERIFIED}
 
 leg_actuator_assignment:
   hip_yaw: M
   hip_roll: L
   hip_pitch: L
   knee: L
-  ankle_A: M      # parallel ankle, two motors on the shin driving push rods
+  ankle_A: M      # parallel ankle, two RS06 on the shin driving push rods (crank 50 / foot lever 40 mm)
   ankle_B: M
 
 # Parallel ankle geometry (two cranks on the shin, two push rods to the foot)
 ankle_linkage:
-  crank_radius_m: {value: 0.045, label: ASSUMED}
-  foot_lever_m: {value: 0.045, label: ASSUMED, note: "rod-end attachment distance behind the ankle pitch axis"}
-  rod_half_spacing_m: {value: 0.032, label: ASSUMED, note: "lateral offset of each rod end from the foot centreline"}
-  motor_height_above_ankle_m: {value: 0.200, label: ASSUMED}
+  crank_radius_m: {value: 0.050, label: CALCULATED, note: "reach sweep: -55..+35 pitch, +-20 roll reachable, cond(J) <= 1.17, crank swing <= 59 deg"}
+  foot_lever_m: {value: 0.040, label: CALCULATED, note: "rod-end posts behind the ankle pitch axis"}
+  rod_half_spacing_m: {value: 0.045, label: ASSUMED, note: "lateral offset of each rod end on the foot"}
+  crank_half_spacing_m: {value: 0.057, label: CALCULATED, note: "web/2 + RS06 housing+output + crank/2; rods lean in 12 mm"}
+  motor_A_height_above_ankle_m: {value: 0.198, label: CALCULATED, note: "upper motor, output lateral; 102 mm below knee axis"}
+  motor_B_height_above_ankle_m: {value: 0.105, label: CALCULATED, note: "lower motor, output medial; 21 mm above the ankle fork"}
+  motor_height_above_ankle_m: {value: 0.152, label: CALCULATED, note: "mean, used by the lumped mass model"}
 
 # Mass budget per link (structure + mounted actuator housings). COM in the link frame (m).
 # Link frames sit at the joint that drives them; legs hang along -z in the zero pose.

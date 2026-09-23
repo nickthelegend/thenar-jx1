@@ -13,7 +13,7 @@ from jx1calc.design import Design, LEG_JOINTS  # noqa: E402
 from jx1calc.mjcf import build_mjcf  # noqa: E402
 from jx1calc.kinematics import leg_fk, leg_ik, rpy_to_matrix, rz  # noqa: E402
 from jx1calc.gait import WholeBody  # noqa: E402
-from jx1calc.ankle import ParallelAnkle  # noqa: E402
+from jx1calc.ankle import ParallelAnkle, from_design  # noqa: E402
 
 
 def test_ik_roundtrip_random():
@@ -55,14 +55,14 @@ def test_ik_matches_mujoco():
 
 def test_parallel_ankle_linear_region():
     d = Design()
-    a = ParallelAnkle(d.crank_r, d.foot_lever, d.rod_half_spacing, d.ankle_motor_height)
+    a = from_design(d)
     assert np.allclose(a.crank_angles(0, 0), 0, atol=1e-12)
     J = a.jacobian(0, 0)
-    # small-angle theory for r == a: J ~ [[1, w/a], [1, -w/a]]
-    ratio = d.rod_half_spacing / d.foot_lever
-    assert np.allclose(J, [[1, ratio], [1, -ratio]], atol=0.03), J
-    # full range reachable
-    for p in np.radians(np.linspace(-45, 30, 16)):
+    # small-angle theory: J ~ (a/r) [[1, w/a], [1, -w/a]]
+    k, w = d.foot_lever / d.crank_r, d.rod_half_spacing / d.crank_r
+    assert np.allclose(J, [[k, w], [k, -w]], rtol=0.06), J
+    # full design range reachable
+    for p in np.radians(np.linspace(-60, 35, 20)):
         for r in np.radians(np.linspace(-20, 20, 9)):
             a.crank_angles(p, r)
 

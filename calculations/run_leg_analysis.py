@@ -27,7 +27,7 @@ from jx1calc.design import Design, LEG_JOINTS  # noqa: E402
 from jx1calc.mjcf import build_mjcf  # noqa: E402
 from jx1calc.gait import GaitParams, WholeBody, plan_steps, synthesize  # noqa: E402
 from jx1calc.invdyn import finite_diff, inverse_dynamics  # noqa: E402
-from jx1calc.ankle import ParallelAnkle  # noqa: E402
+from jx1calc.ankle import ParallelAnkle, from_design  # noqa: E402
 
 G = 9.81
 
@@ -118,7 +118,7 @@ def main():
     xml = build_mjcf(d, with_actuators=False)
     (out / "jx1_analysis_model.xml").write_text(xml, encoding="utf-8")
     model = mujoco.MjModel.from_xml_string(xml)
-    ankle = ParallelAnkle(d.crank_r, d.foot_lever, d.rod_half_spacing, d.ankle_motor_height)
+    ankle = from_design(d)
     mass_rows = d.mass_table()
     total_mass = d.total_mass
     jn = [f"l_{j}" for j in LEG_JOINTS] + [f"r_{j}" for j in LEG_JOINTS]

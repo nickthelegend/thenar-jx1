@@ -78,6 +78,9 @@ class Design:
         self.foot_lever = _v(al["foot_lever_m"])
         self.rod_half_spacing = _v(al["rod_half_spacing_m"])
         self.ankle_motor_height = _v(al["motor_height_above_ankle_m"])
+        self.ankle_hA = _v(al.get("motor_A_height_above_ankle_m", {"value": self.ankle_motor_height}))
+        self.ankle_hB = _v(al.get("motor_B_height_above_ankle_m", {"value": self.ankle_motor_height}))
+        self.crank_half_spacing = _v(al.get("crank_half_spacing_m", {"value": self.rod_half_spacing}))
         # knee actuator housing position along the thigh (default: coaxial with the knee)
         self.knee_act_z = _v(g.get("knee_actuator_z_m", {"value": -self.thigh}))
         self.links = self._build_links()
@@ -121,8 +124,8 @@ class Design:
             "hip_yaw_link": [("hip_roll", [-0.055, 0.0, 0.0], "x")],       # roll actuator behind hip centre, axis x
             "hip_roll_link": [("hip_pitch", [0.0, 0.055, 0.0], "y")],      # pitch actuator lateral of hip centre, axis y
             "thigh": [("knee", [0.0, 0.0, self.knee_act_z], "y")],          # knee actuator (coaxial with knee by default)
-            "shin": [("ankle_A", [-0.02, 0.035, -self.shin + self.ankle_motor_height], "y"),
-                      ("ankle_B", [-0.02, -0.035, -self.shin + self.ankle_motor_height], "y")],
+            "shin": [("ankle_A", [0.0, 0.028, -self.shin + self.ankle_hA], "y"),
+                      ("ankle_B", [0.0, -0.028, -self.shin + self.ankle_hB], "y")],
             "ankle_cross": [],
             "foot": [],
         }
