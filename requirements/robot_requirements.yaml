@@ -1,0 +1,127 @@
+# JX1 system requirements — living document (update with every design iteration).
+# Each requirement: target, current design value, status (MET / MARGINAL / OPEN / NOT MET / DEFERRED), evidence label and source.
+# Labels: VERIFIED / MEASURED / CALCULATED / ESTIMATED / ASSUMED / UNVERIFIED.
+meta:
+  robot: JX1
+  revision: "0.3"
+  date: "2026-09-24"
+  design_point: calculations/design_point.yaml (v0.3)
+  analysis: calculations/results/iter1_B_knee_and_pitch_RS04/
+  phase: "1 — walking lower body (pelvis + 12-DOF legs); upper body in phase 2"
+
+overall:
+  height:
+    target: "1.1-1.3 m (compact G1-class)"
+    design: {value: 1.20, unit: m, label: CALCULATED, note: "sole->hip 0.62 m + pelvis/torso 0.40 m + neck/head 0.18 m"}
+    status: MET
+  mass:
+    target: "as low as practical; <= 30 kg (reference cluster 27-35 kg)"
+    design: {value: 27.5, unit: kg, label: ESTIMATED, note: "lower body from actuator datasheets + CAD envelopes; upper body lumped 12 kg (bottom-up estimate 10.7 kg)"}
+    status: MET
+  dof:
+    target: "20-24 actuated"
+    design: {value: 23, label: CALCULATED, breakdown: "legs 12, waist 1, arms 8, neck 2 (+2 gripper DOF deferred to phase 3)"}
+    status: MET
+  payload:
+    target: "0.3 kg per hand at arm's length (V1); hands/grippers phase 3"
+    design: {value: 0.3, unit: kg, label: ASSUMED}
+    status: MET
+    source: calculations/run_upper_body_requirements.py
+
+locomotion:
+  walking_speed:
+    target: "0.5 m/s nominal, 0.8 m/s stretch on flat ground"
+    design: {value: "0.52 nominal / 0.79 fast analysed with 1.5x torque margin", label: CALCULATED}
+    status: MET (analysis) — physical walking NOT demonstrated
+  gait_basis: "ZMP preview-control walking + multibody correction; RL policies expected to demand more -> 1.5x dynamic margin"
+  step_height: {value: 0.05-0.06, unit: m, label: ASSUMED}
+  turning: {value: "15 deg per step", label: CALCULATED}
+  squat_depth: {value: 0.20, unit: m, label: CALCULATED, note: "hip 0.54 -> 0.34 m, knee 117 deg"}
+  friction_demand: {value: 0.47, label: CALCULATED, note: "fast walk; rubber sole mu >= 0.6 required"}
+
+geometry:
+  thigh: {value: 0.270, unit: m, label: CALCULATED, reference: "median 0.28 (0.24-0.29)"}
+  shin: {value: 0.300, unit: m, label: CALCULATED, reference: "median 0.27; G1 0.300"}
+  ankle_to_sole: {value: 0.050, unit: m, label: ASSUMED, reference: "0.038-0.058"}
+  hip_spacing: {value: 0.200, unit: m, label: CALCULATED, reference: "0.19-0.22"}
+  foot: {value: "0.210 x 0.095", unit: m, label: ASSUMED, reference: "0.18-0.22 x 0.06-0.10"}
+  hip_architecture: "yaw-roll-pitch, intersecting axes (see research/reference_robots.md §4 for the pitch-first alternative)"
+  ankle_architecture: "two-motor parallel push-rod ankle, crank 50 mm, foot lever 40 mm, rods +-45 mm"
+
+joint_rom_deg:   # left-leg convention; right leg mirrors roll/yaw (simulation/joint_map.yaml)
+  hip_yaw:     {target: [-40, 45],  design: [-40, 45],  status: MET, verified_in: "SolidWorks limit mates + verification/leg_motion_verification_*.json"}
+  hip_roll:    {target: [-25, 45],  design: [-25, 45],  status: MARGINAL, note: "adduction > ~8 deg meets the stance leg (inter-leg contact) — software self-collision limits"}
+  hip_pitch:   {target: [-115, 35], design: [-115, 35], status: MET}
+  knee:        {target: [0, 135],   design: [0, 120],   status: MARGINAL, note: "120 limited by thigh disc vs ankle motor A; squat needs 117; get-up behaviours want >= 135 (V2)"}
+  ankle_pitch: {target: [-55, 35],  design: [-55, 30],  status: MARGINAL, note: "+30..35 plantarflexion with -20 roll: rod B touches motor B housing -> combined-limit polygon (open issue OI-3)"}
+  ankle_roll:  {target: [-20, 20],  design: [-20, 20],  status: MET}
+  waist_yaw:   {target: [-90, 90],  design: [-90, 90],  status: OPEN (phase 2 CAD)}
+  shoulder_pitch: {target: [-170, 60], status: OPEN}
+  shoulder_roll:  {target: [-10, 150], status: OPEN}
+  shoulder_yaw:   {target: [-90, 90],  status: OPEN}
+  elbow:          {target: [-135, 5],  status: OPEN}
+  neck_yaw:       {target: [-80, 80],  status: OPEN}
+  neck_pitch:     {target: [-30, 45],  status: OPEN}
+
+joint_torque_speed:   # requirement policy: peak = max(1.5 x dynamic, 1.25 x static); continuous = 1.3 x max(RMS walk, stand); speed = max(1.3 x peak, floor)
+  hip_yaw:     {req_peak_Nm: 37.3, req_cont_Nm: 8.0,  req_speed_rad_s: 6.0,  actuator: "RS06 36/11 N·m, 50.3 rad/s", status: MARGINAL, note: "peak 36 vs 37.3 (-3.5 %); static field median 56-63"}
+  hip_roll:    {req_peak_Nm: 50.0, req_cont_Nm: 17.3, req_speed_rad_s: 6.0,  actuator: "RS03 60/20 N·m, 20.9 rad/s", status: MET}
+  hip_pitch:   {req_peak_Nm: 85.4, req_cont_Nm: 25.9, req_speed_rad_s: 12.1, actuator: "RS04 120/40 N·m, 20.9 rad/s", status: MET}
+  knee:        {req_peak_Nm: 71.0, req_cont_Nm: 29.5, req_speed_rad_s: 12.2, actuator: "RS04 120/40 N·m, 20.9 rad/s", status: MET}
+  ankle_motor: {req_peak_Nm: 32.0, req_cont_Nm: 3.4,  req_speed_rad_s: 8.8,  actuator: "RS06 36/11 N·m (x2 per ankle)", status: MET}
+  ankle_pitch_joint: {req_peak_Nm: 40.5, capability_Nm: "46-58 over range (linkage)", status: MET}
+  ankle_roll_joint:  {req_peak_Nm: 12.6, capability_Nm: "51-65 over range (linkage)", status: MET}
+  waist_yaw:      {req_peak_Nm: 21.0, req_cont_Nm: 6.5, actuator: "RS06", status: MET (analysis)}
+  shoulder_pitch: {req_peak_Nm: 15.0, req_cont_Nm: 3.7, actuator: "RS02 17/6", status: MET (0.3 kg payload)}
+  shoulder_roll:  {req_peak_Nm: 15.0, req_cont_Nm: 3.7, actuator: "RS02 17/6", status: MET}
+  shoulder_yaw:   {req_peak_Nm: 8.9,  req_cont_Nm: 0.7, actuator: "RS00 14/5", status: MET}
+  elbow:          {req_peak_Nm: 5.8,  req_cont_Nm: 1.3, actuator: "RS00 14/5", status: MET}
+  neck:           {req_peak_Nm: 0.7,  actuator: "Waveshare ST3215 1.9 N·m stall", status: MET}
+  labels: "requirements CALCULATED (parametric model, ASSUMED masses for structure); actuator ratings VERIFIED (official manuals)"
+
+thermal:
+  actuator_rms_current_utilisation: {value: "<= 0.61 of rated (worst: hip roll 0.61 slow walk, knee 0.57 fast walk)", label: CALCULATED, status: MET}
+  winding_limit_C: {value: 145, label: VERIFIED}
+
+power:
+  bus_voltage: {value: "13S Li-ion, 41.6-54.6 V (48 V nominal)", label: CALCULATED, note: "all RobStride classes rated 48 V (24/15-60 V)"}
+  average_power_W: {stand: 79, walk_nominal: 204, walk_fast: 289, label: CALCULATED}
+  peak_power_W: {value: 967, label: CALCULATED, note: "fast walk; falls/impacts not included"}
+  battery: {value: "13S2P Samsung INR21700-50S, 468 Wh, 50 A continuous", label: CALCULATED}
+  runtime: {walk_nominal_h: 1.84, standing_h: 4.71, target_h: ">= 1.0 walking", status: MET, label: CALCULATED}
+  bms: "JBD SP14S004 13S 40 A smart BMS"
+
+compute:
+  high_level: {value: "NVIDIA Jetson Nano 4 GB (JetPack 4.6.x, Ubuntu 18.04)", status: MET, note: "ROS 2 via container; upgrade path Orin Nano (same module size)"}
+  real_time: {value: "2 x Teensy 4.1 CAN hubs (6 classic-CAN buses, 1 Mbit/s) + RobStride on-board FOC drivers", status: MET (design)}
+  control_rates: {policy_Hz: 50, joint_exchange_Hz: 500, joint_local_loop_Hz: ">= 1000 (actuator internal)", label: ASSUMED}
+
+communication:
+  bus: "classic CAN 2.0B 1 Mbit/s (RobStride), <= 3 leg joints per bus at 500 Hz (~45 % load with 29-bit IDs)"
+  feedback_per_joint: [position, velocity, torque/current, temperature, fault status]
+
+materials_manufacturing:
+  structural_prints: "PA-CF (eSUN, Rs 4,799/kg) on Bambu P1S-class printer"
+  covers: "PETG-CF (Numakers, ~Rs 1,356/kg)"
+  metal: "6061-T6 8 mm thigh plates, 6 mm ankle cranks (CNC/waterjet); EN8/EN24 ankle cross"
+  purchased: "RobStride actuators (import), FBJ/N2K bearings and rod ends, Unbrako fasteners"
+
+budget:
+  target_inr: {value: 750000, label: ASSUMED, note: "Rs 7.5 lakh incl. contingency — ~5x cheaper than a Unitree G1 on Robu (Rs 38.75 lakh)"}
+  current_estimate_inr: {value: 696021, contingency_15pct: 104403, total_with_contingency: 800424, label: ESTIMATED, source: bom/cost_summary.md}
+  lower_body_inr: {value: 395048, label: ESTIMATED}
+  status: "NOT MET with official USD pricing (Rs 8.0 lakh vs 7.5); MET via China-distributor actuator route (saves ~Rs 1.87 lakh)"
+
+safety:
+  emergency_stop: "Schneider XB2BS8442C twist-release, cuts motor bus via MOSFET anti-spark switch + MCU fault line"
+  main_fuse: "per-bus 30 A 58 V ATO fuses + pack BMS 40 A"
+  battery_protection: "JBD smart BMS (OV/UV/OC/short/temp)"
+  power_switch: "Flipsky anti-spark 300 A (12-84 V) MOSFET switch with precharge"
+  watchdogs: "Teensy hub: 20 ms host heartbeat; actuator CAN timeout -> damping/zero-torque (RobStride protection features)"
+  joint_limits: "firmware soft limits = joint_map.yaml minus 2 deg; hardware hard stops TBD (open issue)"
+  current_limits: "per class at 80 % of peak phase current in firmware"
+  temperature_limits: "derate from 100 C, stop at 130 C (winding limit 145 C)"
+  safe_startup: "power-on with motors disabled, zero-offset check vs absolute encoders, ramped enable into damping mode"
+  safe_shutdown: "crouch-and-sit routine, then damping, then disable"
+  comms_loss: "hub detects missing host commands > 50 ms -> joint damping mode; actuator detects missing CAN > 100 ms -> damping/disable"
+  pinch_zones: "knee back (thigh/shin), ankle crank-rod-foot, hip yaw bracket vs pelvis, hand/gripper — see docs/safety_architecture.md"

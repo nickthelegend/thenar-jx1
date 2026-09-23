@@ -1,0 +1,15 @@
+# Isaac Sim URDF importer settings for JX1 (UNVERIFIED — no Isaac Sim on the design machine)
+urdf: ../../ros2_ws/src/jx1_description/urdf/jx1.urdf
+output_usd: jx1.usd
+fix_base: false
+merge_fixed_joints: false
+convex_decomposition: false        # collision meshes are already CoACD convex hulls
+import_inertia_tensor: true
+self_collision: true
+default_drive_type: position
+distance_scale: 1.0
+drive_gains:                        # match simulation/mujoco/jx1.xml position servos
+  hip_pitch|knee: {stiffness: 200.0, damping: 5.0}
+  hip_roll: {stiffness: 150.0, damping: 4.0}
+  hip_yaw|ankle_pitch|waist_yaw: {stiffness: 80.0, damping: 2.0}
+  ankle_roll: {stiffness: 40.0, damping: 1.5}

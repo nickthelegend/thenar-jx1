@@ -131,7 +131,6 @@ def thigh(s):
     p.gv("Thigh_length", mm(THIGH)); p.gv("Thigh_plate_t", mm(T))
     Lt = THIGH
     rk = PKG["thigh_knee_r"]                            # knee-end radius (clears ankle motor A up to 120 deg knee)
-    knee_arc = [(rk * math.cos(math.radians(a)), 0, -Lt + rk * math.sin(math.radians(a))) for a in range(0, -181, -22)][1:-1]
     knee_arc = [(rk * math.cos(math.radians(a)), 0, -Lt + rk * math.sin(math.radians(a))) for a in (-11.25, -33.75, -56.25, -78.75, -101.25, -123.75, -146.25, -168.75)]
     rt = PC["PCD_OUT"] / 2 + 0.008                      # top boss radius around the hip-pitch output pattern
     outline = [(-rt * 0.8, 0, rt), (rt * 0.8, 0, rt), (rt + 0.004, 0, 0.0), (0.030, 0, -0.110), (0.048, 0, -Lt + 0.056)] + \
@@ -141,9 +140,11 @@ def thigh(s):
     holes += [((0, 0, 0), 0.012), ((0, 0, -Lt), 0.026), ((0, 0, -0.085), 0.022), ((0, 0, -0.140), 0.022), ((0, 0, -0.195), 0.020)]
     plate(p, "Thigh_Plate", "y", y0, y0 + T, outline, holes)
     circle_cut(p, "Pitch_Pilot_Recess", "y", y0, (0, y0, 0), PC["PILOT_D"] + 0.0003, PC["PILOT_H"] + 0.0002, into_positive=True)
-    # C-channel flanges (medial) between the actuators for bending stiffness
+    # C-channel flanges (medial) between the actuators for bending stiffness; they stop 4 mm above the knee housing
+    zf = -Lt + KC["D"] / 2 + 0.004
+    p.gv("Flange_end_z", mm(zf))
     for tag, x0 in (("Front_Flange", 0.022), ("Back_Flange", -0.030)):
-        plate(p, tag, "x", x0, x0 + 0.008, [(0, y0 - 0.020, -0.215), (0, y0, -0.215), (0, y0, -0.100), (0, y0 - 0.020, -0.100)])
+        plate(p, tag, "x", x0, x0 + 0.008, [(0, y0 - 0.020, zf), (0, y0, zf), (0, y0, -0.100), (0, y0 - 0.020, -0.100)])
     p.ref_axis("Front Plane", "Right Plane", "AX_PitchY")
     p.ref_plane_angle("Front Plane", "AX_PitchY", 40.0, "PL_PitchRef")   # hip-pitch limit reference (window offset 50 deg)
     return finish(p, ALU_RGB, "thigh: hip pitch output -> knee housing (coplanar faces)", "6061-T6 8 mm plate, CNC/waterjet + flanges; ASSUMED")
@@ -152,8 +153,7 @@ def thigh(s):
 # ------------------------------------------------------------------------------------------------ shin (frame at knee centre)
 def shin(s):
     p = Part(s, f"JX1_Shin_{SUF()}", CADDIR / "Shin" / f"JX1_Shin_{SUF()}.SLDPRT")
-    y_out = -(PKG["knee_rear_y"] - L["L_HOUSING"]) - L["T_OUT"] + 0.0   # knee output face (medial), = -0.028
-    y_out = PKG["knee_rear_y"] - KC["L_HOUSING"] - KC["T_OUT"]
+    y_out = PKG["knee_rear_y"] - KC["L_HOUSING"] - KC["T_OUT"]    # knee output face (medial)
     zA, zB, Ls = PKG["ankle_A_z"], PKG["ankle_B_z"], SHIN
     web = PKG["shin_web_t"] if "shin_web_t" in PKG else 0.010
     p.gv("Shin_length", mm(Ls)); p.gv("AnkleA_z", mm(zA)); p.gv("AnkleB_z", mm(zB))
