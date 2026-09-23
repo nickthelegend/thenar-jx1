@@ -28,7 +28,8 @@
       "SK_Back_Plate": 3,
       "SK_Roll_Pilot_Recess": 3,
       "SK_Medial_Plate": 3
-    }
+    },
+    "refpoints": {}
   },
   "JX1_Thigh_L": {
     "bodies": 1,
@@ -38,7 +39,8 @@
       "SK_Pitch_Pilot_Recess": 3,
       "SK_Front_Flange": 3,
       "SK_Back_Flange": 3
-    }
+    },
+    "refpoints": {}
   },
   "JX1_Shin_L": {
     "bodies": 1,
@@ -51,7 +53,8 @@
       "SK_Fork_Bar": 3,
       "SK_Tine_Lat": 3,
       "SK_Tine_Med": 3
-    }
+    },
+    "refpoints": {}
   },
   "JX1_AnkleCross": {
     "bodies": 1,
@@ -70,28 +73,56 @@
       "SK_Clevis_Front": 3,
       "SK_Clevis_Back": 3,
       "SK_Post_Lat": 3,
-      "SK_Post_Med": 3
+      "SK_Post_Med": 3,
+      "SK_RodBalls": 3
+    },
+    "refpoints": {
+      "SK_RodBalls": [
+        "Point1@SK_RodBalls",
+        "Point3@SK_RodBalls"
+      ]
     }
   },
   "JX1_AnkleCrank": {
     "bodies": 1,
     "errors": [],
     "sketch_status": {
-      "SK_Crank_Plate": 3
+      "SK_Crank_Plate": 3,
+      "SK_Pilot_Recess": 3,
+      "SK_Ball": 3
+    },
+    "refpoints": {
+      "SK_Ball": [
+        "Point1@SK_Ball"
+      ]
     }
   },
   "JX1_AnkleRod_A": {
     "bodies": 1,
     "errors": [],
     "sketch_status": {
-      "SK_Rod": 3
+      "SK_Rod": 3,
+      "SK_Ends": 3
+    },
+    "refpoints": {
+      "SK_Ends": [
+        "Point1@SK_Ends",
+        "Point3@SK_Ends"
+      ]
     }
   },
   "JX1_AnkleRod_B": {
     "bodies": 1,
     "errors": [],
     "sketch_status": {
-      "SK_Rod": 3
+      "SK_Rod": 3,
+      "SK_Ends": 3
+    },
+    "refpoints": {
+      "SK_Ends": [
+        "Point1@SK_Ends",
+        "Point3@SK_Ends"
+      ]
     }
   }
 }

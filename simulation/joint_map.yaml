@@ -72,9 +72,9 @@ joints:
   origin_rpy_rad: [0.0, 0.0, 0.0]
   axis: [0, 1, 0]
   lower_rad: 0.0
-  upper_rad: 2.356194
+  upper_rad: 2.094395
   lower_deg: 0
-  upper_deg: 135
+  upper_deg: 120
   zero: see zero_pose
   sign: + = flexion
   actuator_class: L
@@ -88,9 +88,9 @@ joints:
   origin_rpy_rad: [0.0, 0.0, 0.0]
   axis: [0, 1, 0]
   lower_rad: -0.959931
-  upper_rad: 0.610865
+  upper_rad: 0.523599
   lower_deg: -55
-  upper_deg: 35
+  upper_deg: 30
   zero: see zero_pose
   sign: + = plantarflexion (toes down)
   actuator_class: Mx2 via parallel push-rods
@@ -168,9 +168,9 @@ joints:
   origin_rpy_rad: [0.0, 0.0, 0.0]
   axis: [0, 1, 0]
   lower_rad: 0.0
-  upper_rad: 2.356194
+  upper_rad: 2.094395
   lower_deg: 0
-  upper_deg: 135
+  upper_deg: 120
   zero: see zero_pose
   sign: + = flexion
   actuator_class: L
@@ -184,9 +184,9 @@ joints:
   origin_rpy_rad: [0.0, 0.0, 0.0]
   axis: [0, 1, 0]
   lower_rad: -0.959931
-  upper_rad: 0.610865
+  upper_rad: 0.523599
   lower_deg: -55
-  upper_deg: 35
+  upper_deg: 30
   zero: see zero_pose
   sign: + = plantarflexion (toes down)
   actuator_class: Mx2 via parallel push-rods

@@ -74,7 +74,7 @@ class Session:
         return typed(doc, "IModelDoc2")
 
     def open_doc(self, path, kind=None, silent=True):
-        path = Path(path)
+        path = Path(path).resolve()
         kind = kind or {".sldprt": "part", ".sldasm": "assembly", ".slddrw": "drawing"}[path.suffix.lower()]
         dtype = {"part": C.swDocPART, "assembly": C.swDocASSEMBLY, "drawing": C.swDocDRAWING}[kind]
         opts = C.swOpenDocOptions_Silent if silent else 0

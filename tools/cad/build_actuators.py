@@ -53,7 +53,7 @@ def housing(s, cls):
     cw, ch_, cl = a["CONN"]
     with p.sketch("XY", "SK_Connector", plane_name="PL_Rear") as sk:
         sk.rect(-cw / 2, R - 0.004, cw / 2, R + ch_)
-    p.extrude("SK_Connector", cl, "Connector_Zone", reverse=True)
+    p.extrude("SK_Connector", cl, "Connector_Zone", reverse=False)
     p.color(HOUSING_RGB)
     p.prop("JX1_Class", cls)
     p.prop("JX1_Role", "actuator housing (stator side) - MAI envelope")

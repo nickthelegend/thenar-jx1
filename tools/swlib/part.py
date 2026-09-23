@@ -77,6 +77,14 @@ class Sketch:
             seg.ConstructionGeometry = True
         return seg
 
+    def point(self, u, v, names=(None, None), gvs=(None, None)):
+        """Fully located sketch point (used as a mate reference: Point<n>@<sketch>)."""
+        pt = typed(self.sm.CreatePoint(u, v, 0), "ISketchPoint")
+        if pt is None:
+            raise RuntimeError("CreatePoint failed")
+        self.locate(pt, u, v, names, gvs)
+        return pt
+
     def centerline(self, u1, v1, u2, v2):
         seg = typed(self.sm.CreateCenterLine(u1, v1, 0, u2, v2, 0), "ISketchSegment")
         ln = typed(seg, "ISketchLine")
@@ -324,6 +332,22 @@ class Part:
         self.features.append(name)
         return f
 
+    def ref_plane_angle(self, base_plane, axis_name, angle_deg, name):
+        """Reference plane through `axis_name`, rotated `angle_deg` from `base_plane`."""
+        self.doc.ClearSelection2(True)
+        if not self.ext.SelectByID2(base_plane, "PLANE", 0, 0, 0, False, 0, None, 0):
+            raise RuntimeError(f"cannot select {base_plane}")
+        if not self.ext.SelectByID2(axis_name, "AXIS", 0, 0, 0, True, 1, None, 0):
+            raise RuntimeError(f"cannot select {axis_name}")
+        rp = self.fm.InsertRefPlane(C.swRefPlaneReferenceConstraint_Angle, math.radians(angle_deg),
+                                    C.swRefPlaneReferenceConstraint_Coincident, 0, 0, 0)
+        if rp is None:
+            raise RuntimeError(f"angle plane {name} failed")
+        f = typed(self.doc.FeatureByPositionReverse(0), "IFeature")
+        f.Name = name
+        self.features.append(name)
+        return f
+
     def ref_axis(self, plane_a, plane_b, name):
         self.doc.ClearSelection2(True)
         self.ext.SelectByID2(plane_a, "PLANE", 0, 0, 0, False, 0, None, 0)
@@ -335,6 +359,28 @@ class Part:
         f.Name = name
         self.features.append(name)
         return f
+
+    def ref_points_sketch(self, plane_key, name, pts_uv, plane_name=None):
+        """A sketch that only holds located reference points (mate targets). SolidWorks does not number sketch
+        points sequentially, so the real selection names are discovered by position and stored in self.refpoints."""
+        with self.sketch(plane_key, name, plane_name=plane_name) as sk:
+            for (u, v) in pts_uv:
+                sk.point(u, v)
+        sel = typed(self.doc.SelectionManager, "ISelectionMgr")
+        found = {}
+        for i in range(1, 40):
+            self.doc.ClearSelection2(True)
+            if self.ext.SelectByID2(f"Point{i}@{name}", "EXTSKETCHPOINT", 0, 0, 0, False, 0, None, 0):
+                pt = typed(sel.GetSelectedObject6(1, -1), "ISketchPoint")
+                found[f"Point{i}@{name}"] = (pt.X, pt.Y)
+        self.doc.ClearSelection2(True)
+        names = []
+        for (u, v) in pts_uv:
+            best = min(found.items(), key=lambda kv: (kv[1][0] - u) ** 2 + (kv[1][1] - v) ** 2)
+            names.append(best[0])
+        self.refpoints = getattr(self, "refpoints", {})
+        self.refpoints[name] = names
+        return names
 
     def coordinate_system(self, name, origin_xyz=(0, 0, 0)):
         """Coordinate system at the part origin aligned with model axes (link frame marker for URDF export)."""
@@ -426,7 +472,7 @@ class Part:
         self.doc.ShowNamedView2("*Isometric", 7)
         self.doc.ViewZoomtofit2()
         save_as(self.doc, self.path)
-        info = {"path": str(self.path), "bodies": self.body_count(), "errors": self.errors(),
+        info = {"path": str(self.path), "bodies": self.body_count(), "errors": self.errors(), "refpoints": getattr(self, "refpoints", {}),
                 "sketch_status": self.sketch_status, "global_variables": self.gvars, "mass": self.mass_properties()}
         if close:
             self.s.close(self.doc)

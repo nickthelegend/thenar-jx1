@@ -105,13 +105,15 @@ def hip_roll_bracket(s):
     y_med = PKG["pitch_out_y"] - L["T_OUT"] - L["L_HOUSING"]   # pitch housing rear face (medial)
     p.gv("Roll_face_x", mm(xf)); p.gv("Pitch_rear_y", mm(y_med))
     bh = [(0, y, z, d) for (y, z, d) in [(v_, -u_, d_) for (u_, v_, d_) in bolt_holes(uv("x", (0, 0, 0)), L["PCD_OUT"], L["N_OUT"], CLR_M4, 22.5)]]
-    plate(p, "Back_Plate", "x", xf, xf + T, [(0, y_med - T, -0.045), (0, 0.040, -0.045), (0, 0.040, 0.045), (0, y_med - T, 0.045)],
+    y_lat = PKG["pitch_out_y"] - 0.002       # stop 2 mm short of the thigh plate plane
+    y_in = min(y_med - T, -L["D_OUT"] / 2 - 0.002)  # cover the whole roll output flange on the medial side
+    plate(p, "Back_Plate", "x", xf, xf + T, [(0, y_in, -0.045), (0, y_lat, -0.045), (0, y_lat, 0.045), (0, y_in, 0.045)],
           [((0, y, z), d) for (_, y, z, d) in bh] + [((0, 0, 0), 0.012)])
     circle_cut(p, "Roll_Pilot_Recess", "x", xf, (xf, 0, 0), L["PILOT_D"] + 0.0003, L["PILOT_H"] + 0.0002, into_positive=True)
     mh = [((x, 0, z), d) for (x, z, d) in [(u_, -v_, d_) for (u_, v_, d_) in bolt_holes((0, 0), L["PCD_REAR"], L["N_REAR"], CLR_M4, 22.5)]]
     mh.append(((0, 0, 0), 0.026))
-    plate(p, "Medial_Plate", "y", y_med - T, y_med, [(xf, 0, -0.052), (0.040, 0, -0.052), (0.056, 0, -0.030), (0.056, 0, 0.030),
-                                                      (0.040, 0, 0.052), (xf, 0, 0.052)], mh)
+    plate(p, "Medial_Plate", "y", y_med - T, y_med, [(xf, 0, -0.049), (0.036, 0, -0.049), (0.054, 0, -0.030), (0.054, 0, 0.030),
+                                                      (0.036, 0, 0.049), (xf, 0, 0.049)], mh)
     return finish(p, PRINT_RGB, "hip roll output -> hip pitch housing", "FDM PA-CF; ASSUMED")
 
 
@@ -121,9 +123,11 @@ def thigh(s):
     y0 = PKG["pitch_out_y"]
     p.gv("Thigh_length", mm(THIGH)); p.gv("Thigh_plate_t", mm(T))
     Lt = THIGH
-    outline = [(-0.032, 0, 0.034), (0.032, 0, 0.034), (0.044, 0, 0.0), (0.030, 0, -0.110), (0.046, 0, -Lt + 0.040),
-               (0.056, 0, -Lt), (0.042, 0, -Lt - 0.044), (-0.042, 0, -Lt - 0.044), (-0.056, 0, -Lt), (-0.046, 0, -Lt + 0.040),
-               (-0.030, 0, -0.110), (-0.044, 0, 0.0)]
+    rk = 0.050                                          # knee-end radius (clears ankle motor A up to 120 deg knee)
+    knee_arc = [(rk * math.cos(math.radians(a)), 0, -Lt + rk * math.sin(math.radians(a))) for a in range(0, -181, -22)][1:-1]
+    knee_arc = [(rk * math.cos(math.radians(a)), 0, -Lt + rk * math.sin(math.radians(a))) for a in (-11.25, -33.75, -56.25, -78.75, -101.25, -123.75, -146.25, -168.75)]
+    outline = [(-0.032, 0, 0.034), (0.032, 0, 0.034), (0.044, 0, 0.0), (0.030, 0, -0.110), (0.046, 0, -Lt + 0.052)] + \
+              knee_arc + [(-0.046, 0, -Lt + 0.052), (-0.030, 0, -0.110), (-0.044, 0, 0.0)]
     holes = [((x, 0, z), CLR_M4) for (x, z, _) in [(u_, -v_, d_) for (u_, v_, d_) in bolt_holes((0, 0), L["PCD_OUT"], L["N_OUT"], CLR_M4, 22.5)]]
     holes += [((x, 0, z), CLR_M4) for (x, z, _) in [(u_, -v_, d_) for (u_, v_, d_) in bolt_holes((0, Lt), L["PCD_REAR"], L["N_REAR"], CLR_M4, 22.5)]]
     holes += [((0, 0, 0), 0.012), ((0, 0, -Lt), 0.026), ((0, 0, -0.085), 0.022), ((0, 0, -0.140), 0.022), ((0, 0, -0.195), 0.020)]
@@ -132,6 +136,8 @@ def thigh(s):
     # C-channel flanges (medial) between the actuators for bending stiffness
     for tag, x0 in (("Front_Flange", 0.022), ("Back_Flange", -0.030)):
         plate(p, tag, "x", x0, x0 + 0.008, [(0, y0 - 0.020, -0.215), (0, y0, -0.215), (0, y0, -0.062), (0, y0 - 0.020, -0.062)])
+    p.ref_axis("Front Plane", "Right Plane", "AX_PitchY")
+    p.ref_plane_angle("Front Plane", "AX_PitchY", 40.0, "PL_PitchRef")   # hip-pitch limit reference (window offset 50 deg)
     return finish(p, ALU_RGB, "thigh: hip pitch output -> knee housing (coplanar faces)", "6061-T6 8 mm plate, CNC/waterjet + flanges; ASSUMED")
 
 
@@ -165,6 +171,10 @@ def shin(s):
     for tag, y0 in (("Tine_Lat", 0.018), ("Tine_Med", -0.027)):
         plate(p, tag, "y", y0, y0 + 0.009, [(-0.016, 0, za + 0.040), (0.016, 0, za + 0.040), (0.016, 0, za - 0.008), (0.008, 0, za - 0.018),
                                              (-0.008, 0, za - 0.018), (-0.016, 0, za - 0.008)], [((0, 0, za), 0.008)])
+    p.ref_plane_offset("Front Plane", Ls, "PL_AnkleZ", flip=True)
+    p.ref_axis("PL_AnkleZ", "Right Plane", "AX_AnklePitch")
+    p.ref_axis("Front Plane", "Right Plane", "AX_KneeY")
+    p.ref_plane_angle("Front Plane", "AX_KneeY", 67.5, "PL_KneeRef")    # knee limit reference (window offset 22.5 deg)
     return finish(p, PRINT_RGB, "shin: knee output -> ankle fork, carries ankle motors A (upper, +Y) and B (lower, -Y)",
                   "FDM PA-CF with Al knee plate insert option; ASSUMED")
 
@@ -177,6 +187,8 @@ def ankle_cross(s):
     # pitch pin bore (along Y) and roll pin bore (along X)
     circle_cut(p, "Pitch_Bore", "y", -0.020, (0, -0.020, 0), 0.008, 0.040, into_positive=True)
     circle_cut(p, "Roll_Bore", "x", -0.020, (-0.020, 0, 0), 0.008, 0.040, into_positive=True)
+    p.ref_axis("Front Plane", "Right Plane", "AX_Pitch")
+    p.ref_axis("Front Plane", "Top Plane", "AX_Roll")
     return finish(p, STEEL_RGB, "ankle universal-joint spider (pitch pin Y, roll pin X)", "EN8/EN24 steel, turned + drilled; ASSUMED")
 
 
@@ -191,13 +203,15 @@ def foot(s):
     plate2d(p, "Sole_Plate", "z", zs, zs + 0.010, outline, [(0.070, 0.0, 0.020), (0.030, 0.0, 0.016)])
     # roll clevis tines (normal X) either side of the cross block
     for tag, x0 in (("Clevis_Front", 0.0175), ("Clevis_Back", -0.0255)):
-        plate(p, tag, "x", x0, x0 + 0.008, [(0, -0.015, zs + 0.010), (0, 0.015, zs + 0.010), (0, 0.015, 0.006), (0, 0.009, 0.014),
-                                             (0, -0.009, 0.014), (0, -0.015, 0.006)], [((0, 0, 0), 0.008)])
+        plate(p, tag, "x", x0, x0 + 0.008, [(0, -0.015, zs + 0.010), (0, 0.015, zs + 0.010), (0, 0.015, 0.004), (0, 0.009, 0.011),
+                                             (0, -0.009, 0.011), (0, -0.015, 0.004)], [((0, 0, 0), 0.008)])
     # push-rod ball posts behind the ankle (rod ends at ankle-centre height)
     wf = PKG.get("rod_foot_w", 0.045)
     for tag, sy in (("Post_Lat", 1), ("Post_Med", -1)):
         plate(p, tag, "z", zs + 0.010, -0.004, [(-FOOT_LEVER - 0.007, sy * wf - 0.007, 0), (-FOOT_LEVER + 0.007, sy * wf - 0.007, 0),
                                                 (-FOOT_LEVER + 0.007, sy * wf + 0.007, 0), (-FOOT_LEVER - 0.007, sy * wf + 0.007, 0)])
+    p.ref_axis("Front Plane", "Top Plane", "AX_Roll")
+    p.ref_points_sketch("XY", "SK_RodBalls", [(-FOOT_LEVER, wf), (-FOOT_LEVER, -wf)])
     return finish(p, ACCENT_RGB, "foot: sole plate, roll clevis, rod-end posts", "FDM PA-CF + 3 mm TPU/rubber sole pad; ASSUMED")
 
 
@@ -211,6 +225,10 @@ def ankle_crank(s):
     ro = AK["D_OUT"] / 2
     outline = [(-CRANK_R - 0.009, -0.009), (-ro * 0.7, -ro), (ro * 0.7, -ro), (ro, 0.0), (ro * 0.7, ro), (-ro * 0.7, ro), (-CRANK_R - 0.009, 0.009)]
     plate2d(p, "Crank_Plate", "z", 0.0, 0.006, outline, holes)
+    circle_cut(p, "Pilot_Recess", "z", 0.0, (0, 0, 0), AK["PILOT_D"] + 0.0003, AK["PILOT_H"] + 0.0002, into_positive=True)
+    p.ref_plane_offset("Front Plane", 0.003, "PL_BallMid")
+    p.ref_points_sketch("XY", "SK_Ball", [(-CRANK_R, 0.0)], plane_name="PL_BallMid")
+    p.ref_axis("Top Plane", "Right Plane", "AX_Joint")
     return finish(p, ALU_RGB, "ankle crank (M output -> rod end)", "6061 plate 6 mm; ASSUMED")
 
 
@@ -224,6 +242,7 @@ def ankle_rod(s, tag, length):
                (r_ball, length + r_ball), (0, length + r_ball)]
         sk.polygon(pts)
     p.revolve("SK_Rod", "Rod_Body")
+    p.ref_points_sketch("XZ", "SK_Ends", [(0.0, 0.0), (0.0, length)])
     return finish(p, STEEL_RGB, f"ankle push rod {tag} with M5 rod-end envelopes", "M5 threaded rod + 2x rod-end bearings; ASSUMED")
 
 
@@ -241,13 +260,13 @@ def main():
             hB = SHIN + PKG["ankle_B_z"]
             wf, wc = PKG.get("rod_foot_w", 0.045), PKG.get("rod_crank_w", 0.060)
             for tag, h in (("A", hA), ("B", hB)):
-                Lr = math.sqrt(h ** 2 + (wc - wf) ** 2)
+                Lr = math.sqrt(h ** 2 + (wc - wf) ** 2 + (CRANK_R - FOOT_LEVER) ** 2)  # exact zero-pose ball-centre distance
                 info = ankle_rod(s, tag, Lr)
-                report[Path(info["path"]).stem] = {k: info[k] for k in ("bodies", "errors", "sketch_status")}
+                report[Path(info["path"]).stem] = {k: info[k] for k in ("bodies", "errors", "sketch_status", "refpoints")}
                 print(Path(info["path"]).stem, info["bodies"], info["errors"], info["sketch_status"], flush=True)
             continue
         info = BUILDERS[n](s)
-        report[Path(info["path"]).stem] = {k: info[k] for k in ("bodies", "errors", "sketch_status")}
+        report[Path(info["path"]).stem] = {k: info[k] for k in ("bodies", "errors", "sketch_status", "refpoints")}
         bad = {k: v for k, v in info["sketch_status"].items() if v != 3}
         print(Path(info["path"]).stem, "bodies", info["bodies"], "errors", info["errors"], "underdefined", bad, flush=True)
     ev = ROOT / "verification" / "cad_build_leg_parts.json"

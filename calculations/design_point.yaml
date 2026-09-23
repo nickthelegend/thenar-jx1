@@ -35,8 +35,8 @@ joint_ranges_deg:
   hip_yaw:     {min: -40,  max: 45,  label: ASSUMED, note: "+ = toes turn outward (left leg)"}
   hip_roll:    {min: -25,  max: 45,  label: ASSUMED, note: "+ = abduction (left leg)"}
   hip_pitch:   {min: -115, max: 35,  label: ASSUMED, note: "- = flexion (leg forward)"}
-  knee:        {min: 0,    max: 135, label: ASSUMED, note: "+ = flexion"}
-  ankle_pitch: {min: -55,  max: 35,  label: ASSUMED, note: "- = dorsiflexion (toes up)"}
+  knee:        {min: 0,    max: 120, label: CALCULATED, note: "+ = flexion; CAD sweep: thigh knee disc clears ankle motor A up to 120 deg (squat needs 117)"}
+  ankle_pitch: {min: -55,  max: 30,  label: ASSUMED, note: "- = dorsiflexion (toes up)"}
   ankle_roll:  {min: -20,  max: 20,  label: ASSUMED}
 
 # Actuator classes (iteration 1): masses/dims VERIFIED from official RobStride specs (research/raw/actuator_technology_raw.md);
@@ -61,9 +61,9 @@ ankle_linkage:
   foot_lever_m: {value: 0.040, label: CALCULATED, note: "rod-end posts behind the ankle pitch axis"}
   rod_half_spacing_m: {value: 0.045, label: ASSUMED, note: "lateral offset of each rod end on the foot"}
   crank_half_spacing_m: {value: 0.057, label: CALCULATED, note: "web/2 + RS06 housing+output + crank/2; rods lean in 12 mm"}
-  motor_A_height_above_ankle_m: {value: 0.198, label: CALCULATED, note: "upper motor, output lateral; 102 mm below knee axis"}
-  motor_B_height_above_ankle_m: {value: 0.105, label: CALCULATED, note: "lower motor, output medial; 21 mm above the ankle fork"}
-  motor_height_above_ankle_m: {value: 0.152, label: CALCULATED, note: "mean, used by the lumped mass model"}
+  motor_A_height_above_ankle_m: {value: 0.190, label: CALCULATED, note: "upper motor, output lateral; 110 mm below knee axis"}
+  motor_B_height_above_ankle_m: {value: 0.100, label: CALCULATED, note: "lower motor, output medial; 16 mm above the ankle fork"}
+  motor_height_above_ankle_m: {value: 0.145, label: CALCULATED, note: "mean, used by the lumped mass model"}
 
 # Mass budget per link (structure + mounted actuator housings). COM in the link frame (m).
 # Link frames sit at the joint that drives them; legs hang along -z in the zero pose.
