@@ -1,0 +1,69 @@
+<mujoco model="jx1_analysis">
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.001" gravity="0 0 -9.81" integrator="implicitfast"/>
+  <worldbody>
+    <geom name="floor" type="plane" size="5 5 0.1" rgba=".8 .8 .8 1"/>
+    <light pos="0 0 3" dir="0 0 -1"/>
+    <body name="pelvis" pos="0 0 0.61000">
+      <freejoint name="root"/>
+      <inertial pos="0 0 0.06375" mass="2" diaginertia="0.015665 0.002765 0.01594"/>
+      <geom type="box" size="0.06 0.13 0.05" pos="0 0 0.05" rgba=".9 .5 .1 1" contype="0" conaffinity="0"/>
+      <site name="imu" pos="0 0 0.05" size="0.01"/>
+      <body name="upper_body" pos="0 0 0">
+        <inertial pos="0 0 0.26" mass="12" diaginertia="0.2925 0.2425 0.13"/>
+        <geom type="box" size="0.09 0.14 0.2" pos="0 0 0.26" rgba=".9 .9 .92 .6" contype="0" conaffinity="0"/>
+      </body>
+      <body name="l_hip_yaw_link" pos="0 0.09 0">
+<inertial pos="-0.0468182 0 0.00363636" mass="1.1" diaginertia="0.00135712 0.00141286 0.00139407"/>
+<joint name="l_hip_yaw" axis="0 0 1" range="-0.698132 0.785398" limited="true" armature="0.01" damping="0.0"/>
+<geom type="cylinder" size="0.035 0.03" pos="0 0 0.03" rgba=".3 .3 .35 1" contype="0" conaffinity="0"/>
+<body name="l_hip_roll_link" pos="0 0 0">
+<inertial pos="0 0.0531818 0" mass="1.1" diaginertia="0.00107907 0.00133833 0.00107907"/>
+<joint name="l_hip_roll" axis="1 0 0" range="-0.436332 0.785398" limited="true" armature="0.02" damping="0.0"/>
+<geom type="cylinder" size="0.045 0.03" euler="90 0 0" pos="0 0.055 0" rgba=".25 .25 .3 1" contype="0" conaffinity="0"/>
+<body name="l_thigh" pos="0 0 0">
+<inertial pos="0 0 -0.255" mass="1.35" diaginertia="0.00560063 0.00593625 0.00115688"/>
+<joint name="l_hip_pitch" axis="0 1 0" range="-2.007129 0.610865" limited="true" armature="0.02" damping="0.0"/>
+<geom type="capsule" fromto="0 0 -0.03 0 0 -0.25" size="0.035" rgba=".85 .85 .88 1" contype="0" conaffinity="0"/>
+<body name="l_shin" pos="0 0 -0.28">
+<inertial pos="-0.0141935 0 -0.0843548" mass="1.55" diaginertia="0.00511998 0.0041546 0.00237087"/>
+<joint name="l_knee" axis="0 1 0" range="0.000000 2.356194" limited="true" armature="0.02" damping="0.0"/>
+<geom type="capsule" fromto="0 0 -0.03 0 0 -0.25" size="0.03" rgba=".85 .85 .88 1" contype="0" conaffinity="0"/>
+<body name="l_ankle_cross" pos="0 0 -0.28">
+<inertial pos="0 0 0" mass="0.05" diaginertia="7.5e-06 7.5e-06 7.5e-06"/>
+<joint name="l_ankle_pitch" axis="0 1 0" range="-1.047198 0.610865" limited="true" armature="0.02" damping="0.0"/>
+<geom type="sphere" size="0.015" rgba=".2 .2 .2 1" contype="0" conaffinity="0"/>
+<body name="l_foot" pos="0 0 0">
+<inertial pos="0.03 0 -0.035" mass="0.35" diaginertia="0.000289479 0.0013125 0.00154948"/>
+<joint name="l_ankle_roll" axis="1 0 0" range="-0.349066 0.349066" limited="true" armature="0.010114" damping="0.0"/>
+<geom name="l_foot_geom" type="box" size="0.105 0.0475 0.011" pos="0.03 0 -0.03900000000000001" rgba=".15 .15 .15 1" friction="1.0 0.02 0.001"/><site name="l_sole" pos="0 0 -0.05" size="0.01"/>
+</body></body></body></body></body></body>
+      <body name="r_hip_yaw_link" pos="0 -0.09 0">
+<inertial pos="-0.0468182 -0 0.00363636" mass="1.1" diaginertia="0.00135712 0.00141286 0.00139407"/>
+<joint name="r_hip_yaw" axis="0 0 1" range="-0.785398 0.698132" limited="true" armature="0.01" damping="0.0"/>
+<geom type="cylinder" size="0.035 0.03" pos="0 0 0.03" rgba=".3 .3 .35 1" contype="0" conaffinity="0"/>
+<body name="r_hip_roll_link" pos="0 0 0">
+<inertial pos="0 -0.0531818 0" mass="1.1" diaginertia="0.00107907 0.00133833 0.00107907"/>
+<joint name="r_hip_roll" axis="1 0 0" range="-0.785398 0.436332" limited="true" armature="0.02" damping="0.0"/>
+<geom type="cylinder" size="0.045 0.03" euler="90 0 0" pos="0 -0.055 0" rgba=".25 .25 .3 1" contype="0" conaffinity="0"/>
+<body name="r_thigh" pos="0 0 0">
+<inertial pos="0 -0 -0.255" mass="1.35" diaginertia="0.00560063 0.00593625 0.00115688"/>
+<joint name="r_hip_pitch" axis="0 1 0" range="-2.007129 0.610865" limited="true" armature="0.02" damping="0.0"/>
+<geom type="capsule" fromto="0 0 -0.03 0 0 -0.25" size="0.035" rgba=".85 .85 .88 1" contype="0" conaffinity="0"/>
+<body name="r_shin" pos="0 0 -0.28">
+<inertial pos="-0.0141935 -0 -0.0843548" mass="1.55" diaginertia="0.00511998 0.0041546 0.00237087"/>
+<joint name="r_knee" axis="0 1 0" range="0.000000 2.356194" limited="true" armature="0.02" damping="0.0"/>
+<geom type="capsule" fromto="0 0 -0.03 0 0 -0.25" size="0.03" rgba=".85 .85 .88 1" contype="0" conaffinity="0"/>
+<body name="r_ankle_cross" pos="0 0 -0.28">
+<inertial pos="0 -0 0" mass="0.05" diaginertia="7.5e-06 7.5e-06 7.5e-06"/>
+<joint name="r_ankle_pitch" axis="0 1 0" range="-1.047198 0.610865" limited="true" armature="0.02" damping="0.0"/>
+<geom type="sphere" size="0.015" rgba=".2 .2 .2 1" contype="0" conaffinity="0"/>
+<body name="r_foot" pos="0 0 0">
+<inertial pos="0.03 -0 -0.035" mass="0.35" diaginertia="0.000289479 0.0013125 0.00154948"/>
+<joint name="r_ankle_roll" axis="1 0 0" range="-0.349066 0.349066" limited="true" armature="0.010114" damping="0.0"/>
+<geom name="r_foot_geom" type="box" size="0.105 0.0475 0.011" pos="0.03 0 -0.03900000000000001" rgba=".15 .15 .15 1" friction="1.0 0.02 0.001"/><site name="r_sole" pos="0 0 -0.05" size="0.01"/>
+</body></body></body></body></body></body>
+    </body>
+  </worldbody>
+  
+</mujoco>
