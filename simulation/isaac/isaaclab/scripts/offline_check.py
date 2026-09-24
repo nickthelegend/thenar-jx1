@@ -614,6 +614,7 @@ def check_action_term(task_id, env_cfg, env, tc, joints, rep, mods):
             prev[ids.numpy()] = default
         target = pio.clip_ankle_targets(pio.actions_to_targets(a.numpy(), default, tc["raw"]["action_scale"], lim[:, 0], lim[:, 1]),
                                         pol, polys)
+        target = pio.clip_hip_yaw_toe_out(target, pol, tc.get("toe_out_max_rad"))
         term.process_actions(a)
         d = np.zeros(N_ENVS, dtype=int) if delay is None else delay.numpy()
         for k in range(1, dec + 1):
@@ -625,7 +626,7 @@ def check_action_term(task_id, env_cfg, env, tc, joints, rep, mods):
             got = rob.targets[:, pj].numpy()
             worst = max(worst, float(np.abs(got - expect).max()))
         prev = target
-    rep.add(task_id, "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, hub ramp, delay, reset)", worst < 1e-5,
+    rep.add(task_id, "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, toe-out, hub ramp, delay, reset)", worst < 1e-5,
             f"max |diff| {worst:.2e} rad over 4 steps x {dec} substeps")
 
 

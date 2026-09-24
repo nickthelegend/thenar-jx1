@@ -334,6 +334,33 @@ def test_ros2_control_xacro_expands():
     assert order[:CFG.num_actions] == CFG.policy_joints
 
 
+def test_hip_yaw_toe_out_coupling():
+    """OI-24: left_hip_yaw - right_hip_yaw <= max in training (policy_io), the ROS runner and the exported contract."""
+    assert CFG.hip_yaw_toe_out_max is not None and abs(np.degrees(CFG.hip_yaw_toe_out_max) - 40.0) < 1e-9
+    pj = CFG.policy_joints
+    il, ir = pj.index("left_hip_yaw_joint"), pj.index("right_hip_yaw_joint")
+    rng = np.random.default_rng(4)
+    t = rng.uniform(-0.8, 0.8, (500, len(pj)))
+    c = policy_io.clip_hip_yaw_toe_out(t, pj, CFG.hip_yaw_toe_out_max)
+    assert np.all(c[:, il] - c[:, ir] <= CFG.hip_yaw_toe_out_max + 1e-12)
+    ok = t[:, il] - t[:, ir] <= CFG.hip_yaw_toe_out_max
+    assert np.array_equal(c[ok], t[ok]) and 0 < ok.sum() < len(t)             # untouched inside, both cases exercised
+    assert np.allclose(np.delete(c, [il, ir], axis=1), np.delete(t, [il, ir], axis=1))
+    assert np.allclose((c[:, il] + c[:, ir])[~ok], (t[:, il] + t[:, ir])[~ok])   # excess taken off both hips equally
+    with tempfile.TemporaryDirectory() as tmp:
+        bundle = export_untrained(Path(tmp))
+        io = yaml.safe_load((bundle / "policy_io.yaml").read_text(encoding="utf-8"))
+        assert abs(io["hip_yaw_toe_out_max_rad"] - CFG.hip_yaw_toe_out_max) < 1e-6
+        runner_mod = load_module(REPO / "ros2_ws" / "src" / "jx1_policy" / "jx1_policy" / "runner.py", "ros_runner3")
+        ros = runner_mod.PolicyRunner(bundle)
+        ros.session = type("S", (), {"run": lambda self, out, feed: [np.full((1, len(pj)), 0.0)]})()    # zero action
+        ros.default = ros.default.copy()
+        ros.default[il], ros.default[ir] = 0.6, -0.6                               # toe-out sum 68.8 deg > 40
+        tgt = ros.step(np.array([1.0, 0, 0, 0]), np.zeros(3), np.zeros(len(pj)), np.zeros(len(pj)), np.zeros(3), 0.0)
+        ref = policy_io.clip_hip_yaw_toe_out(np.clip(ros.default, ros.lower, ros.upper), pj, io["hip_yaw_toe_out_max_rad"])
+        assert abs(tgt["left_hip_yaw_joint"] - ref[il]) < 1e-12 and abs(tgt["right_hip_yaw_joint"] - ref[ir]) < 1e-12
+
+
 def test_mirror_symmetry_matches_physics():
     """Mirror maps used by the PPO symmetry loss: MuJoCo physics is equivariant under them, the observation of a mirrored
     state is the mirrored observation, and mirroring twice is the identity."""

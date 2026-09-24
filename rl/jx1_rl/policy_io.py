@@ -86,6 +86,19 @@ def clip_ankle_targets(targets: np.ndarray, joints: list, polygons: dict) -> np.
     return out
 
 
+def clip_hip_yaw_toe_out(targets: np.ndarray, joints: list, max_sum: float | None) -> np.ndarray:
+    """Hip-yaw toe-out coupling (joint_map coupled_limits.hip_yaw_toe_out, OI-24): the bracket tails touch when both
+    hips toe out, so left_hip_yaw - right_hip_yaw <= max_sum; any excess is taken off both hips equally."""
+    if max_sum is None or "left_hip_yaw_joint" not in joints or "right_hip_yaw_joint" not in joints:
+        return targets
+    il, ir = joints.index("left_hip_yaw_joint"), joints.index("right_hip_yaw_joint")
+    out = np.array(targets, dtype=np.float64, copy=True)
+    excess = np.maximum(out[..., il] - out[..., ir] - max_sum, 0.0)
+    out[..., il] -= 0.5 * excess
+    out[..., ir] += 0.5 * excess
+    return out
+
+
 def ankle_polygon_violation(q: np.ndarray, joints: list, polygons: dict) -> np.ndarray:
     """Distance (rad) of each ankle's (pitch, roll) outside its polygon, summed over ankles. q (..., n)."""
     total = np.zeros(q.shape[:-1])

@@ -221,6 +221,7 @@ class JX1Env:
         self.actions[:] = np.clip(actions, -100.0, 100.0)
         targets = policy_io.actions_to_targets(self.actions, self.default, self.action_scale, self.lower, self.upper)
         targets = policy_io.clip_ankle_targets(targets, self.joints, self.cfg.ankle_polygons)
+        targets = policy_io.clip_hip_yaw_toe_out(targets, self.joints, self.cfg.hip_yaw_toe_out_max)
         self.ctrl[:, self.act] = targets
         if self.hub_interp:
             # the CAN hubs ramp each new host target linearly over the next host period (firmware command_for(): alpha)

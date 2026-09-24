@@ -6,6 +6,7 @@ and velocity limits per joint (actuator classes), link names.
 """
 from __future__ import annotations
 
+import math
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -91,6 +92,8 @@ def load(config_path: Path | None = None) -> dict:
         "base_height": base_height(cfg, jm),
         "sole_offset": [float(v) for v in next(f["origin_xyz_m"] for f in jm["fixed_frames"] if f["name"] == "left_sole_fixed")],
         "polygons_deg": {s: jm["coupled_limits"]["ankle_pitch_roll"][f"{s}_polygon_deg"] for s in ("left", "right")},
+        "toe_out_max_rad": (math.radians(jm["coupled_limits"]["hip_yaw_toe_out"]["toe_out_sum_max_deg"])
+                            if "hip_yaw_toe_out" in jm.get("coupled_limits", {}) else None),
     }
 
 
@@ -122,10 +125,12 @@ def policy_io(tc: dict, meta: dict) -> dict:
         "velocity_limits_rad_s": {j: 30.0 if "ankle" in j else tc["velocity"].get(j, class_velocity[tc["classes"][j]]) for j in present},
         "joint_limits_rad": {j: list(tc["limits"][j]) for j in present},
         "ankle_polygons_rad": {s: [[round(math.radians(a), 6), round(math.radians(b), 6)] for a, b in p] for s, p in tc["polygons_deg"].items()},
+        **({"hip_yaw_toe_out_max_rad": round(tc["toe_out_max_rad"], 6)} if tc.get("toe_out_max_rad") is not None else {}),
         "observation": {"size": 9 + 3 * n + 2, "layout": OBS_LAYOUT, "scales": raw["observation"]["scales"], "clip": raw["observation"]["clip"]},
         "gait": raw["gait"],
         "commands": raw["commands"]["ranges"],
-        "targets": "q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad",
+        "targets": "q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad; "
+                   "left_hip_yaw - right_hip_yaw <= hip_yaw_toe_out_max_rad (excess taken off both hips equally)",
         "trained": meta,
     }
 

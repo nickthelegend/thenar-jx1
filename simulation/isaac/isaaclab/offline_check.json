@@ -103,15 +103,15 @@
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
-   "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, hub ramp, delay, reset)",
+   "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, toe-out, hub ramp, delay, reset)",
    "ok": true,
-   "detail": "max |diff| 1.35e-07 rad over 4 steps x 4 substeps"
+   "detail": "max |diff| 1.37e-07 rad over 4 steps x 4 substeps"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
    "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
    "ok": true,
-   "detail": "delays [0, 1, 2, 3] of [0, 3] substeps, max |diff| 2.4e-07"
+   "detail": "delays [0, 2, 3] of [0, 3] substeps, max |diff| 2.4e-07"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
@@ -223,7 +223,7 @@
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-v0",
-   "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, hub ramp, delay, reset)",
+   "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, toe-out, hub ramp, delay, reset)",
    "ok": true,
    "detail": "max |diff| 1.37e-07 rad over 4 steps x 4 substeps"
   },
@@ -231,7 +231,7 @@
    "task": "Isaac-Velocity-Flat-JX1-v0",
    "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
    "ok": true,
-   "detail": "delays [0, 1, 2] of [0, 3] substeps, max |diff| 2.4e-07"
+   "detail": "delays [0, 1, 2, 3] of [0, 3] substeps, max |diff| 2.4e-07"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-v0",
@@ -343,7 +343,7 @@
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
-   "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, hub ramp, delay, reset)",
+   "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, toe-out, hub ramp, delay, reset)",
    "ok": true,
    "detail": "max |diff| 1.35e-07 rad over 4 steps x 4 substeps"
   },
@@ -351,7 +351,7 @@
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
    "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
    "ok": true,
-   "detail": "delays [0, 1, 2, 3] of [0, 3] substeps, max |diff| 2.4e-07"
+   "detail": "delays [0, 2, 3] of [0, 3] substeps, max |diff| 2.4e-07"
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
@@ -463,7 +463,7 @@
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-v0",
-   "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, hub ramp, delay, reset)",
+   "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, toe-out, hub ramp, delay, reset)",
    "ok": true,
    "detail": "max |diff| 1.35e-07 rad over 4 steps x 4 substeps"
   },
@@ -471,7 +471,7 @@
    "task": "Isaac-Velocity-Rough-JX1-v0",
    "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
    "ok": true,
-   "detail": "delays [0, 1, 2] of [0, 3] substeps, max |diff| 2.4e-07"
+   "detail": "delays [0, 2, 3] of [0, 3] substeps, max |diff| 2.4e-07"
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-v0",
@@ -537,13 +537,13 @@
    "task": "export",
    "check": "export_offline ONNX == rsl_rl 3 ActorCritic.act_inference (normaliser in the policy)",
    "ok": true,
-   "detail": "max |diff| 8.94e-08; rsl_rl>=3 (policy normaliser)"
+   "detail": "max |diff| 1.12e-07; rsl_rl>=3 (policy normaliser)"
   },
   {
    "task": "export",
    "check": "export_offline ONNX == hand-computed rsl_rl 2.x actor (runner normaliser)",
    "ok": true,
-   "detail": "max |diff| 2.65e-06"
+   "detail": "max |diff| 2.86e-06"
   },
   {
    "task": "export",

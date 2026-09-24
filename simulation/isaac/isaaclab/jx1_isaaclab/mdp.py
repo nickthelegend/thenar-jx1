@@ -179,6 +179,8 @@ class PolygonClippedJointPositionAction(JointPositionAction):
         self._ankles = [(names.index(f"{s}_ankle_pitch_joint"), names.index(f"{s}_ankle_roll_joint"),
                          torch.tensor(p, device=self.device, dtype=torch.float32)) for s, p in cfg.polygons_rad.items()
                         if f"{s}_ankle_pitch_joint" in names]
+        self._yaw = ((names.index("left_hip_yaw_joint"), names.index("right_hip_yaw_joint"))
+                     if cfg.hip_yaw_toe_out_max is not None and {"left_hip_yaw_joint", "right_hip_yaw_joint"} <= set(names) else None)
         self._hold = self._asset.data.default_joint_pos[:, self._joint_ids].clone()
         self._applied = self._hold.clone()
         self._from = self._hold.clone()
@@ -215,6 +217,11 @@ class PolygonClippedJointPositionAction(JointPositionAction):
         p = torch.clamp(self._processed_actions, self._lo, self._hi)
         for ip, ir, poly in self._ankles:
             p[:, [ip, ir]] = project_to_polygon(p[:, [ip, ir]], poly)
+        if self._yaw is not None:                         # hip-yaw toe-out coupling (OI-24), excess off both hips equally
+            il, ir = self._yaw
+            excess = torch.clamp(p[:, il] - p[:, ir] - self.cfg.hip_yaw_toe_out_max, min=0.0)
+            p[:, il] = p[:, il] - 0.5 * excess
+            p[:, ir] = p[:, ir] + 0.5 * excess
         self._processed_actions = p
         self._from = self._applied.clone()
         self._substep = 0
@@ -249,6 +256,7 @@ class PolygonClippedJointPositionActionCfg(JointPositionActionCfg):
     hub_interpolation: bool = True
     action_delay_substeps: tuple = (0, 0)
     obs_delay_substeps: tuple = (0, 0)
+    hip_yaw_toe_out_max: float | None = None
 
 
 # ------------------------------------------------------------------------------------------------ delayed observations

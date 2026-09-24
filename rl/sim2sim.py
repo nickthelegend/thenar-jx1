@@ -50,7 +50,8 @@ class Runner:
         act = self.sess.run([self.io["policy"]["output"]], {self.io["policy"]["input"]: obs[None].astype(np.float32)})[0][0]
         self.last_action = act.astype(np.float64)
         tgt = policy_io.actions_to_targets(self.last_action, self.default, self.io["action_scale"], self.lower, self.upper)
-        return policy_io.clip_ankle_targets(tgt, self.joints, self.polys)
+        tgt = policy_io.clip_ankle_targets(tgt, self.joints, self.polys)
+        return policy_io.clip_hip_yaw_toe_out(tgt, self.joints, self.io.get("hip_yaw_toe_out_max_rad"))
 
 
 def load_cad_model(io, terrain_cfg=None):

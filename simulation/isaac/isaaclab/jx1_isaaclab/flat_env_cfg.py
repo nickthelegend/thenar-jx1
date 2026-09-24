@@ -93,7 +93,8 @@ class JX1Actions:
                                                          use_default_offset=True, preserve_order=True, polygons_rad=POLYGONS,
                                                          hub_interpolation=R["model"].get("hub_interpolation", False),
                                                          action_delay_substeps=tuple(RND.get("action_delay_substeps", (0, 0))),
-                                                         obs_delay_substeps=tuple(RND.get("obs_delay_substeps", (0, 0))))
+                                                         obs_delay_substeps=tuple(RND.get("obs_delay_substeps", (0, 0))),
+                                                         hip_yaw_toe_out_max=TC["toe_out_max_rad"])
 
 
 @configclass

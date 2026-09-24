@@ -84,10 +84,12 @@ def policy_io(cfg, meta):
         "velocity_limits_rad_s": {j: velocity_limit(cfg, j) for j in present},
         "joint_limits_rad": {j: list(cfg.limits[j]) for j in present},
         "ankle_polygons_rad": {s: np.round(p, 6).tolist() for s, p in cfg.ankle_polygons.items()},
+        **({"hip_yaw_toe_out_max_rad": round(cfg.hip_yaw_toe_out_max, 6)} if cfg.hip_yaw_toe_out_max is not None else {}),
         "observation": {"size": cfg.num_obs, "layout": OBS_LAYOUT, "scales": cfg["observation"]["scales"], "clip": cfg["observation"]["clip"]},
         "gait": cfg["gait"],
         "commands": cfg["commands"]["ranges"],
-        "targets": "q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad",
+        "targets": "q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad; "
+                   "left_hip_yaw - right_hip_yaw <= hip_yaw_toe_out_max_rad (excess taken off both hips equally)",
         "trained": meta,
     }
 

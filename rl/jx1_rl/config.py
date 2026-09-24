@@ -29,6 +29,7 @@ class TaskConfig:
     gains: dict = field(default_factory=dict)                # joint -> (kp, kd)
     limits: dict = field(default_factory=dict)               # joint -> (lower, upper) rad
     ankle_polygons: dict = field(default_factory=dict)       # 'left'/'right' -> (k, 2) rad (pitch, roll)
+    hip_yaw_toe_out_max: float | None = None                 # rad: left_hip_yaw - right_hip_yaw <= this (OI-24)
 
     def __getitem__(self, k):
         return self.raw[k]
@@ -91,4 +92,7 @@ def load(path: str | Path = RL_DIR / "config" / "jx1_walk.yaml") -> TaskConfig:
     if cl:
         for side in ("left", "right"):
             cfg.ankle_polygons[side] = np.radians(np.array(cl[f"{side}_polygon_deg"], dtype=np.float64))
+    ty = jm.get("coupled_limits", {}).get("hip_yaw_toe_out")
+    if ty:
+        cfg.hip_yaw_toe_out_max = float(np.radians(ty["toe_out_sum_max_deg"]))
     return cfg

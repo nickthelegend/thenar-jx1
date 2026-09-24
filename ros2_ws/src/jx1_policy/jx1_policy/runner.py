@@ -58,6 +58,10 @@ class PolicyRunner:
                 self.ankles.append((self.policy_joints.index(f"{side}_ankle_pitch_joint"),
                                     self.policy_joints.index(f"{side}_ankle_roll_joint"), np.array(poly)))
         self.last_action = np.zeros(len(self.policy_joints))
+        # hip-yaw toe-out coupling (left_hip_yaw - right_hip_yaw <= max): the bracket tails touch beyond it (OI-24)
+        self.toe_out_max = io.get("hip_yaw_toe_out_max_rad")
+        self.yaw_ids = ((self.policy_joints.index("left_hip_yaw_joint"), self.policy_joints.index("right_hip_yaw_joint"))
+                        if {"left_hip_yaw_joint", "right_hip_yaw_joint"} <= set(self.policy_joints) else None)
 
     def reset(self):
         self.last_action[:] = 0.0
@@ -80,6 +84,11 @@ class PolicyRunner:
         tgt = np.clip(self.default + self.action_scale * self.last_action, self.lower, self.upper)
         for ip, ir, poly in self.ankles:
             tgt[ip], tgt[ir] = project_to_polygon(np.array([tgt[ip], tgt[ir]]), poly)
+        if self.toe_out_max is not None and self.yaw_ids:
+            il, ir = self.yaw_ids
+            excess = max(tgt[il] - tgt[ir] - self.toe_out_max, 0.0)
+            tgt[il] -= 0.5 * excess
+            tgt[ir] += 0.5 * excess
         out = dict(zip(self.policy_joints, tgt.tolist()))
         out.update({j: self.default_all[j] for j in self.held_joints})
         return out
