@@ -5,6 +5,7 @@ All API lengths are metres and angles radians (SolidWorks API convention), indep
 from __future__ import annotations
 
 import math
+import os
 from pathlib import Path
 
 import pythoncom
@@ -44,6 +45,14 @@ def dispatch_array(objs):
 NOTHING = com.VARIANT(pythoncom.VT_DISPATCH, None)
 
 
+def _other_solidworks_running(own_pid: int) -> bool:
+    """True when another SLDWORKS.exe is running (then owning the shared registration would put it at risk)."""
+    import subprocess
+    out = subprocess.run(["tasklist", "/FI", "IMAGENAME eq SLDWORKS.exe", "/FO", "CSV", "/NH"], capture_output=True, text=True).stdout
+    pids = [int(line.split('","')[1]) for line in out.strip().splitlines() if line.startswith('"SLDWORKS')]
+    return any(p != own_pid for p in pids)
+
+
 class Session:
     """Connection to the dedicated JX1 SolidWorks session (never the shared GetActiveObject one)."""
 
@@ -52,7 +61,8 @@ class Session:
         self.pid = pid
         self.app = app
         guard = active_object_pid()
-        if guard == pid:
+        # JX_SW_ALLOW_ACTIVE=1: the session owns the shared registration only because it started first (checked by hand)
+        if guard == pid and _other_solidworks_running(pid) and os.environ.get("JX_SW_ALLOW_ACTIVE") != "1":
             raise RuntimeError("JX1 session is registered as the shared active SolidWorks object; refusing to work")
         self.math = typed(self.app.GetMathUtility(), "IMathUtility")
 

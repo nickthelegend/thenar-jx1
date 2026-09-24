@@ -38,3 +38,6 @@ media/assembly-film/node_modules/
 
 # cost-report build files (HTML, page previews, headless browser profile)
 bom/.report_build/
+
+# screen recordings of the CAD sessions (large; kept locally for the timelapse)
+media/timelapse/
