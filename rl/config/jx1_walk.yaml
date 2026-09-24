@@ -76,9 +76,12 @@ gait:                                            # phase clock shared by actor, 
   offset: 0.5                                    # right leg phase = left + offset
   stance_fraction: 0.55
   swing_height_m: 0.08
-  # stand mode (OI-27): |(vx, vy, wz)| below this = stand still. The clock features read 0, the contact reward wants both
-  # feet down and there is no swing target (a free-running clock made the policy step in place: 163 W standing)
+  # stand mode (OI-27): |(vx, vy, wz)| below this = stand still. The clock features read 0 and there is no swing target
+  # (a free-running clock made the policy step in place: 163 W standing)
   stand_command_threshold: 0.1
+  # contact reward in stand mode: both_down (walk_v5/v6: it also penalised recovery steps, standing push 11.7 N s forward
+  # for walk_v6) or none (no gait contact target; stand_still still penalises needless joint motion)
+  stand_contact_reward: none
 
 commands:
   resample_s: 10.0
@@ -93,7 +96,7 @@ termination:
 
 rewards:                                         # weights (per policy step; multiplied by the policy dt)
   tracking_lin_vel: 1.0                          # exp(-|v_xy - cmd|^2 / sigma)
-  tracking_ang_vel: 0.5
+  tracking_ang_vel: 0.8                           # 0.5 up to walk_v6: slow turns tracked at 80 % after the stand-mode fine-tunes
   tracking_sigma: 0.25
   lin_vel_z: -2.0
   ang_vel_xy: -0.05

@@ -110,6 +110,8 @@ class JX1Env:
         g = cfg["gait"]
         self.period, self.offset, self.stance, self.swing_h = g["period_s"], g["offset"], g["stance_fraction"], g["swing_height_m"]
         self.stand_thr = g.get("stand_command_threshold")
+        # stand-mode contact reward: "both_down" (walk_v5/v6: both feet down, which penalises recovery steps) or "none"
+        self.stand_contact = g.get("stand_contact_reward", "both_down")
         self._sense(self._sens_out)                           # placeholders
         self.reset_envs(np.arange(N))
 
@@ -314,7 +316,7 @@ class JX1Env:
                               + policy_io.ankle_polygon_violation(q, self.joints, self.cfg.ankle_polygons),
             "alive": np.ones(self.N),
             "hip_pos": np.sum(q[:, self.hip_idx] ** 2, axis=1),
-            "contact": np.sum(contact == stance, axis=1).astype(np.float64),
+            "contact": np.sum(contact == stance, axis=1).astype(np.float64) * (moving | (self.stand_contact == "both_down")),
             "feet_swing_height": np.sum(((self.foot_pos[:, :, 2] - self.ground(self.foot_pos[:, :, 0], self.foot_pos[:, :, 1])
                                           - self.swing_h) ** 2) * ~contact, axis=1) * moving,
             "contact_no_vel": np.sum(np.sum(self.foot_vel ** 2, axis=2) * contact, axis=1),

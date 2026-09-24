@@ -1,0 +1,24 @@
+{
+ "policy": "rl\\policies\\jx1_walk_stand_sym",
+ "command": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "push_duration_s": 0.1,
+ "push_time_s": 4.0,
+ "max_survived_impulse_Ns": {
+  "forward": 11.72,
+  "backward": 18.28,
+  "left": 46.41,
+  "right": 51.56
+ },
+ "baseline_upright": true,
+ "robot_mass_kg": 33.61,
+ "equivalent_com_velocity_change_m_s": {
+  "forward": 0.349,
+  "backward": 0.544,
+  "left": 1.381,
+  "right": 1.534
+ }
+}

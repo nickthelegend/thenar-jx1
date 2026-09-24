@@ -1,0 +1,93 @@
+{
+ "policy": "rl/policies/jx1_walk_stand_sym",
+ "chain": "jx1_policy -> jx1_hw hw_node -> hub protocol over TCP -> fake_hub (firmware law) -> MuJoCo",
+ "started_by": "ros2 launch jx1_hw hardware.launch.py hil:=true (colcon install)",
+ "phases": {
+  "stand": {
+   "command": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "sim_duration_s": 4.0,
+   "distance_m": 0.152,
+   "mean_speed_m_s": 0.038,
+   "yaw_change_deg": -3.3,
+   "min_pelvis_z_m": 0.571,
+   "max_tilt_deg": 5.42
+  },
+  "forward": {
+   "command": [
+    0.3,
+    0.0,
+    0.0
+   ],
+   "sim_duration_s": 10.0,
+   "distance_m": 2.595,
+   "mean_speed_m_s": 0.26,
+   "yaw_change_deg": -14.8,
+   "min_pelvis_z_m": 0.567,
+   "max_tilt_deg": 4.58
+  },
+  "turn": {
+   "command": [
+    0.0,
+    0.0,
+    0.3
+   ],
+   "sim_duration_s": 6.0,
+   "distance_m": 0.176,
+   "mean_speed_m_s": 0.029,
+   "yaw_change_deg": 73.6,
+   "min_pelvis_z_m": 0.568,
+   "max_tilt_deg": 4.99
+  },
+  "stop": {
+   "command": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "sim_duration_s": 4.0,
+   "distance_m": 0.157,
+   "mean_speed_m_s": 0.039,
+   "yaw_change_deg": -3.5,
+   "min_pelvis_z_m": 0.571,
+   "max_tilt_deg": 4.86
+  }
+ },
+ "reached_walk_state": true,
+ "run_accepted": true,
+ "hub_modes_after_run": {
+  "a": 2,
+  "b": 2
+ },
+ "upright": true,
+ "hub_status_end": {
+  "requested": 2,
+  "fall_latched": false,
+  "hubs": {
+   "a": {
+    "mode": 2,
+    "estop": false,
+    "fault": false,
+    "stale": []
+   },
+   "b": {
+    "mode": 2,
+    "estop": false,
+    "fault": false,
+    "stale": []
+   }
+  }
+ },
+ "launch_log_tail": [
+  "[INFO] [launch]: Default logging verbosity is set to INFO",
+  "[INFO] [fake_hub.EXE-1]: process started with pid [38312]",
+  "[INFO] [hw_node.EXE-2]: process started with pid [51136]",
+  "[INFO] [robot_state_publisher.EXE-3]: process started with pid [42908]",
+  "[INFO] [policy_node.EXE-4]: process started with pid [50160]",
+  "[robot_state_publisher.EXE-3] [WARN] [1790244999.242781100] [kdl_parser]: The root link pelvis has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.",
+  "[robot_state_publisher.EXE-3] [INFO] [1790244999.242933300] [robot_state_publisher]: Robot initialized"
+ ]
+}

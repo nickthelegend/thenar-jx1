@@ -1,0 +1,75 @@
+{
+ "policy": "rl/policies/jx1_walk_stand_sym",
+ "ros_distro": "jazzy",
+ "started_by": "ros2 launch jx1_bringup ros2_control.launch.py (colcon install)",
+ "phases": {
+  "forward": {
+   "command": [
+    0.4,
+    0.0,
+    0.0
+   ],
+   "sim_duration_s": 10.0,
+   "distance_m": 3.369,
+   "mean_speed_m_s": 0.337,
+   "yaw_change_deg": -13.9,
+   "min_pelvis_z_m": 0.563,
+   "max_tilt_deg": 5.36
+  },
+  "turn": {
+   "command": [
+    0.0,
+    0.0,
+    0.4
+   ],
+   "sim_duration_s": 6.0,
+   "distance_m": 0.178,
+   "mean_speed_m_s": 0.03,
+   "yaw_change_deg": 103.1,
+   "min_pelvis_z_m": 0.563,
+   "max_tilt_deg": 4.98
+  },
+  "stop": {
+   "command": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "sim_duration_s": 4.0,
+   "distance_m": 0.172,
+   "mean_speed_m_s": 0.043,
+   "yaw_change_deg": -2.5,
+   "min_pelvis_z_m": 0.571,
+   "max_tilt_deg": 4.76
+  }
+ },
+ "reached_walk_state": true,
+ "upright": true,
+ "launch_log_tail": [
+  "[INFO] [mujoco_node.EXE-6]: process started with pid [50400]",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.451725900] [controller_manager]: Using ROS clock for triggering controller manager cycles.",
+  "[ros2_control_node.EXE-1] [WARN] [1790244930.459462800] [pal_statistics]: Unable to start publisher thread for statistics in ros2_control, as the registry is not found.",
+  "[ros2_control_node.EXE-1] [WARN] [1790244930.459493000] [pal_statistics]: Unable to start publisher thread for statistics in cm_execution_statistics, as the registry is not found.",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.459930900] [controller_manager]: Subscribing to '/robot_description' topic for robot description.",
+  "[ros2_control_node.EXE-1] Realtime kernel detection is not supported on Windows.",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.459986200] [controller_manager]: update rate is 200 Hz",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.459993600] [controller_manager]: Overruns handling is : enabled",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.460000600] [controller_manager]: Spawning controller_manager RT thread with scheduler priority: 50",
+  "[ros2_control_node.EXE-1] [WARN] [1790244930.460183900] [controller_manager]: Could not enable FIFO RT scheduling policy: with error number <0>(No error). See [https://control.ros.org/master/doc/ros2_control/controller_manager/doc/userdoc.html] for details on how to enable realtime scheduling.",
+  "[robot_state_publisher.EXE-2] [WARN] [1790244930.478511300] [kdl_parser]: The root link pelvis has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.",
+  "[robot_state_publisher.EXE-2] [INFO] [1790244930.478711900] [robot_state_publisher]: Robot initialized",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.686867800] [controller_manager]: Received robot description from topic.",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.686958700] [controller_manager]: Enforcing command limits is disabled. Command limits from URDF will be ignored.",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.693195800] [controller_manager]: Loading hardware 'JX1System' ",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.696084600] [controller_manager]: Loaded hardware 'JX1System' from plugin 'topic_based_ros2_control/TopicBasedSystem'",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.696189700] [controller_manager]: Initialize hardware 'JX1System' ",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.709524500] [controller_manager]: Successful initialization of hardware 'JX1System'",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.709837100] [controller_manager]: Activating component 'JX1System'.",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.709868000] [resource_manager]: 'configure' hardware 'JX1System' ",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.709874900] [resource_manager]: Successful 'configure' of hardware 'JX1System'",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.709891800] [resource_manager]: 'activate' hardware 'JX1System' ",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.709900500] [resource_manager]: Successful 'activate' of hardware 'JX1System'",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.709943700] [controller_manager]: Registering statistics for : JX1System",
+  "[ros2_control_node.EXE-1] [INFO] [1790244930.709964400] [controller_manager]: Resource Manager has been successfully initialized. Starting Controller Manager services..."
+ ]
+}

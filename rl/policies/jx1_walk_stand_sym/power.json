@@ -1,0 +1,195 @@
+{
+ "policy": "jx1_walk_stand_sym",
+ "model": "calculations/run_power_budget.py actuator model (Kt VERIFIED, R_phase ESTIMATED), no regeneration",
+ "duration_s": 10.0,
+ "scenarios": {
+  "stand": {
+   "command": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fell": false,
+   "achieved": [
+    -0.0,
+    -0.0,
+    -0.0
+   ],
+   "foot_liftoffs_per_s": 0.0,
+   "legs_mean_W": 31.5,
+   "mean_W": 79.3,
+   "peak_W": 79.4,
+   "mean_current_A_at_nominal": 1.69,
+   "peak_current_A_at_min_V": 1.9
+  },
+  "walk_0.3": {
+   "command": [
+    0.3,
+    0.0,
+    0.0
+   ],
+   "fell": false,
+   "achieved": [
+    0.295,
+    -0.011,
+    -0.029
+   ],
+   "foot_liftoffs_per_s": 2.51,
+   "legs_mean_W": 172.9,
+   "mean_W": 235.8,
+   "peak_W": 294.3,
+   "mean_current_A_at_nominal": 5.04,
+   "peak_current_A_at_min_V": 7.1
+  },
+  "walk_0.5": {
+   "command": [
+    0.5,
+    0.0,
+    0.0
+   ],
+   "fell": false,
+   "achieved": [
+    0.493,
+    -0.013,
+    -0.029
+   ],
+   "foot_liftoffs_per_s": 2.51,
+   "legs_mean_W": 221.3,
+   "mean_W": 284.2,
+   "peak_W": 376.1,
+   "mean_current_A_at_nominal": 6.07,
+   "peak_current_A_at_min_V": 9.0
+  },
+  "walk_0.8": {
+   "command": [
+    0.8,
+    0.0,
+    0.0
+   ],
+   "fell": false,
+   "achieved": [
+    0.765,
+    -0.013,
+    -0.027
+   ],
+   "foot_liftoffs_per_s": 2.51,
+   "legs_mean_W": 299.9,
+   "mean_W": 362.7,
+   "peak_W": 504.4,
+   "mean_current_A_at_nominal": 7.75,
+   "peak_current_A_at_min_V": 12.1
+  },
+  "turn_0.5": {
+   "command": [
+    0.0,
+    0.0,
+    0.5
+   ],
+   "fell": false,
+   "achieved": [
+    -0.025,
+    -0.007,
+    0.418
+   ],
+   "foot_liftoffs_per_s": 2.51,
+   "legs_mean_W": 145.1,
+   "mean_W": 208.0,
+   "peak_W": 291.5,
+   "mean_current_A_at_nominal": 4.44,
+   "peak_current_A_at_min_V": 7.0
+  }
+ },
+ "thermal": {
+  "hip_yaw": {
+   "class": "M",
+   "worst_I_rms_A": 2.88,
+   "rated_I_rms_A": 10.11,
+   "utilisation": 0.29,
+   "scenario": "walk_0.8"
+  },
+  "hip_roll": {
+   "class": "L",
+   "worst_I_rms_A": 6.49,
+   "rated_I_rms_A": 9.19,
+   "utilisation": 0.71,
+   "scenario": "walk_0.8"
+  },
+  "hip_pitch": {
+   "class": "XL",
+   "worst_I_rms_A": 6.58,
+   "rated_I_rms_A": 19.09,
+   "utilisation": 0.34,
+   "scenario": "walk_0.8"
+  },
+  "knee": {
+   "class": "XL",
+   "worst_I_rms_A": 11.28,
+   "rated_I_rms_A": 19.09,
+   "utilisation": 0.59,
+   "scenario": "walk_0.8"
+  },
+  "ankle_motor": {
+   "class": "M",
+   "worst_I_rms_A": 8.03,
+   "rated_I_rms_A": 10.11,
+   "utilisation": 0.79,
+   "scenario": "walk_0.8"
+  }
+ },
+ "torque_speed": {
+  "model": "|tau| / (peak torque * (1 - |omega| / no-load speed at 41.6 V)), linear stall-to-no-load line (conservative: the real curve is flat up to its corner speed); worst point per actuator",
+  "hip_yaw": {
+   "class": "M",
+   "worst_utilisation": 0.25,
+   "tau_Nm": 8.9,
+   "omega_rad_s": 0.2,
+   "no_load_rad_s_at_min_V": 43.6,
+   "scenario": "turn_0.5"
+  },
+  "hip_roll": {
+   "class": "L",
+   "worst_utilisation": 0.49,
+   "tau_Nm": 29.3,
+   "omega_rad_s": 0.12,
+   "no_load_rad_s_at_min_V": 18.2,
+   "scenario": "walk_0.8"
+  },
+  "hip_pitch": {
+   "class": "XL",
+   "worst_utilisation": 0.33,
+   "tau_Nm": 38.2,
+   "omega_rad_s": 0.78,
+   "no_load_rad_s_at_min_V": 18.2,
+   "scenario": "walk_0.8"
+  },
+  "knee": {
+   "class": "XL",
+   "worst_utilisation": 0.38,
+   "tau_Nm": 41.8,
+   "omega_rad_s": 1.66,
+   "no_load_rad_s_at_min_V": 18.2,
+   "scenario": "walk_0.8"
+  },
+  "ankle_motor": {
+   "class": "M",
+   "worst_utilisation": 0.88,
+   "tau_Nm": 30.1,
+   "omega_rad_s": 2.03,
+   "no_load_rad_s_at_min_V": 43.6,
+   "scenario": "walk_0.8"
+  }
+ },
+ "pack_13S2P_50S": {
+  "usable_Wh_80pct": 374.0,
+  "cont_current_A": 50,
+  "runtime_h": {
+   "stand": 4.72,
+   "walk_0.3": 1.59,
+   "walk_0.5": 1.32,
+   "walk_0.8": 1.03,
+   "turn_0.5": 1.8
+  },
+  "bms_rating_A": 40,
+  "worst_peak_current_A": 12.1
+ }
+}

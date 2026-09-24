@@ -347,7 +347,7 @@
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
    "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, toe-out, hub ramp, delay, reset)",
    "ok": true,
-   "detail": "max |diff| 1.37e-07 rad over 4 steps x 4 substeps"
+   "detail": "max |diff| 1.35e-07 rad over 4 steps x 4 substeps"
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
@@ -545,7 +545,7 @@
    "task": "export",
    "check": "export_offline ONNX == hand-computed rsl_rl 2.x actor (runner normaliser)",
    "ok": true,
-   "detail": "max |diff| 5.72e-06"
+   "detail": "max |diff| 2.86e-06"
   },
   {
    "task": "export",

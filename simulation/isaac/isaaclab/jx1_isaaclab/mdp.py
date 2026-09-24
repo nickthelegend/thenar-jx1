@@ -100,10 +100,14 @@ def feet_height(env, sole_offset, asset_cfg: SceneEntityCfg, ground_cfg: SceneEn
 
 # ------------------------------------------------------------------------------------------------ rewards
 def contact_phase_match(env, period: float, offset: float, stance_fraction: float, sensor_cfg: SceneEntityCfg,
-                        command_name: str | None = None, stand_threshold: float | None = None) -> torch.Tensor:
+                        command_name: str | None = None, stand_threshold: float | None = None,
+                        stand_contact: str = "both_down") -> torch.Tensor:
+    """Feet whose contact state agrees with the gait clock. Stand mode: both feet down ("both_down") or no term ("none")."""
+    moving = _moving(env, command_name, stand_threshold) > 0.5
     stance = _leg_phase(env, period, offset) < stance_fraction
-    stance = torch.where(_moving(env, command_name, stand_threshold)[:, None] > 0.5, stance, torch.ones_like(stance))   # stand: both down
-    return (_contact(env, sensor_cfg) == stance).float().sum(dim=1)
+    stance = torch.where(moving[:, None], stance, torch.ones_like(stance))
+    match = (_contact(env, sensor_cfg) == stance).float().sum(dim=1)
+    return match if stand_contact == "both_down" else match * moving.float()
 
 
 def feet_swing_height(env, target_height: float, sole_offset, sensor_cfg: SceneEntityCfg, asset_cfg: SceneEntityCfg,

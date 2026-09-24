@@ -120,7 +120,8 @@ class JX1Rewards:
                       params={"asset_cfg": robot([j for j in POLICY if "hip_roll" in j or "hip_yaw" in j])})
     contact = RewTerm(func=jx1.contact_phase_match, weight=W["contact"],
                       params={"period": G["period_s"], "offset": G["offset"], "stance_fraction": G["stance_fraction"],
-                              "sensor_cfg": SceneEntityCfg("contact_forces", body_names=FEET, preserve_order=True), **STAND})
+                              "sensor_cfg": SceneEntityCfg("contact_forces", body_names=FEET, preserve_order=True), **STAND,
+                              "stand_contact": G.get("stand_contact_reward", "both_down")})
     feet_swing_height = RewTerm(func=jx1.feet_swing_height, weight=W["feet_swing_height"],
                                 params={"target_height": G["swing_height_m"], "sole_offset": SOLE,
                                         "sensor_cfg": SceneEntityCfg("contact_forces", body_names=FEET, preserve_order=True),
