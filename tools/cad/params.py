@@ -72,6 +72,9 @@ PKG = {
     "yaw_keel_w": 0.012,         # keel under the yaw top plate above the roll housing, behind the roll-bracket sweep
     "roll_plate_t": 0.010,       # hip-roll bracket medial plate (6061-T6; back plate stays 8 mm for pitch-housing connector clearance;
                                  #   R1 8 mm/8 mm already passes 1.96/2.64, R2 12 mm 4.42/6.68)
+    "roll_back_bottom_z": -0.040,  # hip-roll back plate lower edge (top stays +45 mm): at -45 mm the thigh's back flange touched it at
+                                 #   hip pitch +35 deg (0.23 mm3, verify_leg_motion 2026-09-24); -40 mm moves first contact to ~37.3 deg
+                                 #   and still covers the RS03 output disc (r 34 mm) with 6 mm margin, >= 10 mm below the M4 holes
     "shin_knee_t": 0.014,        # shin knee plate (6061-T6; design S3: SF 3.12 / 4.04)
     "shin_joggle_z": (-0.110, -0.066),   # knee plate -> web joggle block, deepened (torsion of the offset load path)
     "foot_sole_t": 0.008,        # 6061 sole plate (F1 10 mm: 4.29 / 2.5; 8 mm estimated 2.7 / 1.6)

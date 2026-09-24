@@ -123,7 +123,9 @@ def hip_roll_bracket(s):
     y_lat = PKG["pitch_out_y"] - 0.002       # stop 2 mm short of the thigh plate plane
     y_in = min(y_med - TR, -L["D_OUT"] / 2 - 0.002)  # cover the whole roll output flange on the medial side
     # back plate stays 8 mm: 10 mm would reach the hip-pitch housing's rear connector zone (clocked backward, radius 68 mm)
-    plate(p, "Back_Plate", "x", xf, xf + T, [(0, y_in, -0.045), (0, y_lat, -0.045), (0, y_lat, 0.045), (0, y_in, 0.045)],
+    zb = PKG["roll_back_bottom_z"]           # raised lower edge: thigh back-flange clearance at hip pitch +35 deg
+    p.gv("Back_bottom_z", mm(zb))
+    plate(p, "Back_Plate", "x", xf, xf + T, [(0, y_in, zb), (0, y_lat, zb), (0, y_lat, 0.045), (0, y_in, 0.045)],
           [((0, y, z), d) for (_, y, z, d) in bh] + [((0, 0, 0), 0.012)])
     circle_cut(p, "Roll_Pilot_Recess", "x", xf, (xf, 0, 0), L["PILOT_D"] + 0.0003, L["PILOT_H"] + 0.0002, into_positive=True)
     rm = PC["PCD_REAR"] / 2 + 0.006

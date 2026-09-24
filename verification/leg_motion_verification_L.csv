@@ -23,4 +23,4 @@ toe_out_step,"{""hip_yaw"": 40, ""hip_pitch"": -20, ""knee"": 40, ""ankle_pitch"
 toe_in_step,"{""hip_yaw"": -35, ""hip_pitch"": -20, ""knee"": 40, ""ankle_pitch"": -20}",0.0,0.0,True,True,
 sit,"{""hip_pitch"": -90, ""knee"": 90}",0.0,0.0,True,True,
 ankle_corner_1,"{""ankle_pitch"": -55, ""ankle_roll"": 20, ""knee"": 60, ""hip_pitch"": -30}",0.0,0.0,True,True,
-ankle_corner_2,"{""ankle_pitch"": 30, ""ankle_roll"": -20}",0.0,0.0,True,False,L_AnkBH/L_RodB:696.021mm3
+ankle_corner_2,"{""ankle_pitch"": 30, ""ankle_roll"": -20}",0.0,0.0,True,False,L_AnkBH/L_RodB:696.031mm3

@@ -85,7 +85,7 @@
         -75.0,
         75.0
       ],
-      "measured_sin_for_+0.1rad": 0.09983341664682772,
+      "measured_sin_for_+0.1rad": 0.09983341664682813,
       "sign_check_pass": true
     },
     "R_hip_yaw_LIMIT": {
@@ -155,7 +155,7 @@
         -75.0,
         75.0
       ],
-      "measured_sin_for_+0.1rad": 0.0998334166468281,
+      "measured_sin_for_+0.1rad": 0.09983341664682793,
       "sign_check_pass": true
     },
     "R_ankle_motorB_LIMIT": {

@@ -19,6 +19,7 @@ import sys
 from pathlib import Path
 
 import numpy as np
+import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from swlib.core import C, Session, typed, set_view  # noqa: E402
@@ -33,6 +34,22 @@ WHITELIST = [("RodA", "CrankA"), ("RodB", "CrankB"), ("RodA", "Foot"), ("RodB", 
 
 
 MIRRORED = ("hip_yaw", "hip_roll", "ankle_roll")
+COUPLED = yaml.safe_load((ROOT / "simulation" / "joint_map.yaml").read_text(encoding="utf-8"))["coupled_limits"]["ankle_pitch_roll"]
+
+
+def within_coupled_limits(side, q_deg, tol=1e-6):
+    """(ankle_pitch, ankle_roll) inside or on the coupled limit polygon of simulation/joint_map.yaml (open issue OI-3)."""
+    poly = np.array(COUPLED["left_polygon_deg" if side == "L" else "right_polygon_deg"], float)
+    p = np.array([q_deg.get("ankle_pitch", 0.0), q_deg.get("ankle_roll", 0.0)])
+    inside = False
+    for a, b in zip(poly, np.roll(poly, -1, axis=0)):
+        ab, ap = b - a, p - a
+        t = np.clip(ap @ ab / (ab @ ab), 0, 1)
+        if np.linalg.norm(ap - t * ab) <= tol:
+            return True                                   # on the boundary
+        if (a[1] > p[1]) != (b[1] > p[1]) and p[0] < a[0] + (p[1] - a[1]) * ab[0] / ab[1]:
+            inside = not inside
+    return inside
 
 
 def poses_to_test(side="L"):
@@ -191,7 +208,8 @@ def main():
         row = {"pose": name, "joints_deg": q, "max_pos_err_mm": round(dp, 4), "max_rot_err_deg": round(dr, 4), "worst_component": who,
                "ankle_motor_deg": [round(float(np.degrees(x)), 2) for x in phi], "mate_errors": errs,
                "interferences": real, "inter_leg_contacts": inter_leg, "whitelisted_contacts": len(ints) - len(real) - len(inter_leg),
-               "kinematics_pass": dp < 0.05 and dr < 0.05 and not errs, "collision_free": not real}
+               "kinematics_pass": dp < 0.05 and dr < 0.05 and not errs, "collision_free": not real,
+               "within_coupled_ankle_limits": within_coupled_limits(a.side, q)}
         rows.append(row)
         print(f"{name:18s} kin {'OK ' if row['kinematics_pass'] else 'BAD'} err {dp:8.4f} mm {dr:7.4f} deg ({who})  "
               f"collisions {len(real)} {[tuple(i['components']) + (i['volume_mm3'],) for i in real][:3]} inter-leg {len(inter_leg)}", flush=True)
@@ -208,7 +226,9 @@ def main():
                         r["collision_free"], "; ".join(f"{'/'.join(i['components'])}:{i['volume_mm3']}mm3" for i in r["interferences"])])
     npass = sum(r["kinematics_pass"] for r in rows)
     nfree = sum(r["collision_free"] for r in rows)
-    print(f"\nkinematics pass {npass}/{len(rows)}, collision-free {nfree}/{len(rows)}")
+    inside = [r for r in rows if r["within_coupled_ankle_limits"]]
+    print(f"\nkinematics pass {npass}/{len(rows)}, collision-free {nfree}/{len(rows)}; within the coupled ankle limits "
+          f"collision-free {sum(r['collision_free'] for r in inside)}/{len(inside)} ({len(rows) - len(inside)} pose(s) outside by design)")
 
 
 if __name__ == "__main__":
