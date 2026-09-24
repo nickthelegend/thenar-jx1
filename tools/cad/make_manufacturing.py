@@ -12,6 +12,7 @@ Usage: .venv/Scripts/python tools/cad/make_manufacturing.py [--no-drawings]
 from __future__ import annotations
 
 import argparse
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -41,14 +42,14 @@ PARTS = [
     ("Ankle/JX1_AnkleCross", "turn + cross-drill Ø8 H7 bores", "EN8/EN24", 2, True),
     ("Ankle/JX1_AnkleRod_A", "cut Ø8 rod to length, tap M5x12 both ends", "chrome-plated steel", 2, True),
     ("Ankle/JX1_AnkleRod_B", "cut Ø8 rod to length, tap M5x12 both ends", "chrome-plated steel", 2, False),
-    ("Torso/JX1_Torso", "laser 5/4 mm plates + 4x 2020 extrusion posts - ON HOLD until the upper-body FEA", "6061-T6 + 2020", 1, True),
-    ("Arms/JX1_ShoulderPitchBracket_L", "laser 5 mm plates, bolted U-bracket - ON HOLD until the upper-body FEA", "6061-T6", 1, True),
+    ("Torso/JX1_Torso", "laser 5/4 mm plates + 4x 2020 extrusion posts (FEA SF 4.44/3.59)", "6061-T6 + 2020", 1, True),
+    ("Arms/JX1_ShoulderPitchBracket_L", "laser 5 mm plates, bolted U-bracket (FEA SF 2.17/1.75)", "6061-T6", 1, True),
     ("Arms/JX1_ShoulderPitchBracket_R", "as L, mirrored", "6061-T6", 1, False),
-    ("Arms/JX1_ShoulderRollBracket_L", "laser 6 mm plates, bolted L-bracket - ON HOLD until the upper-body FEA", "6061-T6", 1, True),
+    ("Arms/JX1_ShoulderRollBracket_L", "laser 6 mm plates, bolted L-bracket (FEA SF 2.05/1.66)", "6061-T6", 1, True),
     ("Arms/JX1_ShoulderRollBracket_R", "as L, mirrored", "6061-T6", 1, False),
-    ("Arms/JX1_UpperArm_L", "laser 6 mm plates, bolted - ON HOLD until the upper-body FEA", "6061-T6", 1, True),
+    ("Arms/JX1_UpperArm_L", "laser 10 + 8 mm plates + 2x 6 mm gussets, bolted/welded (FEA SF 3.12/2.52)", "6061-T6", 1, True),
     ("Arms/JX1_UpperArm_R", "as L, mirrored", "6061-T6", 1, False),
-    ("Arms/JX1_Forearm_L", "laser 6 mm plates, bolted - ON HOLD until the upper-body FEA", "6061-T6", 1, True),
+    ("Arms/JX1_Forearm_L", "laser 6 mm plates, bolted (FEA SF 3.27/2.65)", "6061-T6", 1, True),
     ("Arms/JX1_Forearm_R", "as L, mirrored", "6061-T6", 1, False),
 ]
 PRINTED = [("Head/JX1_Head", "PETG-CF, 3 walls, 25 % gyroid", 1), ("Head/JX1_NeckBracket", "PA-CF, solid", 1),
@@ -66,8 +67,9 @@ def assign_material(doc, material, stem, process):
     if name:
         pd.SetMaterialPropertyName2("", SW_LIBRARY, name)
     cpm = typed(typed(doc.Extension, "IModelDocExtension").CustomPropertyManager(""), "ICustomPropertyManager")
-    for k, v in (("Material", f'"SW-Material@{stem}.SLDPRT"'), ("Weight", f'"SW-Mass@{stem}.SLDPRT"'), ("Description", process),
-                 ("PartNo", stem)):
+    title = re.sub(r"(?<=[a-z])(?=[A-Z])", " ", stem.replace("JX1_", "")).replace("_", " ")   # "HipYawBracket_L" -> "Hip Yaw Bracket L"
+    for k, v in (("Material", f'"SW-Material@{stem}.SLDPRT"'), ("Weight", f'"SW-Mass@{stem}.SLDPRT"'), ("Description", title),
+                 ("Process", process), ("PartNo", stem)):
         cpm.Add3(k, C.swCustomInfoText, v, C.swCustomPropertyReplaceValue)
     got = pd.GetMaterialPropertyName2("", "")
     return got[0] if isinstance(got, tuple) else got
