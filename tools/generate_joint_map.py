@@ -133,6 +133,13 @@ def main():
                 "enforced_by": "high-level controller / RL action clipping on the Jetson (the CAN hubs enforce per-motor crank limits)",
                 "evidence": DP["ankle_linkage"]["coupled_limit_polygon_deg"]["note"],
             },
+            "hip_yaw_toe_out": {
+                "joints": ["left_hip_yaw", "right_hip_yaw"],
+                "rule": "left_hip_yaw - right_hip_yaw <= toe_out_sum_max_deg (sum of both toe-out angles)",
+                "toe_out_sum_max_deg": DP["hip_yaw_coupling"]["toe_out_sum_max_deg"]["value"],
+                "enforced_by": "high-level controller / RL action clipping on the Jetson",
+                "evidence": DP["hip_yaw_coupling"]["toe_out_sum_max_deg"]["note"],
+            },
         },
         "fixed_frames": fixed,
     }

@@ -72,6 +72,14 @@ ankle_linkage:
     label: CALCULATED
     note: "SolidWorks interference sweep, 5 deg grid, 162 poses, 92 % of the box collision-free; polygon keeps 2-5 deg to first contact (verification/ankle_workspace_L.json)"
 
+# hip-yaw bracket tails touch when both hips toe out (OI-24): toe-out_L + toe-out_R <= max (toe-out_L = +left hip yaw,
+# toe-out_R = -right hip yaw); toe-in never clashes
+hip_yaw_coupling:
+  toe_out_sum_max_deg:
+    value: 40
+    label: CALCULATED
+    note: "MuJoCo sweep on the CAD CoACD hulls (conservative): first contact at 21 deg each, or 11 deg with the other hip at its 45 deg limit; the learned gait peaks at 22.9 deg"
+
 # Mass budget per link (structure + mounted actuator housings). COM in the link frame (m).
 # Link frames sit at the joint that drives them; legs hang along -z in the zero pose.
 mass_budget:

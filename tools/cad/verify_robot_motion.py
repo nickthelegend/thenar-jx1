@@ -61,10 +61,15 @@ POSES = [
     ("abduction_arms_relaxed", {"hip_roll": 30, "ankle_roll": -20}, {}, arms(roll=8)),
     ("waist_turn_carry", STAND, STAND, {**arms(pitch=-30, roll=15, elbow=-90), "waist_yaw": 45}),
     ("head_scan", STAND, STAND, {**arms(roll=8), "neck_yaw": 60, "neck_pitch": 30}),
+    # OI-24 hip-yaw toe-out: the learned controller's largest toe-out sum is 22.9 deg (rl/policies/jx1_walk_rough, spinning at
+    # 0.9 rad/s); MuJoCo hulls first touch at 21 deg each (sum 42 > the 40 deg controller limit) -> negative test
+    ("toe_out_learned_gait", {**STAND, "hip_yaw": 11.5}, {**STAND, "hip_yaw": -11.5}, arms(roll=8)),
+    ("toe_out_21_each", {**STAND, "hip_yaw": 21}, {**STAND, "hip_yaw": -21}, arms(roll=8)),
 ]
 # poses that deliberately violate a documented controller constraint: contact is the expected result
 OUTSIDE_LIMITS = {"single_leg_overshift": "OI-7: stance hip adduction > 8 deg with the swing leg adducted crosses the legs",
-                  "abduction_arms_down": "OI-18: arms hanging straight + 30 deg hip abduction; walking posture keeps shoulder roll >= 8 deg"}
+                  "abduction_arms_down": "OI-18: arms hanging straight + 30 deg hip abduction; walking posture keeps shoulder roll >= 8 deg",
+                  "toe_out_21_each": "OI-24: hip-yaw toe-out sum 42 deg > the 40 deg controller limit (MuJoCo hulls touch here)"}
 
 
 class RobotVerifier(Verifier):

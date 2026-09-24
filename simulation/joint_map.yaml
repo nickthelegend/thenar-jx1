@@ -405,6 +405,15 @@ coupled_limits:
     - [-55, -20]
     enforced_by: high-level controller / RL action clipping on the Jetson (the CAN hubs enforce per-motor crank limits)
     evidence: SolidWorks interference sweep, 5 deg grid, 162 poses, 92 % of the box collision-free; polygon keeps 2-5 deg to first contact (verification/ankle_workspace_L.json)
+  hip_yaw_toe_out:
+    joints:
+    - left_hip_yaw
+    - right_hip_yaw
+    rule: left_hip_yaw - right_hip_yaw <= toe_out_sum_max_deg (sum of both toe-out angles)
+    toe_out_sum_max_deg: 40
+    enforced_by: high-level controller / RL action clipping on the Jetson
+    evidence: 'MuJoCo sweep on the CAD CoACD hulls (conservative): first contact at 21 deg each, or 11 deg with the other hip at its 45 deg limit;
+      the learned gait peaks at 22.9 deg'
 fixed_frames:
 - name: left_hand_fixed
   type: fixed
