@@ -4,7 +4,9 @@
 Run inside a ROS 2 (Jazzy) Python environment that also has mujoco==3.14.0 and onnxruntime, e.g. the RoboStack/pixi
 environment used on the design machine:
   <pixi> run python rl/ros2_check.py --policy rl/policies/jx1_walk_flat
-Scenario: stand (ramp) -> 0.4 m/s forward 10 s -> turn 0.4 rad/s 6 s -> stop 4 s. Writes <policy>/ros2_check.json.
+  <pixi> run python rl/ros2_check.py --policy rl/policies/jx1_walk_flat --launch <ws>/install    # packaged: colcon + ros2 launch
+Scenario: stand (ramp) -> 0.4 m/s forward 10 s -> turn 0.4 rad/s 6 s -> stop 4 s. Writes <policy>/ros2_check.json
+(ros2_launch_check.json with --launch; the install space comes from rl/ros2_env/build_ws.py).
 """
 from __future__ import annotations
 
@@ -63,22 +65,62 @@ def spin_until(node, cond, timeout_s):
     return False
 
 
+def start_launch(install: Path, policy: Path):
+    """`ros2 launch jx1_bringup mujoco_sim.launch.py` from a colcon install space (rl/ros2_env/build_ws.py)."""
+    args = ["ros2", "launch", "jx1_bringup", "mujoco_sim.launch.py", f"repo:={REPO}", f"policy_dir:={policy}"]
+    if sys.platform == "win32":
+        cmd = f'call "{install / "setup.bat"}" >NUL && ' + " ".join(f'"{x}"' if " " in x else x for x in args)
+        # one command-line string: a list would have its inner quotes escaped (\"), which cmd.exe does not understand
+        return subprocess.Popen(f'cmd /d /s /c "{cmd}"', stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    cmd = f'. "{install / "setup.sh"}" && exec ' + " ".join(f"'{x}'" for x in args)
+    return subprocess.Popen(["bash", "-c", cmd], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, start_new_session=True)
+
+
+def clean(lines):
+    """Log lines without the machine-specific log directory (host name, user home)."""
+    home = str(Path.home())
+    return [ln.replace(home, "~") for ln in lines if "All log files can be found" not in ln]
+
+
+def stop(p):
+    """Stop a process and everything it started (ros2 launch spawns the nodes as children)."""
+    if p.poll() is None:
+        if sys.platform == "win32":
+            subprocess.run(["taskkill", "/F", "/T", "/PID", str(p.pid)], capture_output=True)
+        else:
+            p.terminate()
+    try:
+        return p.communicate(timeout=15)[0]
+    except subprocess.TimeoutExpired:
+        p.kill()
+        return p.communicate()[0]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--policy", default=str(REPO / "rl" / "policies" / "jx1_walk_flat"))
+    ap.add_argument("--launch", type=Path, default=None,
+                    help="colcon install space: start the stack with `ros2 launch jx1_bringup mujoco_sim.launch.py` from it "
+                         "instead of running the two nodes from the source tree (writes ros2_launch_check.json)")
     a = ap.parse_args()
     policy = Path(a.policy).resolve()
-    env = dict(os.environ)
-    env["PYTHONPATH"] = os.pathsep.join([str(REPO / "ros2_ws" / "src" / "jx1_sim"), str(REPO / "ros2_ws" / "src" / "jx1_policy"),
-                                         env.get("PYTHONPATH", "")])
-    sim = subprocess.Popen([sys.executable, "-m", "jx1_sim.mujoco_node", "--ros-args", "-p",
-                            f"model_path:={REPO / 'simulation' / 'mujoco' / 'jx1.xml'}", "-p", f"policy_io:={policy / 'policy_io.yaml'}"],
-                           env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-    pol = subprocess.Popen([sys.executable, "-m", "jx1_policy.policy_node", "--ros-args", "-p", f"policy_dir:={policy}", "-p",
-                            "use_sim_time:=true"], env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    if a.launch:
+        procs = {"launch": start_launch(a.launch.resolve(), policy)}
+    else:
+        env = dict(os.environ)
+        env["PYTHONPATH"] = os.pathsep.join([str(REPO / "ros2_ws" / "src" / "jx1_sim"), str(REPO / "ros2_ws" / "src" / "jx1_policy"),
+                                             env.get("PYTHONPATH", "")])
+        procs = {"sim": subprocess.Popen([sys.executable, "-m", "jx1_sim.mujoco_node", "--ros-args", "-p",
+                                          f"model_path:={REPO / 'simulation' / 'mujoco' / 'jx1.xml'}", "-p",
+                                          f"policy_io:={policy / 'policy_io.yaml'}"],
+                                         env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True),
+                 "policy": subprocess.Popen([sys.executable, "-m", "jx1_policy.policy_node", "--ros-args", "-p", f"policy_dir:={policy}",
+                                             "-p", "use_sim_time:=true"], env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)}
     rclpy.init()
     probe = Probe()
-    result = {"policy": str(policy), "ros_distro": os.environ.get("ROS_DISTRO", "?"), "phases": {}}
+    result = {"policy": policy.relative_to(REPO).as_posix() if policy.is_relative_to(REPO) else policy.name, "ros_distro": os.environ.get("ROS_DISTRO", "?"),
+              "started_by": "ros2 launch jx1_bringup mujoco_sim.launch.py (colcon install)" if a.launch else "python -m (source tree)",
+              "phases": {}}
     try:
         ok = spin_until(probe, lambda: probe.state == "WALK", 90.0)
         result["reached_walk_state"] = ok
@@ -99,20 +141,17 @@ def main():
                                       "min_pelvis_z_m": round(min(z), 3), "max_tilt_deg": round(max(tilt), 2)}
             print(name, result["phases"][name], flush=True)
         result["upright"] = all(p["min_pelvis_z_m"] > 0.4 for p in result["phases"].values())
+    except Exception as e:                                     # keep the report (and the process logs) on failure
+        result["error"] = f"{type(e).__name__}: {e}"
     finally:
         probe.destroy_node()
         rclpy.try_shutdown()
-        for p in (pol, sim):
-            p.terminate()
-        for p, tag in ((sim, "sim"), (pol, "policy")):
-            try:
-                out = p.communicate(timeout=10)[0]
-            except subprocess.TimeoutExpired:
-                p.kill()
-                out = p.communicate()[0]
-            result[f"{tag}_log_tail"] = out.strip().splitlines()[-5:]
-    (policy / "ros2_check.json").write_text(json.dumps(result, indent=1), encoding="utf-8")
-    print(json.dumps({k: v for k, v in result.items() if not k.endswith("log_tail")}, indent=1))
+        for tag, p in procs.items():
+            result[f"{tag}_log_tail"] = clean(stop(p).strip().splitlines())[-(25 if a.launch else 5):]
+    (policy / ("ros2_launch_check.json" if a.launch else "ros2_check.json")).write_text(json.dumps(result, indent=1), encoding="utf-8")
+    print(json.dumps({k: v for k, v in result.items() if not k.endswith("log_tail") or "error" in result}, indent=1))
+    if "error" in result:
+        sys.exit(1)
 
 
 if __name__ == "__main__":

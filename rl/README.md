@@ -77,6 +77,11 @@ rl/.venv/Scripts/python rl/sim2sim.py --policy rl/policies/jx1_walk_rough --terr
 - `rl/push_test.py`: 0.1 s torso force pulse while walking at 0.5 m/s, bisection of the largest survived impulse per
   direction (same method as `simulation/mujoco/push_jx1.py` for the model-based controller). Interim policy on the
   placeholder-torso model: 11.7–23.4 N·s, vs 6.6–7.8 N·s for the fixed-footstep ZMP controller.
+- `rl/envelope.py`: constant-command walks over a vx × wz and a vx × vy grid, from inside the training ranges to beyond
+  them. For each command it records falls, tracking and torque margin, and writes `envelope.json` and `envelope.png`. The
+  whole grid takes about a minute on 4 processes.
+- `rl/report.py`: gathers every check of a bundle (training curves, sim-to-sim, envelope, pushes, ROS 2, HIL) into the
+  bundle's `REPORT.md`.
 
 ## Train in Isaac Lab (offline-checked, not yet run in Isaac Sim)
 
@@ -155,6 +160,20 @@ ros2 launch jx1_bringup isaac_sim.launch.py                       # with simulat
 pixi install --manifest-path rl/ros2_env/pixi.toml
 pixi run --manifest-path rl/ros2_env/pixi.toml python rl/ros2_check.py --policy rl/policies/jx1_walk_flat
 ```
+
+The packaged path is verified the same way. `rl/ros2_env/build_ws.py` runs `colcon build` on `ros2_ws/src` into a
+workspace outside the repository. `ros2_check.py --launch` then starts everything with
+`ros2 launch jx1_bringup mujoco_sim.launch.py` from that install space: the MuJoCo node, `robot_state_publisher` on the
+xacro description, and the policy node. It drives the robot and writes `ros2_launch_check.json`.
+
+```bash
+pixi run --manifest-path rl/ros2_env/pixi.toml python rl/ros2_env/build_ws.py --ws <ws>
+pixi run --manifest-path rl/ros2_env/pixi.toml python rl/ros2_check.py --policy rl/policies/jx1_walk_flat --launch <ws>/install
+```
+
+`jx1_bringup` is an ament_python package, so it builds without a C++ toolchain. `jx1_description` is ament_cmake and
+only installs directories. On Windows without MSVC, `build_ws.py` replicates that install rule. On the Jetson or Ubuntu,
+plain `colcon build` builds all five packages.
 
 Topics (sim and hardware alike): `/jx1/joint_states` (JointState, all actuated joints), `/jx1/imu` (pelvis IMU),
 `/cmd_vel` (vx, vy, wz) → `/jx1/joint_command` (JointState position targets). PD gains are applied downstream (MuJoCo

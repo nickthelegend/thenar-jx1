@@ -18,6 +18,5 @@ setup(
     maintainer_email="maintainer@jx1.invalid",
     description="JX1 walking-policy runtime and ROS 2 node",
     license="Apache-2.0",
-    tests_require=["pytest"],
     entry_points={"console_scripts": ["policy_node = jx1_policy.policy_node:main"]},
 )

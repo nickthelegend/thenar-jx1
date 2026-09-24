@@ -23,6 +23,11 @@ ros-jazzy-ament-index-python = "*"
 numpy = "*"
 pyyaml = "*"
 pyserial = "*"
+colcon-common-extensions = ">=0.3.0,<0.4"
+ros-jazzy-launch = ">=3.4.11,<4"
+ros-jazzy-launch-ros = ">=0.26.12,<0.27"
+ros-jazzy-ros2launch = ">=0.26.12,<0.27"
+setuptools = "<80"
 
 [pypi-dependencies]
 mujoco = "==3.14.0"

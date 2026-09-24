@@ -53,7 +53,7 @@ class Runner:
 
 
 def load_cad_model(io, terrain_cfg=None):
-    src = REPO / io["trained"]["source_mjcf"]
+    src = REPO / io["trained"].get("source_mjcf", "simulation/mujoco/jx1.xml")      # Isaac-exported bundles name no MJCF
     if terrain_cfg:                              # same heightfield as the rough training task, under the full CAD model
         from jx1_rl import config
         from jx1_rl.terrain import Terrain
@@ -76,57 +76,62 @@ def load_cad_model(io, terrain_cfg=None):
     return m, act_of
 
 
-def run(policy_dir: Path, render=True, hub_interp=True, terrain=None):
-    rn = Runner(policy_dir)
-    io = rn.io
-    m, act_of = load_cad_model(io, terrain)
-    dt_pol = io["control"]["policy_dt_s"]
-    dec = int(round(dt_pol / m.opt.timestep))
-    jq = {j: m.jnt_qposadr[mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, j)] for j in act_of}
-    jd = {j: m.jnt_dofadr[mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, j)] for j in act_of}
-    pol_q = np.array([jq[j] for j in rn.joints])
-    pol_d = np.array([jd[j] for j in rn.joints])
-    pol_a = np.array([act_of[j] for j in rn.joints])
-    sole = [mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_SITE, f"{s}_sole") for s in ("left", "right")]
-    renderer = None
-    if render:
-        try:
-            renderer = mujoco.Renderer(m, 240, 320)
-        except Exception as e:  # pragma: no cover
-            print("render disabled:", e)
-    results, frames = {}, []
-    for name, cmd, T in SCENARIOS:
-        d = mujoco.MjData(m)
-        for j, a in act_of.items():
-            d.qpos[jq[j]] = io["default_joint_pos"].get(j, 0.0)
-            d.ctrl[a] = io["default_joint_pos"].get(j, 0.0)
+class CadSim:
+    """The full CAD model driven by an exported policy exactly as on the robot: 50 Hz targets, hub ramp, PD in the drives."""
+
+    def __init__(self, policy_dir: Path, terrain=None, hub_interp=True):
+        self.rn = Runner(policy_dir)
+        self.io = self.rn.io
+        self.m, self.act_of = load_cad_model(self.io, terrain)
+        m = self.m
+        self.hub_interp = hub_interp
+        self.dt_pol = self.io["control"]["policy_dt_s"]
+        self.dec = int(round(self.dt_pol / m.opt.timestep))
+        jid = {j: mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, j) for j in self.act_of}
+        self.jq = {j: m.jnt_qposadr[i] for j, i in jid.items()}
+        self.pol_q = np.array([self.jq[j] for j in self.rn.joints])
+        self.pol_d = np.array([m.jnt_dofadr[jid[j]] for j in self.rn.joints])
+        self.pol_a = np.array([self.act_of[j] for j in self.rn.joints])
+        self.sole = [mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_SITE, f"{s}_sole") for s in ("left", "right")]
+        self.effort = np.array([self.io["effort_limits_Nm"].get(mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, m.actuator_trnid[a, 0]),
+                                                                np.inf) for a in range(m.nu)])
+        vlim = self.io.get("velocity_limits_rad_s")
+        self.vlim = np.array([vlim[j] for j in self.rn.joints]) if vlim else None
+
+    def reset(self):
+        m, d = self.m, mujoco.MjData(self.m)
+        for j, a in self.act_of.items():
+            d.qpos[self.jq[j]] = self.io["default_joint_pos"].get(j, 0.0)
+            d.ctrl[a] = self.io["default_joint_pos"].get(j, 0.0)
         d.qpos[2] = 1.0
         mujoco.mj_kinematics(m, d)
-        d.qpos[2] = 1.0 - min(d.site_xpos[s][2] for s in sole) + 0.002
+        d.qpos[2] = 1.0 - min(d.site_xpos[s][2] for s in self.sole) + 0.002
         mujoco.mj_forward(m, d)
-        rn.last_action[:] = 0.0
+        self.rn.last_action[:] = 0.0
+        return d
+
+    def rollout(self, cmd, T, frame_cb=None, settle_s=2.0):
+        """Walk with a constant command for T seconds; tracking error is measured after settle_s."""
+        m, rn, dec = self.m, self.rn, self.dec
+        d = self.reset()
         vel_err, tilt_max, peak = [], 0.0, np.zeros(m.nu)
         vmax = np.zeros(len(rn.joints))
         slip, fell = [], False
-        cam = mujoco.MjvCamera()
-        cam.distance, cam.azimuth, cam.elevation = 2.4, 130, -12
-        for k in range(int(T / dt_pol)):
-            quat = d.qpos[3:7].copy()
-            ang_b = d.qvel[3:6].copy()
-            tgt = rn.targets(quat, ang_b, d.qpos[pol_q], d.qvel[pol_d], cmd, d.time)
-            prev = d.ctrl[pol_a].copy()
+        for k in range(int(T / self.dt_pol)):
+            tgt = rn.targets(d.qpos[3:7].copy(), d.qvel[3:6].copy(), d.qpos[self.pol_q], d.qvel[self.pol_d], cmd, d.time)
+            prev = d.ctrl[self.pol_a].copy()
             for i in range(dec):
                 # CAN-hub first-order hold: the new target is reached at the end of the policy period (firmware alpha ramp)
-                d.ctrl[pol_a] = prev + (i + 1) / dec * (tgt - prev) if hub_interp else tgt
+                d.ctrl[self.pol_a] = prev + (i + 1) / dec * (tgt - prev) if self.hub_interp else tgt
                 mujoco.mj_step(m, d)
                 peak = np.maximum(peak, np.abs(d.actuator_force))
-                vmax = np.maximum(vmax, np.abs(d.qvel[pol_d]))
+                vmax = np.maximum(vmax, np.abs(d.qvel[self.pol_d]))
             v_b = policy_io.quat_rotate_inverse(d.qpos[3:7], d.qvel[0:3])
-            if k * dt_pol > 2.0:                                   # after the start transient
+            if k * self.dt_pol > settle_s:                           # after the start transient
                 vel_err.append([v_b[0] - cmd[0], v_b[1] - cmd[1], d.qvel[5] - cmd[2]])
             g = policy_io.projected_gravity(d.qpos[3:7])
             tilt_max = max(tilt_max, float(np.degrees(np.arccos(np.clip(-g[2], -1, 1)))))
-            for s in sole:
+            for s in self.sole:
                 if d.site_xpos[s][2] < 0.003:
                     vel = np.zeros(6)
                     mujoco.mj_objectVelocity(m, d, mujoco.mjtObj.mjOBJ_SITE, s, vel, 0)
@@ -134,30 +139,53 @@ def run(policy_dir: Path, render=True, hub_interp=True, terrain=None):
             if d.qpos[2] < 0.35 or tilt_max > 60:
                 fell = True
                 break
-            if renderer is not None and name == "forward_0.5" and k % 4 == 0:
-                cam.lookat[:] = [d.qpos[0], d.qpos[1], 0.55]
-                renderer.update_scene(d, cam)
-                frames.append(renderer.render().copy())
+            if frame_cb is not None:
+                frame_cb(k, d)
         e = np.array(vel_err) if vel_err else np.zeros((1, 3))
-        lim = np.array([io["effort_limits_Nm"].get(mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, m.actuator_trnid[a, 0]), np.inf)
-                        for a in range(m.nu)])
-        worst = int(np.argmax(peak / lim))
-        results[name] = {"command": list(cmd), "duration_s": T, "fell": fell, "time_survived_s": round(float(d.time), 2),
-                         "mean_velocity_b": np.round(e.mean(axis=0) + np.array(cmd), 3).tolist(),
-                         "velocity_rmse": np.round(np.sqrt((e ** 2).mean(axis=0)), 3).tolist(),
-                         "max_tilt_deg": round(tilt_max, 2), "stance_foot_slip_m_s_p95": round(float(np.percentile(slip, 95)), 3) if slip else None,
-                         "peak_torque_fraction": round(float(peak[worst] / lim[worst]), 3),
-                         "peak_torque_joint": mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_ACTUATOR, worst)}
-        vlim = io.get("velocity_limits_rad_s")
-        if vlim:
-            frac = vmax / np.array([vlim[j] for j in rn.joints])
-            results[name]["peak_speed_fraction"] = round(float(frac.max()), 3)
-            results[name]["peak_speed_joint"] = rn.joints[int(np.argmax(frac))]
-        r = results[name]
-        print(f"{name:13s} cmd {cmd} -> {'FELL' if fell else 'ok  '} v_mean {r['mean_velocity_b']} rmse {r['velocity_rmse']} "
+        worst = int(np.argmax(peak / self.effort))
+        r = {"command": list(cmd), "duration_s": T, "fell": fell, "time_survived_s": round(float(d.time), 2),
+             "mean_velocity_b": np.round(e.mean(axis=0) + np.array(cmd), 3).tolist(),
+             "velocity_rmse": np.round(np.sqrt((e ** 2).mean(axis=0)), 3).tolist(),
+             "max_tilt_deg": round(tilt_max, 2), "stance_foot_slip_m_s_p95": round(float(np.percentile(slip, 95)), 3) if slip else None,
+             "peak_torque_fraction": round(float(peak[worst] / self.effort[worst]), 3),
+             "peak_torque_joint": mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_ACTUATOR, worst)}
+        if self.vlim is not None:
+            frac = vmax / self.vlim
+            r["peak_speed_fraction"] = round(float(frac.max()), 3)
+            r["peak_speed_joint"] = rn.joints[int(np.argmax(frac))]
+        return r
+
+
+def rel(path: Path) -> str:
+    p = Path(path).resolve()
+    return p.relative_to(REPO).as_posix() if p.is_relative_to(REPO) else p.as_posix()
+
+
+def run(policy_dir: Path, render=True, hub_interp=True, terrain=None):
+    sim = CadSim(policy_dir, terrain, hub_interp)
+    renderer, frames = None, []
+    if render:
+        try:
+            renderer = mujoco.Renderer(sim.m, 240, 320)
+        except Exception as e:  # pragma: no cover
+            print("render disabled:", e)
+    cam = mujoco.MjvCamera()
+    cam.distance, cam.azimuth, cam.elevation = 2.4, 130, -12
+
+    def grab(k, d):
+        if k % 4 == 0:
+            cam.lookat[:] = [d.qpos[0], d.qpos[1], 0.55]
+            renderer.update_scene(d, cam)
+            frames.append(renderer.render().copy())
+
+    results = {}
+    for name, cmd, T in SCENARIOS:
+        r = results[name] = sim.rollout(cmd, T, frame_cb=grab if renderer is not None and name == "forward_0.5" else None)
+        print(f"{name:13s} cmd {cmd} -> {'FELL' if r['fell'] else 'ok  '} v_mean {r['mean_velocity_b']} rmse {r['velocity_rmse']} "
               f"tilt {r['max_tilt_deg']:5.1f} deg peak {r['peak_torque_joint']} {r['peak_torque_fraction']:.0%}", flush=True)
-    summary = {"terrain": terrain or "flat", "hub_interpolation": hub_interp, "policy": (policy_dir.resolve().relative_to(REPO).as_posix() if policy_dir.resolve().is_relative_to(REPO) else str(policy_dir)), "model": io["trained"]["source_mjcf"], "physics_dt_s": m.opt.timestep,
-               "decimation": dec, "scenarios": results, "all_upright": not any(r["fell"] for r in results.values())}
+    summary = {"terrain": terrain or "flat", "hub_interpolation": hub_interp, "policy": rel(policy_dir),
+               "model": sim.io["trained"].get("source_mjcf", "simulation/mujoco/jx1.xml"), "physics_dt_s": sim.m.opt.timestep,
+               "decimation": sim.dec, "scenarios": results, "all_upright": not any(r["fell"] for r in results.values())}
     tag = "" if not terrain else "_" + Path(terrain).stem.replace("jx1_walk_", "")
     (policy_dir / f"sim2sim{tag}.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
     if frames:

@@ -5,7 +5,9 @@
   <description>Launch files for JX1: MuJoCo or Isaac Sim simulation + walking policy, ros2_control (topic-based hardware), RViz.</description>
   <maintainer email="maintainer@jx1.invalid">JX1 project</maintainer>
   <license>Apache-2.0</license>
-  <buildtool_depend>ament_cmake</buildtool_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
   <exec_depend>jx1_description</exec_depend>
   <exec_depend>jx1_policy</exec_depend>
   <exec_depend>jx1_sim</exec_depend>
@@ -18,6 +20,6 @@
   <exec_depend>topic_based_ros2_control</exec_depend>
   <exec_depend>teleop_twist_keyboard</exec_depend>
   <export>
-    <build_type>ament_cmake</build_type>
+    <build_type>ament_python</build_type>
   </export>
 </package>
