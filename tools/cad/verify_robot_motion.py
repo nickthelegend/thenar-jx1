@@ -49,7 +49,12 @@ POSES = [
     ("deep_squat_arms_forward", {"hip_pitch": -70, "knee": 120, "ankle_pitch": -50}, {"hip_pitch": -70, "knee": 120, "ankle_pitch": -50},
      arms(pitch=-90)),
     ("sit_hands_on_lap", {"hip_pitch": -90, "knee": 90}, {"hip_pitch": -90, "knee": 90}, arms(pitch=-40, roll=5, elbow=-60)),
-    ("single_leg_T_pose", {"hip_pitch": -31, "knee": 55, "ankle_pitch": -24, "hip_roll": -14, "ankle_roll": 14},
+    # one-leg stance within the inter-leg limit (OI-7: stance adduction <= 8 deg): stance foot 25 mm from the pelvis centre line,
+    # inside the 95 mm sole; swing leg abducted 6 deg (right-leg abduction is negative roll)
+    ("single_leg_T_pose", {"hip_pitch": -31, "knee": 55, "ankle_pitch": -24, "hip_roll": -8, "ankle_roll": 8},
+     {"hip_pitch": -45, "knee": 90, "ankle_pitch": -20, "hip_roll": -6}, arms(roll=90)),
+    # negative test: 14 deg stance adduction + adducted swing leg crosses the legs (outside OI-7)
+    ("single_leg_overshift", {"hip_pitch": -31, "knee": 55, "ankle_pitch": -24, "hip_roll": -14, "ankle_roll": 14},
      {"hip_pitch": -45, "knee": 90, "ankle_pitch": -20, "hip_roll": 5}, arms(roll=90)),
     ("leg_forward_arms_back", {"hip_pitch": -60, "knee": 20}, STAND, arms(pitch=60, roll=8)),
     ("abduction_arms_down", {"hip_roll": 30, "ankle_roll": -20}, {}, {}),
@@ -57,6 +62,9 @@ POSES = [
     ("waist_turn_carry", STAND, STAND, {**arms(pitch=-30, roll=15, elbow=-90), "waist_yaw": 45}),
     ("head_scan", STAND, STAND, {**arms(roll=8), "neck_yaw": 60, "neck_pitch": 30}),
 ]
+# poses that deliberately violate a documented controller constraint: contact is the expected result
+OUTSIDE_LIMITS = {"single_leg_overshift": "OI-7: stance hip adduction > 8 deg with the swing leg adducted crosses the legs",
+                  "abduction_arms_down": "OI-18: arms hanging straight + 30 deg hip abduction; walking posture keeps shoulder roll >= 8 deg"}
 
 
 class RobotVerifier(Verifier):
@@ -115,7 +123,8 @@ def main():
         dp, dr = max(dpl, dpr, dpu), max(drl, drr, dru)
         rows.append({"pose": name, "left_leg_deg": qL, "right_leg_deg": qR, "upper_deg": qU, "max_pos_err_mm": round(dp, 4),
                      "max_rot_err_deg": round(dr, 4), "mate_errors": errs, "interferences": ints,
-                     "kinematics_pass": dp < 0.05 and dr < 0.05 and not errs, "collision_free": not ints})
+                     "kinematics_pass": dp < 0.05 and dr < 0.05 and not errs, "collision_free": not ints,
+                     "outside_documented_limits": OUTSIDE_LIMITS.get(name)})
         print(f"{name:26s} kin {'OK ' if rows[-1]['kinematics_pass'] else 'BAD'} err {dp:8.4f} mm {dr:7.4f} deg  collisions {len(ints)} "
               f"{[(i['components'][0], i['components'][1], i['volume_mm3']) for i in ints][:4]}", flush=True)
         if a.images and name in ("zero", "walk_left_stance", "deep_squat_arms_forward", "single_leg_T_pose", "waist_turn_carry"):
@@ -128,7 +137,11 @@ def main():
         for r in rows:
             w.writerow([r["pose"], r["max_pos_err_mm"], r["max_rot_err_deg"], r["kinematics_pass"], len(r["interferences"]),
                         "; ".join(f"{i['components'][0]}|{i['components'][1]}|{i['volume_mm3']}" for i in r["interferences"])])
-    print(f"\nkinematics pass {sum(r['kinematics_pass'] for r in rows)}/{len(rows)}, collision-free {sum(r['collision_free'] for r in rows)}/{len(rows)}")
+    inside = [r for r in rows if not r["outside_documented_limits"]]
+    neg = ", ".join(f"{r['pose']} {'contact' if not r['collision_free'] else 'NO contact'}" for r in rows if r["outside_documented_limits"])
+    print(f"\nkinematics pass {sum(r['kinematics_pass'] for r in rows)}/{len(rows)}, collision-free {sum(r['collision_free'] for r in rows)}/{len(rows)}; "
+          f"within the documented limits collision-free {sum(r['collision_free'] for r in inside)}/{len(inside)} "
+          f"({len(rows) - len(inside)} negative test(s): {neg})")
 
 
 if __name__ == "__main__":

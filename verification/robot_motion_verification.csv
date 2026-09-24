@@ -1,0 +1,14 @@
+pose,max_pos_err_mm,max_rot_err_deg,kinematics_pass,collisions,collision_pairs
+zero,0.0,0.0,True,0,
+stand_arms_relaxed,0.0,0.0,True,0,
+walk_left_stance,0.0,0.0,True,0,
+walk_right_stance,0.0,0.0,True,0,
+deep_squat_arms_forward,0.0,0.0,True,0,
+sit_hands_on_lap,0.0,0.0,True,0,
+single_leg_T_pose,0.0,0.0,True,0,
+single_leg_overshift,0.0,0.0,True,13,L_AnkBH|R_AnkBH|17281.884; L_Shin|R_Foot|2413.223; L_CrankB|R_AnkBH|2345.127; L_AnkBH|R_Shin|1435.339; L_CrankB|R_Shin|1266.379; L_AnkBO|R_AnkBH|1053.43; L_CrankB|R_Foot|369.062; L_Cross|R_Foot|225.613; L_AnkBH|R_CrankB|142.989; L_Foot|R_Foot|122.79; L_CrankB|R_Cross|50.239; L_AnkBH|R_AnkBO|6.575; L_AnkBO|R_Shin|4.887
+leg_forward_arms_back,0.0,0.0,True,0,
+abduction_arms_down,0.0,0.0,True,3,L_Thigh|L_Gripper|2528.135; L_Thigh|L_Gripper|1757.514; L_Thigh|L_Gripper|433.134
+abduction_arms_relaxed,0.0,0.0,True,0,
+waist_turn_carry,0.0,0.0,True,0,
+head_scan,0.0,0.0,True,0,
