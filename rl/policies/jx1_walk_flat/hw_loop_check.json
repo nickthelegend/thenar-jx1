@@ -1,6 +1,7 @@
 {
- "policy": "D:\\Project\\thenar-jx1\\rl\\policies\\jx1_walk_flat",
+ "policy": "rl/policies/jx1_walk_flat",
  "chain": "jx1_policy -> jx1_hw hw_node -> hub protocol over TCP -> fake_hub (firmware law) -> MuJoCo",
+ "started_by": "python -m (source tree)",
  "phases": {
   "stand": {
    "command": [
@@ -8,12 +9,12 @@
     0.0,
     0.0
    ],
-   "sim_duration_s": 3.99,
-   "distance_m": 0.156,
-   "mean_speed_m_s": 0.039,
+   "sim_duration_s": 4.0,
+   "distance_m": 0.149,
+   "mean_speed_m_s": 0.037,
    "yaw_change_deg": -8.8,
    "min_pelvis_z_m": 0.586,
-   "max_tilt_deg": 5.24
+   "max_tilt_deg": 5.0
   },
   "forward": {
    "command": [
@@ -22,11 +23,11 @@
     0.0
    ],
    "sim_duration_s": 9.99,
-   "distance_m": 2.471,
-   "mean_speed_m_s": 0.247,
-   "yaw_change_deg": -15.7,
+   "distance_m": 2.846,
+   "mean_speed_m_s": 0.285,
+   "yaw_change_deg": -13.7,
    "min_pelvis_z_m": 0.585,
-   "max_tilt_deg": 5.41
+   "max_tilt_deg": 5.5
   },
   "turn": {
    "command": [
@@ -35,11 +36,11 @@
     0.3
    ],
    "sim_duration_s": 6.0,
-   "distance_m": 0.279,
-   "mean_speed_m_s": 0.047,
-   "yaw_change_deg": 64.0,
-   "min_pelvis_z_m": 0.588,
-   "max_tilt_deg": 5.38
+   "distance_m": 0.327,
+   "mean_speed_m_s": 0.054,
+   "yaw_change_deg": 76.0,
+   "min_pelvis_z_m": 0.587,
+   "max_tilt_deg": 5.29
   },
   "stop": {
    "command": [
@@ -48,11 +49,11 @@
     0.0
    ],
    "sim_duration_s": 3.99,
-   "distance_m": 0.215,
-   "mean_speed_m_s": 0.054,
+   "distance_m": 0.188,
+   "mean_speed_m_s": 0.047,
    "yaw_change_deg": -8.2,
    "min_pelvis_z_m": 0.588,
-   "max_tilt_deg": 4.65
+   "max_tilt_deg": 4.68
   }
  },
  "reached_walk_state": true,
@@ -81,12 +82,12 @@
   }
  },
  "fake_hub_log_tail": [
-  "[INFO] [1790230498.283829600] [jx1_fake_hubs]: hub emulator on ports [5555, 5556]; gantry holds the base until RUN"
+  "[INFO] [1790232422.132707200] [jx1_fake_hubs]: hub emulator on ports [5555, 5556]; gantry holds the base until RUN"
  ],
  "hw_node_log_tail": [
-  "[INFO] [1790230498.868135200] [jx1_hw]: hubs a=socket://127.0.0.1:5555 b=socket://127.0.0.1:5556; DAMPING until /jx1/hw/run"
+  "[INFO] [1790232424.698250900] [jx1_hw]: hubs a=socket://127.0.0.1:5555 b=socket://127.0.0.1:5556; DAMPING until /jx1/hw/run"
  ],
  "policy_log_tail": [
-  "[INFO] [1790230498.836711400] [jx1_policy]: policy D:\\Project\\thenar-jx1\\rl\\policies\\jx1_walk_flat: 12 joints, 50 Hz"
+  "[INFO] [1790232424.848002800] [jx1_policy]: policy D:\\Project\\thenar-jx1\\rl\\policies\\jx1_walk_flat: 12 joints, 50 Hz"
  ]
 }

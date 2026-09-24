@@ -10,10 +10,10 @@
     0.0
    ],
    "sim_duration_s": 3.99,
-   "distance_m": 0.157,
-   "mean_speed_m_s": 0.039,
-   "yaw_change_deg": -8.8,
-   "min_pelvis_z_m": 0.586,
+   "distance_m": 0.141,
+   "mean_speed_m_s": 0.035,
+   "yaw_change_deg": -8.3,
+   "min_pelvis_z_m": 0.587,
    "max_tilt_deg": 5.01
   },
   "forward": {
@@ -23,11 +23,11 @@
     0.0
    ],
    "sim_duration_s": 9.99,
-   "distance_m": 2.682,
-   "mean_speed_m_s": 0.268,
-   "yaw_change_deg": -13.5,
+   "distance_m": 2.795,
+   "mean_speed_m_s": 0.28,
+   "yaw_change_deg": -12.0,
    "min_pelvis_z_m": 0.585,
-   "max_tilt_deg": 5.35
+   "max_tilt_deg": 5.38
   },
   "turn": {
    "command": [
@@ -36,11 +36,11 @@
     0.3
    ],
    "sim_duration_s": 6.0,
-   "distance_m": 0.32,
-   "mean_speed_m_s": 0.053,
-   "yaw_change_deg": 71.2,
-   "min_pelvis_z_m": 0.588,
-   "max_tilt_deg": 5.39
+   "distance_m": 0.324,
+   "mean_speed_m_s": 0.054,
+   "yaw_change_deg": 75.4,
+   "min_pelvis_z_m": 0.587,
+   "max_tilt_deg": 5.32
   },
   "stop": {
    "command": [
@@ -49,11 +49,11 @@
     0.0
    ],
    "sim_duration_s": 3.99,
-   "distance_m": 0.202,
-   "mean_speed_m_s": 0.051,
-   "yaw_change_deg": -8.1,
-   "min_pelvis_z_m": 0.588,
-   "max_tilt_deg": 4.59
+   "distance_m": 0.188,
+   "mean_speed_m_s": 0.047,
+   "yaw_change_deg": -7.8,
+   "min_pelvis_z_m": 0.589,
+   "max_tilt_deg": 4.84
   }
  },
  "reached_walk_state": true,
@@ -83,11 +83,11 @@
  },
  "launch_log_tail": [
   "[INFO] [launch]: Default logging verbosity is set to INFO",
-  "[INFO] [fake_hub.EXE-1]: process started with pid [52136]",
-  "[INFO] [hw_node.EXE-2]: process started with pid [46332]",
-  "[INFO] [robot_state_publisher.EXE-3]: process started with pid [49308]",
-  "[INFO] [policy_node.EXE-4]: process started with pid [39956]",
-  "[robot_state_publisher.EXE-3] [WARN] [1790231124.683472600] [kdl_parser]: The root link pelvis has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.",
-  "[robot_state_publisher.EXE-3] [INFO] [1790231124.683665300] [robot_state_publisher]: Robot initialized"
+  "[INFO] [fake_hub.EXE-1]: process started with pid [43552]",
+  "[INFO] [hw_node.EXE-2]: process started with pid [47684]",
+  "[INFO] [robot_state_publisher.EXE-3]: process started with pid [32012]",
+  "[INFO] [policy_node.EXE-4]: process started with pid [36372]",
+  "[robot_state_publisher.EXE-3] [WARN] [1790232468.884923400] [kdl_parser]: The root link pelvis has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.",
+  "[robot_state_publisher.EXE-3] [INFO] [1790232468.885120500] [robot_state_publisher]: Robot initialized"
  ]
 }

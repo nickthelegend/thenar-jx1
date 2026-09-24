@@ -97,12 +97,12 @@ Same script on every path: forward 0.4 m/s for 10 s, turn 0.4 rad/s for 6 s (137
 
 | phase | command | distance | mean speed | yaw change | min pelvis z | max tilt |
 |---|---|---|---|---|---|---|
-| stand | (+0.0, +0.0, +0.0) | 0.16 m | 0.04 m/s | -8.8° | 0.586 m | 5.2° |
-| forward | (+0.3, +0.0, +0.0) | 2.47 m | 0.25 m/s | -15.7° | 0.585 m | 5.4° |
-| turn | (+0.0, +0.0, +0.3) | 0.28 m | 0.05 m/s | +64.0° | 0.588 m | 5.4° |
-| stop | (+0.0, +0.0, +0.0) | 0.21 m | 0.05 m/s | -8.2° | 0.588 m | 4.7° |
+| stand | (+0.0, +0.0, +0.0) | 0.15 m | 0.04 m/s | -8.8° | 0.586 m | 5.0° |
+| forward | (+0.3, +0.0, +0.0) | 2.85 m | 0.28 m/s | -13.7° | 0.585 m | 5.5° |
+| turn | (+0.0, +0.0, +0.3) | 0.33 m | 0.05 m/s | +76.0° | 0.587 m | 5.3° |
+| stop | (+0.0, +0.0, +0.0) | 0.19 m | 0.05 m/s | -8.2° | 0.588 m | 4.7° |
 
-Started as on the robot, `ros2 launch jx1_hw hardware.launch.py hil:=true (colcon install)`: forward 0.27 m/s at 0.3, turn 71° of 103° commanded, upright True, RUN accepted True.
+Started as on the robot, `ros2 launch jx1_hw hardware.launch.py hil:=true (colcon install)`: forward 0.28 m/s at 0.3, turn 75° of 103° commanded, upright True, RUN accepted True.
 
 ## Watch items
 
