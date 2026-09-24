@@ -334,6 +334,83 @@ def test_ros2_control_xacro_expands():
     assert order[:CFG.num_actions] == CFG.policy_joints
 
 
+def test_mirror_symmetry_matches_physics():
+    """Mirror maps used by the PPO symmetry loss: MuJoCo physics is equivariant under them, the observation of a mirrored
+    state is the mirrored observation, and mirroring twice is the identity."""
+    from jx1_rl.symmetry import Mirror, mirror_mujoco_state
+    m = mujoco.MjModel.from_xml_path(str(REPO / "simulation" / "mujoco" / "jx1.xml"))
+    m.opt.disableflags |= mujoco.mjtDisableBit.mjDSBL_CONTACT          # in the air: no floor, no self-contact
+    # the CAD trunk and head are slightly asymmetric (torso COM y 0.8 mm, tilted principal axes; head E-stop): make the
+    # inertias exactly mirror-symmetric so that only the sign conventions are tested
+    S = np.diag([1.0, -1.0, 1.0])
+
+    def inertia(b):
+        R = np.zeros(9)
+        mujoco.mju_quat2Mat(R, m.body_iquat[b])
+        R = R.reshape(3, 3)
+        return R @ np.diag(m.body_inertia[b]) @ R.T
+
+    def set_inertia(b, full):
+        w, V = np.linalg.eigh(full)
+        if np.linalg.det(V) < 0:
+            V[:, 0] *= -1
+        q = np.zeros(4)
+        mujoco.mju_mat2Quat(q, V.flatten())
+        m.body_inertia[b], m.body_iquat[b] = w, q
+    for b in range(1, m.nbody):
+        name = mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_BODY, b) or ""
+        if name.startswith("left_"):
+            r = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, "right_" + name[5:])
+            m.body_mass[r], m.body_ipos[r] = m.body_mass[b], m.body_ipos[b] * np.array([1.0, -1.0, 1.0])
+            set_inertia(r, S @ inertia(b) @ S)
+        elif not name.startswith("right_"):
+            set_inertia(b, 0.5 * (inertia(b) + S @ inertia(b) @ S))
+            m.body_ipos[b][1] = 0.0
+    act = {mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, m.actuator_trnid[a, 0]): a for a in range(m.nu)}
+    jid = {j: mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, j) for j in act}
+    qadr, dadr = {j: m.jnt_qposadr[i] for j, i in jid.items()}, {j: m.jnt_dofadr[i] for j, i in jid.items()}
+    rng = np.random.default_rng(5)
+    d, dm = mujoco.MjData(m), mujoco.MjData(m)
+    d.qpos[2] = 2.0
+    d.qpos[3:7] = np.array([0.95, 0.1, -0.2, 0.2]) / np.linalg.norm([0.95, 0.1, -0.2, 0.2])
+    d.qvel[:] = rng.uniform(-0.5, 0.5, m.nv)
+    for j, i in jid.items():
+        lo, hi = m.jnt_range[i]
+        d.qpos[qadr[j]] = rng.uniform(lo + 0.2 * (hi - lo), hi - 0.2 * (hi - lo))
+    ctrl = {j: rng.uniform(*m.jnt_range[jid[j]]) * 0.5 for j in act}
+    dm.qpos[:], dm.qvel[:] = mirror_mujoco_state(d.qpos, d.qvel, qadr, dadr)
+    names = list(act)
+    from jx1_rl.symmetry import joint_mirror
+    midx, msign = joint_mirror(names)
+    for i, j in enumerate(names):
+        d.ctrl[act[j]] = ctrl[j]
+        dm.ctrl[act[j]] = msign[i] * ctrl[names[midx[i]]]
+    for _ in range(100):                                                     # 0.2 s of free flight with PD motion
+        mujoco.mj_step(m, d)
+        mujoco.mj_step(m, dm)
+    qp, qv = mirror_mujoco_state(d.qpos, d.qvel, qadr, dadr)
+    assert np.abs(qp - dm.qpos).max() < 1e-4 and np.abs(qv - dm.qvel).max() < 1e-3, (np.abs(qp - dm.qpos).max(), np.abs(qv - dm.qvel).max())
+
+    mir = Mirror(CFG.policy_joints, CFG.num_privileged_obs)
+    pj = CFG.policy_joints
+    default = np.array([CFG.default_pos[j] for j in pj])
+
+    def obs_of(qpos, qvel, cmd, last, t):
+        q = np.array([qpos[qadr[j]] for j in pj])
+        dq = np.array([qvel[dadr[j]] for j in pj])
+        return policy_io.build_observation(qvel[3:6], policy_io.projected_gravity(qpos[3:7]), cmd, q - default, dq, last,
+                                           policy_io.gait_phase(np.asarray(t), CFG["gait"]["period_s"]), CFG["observation"]["scales"])
+    cmd, last, t = np.array([0.4, 0.2, -0.3]), rng.normal(0, 0.5, len(pj)), 0.37
+    o = obs_of(d.qpos, d.qvel, cmd, last, t)
+    om = obs_of(dm.qpos, dm.qvel, cmd * np.array([1, -1, -1]), mir.act(last), t + 0.5 * CFG["gait"]["period_s"])
+    assert np.allclose(mir.obs(o), om, atol=1e-5), np.abs(mir.obs(o) - om).max()
+    x, p, a = rng.normal(size=(4, CFG.num_obs)), rng.normal(size=(4, CFG.num_privileged_obs)), rng.normal(size=(4, CFG.num_actions))
+    assert np.allclose(mir.obs(mir.obs(x)), x) and np.allclose(mir.priv(mir.priv(p)), p) and np.allclose(mir.act(mir.act(a)), a)
+    assert np.allclose(mir.priv(p)[:, :CFG.num_obs], mir.obs(p[:, :CFG.num_obs]))
+    tx = torch.as_tensor(x, dtype=torch.float32)
+    assert torch.allclose(mir.obs(tx), torch.as_tensor(mir.obs(x), dtype=torch.float32))
+
+
 def main():
     tests = [(n, f) for n, f in globals().items() if n.startswith("test_") and callable(f)]
     failed = 0

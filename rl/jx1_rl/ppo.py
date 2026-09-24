@@ -3,7 +3,9 @@
 Actor: MLP on the (normalised) actor observation -> Gaussian mean, state-independent learned std.
 Critic: MLP on the privileged observation. Running mean/std normalisers for both inputs are part of the checkpoint and
 are baked into the exported policy. GAE(lambda), clipped surrogate + clipped value loss, entropy bonus, KL-adaptive
-learning rate, time-out bootstrapping.
+learning rate, time-out bootstrapping. Optional mirror loss (ppo.symmetry_coef > 0, jx1_rl/symmetry.py): the actor's
+mean action for the left/right-mirrored observation must be the mirrored mean action (Yu et al. 2018, rsl_rl's
+use_mirror_loss), which removes the one-sided yaw drift a free policy picks up.
 """
 from __future__ import annotations
 
@@ -33,6 +35,9 @@ class Normalizer(nn.Module):
 
     def forward(self, x):
         return (x - self.mean) / (self.var.sqrt() + self.eps)
+
+    def denorm(self, y):
+        return y * (self.var.sqrt() + self.eps) + self.mean
 
     @torch.no_grad()
     def update(self, x):
@@ -101,14 +106,14 @@ class Storage:
 
 
 class PPO:
-    def __init__(self, ac: ActorCritic, cfg: dict, device):
-        self.ac, self.cfg, self.device = ac, cfg, device
+    def __init__(self, ac: ActorCritic, cfg: dict, device, mirror=None):
+        self.ac, self.cfg, self.device, self.mirror = ac, cfg, device, mirror
         self.lr = cfg["learning_rate"]
         self.opt = torch.optim.Adam(ac.parameters(), lr=self.lr)
 
     def update(self, st: Storage):
         c = self.cfg
-        stats = {"value_loss": 0.0, "surrogate": 0.0, "entropy": 0.0, "kl": 0.0}
+        stats = {"value_loss": 0.0, "surrogate": 0.0, "entropy": 0.0, "kl": 0.0, "symmetry": 0.0}
         n = 0
         for obs, priv, act, old_v, adv, ret, old_logp, old_mu, old_sigma in st.minibatches(c["num_mini_batches"], c["num_learning_epochs"]):
             dist = self.ac.distribution(obs)
@@ -130,6 +135,12 @@ class PPO:
             v_clip = old_v + (value - old_v).clamp(-c["clip_param"], c["clip_param"])
             value_loss = torch.max((value - ret) ** 2, (v_clip - ret) ** 2).mean()
             loss = surrogate + c["value_loss_coef"] * value_loss - c["entropy_coef"] * entropy.mean()
+            if self.mirror is not None:
+                # storage holds normalised observations: mirror in raw units, normalise again
+                obs_m = self.ac.obs_norm(self.mirror.obs(self.ac.obs_norm.denorm(obs)))
+                sym = ((mu - self.mirror.act(self.ac.actor(obs_m))) ** 2).mean()
+                loss = loss + c["symmetry_coef"] * sym
+                stats["symmetry"] += sym.item()
             self.opt.zero_grad()
             loss.backward()
             nn.utils.clip_grad_norm_(self.ac.parameters(), c["max_grad_norm"])

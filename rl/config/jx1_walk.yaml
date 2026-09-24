@@ -150,4 +150,7 @@ ppo:
   num_learning_epochs: 5
   num_mini_batches: 4
   max_grad_norm: 1.0
+  # left/right mirror loss on the actor mean (jx1_rl/symmetry.py). The free policy drifted -0.03 rad/s in yaw at zero
+  # command and tracked +0.3 rad/s turns at 85 % but -0.3 at 109 % on a symmetric robot (COM y offset 0.2 mm)
+  symmetry_coef: 0.5
   save_interval: 100

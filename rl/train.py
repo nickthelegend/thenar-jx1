@@ -9,18 +9,19 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-import shutil
 import sys
 import time
 from pathlib import Path
 
 import numpy as np
 import torch
+import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from jx1_rl import RL_DIR, config  # noqa: E402
+from jx1_rl import REPO, RL_DIR, config  # noqa: E402
 from jx1_rl.env import JX1Env  # noqa: E402
 from jx1_rl.ppo import PPO, ActorCritic, Storage  # noqa: E402
+from jx1_rl.symmetry import Mirror  # noqa: E402
 
 
 def main():
@@ -41,14 +42,17 @@ def main():
     run = a.run or time.strftime(f"{cfg['name']}_%Y%m%d_%H%M%S")
     out = RL_DIR / "runs" / run
     out.mkdir(parents=True, exist_ok=True)
-    shutil.copy(a.config, out / "config.yaml")
+    # merged snapshot (a `base:` inheritance would not resolve next to the checkpoint); export.py reads it
+    src = Path(a.config).resolve()
+    header = f"# task config of this run, merged from {src.relative_to(REPO).as_posix() if src.is_relative_to(REPO) else src.name}\n"
+    (out / "config.yaml").write_text(header + yaml.safe_dump(config.load_raw(a.config), sort_keys=False, width=140), encoding="utf-8")
     torch.manual_seed(a.seed)
     dev = torch.device(a.device)
 
     env = JX1Env(cfg, N, nthread=a.threads, seed=a.seed)
     ac = ActorCritic(cfg.num_obs, cfg.num_privileged_obs, cfg.num_actions, pc["actor_hidden"], pc["critic_hidden"],
                      pc["activation"], pc["init_noise_std"]).to(dev)
-    ppo = PPO(ac, pc, dev)
+    ppo = PPO(ac, pc, dev, mirror=Mirror(cfg.policy_joints, cfg.num_privileged_obs) if pc.get("symmetry_coef", 0.0) > 0 else None)
     start = 0
     if a.resume:
         ck = torch.load(a.resume, map_location=dev)
@@ -66,7 +70,7 @@ def main():
     metrics_f = open(out / "metrics.csv", "a", newline="", encoding="utf-8")
     ep_keys = [f"ep_{k}" for k, w in cfg["rewards"].items() if k not in ("tracking_sigma", "soft_torque_limit") and w != 0.0] + ["ep_length_s"]
     fields = ["iteration", "time_s", "fps", "collect_s", "update_s", "reward_per_step", "value_loss", "surrogate", "entropy", "kl", "lr",
-              "std"] + ep_keys + ["unstable_resets"]
+              "std", "symmetry"] + ep_keys + ["unstable_resets"]
     writer = csv.DictWriter(metrics_f, fieldnames=fields, extrasaction="ignore")
     if metrics_f.tell() == 0:
         writer.writeheader()
