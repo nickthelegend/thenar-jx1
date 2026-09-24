@@ -1,4 +1,7 @@
-"""Export an Isaac Lab-trained JX1 policy to the deployment bundle (policy.onnx + policy_io.yaml), UNVERIFIED here.
+"""Export an Isaac Lab-trained JX1 policy to the deployment bundle (policy.onnx + policy_io.yaml) from inside Isaac Sim.
+
+export_offline.py does the same from the checkpoint alone (no Isaac Sim) and is the checked path; this script is the
+Isaac Lab-native alternative (isaaclab_rl exporter).
 
   <IsaacLab>/isaaclab.sh -p simulation/isaac/isaaclab/scripts/export_policy.py --checkpoint logs/jx1_flat/<run>/model_3000.pt \
       --out rl/policies/jx1_walk_flat_isaac --headless
@@ -38,7 +41,9 @@ def main():
     runner.load(args.checkpoint)
     alg = runner.alg
     policy = getattr(alg, "policy", None) or getattr(alg, "actor_critic")        # rsl_rl >= 2.3 / older
-    normalizer = getattr(runner, "obs_normalizer", None)                          # runner-side normaliser (older rsl_rl)
+    # observation normaliser: inside the policy for rsl_rl >= 3 (Isaac Lab >= 2.3), in the runner before. Exporting
+    # without it would feed raw observations to a network trained on normalised ones.
+    normalizer = getattr(policy, "actor_obs_normalizer", None) or getattr(runner, "obs_normalizer", None)
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     export_policy_as_onnx(policy, normalizer=normalizer, path=str(out), filename="policy.onnx")

@@ -1,7 +1,8 @@
-"""Train JX1 in Isaac Lab with rsl_rl (UNVERIFIED: no Isaac Sim on the design machine).
+"""Train JX1 in Isaac Lab with rsl_rl (offline-checked against Isaac Lab 2.3.2 by offline_check.py; not run in Isaac Sim here).
 
   <IsaacLab>/isaaclab.sh -p simulation/isaac/isaaclab/scripts/train.py --task Isaac-Velocity-Flat-JX1-v0 --headless [--num_envs 4096]
 Logs and checkpoints: simulation/isaac/isaaclab/logs/jx1_flat/<time>/model_<it>.pt
+Deployment bundle: scripts/export_offline.py --checkpoint <model.pt> --out rl/policies/<name> (no Isaac Sim needed)
 """
 import argparse
 import sys
@@ -38,7 +39,7 @@ def main():
     agent_cfg.seed = env_cfg.seed = args.seed
     agent_cfg.device = args.device
     log_dir = Path(__file__).resolve().parents[1] / "logs" / agent_cfg.experiment_name / time.strftime("%Y-%m-%d_%H-%M-%S")
-    env = RslRlVecEnvWrapper(gym.make(args.task, cfg=env_cfg))
+    env = RslRlVecEnvWrapper(gym.make(args.task, cfg=env_cfg), clip_actions=agent_cfg.clip_actions)
     runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=str(log_dir), device=agent_cfg.device)
     if args.resume:
         runner.load(args.resume)

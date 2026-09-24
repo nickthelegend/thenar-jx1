@@ -1,4 +1,4 @@
-"""JX1 articulation for Isaac Lab (UNVERIFIED: Isaac Sim is not installed on the design machine).
+"""JX1 articulation for Isaac Lab (offline-checked by scripts/offline_check.py; Isaac Sim is not installed on the design machine).
 
 Asset: simulation/isaac/jx1.usd when it exists (simulation/isaac/import_jx1.py), otherwise the CAD-derived URDF with
 absolute mesh paths. Actuators are implicit PD drives with the deployment gains of rl/config/jx1_walk.yaml, the effort

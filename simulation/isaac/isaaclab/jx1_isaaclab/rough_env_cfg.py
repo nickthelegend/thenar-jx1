@@ -1,14 +1,18 @@
-"""Isaac Lab rough-ground task for JX1 = rl/config/jx1_walk_rough.yaml (UNVERIFIED: no Isaac Sim on the design machine).
+"""Isaac Lab rough-ground task for JX1 = rl/config/jx1_walk_rough.yaml (checked offline, never run in Isaac Sim).
 
-Same blind observation, actions (incl. ankle polygon and hub ramp), rewards and randomisation as the flat task; the
-ground is Isaac Lab's terrain generator with sub-terrains matching the MuJoCo tiles: flat, uneven floor (+-noise_m),
-pyramid slopes up to max_slope_deg and random boxes/steps up to max_step_m.
+Same blind observation, actions (incl. ankle polygon, hub ramp and delay), rewards and randomisation as the flat task.
+The ground is Isaac Lab's terrain generator with sub-terrains matching the MuJoCo tiles: flat, uneven floor
+(+-noise_m), pyramid slopes up to max_slope_deg, and random boxes/steps up to max_step_m. A pelvis height scanner gives
+the local ground height, so the base-height reward and termination, the swing-height reward and the critic's heights
+are measured from the ground under the robot, as in the MuJoCo rough task. The policy never sees the scanner.
 """
 from __future__ import annotations
 
 import math
 
 import isaaclab.terrains as terrain_gen
+from isaaclab.managers import SceneEntityCfg
+from isaaclab.sensors import RayCasterCfg, patterns
 from isaaclab.terrains import TerrainGeneratorCfg
 from isaaclab.utils import configclass
 
@@ -37,6 +41,8 @@ JX1_TERRAINS = TerrainGeneratorCfg(
     },
 )
 
+GROUND = SceneEntityCfg("height_scanner")
+
 
 @configclass
 class JX1RoughEnvCfg(JX1FlatEnvCfg):
@@ -45,7 +51,14 @@ class JX1RoughEnvCfg(JX1FlatEnvCfg):
         self.scene.terrain.terrain_type = "generator"
         self.scene.terrain.terrain_generator = JX1_TERRAINS
         self.scene.terrain.max_init_terrain_level = None
-        self.rewards.base_height_l2 = None           # absolute-height reward is wrong on terrain (MuJoCo uses height above ground)
+        # local ground under the pelvis and feet: 13 x 13 rays over 0.6 m, yaw-aligned (critic and rewards only)
+        self.scene.height_scanner = RayCasterCfg(prim_path="{ENV_REGEX_NS}/Robot/pelvis", offset=RayCasterCfg.OffsetCfg(pos=(0.0, 0.0, 20.0)),
+                                                 ray_alignment="yaw", pattern_cfg=patterns.GridPatternCfg(resolution=0.05, size=[0.6, 0.6]),
+                                                 debug_vis=False, mesh_prim_paths=["/World/ground"])
+        self.scene.height_scanner.update_period = self.decimation * self.sim.dt
+        for term in (self.rewards.base_height_l2, self.rewards.feet_swing_height, self.terminations.base_height,
+                     self.observations.critic.base_height, self.observations.critic.feet_height):
+            term.params["ground_cfg"] = GROUND
 
 
 @configclass

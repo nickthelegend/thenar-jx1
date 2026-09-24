@@ -89,6 +89,7 @@ def load(config_path: Path | None = None) -> dict:
         "classes": classes,
         "armature": mjcf_armature(),
         "base_height": base_height(cfg, jm),
+        "sole_offset": [float(v) for v in next(f["origin_xyz_m"] for f in jm["fixed_frames"] if f["name"] == "left_sole_fixed")],
         "polygons_deg": {s: jm["coupled_limits"]["ankle_pitch_roll"][f"{s}_polygon_deg"] for s in ("left", "right")},
     }
 

@@ -29,8 +29,8 @@ MuJoCo, Isaac Lab and ROS 2. The walking task, its conventions and the deploymen
 | `rl/jx1_rl/ppo.py`, `rl/train.py` | PPO (rsl_rl algorithm: asymmetric actor-critic, running normalisers, GAE, adaptive LR), GPU update | tested |
 | `rl/export.py` | TorchScript + ONNX (normaliser baked in) + `policy_io.yaml`, checked against the checkpoint | tested |
 | `rl/sim2sim.py` | exported policy on the **full CAD model** (mesh hulls, 500 Hz, no DR), 7 command scenarios | tested |
-| `rl/tests/test_rl.py` | quaternion maths vs MuJoCo, ankle-polygon projection (numpy/ROS/torch), env determinism, training-vs-deployment observation parity, MuJoCo/Isaac `policy_io` parity, GAE/normaliser, ros2_control xacro | 7/7 pass |
-| `simulation/isaac/isaaclab/` | Isaac Lab task `Isaac-Velocity-Flat-JX1-v0` (same obs/actions/rewards/DR), rsl_rl config, train/export scripts, Isaac Sim ROS 2 bridge | **UNVERIFIED** (no Isaac Sim on the design machine) |
+| `rl/tests/test_rl.py` | quaternion maths vs MuJoCo, ankle-polygon projection (numpy/ROS/torch), env determinism, training-vs-deployment observation parity, latency, hub ramp, MuJoCo/Isaac `policy_io` parity, hardware protocol/bridge/IMU, rough terrain, GAE/normaliser, ros2_control xacro | 13/13 pass |
+| `simulation/isaac/isaaclab/` | Isaac Lab tasks `Isaac-Velocity-{Flat,Rough}-JX1-v0` (+ `-Play`), same obs/actions/rewards/DR; rsl_rl config, train and export scripts, offline API check, Isaac Sim ROS 2 bridge | offline-checked against Isaac Lab 2.3.2 + rsl_rl 3.1.2 (77/77); **not run in Isaac Sim** |
 | `ros2_ws/src/jx1_policy` | ONNX policy runner (no training code) + ROS 2 node (WAIT → RAMP → WALK, HOLD on stale state) | runner tested; node see below |
 | `ros2_ws/src/jx1_sim` | MuJoCo ROS 2 node: `/clock`, `/jx1/joint_states`, `/jx1/imu`, `/jx1/odom`, TF; applies `/jx1/joint_command` | see below |
 | `ros2_ws/src/jx1_bringup` | `mujoco_sim.launch.py`, `isaac_sim.launch.py`, `ros2_control.launch.py`, controllers | see below |
@@ -78,18 +78,62 @@ rl/.venv/Scripts/python rl/sim2sim.py --policy rl/policies/jx1_walk_rough --terr
   direction (same method as `simulation/mujoco/push_jx1.py` for the model-based controller). Interim policy on the
   placeholder-torso model: 11.7–23.4 N·s, vs 6.6–7.8 N·s for the fixed-footstep ZMP controller.
 
-## Train in Isaac Lab (UNVERIFIED)
+## Train in Isaac Lab (offline-checked, not yet run in Isaac Sim)
 
 ```bash
 cd <IsaacLab> && ./isaaclab.sh -p -m pip install -e <repo>/simulation/isaac/isaaclab
 ./isaaclab.sh -p <repo>/simulation/isaac/isaaclab/scripts/train.py --task Isaac-Velocity-Flat-JX1-v0 --headless --num_envs 4096
 ./isaaclab.sh -p <repo>/simulation/isaac/isaaclab/scripts/train.py --task Isaac-Velocity-Rough-JX1-v0 --headless   # terrain generator
-./isaaclab.sh -p <repo>/simulation/isaac/isaaclab/scripts/export_policy.py --checkpoint <log>/model_3000.pt --out <repo>/rl/policies/jx1_walk_flat_isaac --headless
+# deployment bundle straight from the checkpoint, on any machine with rl/.venv (no Isaac Sim needed):
+rl/.venv/Scripts/python simulation/isaac/isaaclab/scripts/export_offline.py --checkpoint <log>/model_2999.pt --out rl/policies/jx1_walk_flat_isaac
+rl/.venv/Scripts/python rl/sim2sim.py --policy rl/policies/jx1_walk_flat_isaac     # the Isaac-trained policy on the MuJoCo CAD model
 ```
 
-Asset: `simulation/isaac/jx1.usd` from `simulation/isaac/import_jx1.py` if present, else the URDF (mesh URIs made
-absolute). The action term clamps to joint limits and projects the ankle targets into the collision-free polygon, as in
-MuJoCo, so exported policies share the `policy_io.yaml` contract.
+Isaac Sim does not fit the design machine (RTX 3050 6 GB, 24 GB RAM, full system drive), so these tasks have not been
+run. They are **checked offline against the Isaac Lab 2.3.2 sources and rsl_rl 3.1.2**:
+
+```bash
+git clone --depth 1 --branch v2.3.2 https://github.com/isaac-sim/IsaacLab.git <dir>/IsaacLab-2.3.2
+rl/.venv/Scripts/python -m pip download rsl-rl-lib==3.1.2 --no-deps -d <dir>      # unzip the wheel to <dir>/rsl_rl_src
+rl/.venv/Scripts/python simulation/isaac/isaaclab/scripts/offline_check.py --isaaclab <dir>/IsaacLab-2.3.2 --rsl-rl <dir>/rsl_rl_src
+```
+
+`offline_check.py` mocks the Omniverse modules (as Isaac Lab's own docs build does) and imports the real Isaac Lab code.
+It checks all four tasks (77/77 pass, report in
+[`offline_check.json`](../simulation/isaac/isaaclab/offline_check.json)):
+- Every env and runner config instantiates, and `validate()` passes.
+- Every manager term resolves as Isaac Lab resolves it at start-up (signature, scene entities against the robot the URDF
+  importer builds).
+- Every observation, reward and termination term runs on a fake scene whose attribute names are checked against the
+  real data classes.
+- Policy and critic observations equal the MuJoCo task's (47 and 55 values).
+- The action term produces the MuJoCo targets on every physics substep: clamp, ankle polygon, hub ramp, delay, reset.
+- Actuators cover all 23 joints with the task gains.
+- The scripts' imports and keyword arguments match the library signatures.
+- The offline exporter matches `rsl_rl`'s `ActorCritic.act_inference`.
+
+What the check found and what was fixed:
+- **Deployment bug:** under rsl_rl ≥ 3 (Isaac Lab ≥ 2.3) the observation normaliser moved into the policy. The export
+  script therefore wrote an ONNX without it, and the deployed policy would have received raw observations.
+  `export_policy.py` is fixed. `export_offline.py` reads both checkpoint layouts.
+- **Runner config:** `obs_groups` is now set, so the critic gets the privileged group. The deprecated
+  `empirical_normalization` is dropped on ≥ 2.3. Actions are clipped at ±100, as in MuJoCo.
+- **Action term:** after a reset the ramp started from the previous episode's last target. It now starts from the
+  default pose, and a 0–1 substep transport delay was added, both as in `env.py`.
+- **Critic:** it lacked the MuJoCo privileged terms (base height, foot contact, sole heights). It now matches the 55 values.
+- **Rough task:** the base-height reward was off, and the fall check and swing height used world z. They are now
+  measured from the ground under the robot, via a pelvis height scanner that only the critic and rewards see.
+- **Randomisation:** friction pairs are consistent, armature is randomised, and gains are randomised on all joints,
+  as in MuJoCo.
+
+Still different from MuJoCo:
+- No 0–5 ms sensing latency: Isaac Lab observes the latest physics state.
+- No joint friction torque: PhysX joint friction is a coefficient, while MuJoCo uses `frictionloss`.
+- PhysX contacts instead of MuJoCo soft contacts. Running an Isaac-trained bundle through `rl/sim2sim.py` on the CAD model
+  measures exactly this gap.
+
+Asset: `simulation/isaac/jx1.usd` from `simulation/isaac/import_jx1.py` if it exists, otherwise the URDF with absolute
+mesh URIs.
 
 ## Run on ROS 2
 

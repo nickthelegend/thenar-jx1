@@ -1,4 +1,5 @@
-"""Isaac Lab flat-ground velocity task for JX1 = the MuJoCo task of rl/config/jx1_walk.yaml (UNVERIFIED here).
+"""Isaac Lab flat-ground velocity task for JX1 = the MuJoCo task of rl/config/jx1_walk.yaml (offline-checked by
+scripts/offline_check.py against Isaac Lab 2.3.2; not run in Isaac Sim here).
 
 Observation layout, scales and noise, gait clock, actions (scale, default offset, ankle polygon), PD gains, rewards and
 weights, terminations, commands and domain randomisation are all taken from rl/config/jx1_walk.yaml, so a policy trained
@@ -29,7 +30,7 @@ HELD = [j for j in TC["present"] if j not in POLICY]
 FEET = ["left_foot_link", "right_foot_link"]
 TRUNK = "torso_link" if "torso_link" in TC["links"] else "pelvis"
 POLYGONS = {s: [[math.radians(a), math.radians(b)] for a, b in p] for s, p in TC["polygons_deg"].items()}
-SOLE_OFFSET = 0.05          # foot-link origin (ankle roll axis) to sole, joint_map fixed frame left_sole_fixed
+SOLE = tuple(TC["sole_offset"])            # sole point in the foot-link frame (joint_map fixed frame left_sole_fixed)
 SIGMA = math.sqrt(W["tracking_sigma"])     # exp(-err^2 / sigma) in MuJoCo == exp(-err^2 / std^2) in Isaac Lab
 
 
@@ -69,7 +70,12 @@ class JX1Observations:
         joint_vel = ObsTerm(func=mdp.joint_vel_rel, params={"asset_cfg": robot(POLICY)}, scale=S["dof_vel"])
         actions = ObsTerm(func=mdp.last_action)
         gait_phase = ObsTerm(func=jx1.gait_phase, params={"period": G["period_s"]})
+        # privileged, same as rl/jx1_rl/env.py: lin vel x2, (base height - standing height) x5, foot contact, sole heights x10
         base_lin_vel = ObsTerm(func=mdp.base_lin_vel, scale=S["lin_vel"])
+        base_height = ObsTerm(func=jx1.base_height_above_target, params={"target_height": BASE_HEIGHT}, scale=5.0)
+        feet_contact = ObsTerm(func=jx1.feet_contact_state,
+                               params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=FEET, preserve_order=True)})
+        feet_height = ObsTerm(func=jx1.feet_height, params={"sole_offset": SOLE, "asset_cfg": robot(bodies=FEET)}, scale=10.0)
 
         def __post_init__(self):
             self.enable_corruption = False
@@ -83,7 +89,8 @@ class JX1Observations:
 class JX1Actions:
     joint_pos = jx1.PolygonClippedJointPositionActionCfg(asset_name="robot", joint_names=POLICY, scale=R["action_scale"],
                                                          use_default_offset=True, preserve_order=True, polygons_rad=POLYGONS,
-                                                         hub_interpolation=R["model"].get("hub_interpolation", False))
+                                                         hub_interpolation=R["model"].get("hub_interpolation", False),
+                                                         action_delay_substeps=tuple(RND.get("action_delay_substeps", (0, 0))))
 
 
 @configclass
@@ -93,7 +100,7 @@ class JX1Rewards:
     lin_vel_z_l2 = RewTerm(func=mdp.lin_vel_z_l2, weight=W["lin_vel_z"])
     ang_vel_xy_l2 = RewTerm(func=mdp.ang_vel_xy_l2, weight=W["ang_vel_xy"])
     flat_orientation_l2 = RewTerm(func=mdp.flat_orientation_l2, weight=W["orientation"])
-    base_height_l2 = RewTerm(func=mdp.base_height_l2, weight=W["base_height"], params={"target_height": BASE_HEIGHT})
+    base_height_l2 = RewTerm(func=jx1.base_height_error, weight=W["base_height"], params={"target_height": BASE_HEIGHT})
     dof_torques_l2 = RewTerm(func=mdp.joint_torques_l2, weight=W["torques"], params={"asset_cfg": robot(POLICY)})
     torque_limits = RewTerm(func=jx1.torque_limits, weight=W.get("torque_limits", 0.0),
                             params={"soft_ratio": W.get("soft_torque_limit", 0.85), "asset_cfg": robot(POLICY)})
@@ -109,7 +116,7 @@ class JX1Rewards:
                       params={"period": G["period_s"], "offset": G["offset"], "stance_fraction": G["stance_fraction"],
                               "sensor_cfg": SceneEntityCfg("contact_forces", body_names=FEET, preserve_order=True)})
     feet_swing_height = RewTerm(func=jx1.feet_swing_height, weight=W["feet_swing_height"],
-                                params={"target_height": G["swing_height_m"], "sole_offset": SOLE_OFFSET,
+                                params={"target_height": G["swing_height_m"], "sole_offset": SOLE,
                                         "sensor_cfg": SceneEntityCfg("contact_forces", body_names=FEET, preserve_order=True),
                                         "asset_cfg": robot(bodies=FEET)})
     contact_no_vel = RewTerm(func=jx1.feet_contact_velocity, weight=W["contact_no_vel"],
@@ -122,7 +129,7 @@ class JX1Rewards:
 @configclass
 class JX1Terminations:
     time_out = DoneTerm(func=mdp.time_out, time_out=True)
-    base_height = DoneTerm(func=mdp.root_height_below_minimum, params={"minimum_height": R["termination"]["min_base_height_m"]})
+    base_height = DoneTerm(func=jx1.base_height_below, params={"minimum_height": R["termination"]["min_base_height_m"]})
     bad_orientation = DoneTerm(func=mdp.bad_orientation, params={"limit_angle": math.radians(R["termination"]["max_tilt_deg"])})
 
 
@@ -156,6 +163,7 @@ class JX1FlatEnvCfg(LocomotionVelocityRoughEnvCfg):
         ev = self.events
         ev.physics_material.params["static_friction_range"] = tuple(RND["friction"])
         ev.physics_material.params["dynamic_friction_range"] = tuple(RND["friction"])
+        ev.physics_material.params["make_consistent"] = True          # dynamic <= static (MuJoCo has one coefficient)
         ev.add_base_mass.params["asset_cfg"] = SceneEntityCfg("robot", body_names=TRUNK)
         ev.add_base_mass.params["mass_distribution_params"] = tuple(RND["added_base_mass_kg"])
         if hasattr(ev, "base_com") and ev.base_com is not None:
@@ -172,8 +180,12 @@ class JX1FlatEnvCfg(LocomotionVelocityRoughEnvCfg):
         v = RND["push_velocity_m_s"]
         ev.push_robot.params = {"velocity_range": {"x": (-v, v), "y": (-v, v)}}
         ev.actuator_gains = EventTerm(func=mdp.randomize_actuator_gains, mode="reset",
-                                      params={"asset_cfg": robot(POLICY), "stiffness_distribution_params": tuple(RND["kp_scale"]),
+                                      params={"asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
+                                              "stiffness_distribution_params": tuple(RND["kp_scale"]),
                                               "damping_distribution_params": tuple(RND["kd_scale"]), "operation": "scale"})
+        ev.joint_armature = EventTerm(func=mdp.randomize_joint_parameters, mode="startup",
+                                      params={"asset_cfg": SceneEntityCfg("robot", joint_names=".*"),
+                                              "armature_distribution_params": tuple(RND["armature_scale"]), "operation": "scale"})
         ev.link_masses = EventTerm(func=mdp.randomize_rigid_body_mass, mode="startup",
                                    params={"asset_cfg": SceneEntityCfg("robot", body_names=".*"),
                                            "mass_distribution_params": tuple(RND["link_mass_scale"]), "operation": "scale"})
