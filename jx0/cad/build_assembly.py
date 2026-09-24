@@ -29,7 +29,13 @@ MM = 1e-3
 
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--frames", default=None, help="folder for a PNG of the assembly after every component (timelapse)")
+    a = ap.parse_args()
+    from build_cad import FrameGrabber
     s = Session()
+    frames = FrameGrabber(s, a.frames)
     doc = s.new_doc("assembly")
     set_mmgs(doc)
     save_as(doc, OUT)
@@ -48,11 +54,18 @@ def main():
                        "R": M[:3, :3].round(6).tolist()})
         s.close(path.name)
         print(f"placed {key:26s} {part}", flush=True)
-        if len(placed) % 6 == 0:
+        if frames.dir:
+            frames.grab(doc, eye=(1.0, -0.8, 0.45))
+        elif len(placed) % 6 == 0:
             set_view(s.app, doc, eye=(1.0, -0.8, 0.45))
     doc.ForceRebuild3(False)
     set_view(s.app, doc, eye=(1.0, -0.8, 0.45))
     save_as(doc, OUT)
+    if frames.dir:                                      # a slow turn around the finished robot
+        import math
+        for k in range(48):
+            a_ = 2 * math.pi * k / 48
+            frames.grab(doc, eye=(math.cos(a_ - 0.67), math.sin(a_ - 0.67), 0.45))
     (ROOT / "jx0" / "cad" / "assembly.json").write_text(json.dumps({"assembly": str(OUT.relative_to(ROOT)).replace("\\", "/"),
                                                                      "components": placed}, indent=1), encoding="utf-8")
     print(f"saved {OUT.relative_to(ROOT)} with {len(placed)} components")

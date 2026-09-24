@@ -20,18 +20,18 @@
    68.62
   ],
   "bbox_ok": true,
-  "volume_cm3": 33.37,
-  "solid_mass_g_petg": 42.4,
-  "printed_mass_g": 23.3,
+  "volume_cm3": 30.34,
+  "solid_mass_g_petg": 38.5,
+  "printed_mass_g": 21.2,
   "features": 17,
-  "triangles": 1436,
+  "triangles": 1704,
   "com_mm": [
-   12.47,
+   13.71,
    0.0,
-   64.38
+   64.15
   ],
   "quantity": 1,
-  "build_s": 25.8
+  "build_s": 38.1
  },
  "JX0_HipYawBracket_L": {
   "part": "JX0_HipYawBracket_L",
@@ -65,7 +65,7 @@
    19.25
   ],
   "quantity": 1,
-  "build_s": 20.6
+  "build_s": 32.6
  },
  "JX0_HipYawBracket_R": {
   "part": "JX0_HipYawBracket_R",
@@ -99,7 +99,7 @@
    19.25
   ],
   "quantity": 1,
-  "build_s": 19.3
+  "build_s": 32.5
  },
  "JX0_HipRollBracket_L": {
   "part": "JX0_HipRollBracket_L",
@@ -133,7 +133,7 @@
    -0.75
   ],
   "quantity": 1,
-  "build_s": 16.6
+  "build_s": 29.0
  },
  "JX0_HipRollBracket_R": {
   "part": "JX0_HipRollBracket_R",
@@ -167,7 +167,7 @@
    -0.75
   ],
   "quantity": 1,
-  "build_s": 16.9
+  "build_s": 29.1
  },
  "JX0_Thigh_L": {
   "part": "JX0_Thigh_L",
@@ -201,7 +201,7 @@
    -45.07
   ],
   "quantity": 1,
-  "build_s": 16.6
+  "build_s": 28.9
  },
  "JX0_Thigh_R": {
   "part": "JX0_Thigh_R",
@@ -224,18 +224,18 @@
    14.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 16.72,
+  "volume_cm3": 16.69,
   "solid_mass_g_petg": 21.2,
   "printed_mass_g": 11.7,
   "features": 13,
-  "triangles": 1112,
+  "triangles": 1294,
   "com_mm": [
    0.0,
    -21.43,
-   -45.1
+   -45.07
   ],
   "quantity": 1,
-  "build_s": 16.4
+  "build_s": 29.0
  },
  "JX0_Shin_L": {
   "part": "JX0_Shin_L",
@@ -258,18 +258,18 @@
    13.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 15.76,
+  "volume_cm3": 15.73,
   "solid_mass_g_petg": 20.0,
   "printed_mass_g": 11.0,
   "features": 13,
-  "triangles": 1112,
+  "triangles": 1294,
   "com_mm": [
    0.0,
    -18.72,
-   -44.71
+   -44.67
   ],
   "quantity": 1,
-  "build_s": 16.5
+  "build_s": 29.0
  },
  "JX0_Shin_R": {
   "part": "JX0_Shin_R",
@@ -303,7 +303,7 @@
    -44.67
   ],
   "quantity": 1,
-  "build_s": 16.7
+  "build_s": 29.2
  },
  "JX0_AnkleBracket_L": {
   "part": "JX0_AnkleBracket_L",
@@ -337,7 +337,7 @@
    -0.34
   ],
   "quantity": 1,
-  "build_s": 16.8
+  "build_s": 29.1
  },
  "JX0_AnkleBracket_R": {
   "part": "JX0_AnkleBracket_R",
@@ -371,7 +371,7 @@
    -0.34
   ],
   "quantity": 1,
-  "build_s": 16.9
+  "build_s": 29.1
  },
  "JX0_Foot": {
   "part": "JX0_Foot",
@@ -405,7 +405,7 @@
    -30.31
   ],
   "quantity": 2,
-  "build_s": 16.9
+  "build_s": 28.0
  },
  "JX0_Torso": {
   "part": "JX0_Torso",
@@ -439,7 +439,7 @@
    132.13
   ],
   "quantity": 1,
-  "build_s": 44.3
+  "build_s": 78.3
  },
  "JX0_Head": {
   "part": "JX0_Head",
@@ -473,7 +473,7 @@
    35.95
   ],
   "quantity": 1,
-  "build_s": 11.2
+  "build_s": 16.0
  },
  "JX0_ShoulderBracket_L": {
   "part": "JX0_ShoulderBracket_L",
@@ -507,7 +507,7 @@
    -18.66
   ],
   "quantity": 1,
-  "build_s": 12.6
+  "build_s": 13.3
  },
  "JX0_ShoulderBracket_R": {
   "part": "JX0_ShoulderBracket_R",
@@ -541,7 +541,7 @@
    -18.66
   ],
   "quantity": 1,
-  "build_s": 11.9
+  "build_s": 13.4
  },
  "JX0_UpperArm": {
   "part": "JX0_UpperArm",
@@ -575,7 +575,7 @@
    -41.36
   ],
   "quantity": 2,
-  "build_s": 12.2
+  "build_s": 13.4
  },
  "JX0_Forearm_L": {
   "part": "JX0_Forearm_L",
@@ -609,7 +609,7 @@
    -59.91
   ],
   "quantity": 1,
-  "build_s": 9.4
+  "build_s": 10.6
  },
  "JX0_Forearm_R": {
   "part": "JX0_Forearm_R",
@@ -643,7 +643,7 @@
    -59.91
   ],
   "quantity": 1,
-  "build_s": 9.4
+  "build_s": 10.5
  },
  "JX0_Servo_ST3215": {
   "part": "JX0_Servo_ST3215",
@@ -670,14 +670,14 @@
   "solid_mass_g_petg": 47.3,
   "printed_mass_g": 26.0,
   "features": 7,
-  "triangles": 688,
+  "triangles": 694,
   "com_mm": [
    12.0,
    -0.0,
    -0.01
   ],
   "quantity": 12,
-  "build_s": 11.8
+  "build_s": 17.4
  },
  "JX0_Servo_MG90S": {
   "part": "JX0_Servo_MG90S",
@@ -707,10 +707,10 @@
   "triangles": 142,
   "com_mm": [
    5.55,
-   -0.0,
+   0.0,
    -17.86
   ],
   "quantity": 7,
-  "build_s": 9.9
+  "build_s": 10.7
  }
 }

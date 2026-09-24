@@ -32,9 +32,28 @@ PETG_DENSITY = 1270.0          # kg/m^3
 PRINT_FILL = 0.55              # printed mass / solid mass (3 walls + 25 % gyroid on these small parts, ESTIMATED)
 
 
+class FrameGrabber:
+    """Exports the SolidWorks model view to numbered PNGs (works even when the window is covered) for the build timelapse."""
+
+    def __init__(self, s: Session, folder):
+        self.s, self.dir, self.n = s, Path(folder).resolve() if folder else None, 0   # SolidWorks resolves relative paths against its own cwd
+        if self.dir:
+            self.dir.mkdir(parents=True, exist_ok=True)
+            self.n = len(list(self.dir.glob("*.png")))
+
+    def grab(self, doc, eye=(1.0, -0.8, 0.6)):
+        if not self.dir:
+            return
+        set_view(self.s.app, doc, eye=eye)
+        ext = typed(doc.Extension, "IModelDocExtension")
+        ext.SaveAs3(str(self.dir / f"{self.n:05d}.png"), C.swSaveAsCurrentVersion, C.swSaveAsOptions_Silent | C.swSaveAsOptions_Copy,
+                    None, None, 0, 0)
+        self.n += 1
+
+
 class Builder:
-    def __init__(self, part: Part, slow=False):
-        self.p, self.planes, self.n, self.slow = part, {}, 0, slow
+    def __init__(self, part: Part, slow=False, frames: FrameGrabber | None = None):
+        self.p, self.planes, self.n, self.slow, self.frames = part, {}, 0, slow, frames
 
     def plane(self, axis, offset_mm):
         base, key = BASE[axis]
@@ -82,6 +101,8 @@ class Builder:
                 self.p.cut(f"S_{tag}", depth, f"Hole_{self.n}", reverse=True)
         if self.slow:
             self.p.doc.ViewZoomtofit2()
+        if self.frames:
+            self.frames.grab(self.p.doc)
 
     def extrude(self, sketch, depth, name):
         try:
@@ -91,11 +112,11 @@ class Builder:
             return self.p.extrude(sketch, depth, name, merge=False)
 
 
-def build_part(s: Session, name, prims, colour, slow=False):
+def build_part(s: Session, name, prims, colour, slow=False, frames=None):
     part = Part(s, name, PARTS_DIR / f"{name}.SLDPRT")
     part.gv("plate_t", G.T)
     part.gv("clearance", G.C)
-    b = Builder(part, slow)
+    b = Builder(part, slow, frames)
     first = True
     # bosses first, then pockets and holes (so every cut sees the finished solid)
     for prim in [q for q in prims if q[0] in ("box", "cyl")] + [q for q in prims if q[0] in ("cut", "hole")]:
@@ -141,6 +162,7 @@ def main():
     ap.add_argument("names", nargs="*")
     ap.add_argument("--slow", action="store_true", help="zoom to fit after every feature (nicer screen recording)")
     ap.add_argument("--keep-open", type=int, default=3, help="leave the last N parts open")
+    ap.add_argument("--frames", default=None, help="folder for a PNG of the model view after every feature (timelapse)")
     a = ap.parse_args()
     catalogue = {**G.PARTS, **G.SERVOS}
     names = a.names or list(catalogue)
@@ -149,10 +171,14 @@ def main():
     index_path = PARTS_DIR / "index.json"
     index = json.loads(index_path.read_text(encoding="utf-8")) if index_path.exists() else {}
     opened = []
+    frames = FrameGrabber(s, a.frames)
     for name in names:
         prims, colour, qty = catalogue[name]
         t0 = time.time()
-        part, rec = build_part(s, name, prims, colour, slow=a.slow)
+        part, rec = build_part(s, name, prims, colour, slow=a.slow, frames=frames)
+        if frames.dir:
+            for _ in range(3):                          # hold the finished part for a moment in the timelapse
+                frames.grab(part.doc)
         rec["quantity"] = qty
         rec["build_s"] = round(time.time() - t0, 1)
         index[name] = rec
