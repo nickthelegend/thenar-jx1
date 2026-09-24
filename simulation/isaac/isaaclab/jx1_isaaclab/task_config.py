@@ -1,0 +1,116 @@
+"""JX1 task facts for Isaac Lab, read from the same files as the MuJoCo training (no Isaac imports here).
+
+rl/config/jx1_walk.yaml: policy joints, default pose, PD gains, action scale, observation scales, gait clock, commands,
+rewards, randomisation.  simulation/joint_map.yaml: joint limits.  ros2_ws/src/jx1_description/urdf/jx1.urdf: effort
+and velocity limits per joint (actuator classes), link names.
+"""
+from __future__ import annotations
+
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+import yaml
+
+REPO = Path(__file__).resolve().parents[4]
+URDF = REPO / "ros2_ws" / "src" / "jx1_description" / "urdf" / "jx1.urdf"
+USD = REPO / "simulation" / "isaac" / "jx1.usd"
+CACHE = Path(__file__).resolve().parents[1] / ".cache"
+
+
+def _jtype(name: str) -> str:
+    base = name[:-6] if name.endswith("_joint") else name
+    for side in ("left_", "right_"):
+        if base.startswith(side):
+            return base[len(side):]
+    return base
+
+
+def base_height(cfg: dict, jm: dict) -> float:
+    """Pelvis height with the soles flat on the floor at the default pose (planar leg FK from the joint map origins)."""
+    import math
+    org = {j["name"]: j["origin_xyz_m"] for j in jm["joints"]}
+    thigh = -org["left_knee_joint"][2]
+    shin = -org["left_ankle_pitch_joint"][2]
+    sole = -next(f["origin_xyz_m"][2] for f in jm["fixed_frames"] if f["name"] == "left_sole_fixed")
+    d = cfg["default_joint_pos"]
+    hp, kn = d.get("left_hip_pitch_joint", 0.0), d.get("left_knee_joint", 0.0)
+    return thigh * math.cos(hp) + shin * math.cos(hp + kn) + sole
+
+
+def mjcf_armature() -> dict:
+    """Rotor armature per joint from the CAD MJCF (not carried by the URDF)."""
+    path = REPO / "simulation" / "mujoco" / "jx1.xml"
+    if not path.exists():
+        return {}
+    return {j.get("name"): float(j.get("armature")) for j in ET.parse(path).getroot().iter("joint") if j.get("armature")}
+
+
+def load(config_path: Path | None = None) -> dict:
+    cfg = yaml.safe_load((config_path or REPO / "rl" / "config" / "jx1_walk.yaml").read_text(encoding="utf-8"))
+    jm = yaml.safe_load((REPO / "simulation" / "joint_map.yaml").read_text(encoding="utf-8"))
+    joints = [j["name"] for j in jm["joints"]]
+    limits = {j["name"]: (j["lower_rad"], j["upper_rad"]) for j in jm["joints"]}
+    effort, velocity, links = {}, {}, []
+    if URDF.exists():
+        root = ET.parse(URDF).getroot()
+        links = [link.get("name") for link in root.findall("link")]
+        for j in root.findall("joint"):
+            lim = j.find("limit")
+            if j.get("type") == "revolute" and lim is not None:
+                effort[j.get("name")] = float(lim.get("effort"))
+                velocity[j.get("name")] = float(lim.get("velocity"))
+    return {
+        "raw": cfg,
+        "joints": joints,
+        "present": [j for j in joints if not effort or j in effort],
+        "policy_joints": list(cfg["policy_joints"]),
+        "default_pos": {j: float(cfg["default_joint_pos"].get(j, 0.0)) for j in joints},
+        "gains": {j: tuple(cfg["pd_gains"][_jtype(j)]) for j in joints},
+        "limits": limits,
+        "effort": effort,
+        "velocity": velocity,
+        "links": links,
+        "armature": mjcf_armature(),
+        "base_height": base_height(cfg, jm),
+        "polygons_deg": {s: jm["coupled_limits"]["ankle_pitch_roll"][f"{s}_polygon_deg"] for s in ("left", "right")},
+    }
+
+
+OBS_LAYOUT = ["base_ang_vel_body x3 (rad/s) * scales.ang_vel", "projected_gravity_body x3", "command (vx m/s, vy m/s, wz rad/s) * scales.commands",
+              "joint_pos - default (policy joints) * scales.dof_pos", "joint_vel (policy joints) * scales.dof_vel",
+              "last_action (raw policy output)", "sin(2 pi phase)", "cos(2 pi phase)"]
+
+
+def policy_io(tc: dict, meta: dict) -> dict:
+    """policy_io.yaml content (same schema as rl/export.py) for a policy trained in Isaac Lab."""
+    import math
+    raw = tc["raw"]
+    present = tc["present"]
+    n = len(tc["policy_joints"])
+    return {
+        "format": "jx1-policy-io/1",
+        "policy": {"onnx": "policy.onnx", "torchscript": None, "input": "obs", "output": "actions", "num_obs": 9 + 3 * n + 2, "num_actions": n},
+        "control": {"policy_dt_s": raw["model"]["timestep"] * raw["model"]["decimation"], "trained_physics_dt_s": raw["model"]["timestep"],
+                    "trained_decimation": raw["model"]["decimation"]},
+        "joints": {"policy": tc["policy_joints"], "held": [j for j in present if j not in tc["policy_joints"]]},
+        "default_joint_pos": {j: tc["default_pos"][j] for j in present},
+        "action_scale": raw["action_scale"],
+        "pd_gains": {j: list(tc["gains"][j]) for j in present},
+        "effort_limits_Nm": {j: tc["effort"][j] for j in present if j in tc["effort"]},
+        "joint_limits_rad": {j: list(tc["limits"][j]) for j in present},
+        "ankle_polygons_rad": {s: [[round(math.radians(a), 6), round(math.radians(b), 6)] for a, b in p] for s, p in tc["polygons_deg"].items()},
+        "observation": {"size": 9 + 3 * n + 2, "layout": OBS_LAYOUT, "scales": raw["observation"]["scales"], "clip": raw["observation"]["clip"]},
+        "gait": raw["gait"],
+        "commands": raw["commands"]["ranges"],
+        "targets": "q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad",
+        "trained": meta,
+    }
+
+
+def urdf_with_absolute_meshes() -> Path:
+    """Copy of jx1.urdf with package://jx1_description/ mesh URIs replaced by absolute paths (Isaac's URDF importer)."""
+    CACHE.mkdir(parents=True, exist_ok=True)
+    pkg = (REPO / "ros2_ws" / "src" / "jx1_description").as_posix()
+    out = CACHE / "jx1_abs.urdf"
+    out.write_text(URDF.read_text(encoding="utf-8").replace("package://jx1_description", pkg), encoding="utf-8")
+    return out

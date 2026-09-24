@@ -1,0 +1,13 @@
+# JX1 RL stack (separate venv: rl/.venv). Tested on Windows 11, Python 3.13.11, RTX 3050 6 GB (CUDA 12.6 wheels).
+#   py -3.13 -m venv rl/.venv
+#   rl/.venv/Scripts/python -m pip install torch==2.14.0 --index-url https://download.pytorch.org/whl/cu126
+#   rl/.venv/Scripts/python -m pip install -r rl/requirements.txt
+mujoco==3.14.0
+numpy==2.5.3
+PyYAML==6.0.3
+onnx==1.23.0
+onnxruntime==1.30.0
+onnxscript==0.7.2
+pillow==12.3.0
+matplotlib==3.11.2
+xacro==2.1.1                         # tests: ros2_control xacro expansion

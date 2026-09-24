@@ -1,0 +1,8 @@
+# jx1_policy node parameters (override with --ros-args --params-file)
+jx1_policy:
+  ros__parameters:
+    output: direct            # direct: /jx1/joint_command | ros2_control: /jx1_position_controller/commands
+    state_timeout_s: 0.1      # stale joint state / IMU -> hold position
+    cmd_timeout_s: 0.5        # stale /cmd_vel -> stand still
+    ramp_s: 2.0               # interpolation to the default pose before the policy starts
+    max_cmd: [0.8, 0.3, 0.6]  # |vx| m/s, |vy| m/s, |wz| rad/s (training command ranges)

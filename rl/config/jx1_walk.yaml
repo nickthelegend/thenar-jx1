@@ -1,0 +1,142 @@
+# JX1 velocity-tracking walking task — the single source of truth for training (MuJoCo, Isaac Lab) and deployment (ROS 2).
+# Everything the policy sees or commands is defined here: joint order, default pose, PD gains, action scale, observation
+# layout/scales, control timing and gait clock. rl/export.py copies the "policy I/O" part next to the exported network
+# (policy_io.yaml), and the ROS 2 node and Isaac Lab task read the same values.
+name: jx1_walk_flat
+
+model:
+  source_mjcf: simulation/mujoco/jx1.xml      # CAD-derived model (tools/sim/build_robot_description.py)
+  timestep: 0.005                             # physics 200 Hz
+  decimation: 4                               # policy 50 Hz
+  solver_iterations: 50                       # Newton line search needs >= 20: 10 injected energy after falls (tested 2026-09-24)
+  ls_iterations: 50
+  contact_solref: [0.01, 1.0]                 # >= 2 x timestep
+  floor_friction: 1.0
+
+# policy action order (joint names from simulation/joint_map.yaml)
+policy_joints:
+  - left_hip_yaw_joint
+  - left_hip_roll_joint
+  - left_hip_pitch_joint
+  - left_knee_joint
+  - left_ankle_pitch_joint
+  - left_ankle_roll_joint
+  - right_hip_yaw_joint
+  - right_hip_roll_joint
+  - right_hip_pitch_joint
+  - right_knee_joint
+  - right_ankle_pitch_joint
+  - right_ankle_roll_joint
+
+# default joint positions (rad): action 0 = this pose. Joints not listed default to 0. Non-policy joints hold this pose.
+default_joint_pos:
+  left_hip_pitch_joint: -0.35
+  left_knee_joint: 0.70
+  left_ankle_pitch_joint: -0.35
+  right_hip_pitch_joint: -0.35
+  right_knee_joint: 0.70
+  right_ankle_pitch_joint: -0.35
+  left_shoulder_roll_joint: 0.14                # 8 deg walking posture: keeps the grippers off the thighs (OI-18)
+  right_shoulder_roll_joint: -0.14
+  left_elbow_joint: -0.35
+  right_elbow_joint: -0.35
+
+# joint PD gains [kp N m/rad, kd N m s/rad] by joint type — the DEPLOYMENT gains (RobStride MIT mode on the robot,
+# PhysX drives in Isaac Lab, position actuators in MuJoCo). Effort limits stay those of the actuator classes (joint_map).
+pd_gains:
+  hip_yaw: [100.0, 2.5]
+  hip_roll: [150.0, 3.0]
+  hip_pitch: [200.0, 5.0]
+  knee: [200.0, 5.0]
+  ankle_pitch: [60.0, 2.0]
+  ankle_roll: [40.0, 1.5]
+  waist_yaw: [150.0, 4.0]
+  shoulder_pitch: [40.0, 1.0]
+  shoulder_roll: [40.0, 1.0]
+  shoulder_yaw: [20.0, 0.5]
+  elbow: [20.0, 0.5]
+  neck_yaw: [5.0, 0.1]
+  neck_pitch: [5.0, 0.1]
+
+action_scale: 0.25                              # joint target = default + action_scale * action
+
+# actor observation = [ang_vel_b*s (3), gravity_b (3), command*s (3), (q-q0)*s (n), dq*s (n), last_action (n),
+#                      sin(2 pi phase), cos(2 pi phase)]  -> 3+3+3+3n+2 = 47 for n = 12
+observation:
+  scales: {ang_vel: 0.25, dof_pos: 1.0, dof_vel: 0.05, lin_vel: 2.0, commands: [2.0, 2.0, 0.25]}
+  clip: 100.0
+  noise: {ang_vel: 0.2, gravity: 0.05, dof_pos: 0.01, dof_vel: 1.5}   # uniform +- (unscaled units), actor only
+
+gait:                                            # phase clock shared by actor, reward and deployment
+  period_s: 0.8
+  offset: 0.5                                    # right leg phase = left + offset
+  stance_fraction: 0.55
+  swing_height_m: 0.08
+
+commands:
+  resample_s: 10.0
+  zero_fraction: 0.1                             # share of envs commanded to stand still
+  ranges: {lin_vel_x: [-0.4, 0.8], lin_vel_y: [-0.3, 0.3], ang_vel_yaw: [-0.6, 0.6]}
+
+episode_s: 20.0
+
+termination:
+  min_base_height_m: 0.35
+  max_tilt_deg: 60.0
+
+rewards:                                         # weights (per policy step; multiplied by the policy dt)
+  tracking_lin_vel: 1.0                          # exp(-|v_xy - cmd|^2 / sigma)
+  tracking_ang_vel: 0.5
+  tracking_sigma: 0.25
+  lin_vel_z: -2.0
+  ang_vel_xy: -0.05
+  orientation: -1.0
+  base_height: -10.0
+  torques: -1.0e-5
+  dof_vel: -1.0e-3
+  dof_acc: -2.5e-7
+  action_rate: -0.01
+  dof_pos_limits: -5.0
+  alive: 0.15
+  hip_pos: -1.0                                  # hip roll/yaw away from 0
+  contact: 0.18                                  # foot contact state agrees with the gait clock
+  feet_swing_height: -20.0
+  contact_no_vel: -0.2                           # foot sliding while in contact
+  stand_still: -0.5                              # joint deviation from default when commanded to stand
+  termination: -200.0
+
+randomization:
+  model_variants: 16                             # per-env physics variants (friction, masses, COM, gains, armature)
+  friction: [0.4, 1.25]
+  added_base_mass_kg: [-1.0, 3.0]
+  base_com_offset_m: 0.02
+  link_mass_scale: [0.9, 1.1]
+  kp_scale: [0.9, 1.1]
+  kd_scale: [0.8, 1.2]
+  armature_scale: [0.8, 1.2]
+  joint_friction_scale: [0.5, 2.0]
+  push_interval_s: 5.0
+  push_velocity_m_s: 0.5
+  init_joint_noise: 0.1
+  init_base_vel: 0.2
+
+ppo:
+  num_envs: 1024
+  num_steps_per_env: 24
+  max_iterations: 3000
+  actor_hidden: [512, 256, 128]
+  critic_hidden: [512, 256, 128]
+  activation: elu
+  init_noise_std: 0.8
+  learning_rate: 1.0e-3
+  schedule: adaptive                             # KL-adaptive learning rate
+  desired_kl: 0.01
+  gamma: 0.99
+  lam: 0.95
+  clip_param: 0.2
+  entropy_coef: 0.01
+  value_loss_coef: 1.0
+  num_learning_epochs: 5
+  num_mini_batches: 4
+  max_grad_norm: 1.0
+  save_interval: 100
