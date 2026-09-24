@@ -236,7 +236,7 @@ class FakeHubNode(Node):
             k += 1
             if k % div == 0:
                 self.send_states()
-            if k % 5 == 0:
+            if k % 2 == 0:                      # /clock, IMU, odom at 250 Hz: the policy timer runs on this clock
                 self.publish()
             if rtf > 0:
                 ahead = d.time / rtf - (time.perf_counter() - wall0)
