@@ -179,15 +179,22 @@ def upper_arm(s):
     p = Part(s, f"JX1_UpperArm_{SUF()}", CAD / "Arms" / f"JX1_UpperArm_{SUF()}.SLDPRT")
     yb = -UPK["elbow_face_y"]                                  # elbow housing rear face (medial)
     ze = EL_OFF[2]
-    t = 0.006
-    p.gv("Elbow_z", mm(ze))
+    # structural variant U3 (calculations/structural/part_variants.py upper_arm): 6 mm plates failed (SF 1.34 / 1.08, L-corner);
+    # elbow plate 10 mm (added medially), yaw plate 8 mm, two 6 mm gussets above the elbow housing -> SF 3.12 / 2.52
+    te, ty, tg, e = 0.010, 0.008, 0.006, 0.0005
+    z_gus = -0.085                                             # gusset tip, 16 mm above the RS00 elbow housing
+    p.gv("Elbow_z", mm(ze)); p.gv("Elbow_plate_t", mm(te)); p.gv("Yaw_plate_t", mm(ty))
     hy = [(u, v, CLR_M3) for (u, v, _) in bolt_holes((0, 0), XS["PCD_OUT"], XS["N_OUT"], CLR_M3)] + [(0, 0, 0.008)]
-    plate2d(p, "Yaw_Plate", "z", -t, 0.0, [(-0.025, yb - t), (0.025, yb - t), (0.025, 0.025), (-0.025, 0.025)], hy)
+    plate2d(p, "Yaw_Plate", "z", -ty, 0.0, [(-0.025, yb - te), (0.025, yb - te), (0.025, 0.025), (-0.025, 0.025)], hy)
     circle_cut(p, "Yaw_Pilot_Recess", "z", 0.0, (0, 0, 0), XS["PILOT_D"] + 0.0003, XS["PILOT_H"] + 0.0002, into_positive=False)
     he = [((x, 0, z), CLR_M3) for (x, z, _) in [(u_, -v_, d_) for (u_, v_, d_) in bolt_holes((0, -ze), XS["PCD_REAR"], XS["N_REAR"], CLR_M3, 45)]]
-    plate(p, "Elbow_Plate", "y", yb - t, yb, [(-0.030, 0, -t), (0.030, 0, -t), (0.030, 0, ze - 0.030), (-0.030, 0, ze - 0.030)],
+    plate(p, "Elbow_Plate", "y", yb - te, yb, [(-0.030, 0, -ty), (0.030, 0, -ty), (0.030, 0, ze - 0.030), (-0.030, 0, ze - 0.030)],
           he + [((0, 0, ze), 0.014)])
-    return finish(p, ALU_RGB, "shoulder yaw output -> elbow housing", "6061-T6 6 mm plates, bolted; ASSUMED until FEA")
+    # gussets (normal x) inset 0.5 mm from the yaw-plate edges and overlapping both plates by 0.5 mm: coplanar start faces fail to merge
+    for tag, x0 in (("Gusset_Front", 0.0185), ("Gusset_Back", -0.0245)):
+        plate(p, tag, "x", x0, x0 + tg, [(0, yb - e, -ty + e), (0, 0.020, -ty + e), (0, yb - e, z_gus)])
+    return finish(p, ALU_RGB, "shoulder yaw output -> elbow housing",
+                  "6061-T6: elbow plate 10 mm, yaw plate 8 mm, 2x 6 mm gussets (laser-cut, bolted/welded); FEA SF 3.12/2.52 (variant U3)")
 
 
 def forearm(s):

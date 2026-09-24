@@ -158,6 +158,32 @@ VARIANTS = {
     },
 }
 
+# upper arm (L-bracket: yaw plate z in [-6, 0] mm, elbow plate y in [YB-6, YB] mm down to the elbow at ZE): the 6 mm version
+# fails (SF 1.34 / 1.08, run_structural 2026-09-24). Material is added medially (away from the elbow housing) and as gussets
+# above the housing (its top is at ZE + 28.5 mm).
+_UB = rs._ub()
+YB, ZE = -_UB[5]["elbow_face_y"], _UB[3][2]
+Z_GUS = -0.085                                           # gusset tip, 16 mm above the RS00 elbow housing
+
+
+def gusset(x0, x1, y_tip=0.020, z_top=-0.006):
+    """Triangular web (normal x) from the yaw plate down the elbow plate: (YB, z_top) - (y_tip, z_top) - (YB, Z_GUS)."""
+    return ("box_if", x0, x1, YB, y_tip, Z_GUS, z_top,
+            lambda x, y, z: (y - YB) / (y_tip - YB) <= (z - Z_GUS) / (z_top - Z_GUS))
+
+
+ARM_EL10 = [("box", -0.030, 0.030, YB - 0.010, YB - 0.006, ZE - 0.030, -0.006),      # elbow plate 6 -> 10 mm (medial side)
+            ("box", -0.025, 0.025, YB - 0.010, YB - 0.006, -0.006, 0.0)]           # yaw plate follows
+ARM_GUSSETS = [gusset(0.019, 0.025), gusset(-0.025, -0.019)]
+ARM_YAW8 = [("box", -0.025, 0.025, YB - 0.010, 0.025, -0.008, -0.006)]             # yaw plate 6 -> 8 mm
+VARIANTS["upper_arm"] = {
+    "U0_al": ("6061-T6", []),
+    "U1_al_elbow10": ("6061-T6", ARM_EL10),
+    "U2_al_elbow10_gussets": ("6061-T6", ARM_EL10 + ARM_GUSSETS),
+    "U3_al_elbow10_gussets_yaw8": ("6061-T6", ARM_EL10 + ARM_GUSSETS + ARM_YAW8),
+    "U4_7075_elbow10_gussets": ("7075-T6", ARM_EL10 + ARM_GUSSETS),
+}
+
 
 def main():
     key = sys.argv[1]
