@@ -1,4 +1,4 @@
-# JX1 system architecture (v0.3)
+# JX1 system architecture (v0.4)
 
 JX1 is a 1.20 m, ≈27.5 kg, 23-DOF humanoid designed for the lowest practical build cost in India. This document ties together
 the mechanical, electrical, computing and software architecture; details live in the linked documents.
@@ -11,15 +11,16 @@ the mechanical, electrical, computing and software architecture; details live in
 | Dimensions | thigh 0.270 m, shin 0.300 m, ankle→sole 0.050 m, hip spacing 0.200 m, foot 0.210 × 0.095 m | `calculations/design_point.yaml` (v0.3) |
 | Actuators | 5 classes, all RobStride 48 V CAN: RS04 (hip pitch, knee), RS03 (hip roll), RS06 (hip yaw, ankle A/B, waist), RS02 (shoulder pitch/roll), RS00 (shoulder yaw, elbow); neck = bus servos | `actuators/actuator_selection.md` |
 | Actuator interface | Modular Actuator Interface: stator rear face → parent link, output face + pilot → child link; connector zones face backwards | `actuators/modular_actuator_interface.md` |
-| Hip packaging | yaw actuator vertical in the pelvis; roll actuator behind the hip (axis +X, output forward); pitch actuator centred on the hip (output lateral); every output face is coplanar with the next mounting face → **the thigh is a flat 8 mm 6061 plate** | `CAD/Hip`, `CAD/Thigh` |
-| Knee / shin | knee actuator on the thigh plate, output medial; shin = medial knee plate + central web carrying ankle motor A (upper, output lateral) and B (lower, output medial) — every bolt stays reachable | `CAD/Shin` |
-| Ankle | U-joint cross on needle bearings; cranks r = 50 mm; push rods on M5 rod ends to posts 40 mm behind the ankle, ±45 mm lateral; reach verified −55°…+30° pitch, ±20° roll | `calculations/jx1calc/ankle.py`, `verification/leg_motion_verification_*.json` |
-| Materials | structural prints PA-CF; covers PETG-CF; thigh plates and cranks 6061-T6; ankle cross EN8/EN24 | `bom/master_bom.csv` |
+| Hip packaging | yaw actuator vertical in the pelvis; roll actuator behind the hip (axis +X, output forward); pitch actuator centred on the hip (output lateral); output faces coplanar with the next mounting face → **the thigh is one 10 mm 6061 plate with run-out flanges** | `CAD/Hip`, `CAD/Thigh` |
+| Knee / shin | knee actuator on the thigh plate, output medial; shin = 14 mm medial knee plate + deep joggle block + 10 mm central web carrying ankle motor A (upper, output lateral) and B (lower, output medial) — every bolt stays reachable | `CAD/Shin` |
+| Ankle | U-joint cross on HK0810 needle bearings; cranks r = 50 mm; Ø8 steel push rods (M5-tapped ends, POS5 rod ends) to posts 40 mm behind the ankle, ±45 mm lateral; reach −55°…+30° pitch, ±20° roll; collision-free pitch/roll polygon in `joint_map.yaml` | `calculations/jx1calc/ankle.py`, `verification/ankle_workspace_L.json` |
+| Materials | **primary load path in aluminium** after FEA (printed PA-CF failed, SF 0.07–0.89): hip-yaw bracket 7075-T6, hip-roll bracket / thigh / shin / foot / pelvis box / cranks 6061-T6 (laser-cut plates + CNC); ankle cross EN8/EN24; printed PA-CF/PETG-CF only for the neck bracket, head, gripper and covers | `calculations/results/structural/report.md` |
+| Upper body | torso = 6061 plate frame on the waist RS06 + four 2020 posts; battery bay (13S2P) at the bottom, Jetson + hub board + DC-DC above; shoulders RS02 pitch (housing on the torso side plate) → RS02 roll (behind the shoulder, U-bracket) → RS00 yaw → RS00 elbow; ST3215 neck yaw/pitch; head shell with IMX219-83 stereo camera | `tools/cad/build_upper_parts.py`, `CAD/Assemblies/JX1_UpperBody.SLDASM` |
 
 ```mermaid
 flowchart TB
-  P[Pelvis torsion box<br/>2 x RS06 hip yaw] --> HY[Hip yaw bracket] --> RR[RS03 hip roll] --> HR[Hip roll bracket]
-  HR --> PP[RS04 hip pitch] --> TH[Thigh plate 6061] --> KN[RS04 knee] --> SH[Shin web]
+  P[Pelvis 6061 box<br/>2 x RS06 hip yaw] --> HY[Hip yaw bracket 7075] --> RR[RS03 hip roll] --> HR[Hip roll bracket 6061]
+  HR --> PP[RS04 hip pitch] --> TH[Thigh 6061 10 mm + flanges] --> KN[RS04 knee] --> SH[Shin 6061 web + knee plate]
   SH --> AA[RS06 ankle A + crank] --> RA[Rod A]
   SH --> AB[RS06 ankle B + crank] --> RB[Rod B]
   SH --> X[Ankle cross] --> F[Foot]

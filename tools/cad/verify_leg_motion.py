@@ -21,7 +21,7 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from swlib.core import C, Session, typed  # noqa: E402
+from swlib.core import C, Session, typed, set_view  # noqa: E402
 from cad.params import ROOT, DP  # noqa: E402
 from cad.leg_kinematics import LegCAD  # noqa: E402
 from cad.build_leg_assembly import from_sw  # noqa: E402
@@ -164,8 +164,7 @@ class Verifier:
         return any(set(keys) == set(w) for w in WHITELIST)
 
     def image(self, path):
-        self.doc.ShowNamedView2("*Isometric", 7)
-        self.doc.ViewZoomtofit2()
+        set_view(self.s.app, self.doc)                                    # Z-up camera (SolidWorks named views are Y-up)
         self.ext.SaveAs3(str(path), 0, 1, None, None, 0, 0)
 
 

@@ -204,7 +204,7 @@ def hip_roll_def():
     xf = PKG["roll_out_x"]
     y_med = PKG["pitch_out_y"] - PC["T_OUT"] - PC["L_HOUSING"]
     return {
-        "stl": "JX1_HipRollBracket_L", "h": 0.002, "materials": {f"PA-CF build {'xyz'[a]}": pacf(a) for a in (0, 1, 2)},
+        "stl": "JX1_HipRollBracket_L", "h": 0.002, "materials": {"6061-T6": al()},
         "supports": [("hip roll output flange", lambda m: m.face_annulus(0, xf, (xf, 0, 0), L_["PILOT_D"] / 2 + 0.0004, L_["D_OUT"] / 2), (0, 1, 2))],
         "sample_groups": [("leg", lambda m: m.face_annulus(1, y_med, (0, y_med, 0), 0.0135, PC["PCD_REAR"] / 2 + 0.006), (0, 0, 0))],
         "note": "L-bracket: roll output (back plate, normal x) -> pitch housing (medial plate, normal y)",
@@ -215,7 +215,7 @@ def hip_yaw_def():
     zt = PKG["yaw_out_z"]
     x_back = PKG["roll_out_x"] - L_["T_OUT"] - L_["L_HOUSING"]
     return {
-        "stl": "JX1_HipYawBracket_L", "h": 0.002, "materials": {f"PA-CF build {'xyz'[a]}": pacf(a) for a in (0, 2)},
+        "stl": "JX1_HipYawBracket_L", "h": 0.002, "materials": {"7075-T6": al7075()},
         "supports": [("hip yaw output flange", lambda m: m.face_annulus(2, zt, (0, 0, zt), M_["PILOT_D"] / 2 + 0.0004, M_["D_OUT"] / 2), (0, 1, 2))],
         "sample_groups": [("leg", lambda m: m.face_annulus(0, x_back, (x_back, 0, 0), 0.0135, L_["PCD_REAR"] / 2 + 0.006), (0, 0, 0))],
         "note": "L-bracket: yaw output (top plate, normal z) -> roll housing (back plate, normal x)",
@@ -227,7 +227,7 @@ def shin_def():
     web = PKG["shin_web_t"]
     zA, zB, Ls, wc = PKG["ankle_A_z"], PKG["ankle_B_z"], SHIN, PKG["rod_crank_w"]
     return {
-        "stl": "JX1_Shin_L", "h": 0.002, "offset": (0.0, 0.001, 0.0), "materials": {f"PA-CF build {'xyz'[a]}": pacf(a) for a in (0, 1)},
+        "stl": "JX1_Shin_L", "h": 0.002, "offset": (0.0, 0.001, 0.0), "materials": {"6061-T6": al()},
         "supports": [("knee output flange", lambda m: m.face_annulus(1, y_out, (0, y_out, 0), KC["PILOT_D"] / 2 + 0.0004, KC["D_OUT"] / 2), (0, 1, 2))],
         "sample_groups": [
             ("fork", lambda m: m.bore(1, (0, 0, -Ls), 0.004, (-0.03, 0.03)), (0, 0, -Ls)),
@@ -254,7 +254,7 @@ def foot_def():
         return [0.2 * f1, 0.2 * f1, f1, 0, 0, 0], [0.2 * f2, 0.2 * f2, f2, 0, 0, 0]
     toe_l, heel_l, edge_l = grf(58 / xt, 40.5 / xt), grf(58 / -xh, 40.5 / -xh), grf(65 / ye, 12.6 / ye)
     return {
-        "stl": "JX1_Foot_L", "h": 0.002, "materials": {"PA-CF build z": pacf(2)},
+        "stl": "JX1_Foot_L", "h": 0.002, "materials": {"6061-T6": al()},
         "supports": [("roll pin (cross)", lambda m: m.bore(0, (0, 0, 0), 0.004, (-0.03, 0.03)), (0, 1, 2)),
                      ("rod-end posts (axial)", lambda m: m.select(lambda X: (np.abs(X[:, 2] + 0.004) <= 0.75 * m.h) & (np.abs(X[:, 0] + FOOT_LEVER) <= 0.007)
                                                                & (np.abs(np.abs(X[:, 1]) - wf) <= 0.007)), (2,))],
@@ -272,7 +272,7 @@ def pelvis_def():
     z0 = PKG["yaw_out_z"] + Mh["T_OUT"] + Mh["L_HOUSING"]
     z1 = z0 + T
     return {
-        "stl": "JX1_Pelvis", "h": 0.002, "materials": {"PA-CF build z": pacf(2)},
+        "stl": "JX1_Pelvis", "h": 0.002, "materials": {"6061-T6": al()},
         "supports": [("waist actuator (torso)", lambda m: m.face_annulus(2, z1, (0, 0, z1), 0.0155, Mh["PCD_REAR"] / 2 + 0.006), (0, 1, 2))],
         "sample_groups": [("leg", lambda m: m.face_annulus(2, z0, (0, HIP_Y, z0), 0.0125, Mh["PCD_REAR"] / 2 + 0.006), (0, HIP_Y, 0))],
         "note": "torsion box; single-support leg wrench reacted by the torso through the waist interface",
@@ -526,6 +526,18 @@ def report(results, hc):
     for key, r in results.items():
         c = r["materials"][r["recommended"]]["interface_compliance"]
         lines.append(f"| {r['stl']} | {c['interface']} | {c['translation_mm_per_kN']} | {c['rotation_deg_per_100Nm']} |")
+    lines += ["", "## Design history (voxel variant studies, same consistent loads)", "",
+              "Variants start from the voxelised first-iteration CAD (printed PA-CF brackets) and add material or change the alloy "
+              "(`part_variants.py`, `thigh_variants.py`); they drove the redesign now in the CAD.", "",
+              "| Part | Variant | Material | Mass (solid) kg | SF LC1 | SF LC2 |", "|---|---|---|---|---|---|"]
+    for f in sorted(OUT.glob("variants_*.json")) + [OUT / "thigh_variants.json"]:
+        if not f.exists():
+            continue
+        part = f.stem.replace("variants_", "").replace("thigh_variants", "thigh")
+        for vname, r in json.loads(f.read_text()).items():
+            mat = r.get("material", "6061-T6")
+            mass = r.get("mass_kg_solid", r.get("mass_kg_6061", ""))
+            lines.append(f"| {part} | {vname} | {mat} | {mass} | {r['SF_LC1']} | {r['SF_LC2']} |")
     lines += ["", "## Hand calculations", "", "```json", json.dumps(hc, indent=1, ensure_ascii=False), "```", ""]
     (OUT / "report.md").write_text("\n".join(lines), encoding="utf-8")
 

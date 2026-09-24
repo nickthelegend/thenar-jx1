@@ -74,7 +74,7 @@ def plate(p: Part, name, normal, a0, a1, outline_model, holes=(), merge=True):
     return name
 
 
-def plate2d(p: Part, name, normal, a0, a1, outline_uv, holes_uv=()):
+def plate2d(p: Part, name, normal, a0, a1, outline_uv, holes_uv=(), merge=True):
     """Same as plate() but with outline/holes already in sketch (u, v) coordinates (v = y for normals x and z)."""
     a0, a1 = _span(normal, a0, a1)
     if normal in ("x", "z") and SIDE[0] < 0:
@@ -86,7 +86,7 @@ def plate2d(p: Part, name, normal, a0, a1, outline_uv, holes_uv=()):
         sk.polygon(list(outline_uv))
         for (u, v, d) in holes_uv:
             sk.circle(u, v, d / 2)
-    p.extrude(f"SK_{name}", a1 - a0, name)
+    p.extrude(f"SK_{name}", a1 - a0, name, merge=merge)
     return name
 
 

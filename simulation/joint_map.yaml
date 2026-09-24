@@ -212,7 +212,7 @@ joints:
   type: revolute
   parent: pelvis
   child: torso_link
-  origin_xyz_m: [0.0, 0.0, 0.11]
+  origin_xyz_m: [0.0, 0.0, 0.186]
   origin_rpy_rad: [0.0, 0.0, 0.0]
   axis: [0, 0, 1]
   lower_rad: -1.570796
@@ -228,7 +228,7 @@ joints:
   type: revolute
   parent: torso_link
   child: left_shoulder_pitch_link
-  origin_xyz_m: [0.0, 0.15, 0.29]
+  origin_xyz_m: [0.0, 0.15, 0.214]
   origin_rpy_rad: [0.0, 0.0, 0.0]
   axis: [0, 1, 0]
   lower_rad: -2.96706
@@ -292,7 +292,7 @@ joints:
   type: revolute
   parent: torso_link
   child: right_shoulder_pitch_link
-  origin_xyz_m: [0.0, -0.15, 0.29]
+  origin_xyz_m: [0.0, -0.15, 0.214]
   origin_rpy_rad: [0.0, 0.0, 0.0]
   axis: [0, 1, 0]
   lower_rad: -2.96706
@@ -356,7 +356,7 @@ joints:
   type: revolute
   parent: torso_link
   child: neck_link
-  origin_xyz_m: [0.0, 0.0, 0.33]
+  origin_xyz_m: [0.0, 0.0, 0.254]
   origin_rpy_rad: [0.0, 0.0, 0.0]
   axis: [0, 0, 1]
   lower_rad: -1.396263

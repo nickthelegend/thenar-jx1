@@ -12,6 +12,8 @@ Plane mappings (model -> sketch), measured in tools/swlib probe 2026-09-24:
 """
 from __future__ import annotations
 
+import atexit
+
 import math
 from contextlib import contextmanager
 from pathlib import Path
@@ -222,6 +224,14 @@ class Part:
         self.s = session
         self.name = name
         self.path = Path(path)
+        # a stale open document at the target path would make SaveAs fail: close it first
+        target = str(self.path.resolve()).lower()
+        for d in session.open_documents():
+            try:
+                if (d.GetPathName() or "").lower() == target:
+                    session.close(d)
+            except Exception:
+                pass
         self.doc = session.new_doc("part")
         set_mmgs(self.doc)
         self.ext = typed(self.doc.Extension, "IModelDocExtension")
@@ -232,8 +242,13 @@ class Part:
         self.sketch_status: dict[str, int] = {}
         self.features: list[str] = []
         self.material = material
-        # no modal "Modify" dialog when adding dimensions through the API
+        # no modal "Modify" dialog when adding dimensions through the API; this is a registry-persistent system option,
+        # so it is restored to the SolidWorks default (on) when the Python process exits
         self.s.app.SetUserPreferenceToggle(C.swInputDimValOnCreate, False)
+        if not getattr(session, "_dim_toggle_guard", False):
+            session._dim_toggle_guard = True
+            app = self.s.app
+            atexit.register(lambda: app.SetUserPreferenceToggle(C.swInputDimValOnCreate, True))
 
     # ---------------------------------------------------------------- global variables & equations
     def gv(self, name: str, value: float, unit: str = "mm"):

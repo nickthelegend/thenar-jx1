@@ -44,12 +44,24 @@ def leg_rows(side, base_id, hub_bus0):
     return rows
 
 
+def upper_sign(joint):
+    """+1 when the actuator +Z (output) axis points along the robot joint axis in the zero pose (tools/cad/upper_kinematics)."""
+    from cad.upper_kinematics import UpperCAD, ACTUATED
+    uc = UpperCAD()
+    poses, W0 = uc.component_poses({}), uc.links({})
+    for j, hk, ok, axis in ACTUATED:
+        if j == joint:
+            ax = W0[uc.comps[hk][1]][:3, :3] @ np.array(axis, float)
+            return 1 if float(np.dot(poses[hk][:3, 2], ax)) > 0 else -1
+    raise KeyError(joint)
+
+
 def arm_rows(side, base_id, bus):
     rows = []
     for k, (j, cls) in enumerate([("shoulder_pitch", "S"), ("shoulder_roll", "S"), ("shoulder_yaw", "XS"), ("elbow", "XS")]):
         jm = JM[f"{side}_{j}_joint"]
         model = MODEL[cls]
-        rows.append((f"{side}_{j}", bus, base_id + k + 1, model, 1, jm["lower_rad"], jm["upper_rad"], 0.8 * PEAK[model]))  # sign: set at arm CAD
+        rows.append((f"{side}_{j}", bus, base_id + k + 1, model, upper_sign(f"{side}_{j}"), jm["lower_rad"], jm["upper_rad"], 0.8 * PEAK[model]))
     return rows
 
 
@@ -69,7 +81,7 @@ def emit(rows, hub):
 
 
 def main():
-    hub_a = leg_rows("left", 10, 0) + arm_rows("left", 20, 2) + [("waist_yaw", 2, 31, "RS06", 1, JM["waist_yaw_joint"]["lower_rad"], JM["waist_yaw_joint"]["upper_rad"], 28.8)]
+    hub_a = leg_rows("left", 10, 0) + arm_rows("left", 20, 2) + [("waist_yaw", 2, 31, "RS06", upper_sign("waist_yaw"), JM["waist_yaw_joint"]["lower_rad"], JM["waist_yaw_joint"]["upper_rad"], 28.8)]
     hub_b = leg_rows("right", 40, 0) + arm_rows("right", 50, 2)
     out = ROOT / "firmware/hub/jx1_hub"
     (out / "config_hub_a.h").write_text(emit(hub_a, 0), encoding="utf-8")

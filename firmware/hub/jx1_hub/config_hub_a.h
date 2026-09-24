@@ -22,7 +22,7 @@ static const JointCfg JOINTS[NJ] = {
   {"left_ankle_motorB", 1, 16, robstride::RS06, -1.0f, 0.0f, -1.30900f, 1.30900f, 28.8f},
   {"left_shoulder_pitch", 2, 21, robstride::RS02, 1.0f, 0.0f, -2.96706f, 1.04720f, 13.6f},
   {"left_shoulder_roll", 2, 22, robstride::RS02, 1.0f, 0.0f, -0.17453f, 2.61799f, 13.6f},
-  {"left_shoulder_yaw", 2, 23, robstride::RS00, 1.0f, 0.0f, -1.57080f, 1.57080f, 11.2f},
+  {"left_shoulder_yaw", 2, 23, robstride::RS00, -1.0f, 0.0f, -1.57080f, 1.57080f, 11.2f},
   {"left_elbow", 2, 24, robstride::RS00, 1.0f, 0.0f, -2.35619f, 0.08727f, 11.2f},
   {"waist_yaw", 2, 31, robstride::RS06, 1.0f, 0.0f, -1.57080f, 1.57080f, 28.8f},
 };

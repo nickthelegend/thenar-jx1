@@ -116,3 +116,22 @@ def set_mmgs(doc):
     ext.SetUserPreferenceInteger(C.swUnitSystem, 0, C.swUnitSystem_MMGS)
     ext.SetUserPreferenceInteger(C.swUnitsLinearDecimalPlaces, 0, 3)
     ext.SetUserPreferenceInteger(C.swUnitsAngularDecimalPlaces, 0, 2)
+
+
+
+def set_view(app, doc, eye=(1.0, 0.75, 0.55), up=(0.0, 0.0, 1.0)):
+    """Orient the active view so the robot's +Z is screen-up, looking from direction `eye` (model frame) at the model.
+
+    SolidWorks standard views assume Y-up; JX1 is modelled Z-up (REP-103). IModelView.Orientation3 rows are the screen X, Y, Z
+    axes expressed in model coordinates (screen Z points toward the viewer)."""
+    import numpy as np
+    zs = np.asarray(eye, float)
+    zs = zs / np.linalg.norm(zs)
+    ys = np.asarray(up, float) - np.dot(up, zs) * zs
+    ys = ys / np.linalg.norm(ys)
+    xs = np.cross(ys, zs)
+    mu = typed(app.GetMathUtility(), "IMathUtility")
+    data = [xs[0], xs[1], xs[2], ys[0], ys[1], ys[2], zs[0], zs[1], zs[2], 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0]
+    view = typed(doc.ActiveView, "IModelView")
+    view.Orientation3 = mu.CreateTransform(var_array(data))
+    doc.ViewZoomtofit2()

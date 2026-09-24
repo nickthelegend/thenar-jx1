@@ -122,17 +122,18 @@ def hip_roll_bracket(s):
     bh = [(0, y, z, d) for (y, z, d) in [(v_, -u_, d_) for (u_, v_, d_) in bolt_holes(uv("x", (0, 0, 0)), L["PCD_OUT"], L["N_OUT"], CLR_M4, 22.5)]]
     y_lat = PKG["pitch_out_y"] - 0.002       # stop 2 mm short of the thigh plate plane
     y_in = min(y_med - TR, -L["D_OUT"] / 2 - 0.002)  # cover the whole roll output flange on the medial side
-    plate(p, "Back_Plate", "x", xf, xf + TR, [(0, y_in, -0.045), (0, y_lat, -0.045), (0, y_lat, 0.045), (0, y_in, 0.045)],
+    # back plate stays 8 mm: 10 mm would reach the hip-pitch housing's rear connector zone (clocked backward, radius 68 mm)
+    plate(p, "Back_Plate", "x", xf, xf + T, [(0, y_in, -0.045), (0, y_lat, -0.045), (0, y_lat, 0.045), (0, y_in, 0.045)],
           [((0, y, z), d) for (_, y, z, d) in bh] + [((0, 0, 0), 0.012)])
     circle_cut(p, "Roll_Pilot_Recess", "x", xf, (xf, 0, 0), L["PILOT_D"] + 0.0003, L["PILOT_H"] + 0.0002, into_positive=True)
     rm = PC["PCD_REAR"] / 2 + 0.006
     mh = [((x, 0, z), d) for (x, z, d) in [(u_, -v_, d_) for (u_, v_, d_) in bolt_holes((0, 0), PC["PCD_REAR"], PC["N_REAR"], CLR_M5, 22.5)]]
     mh.append(((0, 0, 0), 0.026))
-    x0m = xf + TR                             # start behind the back plate: keeps clear of the roll output pilot boss
+    x0m = xf + T                              # start behind the back plate: keeps clear of the roll output pilot boss
     plate(p, "Medial_Plate", "y", y_med - TR, y_med, [(x0m, 0, -rm), (0.030, 0, -rm), (rm, 0, -0.030), (rm, 0, 0.030),
                                                        (0.030, 0, rm), (x0m, 0, rm)], mh)
     return finish(p, ALU_RGB, "hip roll output -> hip pitch housing",
-                  "6061-T6 10 mm plates: back + medial plate bolted (4x M5 + 2x dowel 5 mm) to a 20x20 corner bar, or CNC one piece; "
+                  "6061-T6 plates (back 8 mm, medial 10 mm) bolted (4x M5 + 2x dowel 5 mm) to a 20x20 corner bar, or CNC one piece; "
                   "printed PA-CF fails (SF 0.35/0.37), calculations/results/structural")
 
 
