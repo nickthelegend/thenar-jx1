@@ -1,0 +1,11 @@
+{
+ "urdf": "ros2_ws/src/jx1_description/urdf/jx1.urdf",
+ "xacro": "ros2_ws/src/jx1_description/urdf/jx1.urdf.xacro",
+ "links": 29,
+ "joints": 28,
+ "revolute": 23,
+ "default_expansion_differences": [],
+ "collision_visual_mismatches": [],
+ "margin_2deg_mismatches": [],
+ "pass": true
+}

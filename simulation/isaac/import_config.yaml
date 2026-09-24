@@ -1,15 +1,127 @@
-# Isaac Sim URDF importer settings for JX1 (UNVERIFIED — no Isaac Sim on the design machine)
+generated_by: "tools/sim/build_robot_description.py (UNVERIFIED \u2014 no Isaac Sim\
+  \ on the design machine)"
 urdf: ../../ros2_ws/src/jx1_description/urdf/jx1.urdf
 output_usd: jx1.usd
 fix_base: false
 merge_fixed_joints: false
-convex_decomposition: false        # collision meshes are already CoACD convex hulls
+convex_decomposition: false
 import_inertia_tensor: true
 self_collision: true
-default_drive_type: position
-distance_scale: 1.0
-drive_gains:                        # match simulation/mujoco/jx1.xml position servos
-  hip_pitch|knee: {stiffness: 200.0, damping: 5.0}
-  hip_roll: {stiffness: 150.0, damping: 4.0}
-  hip_yaw|ankle_pitch|waist_yaw: {stiffness: 80.0, damping: 2.0}
-  ankle_roll: {stiffness: 40.0, damping: 1.5}
+note: 'PhysX angular drives take stiffness/damping per degree: the importer multiplies
+  by pi/180'
+drive_gains:
+  left_hip_yaw_joint:
+    kp_Nm_per_rad: 150.0
+    kd_Nms_per_rad: 3.0
+    max_effort_Nm: 36.0
+    max_velocity_rad_s: 50.3
+  left_hip_roll_joint:
+    kp_Nm_per_rad: 300.0
+    kd_Nms_per_rad: 6.0
+    max_effort_Nm: 60.0
+    max_velocity_rad_s: 20.9
+  left_hip_pitch_joint:
+    kp_Nm_per_rad: 400.0
+    kd_Nms_per_rad: 8.0
+    max_effort_Nm: 120.0
+    max_velocity_rad_s: 20.9
+  left_knee_joint:
+    kp_Nm_per_rad: 400.0
+    kd_Nms_per_rad: 8.0
+    max_effort_Nm: 120.0
+    max_velocity_rad_s: 20.9
+  left_ankle_pitch_joint:
+    kp_Nm_per_rad: 350.0
+    kd_Nms_per_rad: 6.0
+    max_effort_Nm: 46.0
+    max_velocity_rad_s: 30.0
+  left_ankle_roll_joint:
+    kp_Nm_per_rad: 200.0
+    kd_Nms_per_rad: 4.0
+    max_effort_Nm: 51.0
+    max_velocity_rad_s: 30.0
+  right_hip_yaw_joint:
+    kp_Nm_per_rad: 150.0
+    kd_Nms_per_rad: 3.0
+    max_effort_Nm: 36.0
+    max_velocity_rad_s: 50.3
+  right_hip_roll_joint:
+    kp_Nm_per_rad: 300.0
+    kd_Nms_per_rad: 6.0
+    max_effort_Nm: 60.0
+    max_velocity_rad_s: 20.9
+  right_hip_pitch_joint:
+    kp_Nm_per_rad: 400.0
+    kd_Nms_per_rad: 8.0
+    max_effort_Nm: 120.0
+    max_velocity_rad_s: 20.9
+  right_knee_joint:
+    kp_Nm_per_rad: 400.0
+    kd_Nms_per_rad: 8.0
+    max_effort_Nm: 120.0
+    max_velocity_rad_s: 20.9
+  right_ankle_pitch_joint:
+    kp_Nm_per_rad: 350.0
+    kd_Nms_per_rad: 6.0
+    max_effort_Nm: 46.0
+    max_velocity_rad_s: 30.0
+  right_ankle_roll_joint:
+    kp_Nm_per_rad: 200.0
+    kd_Nms_per_rad: 4.0
+    max_effort_Nm: 51.0
+    max_velocity_rad_s: 30.0
+  waist_yaw_joint:
+    kp_Nm_per_rad: 150.0
+    kd_Nms_per_rad: 3.0
+    max_effort_Nm: 36.0
+    max_velocity_rad_s: 50.3
+  left_shoulder_pitch_joint:
+    kp_Nm_per_rad: 60.0
+    kd_Nms_per_rad: 1.5
+    max_effort_Nm: 17.0
+    max_velocity_rad_s: 44.0
+  left_shoulder_roll_joint:
+    kp_Nm_per_rad: 60.0
+    kd_Nms_per_rad: 1.5
+    max_effort_Nm: 17.0
+    max_velocity_rad_s: 44.0
+  left_shoulder_yaw_joint:
+    kp_Nm_per_rad: 40.0
+    kd_Nms_per_rad: 1.0
+    max_effort_Nm: 14.0
+    max_velocity_rad_s: 33.0
+  left_elbow_joint:
+    kp_Nm_per_rad: 40.0
+    kd_Nms_per_rad: 1.0
+    max_effort_Nm: 14.0
+    max_velocity_rad_s: 33.0
+  right_shoulder_pitch_joint:
+    kp_Nm_per_rad: 60.0
+    kd_Nms_per_rad: 1.5
+    max_effort_Nm: 17.0
+    max_velocity_rad_s: 44.0
+  right_shoulder_roll_joint:
+    kp_Nm_per_rad: 60.0
+    kd_Nms_per_rad: 1.5
+    max_effort_Nm: 17.0
+    max_velocity_rad_s: 44.0
+  right_shoulder_yaw_joint:
+    kp_Nm_per_rad: 40.0
+    kd_Nms_per_rad: 1.0
+    max_effort_Nm: 14.0
+    max_velocity_rad_s: 33.0
+  right_elbow_joint:
+    kp_Nm_per_rad: 40.0
+    kd_Nms_per_rad: 1.0
+    max_effort_Nm: 14.0
+    max_velocity_rad_s: 33.0
+  neck_yaw_joint:
+    kp_Nm_per_rad: 8.0
+    kd_Nms_per_rad: 0.2
+    max_effort_Nm: 1.9
+    max_velocity_rad_s: 4.7
+  neck_pitch_joint:
+    kp_Nm_per_rad: 8.0
+    kd_Nms_per_rad: 0.2
+    max_effort_Nm: 1.9
+    max_velocity_rad_s: 4.7

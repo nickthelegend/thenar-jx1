@@ -1,0 +1,889 @@
+{
+  "total_mass_kg": 33.608,
+  "upper_body": "CAD",
+  "densities_kg_m3": {
+    "PA-CF print": 800.0,
+    "6061-T6": 2700.0,
+    "7075-T6": 2810.0,
+    "steel": 7850.0,
+    "rod assembly (\u00d88 steel rod + 2x POS5 in \u00d88/\u00d814 envelope)": 7500.0,
+    "torso frame (6061 plates + 2020 posts modelled solid)": 2240.0,
+    "PETG-CF shell": 1100.0
+  },
+  "fixed_masses_kg": {
+    "JX1_BatteryPack": 2.05,
+    "JX1_JetsonNano": 0.25,
+    "JX1_HubBoard": 0.08,
+    "JX1_DCDC5V": 0.2,
+    "JX1_PowerSwitch": 0.12,
+    "JX1_EStop": 0.1,
+    "JX1_Gripper": 0.25,
+    "JX1_Servo_ST3215_Body": 0.05,
+    "JX1_Servo_ST3215_Horn": 0.005,
+    "JX1_StereoCamera": 0.04
+  },
+  "output_mass_share": 0.15,
+  "fastener_allowance": 0.05,
+  "links": {
+    "pelvis": {
+      "mass_kg": 2.9771,
+      "com_m": [
+        -0.0002,
+        0.0001,
+        0.12277
+      ],
+      "inertia_diag_kgm2": [
+        0.023782,
+        0.0056793,
+        0.026316
+      ],
+      "collision_hulls": 10
+    },
+    "left_hip_yaw_link": {
+      "mass_kg": 1.7424,
+      "com_m": [
+        -0.0954,
+        0.00021,
+        0.02829
+      ],
+      "inertia_diag_kgm2": [
+        0.0042933,
+        0.0067345,
+        0.0048235
+      ],
+      "collision_hulls": 10
+    },
+    "left_hip_roll_link": {
+      "mass_kg": 1.8141,
+      "com_m": [
+        -0.01247,
+        -0.00152,
+        0.00018
+      ],
+      "inertia_diag_kgm2": [
+        0.0021001,
+        0.0042107,
+        0.0032577
+      ],
+      "collision_hulls": 10
+    },
+    "left_thigh_link": {
+      "mass_kg": 2.3313,
+      "com_m": [
+        -0.00026,
+        0.02374,
+        -0.19895
+      ],
+      "inertia_diag_kgm2": [
+        0.027066,
+        0.028125,
+        0.0024489
+      ],
+      "collision_hulls": 5
+    },
+    "left_shin_link": {
+      "mass_kg": 2.9596,
+      "com_m": [
+        -0.00317,
+        -0.00527,
+        -0.1381
+      ],
+      "inertia_diag_kgm2": [
+        0.022777,
+        0.021845,
+        0.0042715
+      ],
+      "collision_hulls": 10
+    },
+    "left_ankle_cross_link": {
+      "mass_kg": 0.2023,
+      "com_m": [
+        0.0,
+        0.0,
+        -0.0
+      ],
+      "inertia_diag_kgm2": [
+        3.0397e-05,
+        2.9332e-05,
+        3.5632e-05
+      ],
+      "collision_hulls": 10
+    },
+    "left_foot_link": {
+      "mass_kg": 0.5226,
+      "com_m": [
+        0.01882,
+        -0.0,
+        -0.04098
+      ],
+      "inertia_diag_kgm2": [
+        0.00045095,
+        0.0016839,
+        0.0019898
+      ],
+      "collision_hulls": 1
+    },
+    "right_hip_yaw_link": {
+      "mass_kg": 1.7424,
+      "com_m": [
+        -0.0954,
+        0.00021,
+        0.02829
+      ],
+      "inertia_diag_kgm2": [
+        0.0042933,
+        0.0067345,
+        0.0048235
+      ],
+      "collision_hulls": 10
+    },
+    "right_hip_roll_link": {
+      "mass_kg": 1.8141,
+      "com_m": [
+        -0.01247,
+        0.00152,
+        0.00018
+      ],
+      "inertia_diag_kgm2": [
+        0.0021001,
+        0.0042107,
+        0.0032577
+      ],
+      "collision_hulls": 10
+    },
+    "right_thigh_link": {
+      "mass_kg": 2.3313,
+      "com_m": [
+        -0.00026,
+        -0.02374,
+        -0.19895
+      ],
+      "inertia_diag_kgm2": [
+        0.027066,
+        0.028125,
+        0.0024489
+      ],
+      "collision_hulls": 5
+    },
+    "right_shin_link": {
+      "mass_kg": 2.9596,
+      "com_m": [
+        -0.00317,
+        0.00527,
+        -0.1381
+      ],
+      "inertia_diag_kgm2": [
+        0.022777,
+        0.021845,
+        0.0042715
+      ],
+      "collision_hulls": 10
+    },
+    "right_ankle_cross_link": {
+      "mass_kg": 0.2023,
+      "com_m": [
+        0.0,
+        0.0,
+        -0.0
+      ],
+      "inertia_diag_kgm2": [
+        3.0397e-05,
+        2.9332e-05,
+        3.5632e-05
+      ],
+      "collision_hulls": 10
+    },
+    "right_foot_link": {
+      "mass_kg": 0.5226,
+      "com_m": [
+        0.01882,
+        -0.0,
+        -0.04098
+      ],
+      "inertia_diag_kgm2": [
+        0.00045095,
+        0.0016839,
+        0.0019898
+      ],
+      "collision_hulls": 1
+    },
+    "torso_link": {
+      "mass_kg": 6.2596,
+      "com_m": [
+        -0.00705,
+        0.00085,
+        0.10877
+      ],
+      "inertia_diag_kgm2": [
+        0.067412,
+        0.044561,
+        0.040999
+      ],
+      "collision_hulls": 10
+    },
+    "left_shoulder_pitch_link": {
+      "mass_kg": 0.7325,
+      "com_m": [
+        -0.0564,
+        0.033,
+        0.0
+      ],
+      "inertia_diag_kgm2": [
+        0.0010141,
+        0.0011397,
+        0.0011724
+      ],
+      "collision_hulls": 10
+    },
+    "left_shoulder_roll_link": {
+      "mass_kg": 0.4456,
+      "com_m": [
+        -0.01011,
+        0.00027,
+        -0.02735
+      ],
+      "inertia_diag_kgm2": [
+        0.00032102,
+        0.00042279,
+        0.00031086
+      ],
+      "collision_hulls": 10
+    },
+    "left_upper_arm_link": {
+      "mass_kg": 0.6855,
+      "com_m": [
+        -0.0,
+        -0.01353,
+        -0.0845
+      ],
+      "inertia_diag_kgm2": [
+        0.0021707,
+        0.0021495,
+        0.00036018
+      ],
+      "collision_hulls": 9
+    },
+    "left_forearm_link": {
+      "mass_kg": 0.5177,
+      "com_m": [
+        -0.0,
+        0.01168,
+        -0.15259
+      ],
+      "inertia_diag_kgm2": [
+        0.0040972,
+        0.0040684,
+        0.00024252
+      ],
+      "collision_hulls": 3
+    },
+    "right_shoulder_pitch_link": {
+      "mass_kg": 0.7325,
+      "com_m": [
+        -0.0564,
+        -0.033,
+        -0.0
+      ],
+      "inertia_diag_kgm2": [
+        0.0010141,
+        0.0011397,
+        0.0011724
+      ],
+      "collision_hulls": 10
+    },
+    "right_shoulder_roll_link": {
+      "mass_kg": 0.4456,
+      "com_m": [
+        -0.01012,
+        -0.00027,
+        -0.02735
+      ],
+      "inertia_diag_kgm2": [
+        0.00032102,
+        0.00042279,
+        0.00031085
+      ],
+      "collision_hulls": 10
+    },
+    "right_upper_arm_link": {
+      "mass_kg": 0.6855,
+      "com_m": [
+        -0.0,
+        0.01353,
+        -0.08415
+      ],
+      "inertia_diag_kgm2": [
+        0.0021494,
+        0.0021282,
+        0.00036018
+      ],
+      "collision_hulls": 9
+    },
+    "right_forearm_link": {
+      "mass_kg": 0.5177,
+      "com_m": [
+        0.0,
+        -0.01168,
+        -0.15259
+      ],
+      "inertia_diag_kgm2": [
+        0.0040972,
+        0.0040684,
+        0.00024252
+      ],
+      "collision_hulls": 3
+    },
+    "neck_link": {
+      "mass_kg": 0.0744,
+      "com_m": [
+        0.00938,
+        -0.00304,
+        0.03301
+      ],
+      "inertia_diag_kgm2": [
+        2.5859e-05,
+        3.0809e-05,
+        2.2824e-05
+      ],
+      "collision_hulls": 4
+    },
+    "head_link": {
+      "mass_kg": 0.3902,
+      "com_m": [
+        0.01484,
+        0.00247,
+        0.06683
+      ],
+      "inertia_diag_kgm2": [
+        0.0015672,
+        0.0014783,
+        0.0016176
+      ],
+      "collision_hulls": 10
+    }
+  },
+  "components": [
+    {
+      "link": "pelvis",
+      "component": "JX1_Pelvis",
+      "material": "6061-T6",
+      "mass_kg": 1.3272
+    },
+    {
+      "link": "pelvis",
+      "component": "JX1_ACT_M_Housing",
+      "material": "RobStride RS06 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.5278
+    },
+    {
+      "link": "pelvis",
+      "component": "JX1_ACT_M_Housing",
+      "material": "RobStride RS06 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.5278
+    },
+    {
+      "link": "pelvis",
+      "component": "JX1_ACT_M_Housing",
+      "material": "RobStride RS06 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.5278
+    },
+    {
+      "link": "left_hip_yaw_link",
+      "component": "JX1_ACT_M_Output",
+      "material": "RobStride RS06 (output share, VERIFIED total mass)",
+      "mass_kg": 0.0931
+    },
+    {
+      "link": "left_hip_yaw_link",
+      "component": "JX1_HipYawBracket_L",
+      "material": "7075-T6",
+      "mass_kg": 0.8583
+    },
+    {
+      "link": "left_hip_yaw_link",
+      "component": "JX1_ACT_L_Housing",
+      "material": "RobStride RS03 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.748
+    },
+    {
+      "link": "left_hip_roll_link",
+      "component": "JX1_ACT_L_Output",
+      "material": "RobStride RS03 (output share, VERIFIED total mass)",
+      "mass_kg": 0.132
+    },
+    {
+      "link": "left_hip_roll_link",
+      "component": "JX1_HipRollBracket_L",
+      "material": "6061-T6",
+      "mass_kg": 0.4524
+    },
+    {
+      "link": "left_hip_roll_link",
+      "component": "JX1_ACT_XL_Housing",
+      "material": "RobStride RS04 (housing share, VERIFIED total mass)",
+      "mass_kg": 1.207
+    },
+    {
+      "link": "left_thigh_link",
+      "component": "JX1_ACT_XL_Output",
+      "material": "RobStride RS04 (output share, VERIFIED total mass)",
+      "mass_kg": 0.213
+    },
+    {
+      "link": "left_thigh_link",
+      "component": "JX1_Thigh_L",
+      "material": "6061-T6",
+      "mass_kg": 0.8679
+    },
+    {
+      "link": "left_thigh_link",
+      "component": "JX1_ACT_XL_Housing",
+      "material": "RobStride RS04 (housing share, VERIFIED total mass)",
+      "mass_kg": 1.207
+    },
+    {
+      "link": "left_shin_link",
+      "component": "JX1_ACT_XL_Output",
+      "material": "RobStride RS04 (output share, VERIFIED total mass)",
+      "mass_kg": 0.213
+    },
+    {
+      "link": "left_shin_link",
+      "component": "JX1_Shin_L",
+      "material": "6061-T6",
+      "mass_kg": 1.1627
+    },
+    {
+      "link": "left_shin_link",
+      "component": "JX1_ACT_M_Housing",
+      "material": "RobStride RS06 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.5278
+    },
+    {
+      "link": "left_shin_link",
+      "component": "JX1_ACT_M_Housing",
+      "material": "RobStride RS06 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.5278
+    },
+    {
+      "link": "left_shin_link",
+      "component": "JX1_ACT_M_Output",
+      "material": "RobStride RS06 (output share, VERIFIED total mass)",
+      "mass_kg": 0.0931
+    },
+    {
+      "link": "left_shin_link",
+      "component": "JX1_ACT_M_Output",
+      "material": "RobStride RS06 (output share, VERIFIED total mass)",
+      "mass_kg": 0.0931
+    },
+    {
+      "link": "left_shin_link",
+      "component": "JX1_AnkleCrank",
+      "material": "6061-T6",
+      "mass_kg": 0.0563
+    },
+    {
+      "link": "left_shin_link",
+      "component": "JX1_AnkleCrank",
+      "material": "6061-T6",
+      "mass_kg": 0.0563
+    },
+    {
+      "link": "left_shin_link",
+      "component": "JX1_AnkleRod_A",
+      "material": "rod assembly (\u00d88 steel rod + 2x POS5 in \u00d88/\u00d814 envelope)",
+      "mass_kg": 0.095
+    },
+    {
+      "link": "left_shin_link",
+      "component": "JX1_AnkleRod_B",
+      "material": "rod assembly (\u00d88 steel rod + 2x POS5 in \u00d88/\u00d814 envelope)",
+      "mass_kg": 0.0625
+    },
+    {
+      "link": "left_ankle_cross_link",
+      "component": "JX1_AnkleCross",
+      "material": "steel",
+      "mass_kg": 0.1927
+    },
+    {
+      "link": "left_foot_link",
+      "component": "JX1_Foot_L",
+      "material": "6061-T6",
+      "mass_kg": 0.4977
+    },
+    {
+      "link": "right_hip_yaw_link",
+      "component": "JX1_ACT_M_Output",
+      "material": "RobStride RS06 (output share, VERIFIED total mass)",
+      "mass_kg": 0.0931
+    },
+    {
+      "link": "right_hip_yaw_link",
+      "component": "JX1_HipYawBracket_R",
+      "material": "7075-T6",
+      "mass_kg": 0.8583
+    },
+    {
+      "link": "right_hip_yaw_link",
+      "component": "JX1_ACT_L_Housing",
+      "material": "RobStride RS03 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.748
+    },
+    {
+      "link": "right_hip_roll_link",
+      "component": "JX1_ACT_L_Output",
+      "material": "RobStride RS03 (output share, VERIFIED total mass)",
+      "mass_kg": 0.132
+    },
+    {
+      "link": "right_hip_roll_link",
+      "component": "JX1_HipRollBracket_R",
+      "material": "6061-T6",
+      "mass_kg": 0.4524
+    },
+    {
+      "link": "right_hip_roll_link",
+      "component": "JX1_ACT_XL_Housing",
+      "material": "RobStride RS04 (housing share, VERIFIED total mass)",
+      "mass_kg": 1.207
+    },
+    {
+      "link": "right_thigh_link",
+      "component": "JX1_ACT_XL_Output",
+      "material": "RobStride RS04 (output share, VERIFIED total mass)",
+      "mass_kg": 0.213
+    },
+    {
+      "link": "right_thigh_link",
+      "component": "JX1_Thigh_R",
+      "material": "6061-T6",
+      "mass_kg": 0.8679
+    },
+    {
+      "link": "right_thigh_link",
+      "component": "JX1_ACT_XL_Housing",
+      "material": "RobStride RS04 (housing share, VERIFIED total mass)",
+      "mass_kg": 1.207
+    },
+    {
+      "link": "right_shin_link",
+      "component": "JX1_ACT_XL_Output",
+      "material": "RobStride RS04 (output share, VERIFIED total mass)",
+      "mass_kg": 0.213
+    },
+    {
+      "link": "right_shin_link",
+      "component": "JX1_Shin_R",
+      "material": "6061-T6",
+      "mass_kg": 1.1627
+    },
+    {
+      "link": "right_shin_link",
+      "component": "JX1_ACT_M_Housing",
+      "material": "RobStride RS06 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.5278
+    },
+    {
+      "link": "right_shin_link",
+      "component": "JX1_ACT_M_Housing",
+      "material": "RobStride RS06 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.5278
+    },
+    {
+      "link": "right_shin_link",
+      "component": "JX1_ACT_M_Output",
+      "material": "RobStride RS06 (output share, VERIFIED total mass)",
+      "mass_kg": 0.0931
+    },
+    {
+      "link": "right_shin_link",
+      "component": "JX1_ACT_M_Output",
+      "material": "RobStride RS06 (output share, VERIFIED total mass)",
+      "mass_kg": 0.0931
+    },
+    {
+      "link": "right_shin_link",
+      "component": "JX1_AnkleCrank",
+      "material": "6061-T6",
+      "mass_kg": 0.0563
+    },
+    {
+      "link": "right_shin_link",
+      "component": "JX1_AnkleCrank",
+      "material": "6061-T6",
+      "mass_kg": 0.0563
+    },
+    {
+      "link": "right_shin_link",
+      "component": "JX1_AnkleRod_A",
+      "material": "rod assembly (\u00d88 steel rod + 2x POS5 in \u00d88/\u00d814 envelope)",
+      "mass_kg": 0.095
+    },
+    {
+      "link": "right_shin_link",
+      "component": "JX1_AnkleRod_B",
+      "material": "rod assembly (\u00d88 steel rod + 2x POS5 in \u00d88/\u00d814 envelope)",
+      "mass_kg": 0.0625
+    },
+    {
+      "link": "right_ankle_cross_link",
+      "component": "JX1_AnkleCross",
+      "material": "steel",
+      "mass_kg": 0.1927
+    },
+    {
+      "link": "right_foot_link",
+      "component": "JX1_Foot_R",
+      "material": "6061-T6",
+      "mass_kg": 0.4977
+    },
+    {
+      "link": "torso_link",
+      "component": "JX1_ACT_M_Output",
+      "material": "RobStride RS06 (output share, VERIFIED total mass)",
+      "mass_kg": 0.0931
+    },
+    {
+      "link": "torso_link",
+      "component": "JX1_Torso",
+      "material": "torso frame (6061 plates + 2020 posts modelled solid)",
+      "mass_kg": 2.4076
+    },
+    {
+      "link": "torso_link",
+      "component": "JX1_BatteryPack",
+      "material": "fixed mass (26 x Samsung 50S 69 g + BMS/wiring (CALCULATED))",
+      "mass_kg": 2.05
+    },
+    {
+      "link": "torso_link",
+      "component": "JX1_JetsonNano",
+      "material": "fixed mass (BOM)",
+      "mass_kg": 0.25
+    },
+    {
+      "link": "torso_link",
+      "component": "JX1_HubBoard",
+      "material": "fixed mass (ESTIMATED)",
+      "mass_kg": 0.08
+    },
+    {
+      "link": "torso_link",
+      "component": "JX1_DCDC5V",
+      "material": "fixed mass (ESTIMATED)",
+      "mass_kg": 0.2
+    },
+    {
+      "link": "torso_link",
+      "component": "JX1_EStop",
+      "material": "fixed mass (ESTIMATED)",
+      "mass_kg": 0.1
+    },
+    {
+      "link": "torso_link",
+      "component": "JX1_PowerSwitch",
+      "material": "fixed mass (ESTIMATED)",
+      "mass_kg": 0.12
+    },
+    {
+      "link": "torso_link",
+      "component": "JX1_ACT_S_Housing",
+      "material": "RobStride RS02 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.323
+    },
+    {
+      "link": "torso_link",
+      "component": "JX1_ACT_S_Housing",
+      "material": "RobStride RS02 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.323
+    },
+    {
+      "link": "torso_link",
+      "component": "JX1_Servo_ST3215_Body",
+      "material": "fixed mass (ESTIMATED)",
+      "mass_kg": 0.05
+    },
+    {
+      "link": "left_shoulder_pitch_link",
+      "component": "JX1_ACT_S_Output",
+      "material": "RobStride RS02 (output share, VERIFIED total mass)",
+      "mass_kg": 0.057
+    },
+    {
+      "link": "left_shoulder_pitch_link",
+      "component": "JX1_ShoulderPitchBracket_L",
+      "material": "6061-T6",
+      "mass_kg": 0.3357
+    },
+    {
+      "link": "left_shoulder_pitch_link",
+      "component": "JX1_ACT_S_Housing",
+      "material": "RobStride RS02 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.323
+    },
+    {
+      "link": "left_shoulder_roll_link",
+      "component": "JX1_ACT_S_Output",
+      "material": "RobStride RS02 (output share, VERIFIED total mass)",
+      "mass_kg": 0.057
+    },
+    {
+      "link": "left_shoulder_roll_link",
+      "component": "JX1_ShoulderRollBracket_L",
+      "material": "6061-T6",
+      "mass_kg": 0.1191
+    },
+    {
+      "link": "left_shoulder_roll_link",
+      "component": "JX1_ACT_XS_Housing",
+      "material": "RobStride RS00 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.2635
+    },
+    {
+      "link": "left_upper_arm_link",
+      "component": "JX1_ACT_XS_Output",
+      "material": "RobStride RS00 (output share, VERIFIED total mass)",
+      "mass_kg": 0.0465
+    },
+    {
+      "link": "left_upper_arm_link",
+      "component": "JX1_UpperArm_L",
+      "material": "6061-T6",
+      "mass_kg": 0.3576
+    },
+    {
+      "link": "left_upper_arm_link",
+      "component": "JX1_ACT_XS_Housing",
+      "material": "RobStride RS00 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.2635
+    },
+    {
+      "link": "left_forearm_link",
+      "component": "JX1_ACT_XS_Output",
+      "material": "RobStride RS00 (output share, VERIFIED total mass)",
+      "mass_kg": 0.0465
+    },
+    {
+      "link": "left_forearm_link",
+      "component": "JX1_Forearm_L",
+      "material": "6061-T6",
+      "mass_kg": 0.1988
+    },
+    {
+      "link": "left_forearm_link",
+      "component": "JX1_Gripper",
+      "material": "fixed mass (BOM)",
+      "mass_kg": 0.25
+    },
+    {
+      "link": "right_shoulder_pitch_link",
+      "component": "JX1_ACT_S_Output",
+      "material": "RobStride RS02 (output share, VERIFIED total mass)",
+      "mass_kg": 0.057
+    },
+    {
+      "link": "right_shoulder_pitch_link",
+      "component": "JX1_ShoulderPitchBracket_R",
+      "material": "6061-T6",
+      "mass_kg": 0.3357
+    },
+    {
+      "link": "right_shoulder_pitch_link",
+      "component": "JX1_ACT_S_Housing",
+      "material": "RobStride RS02 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.323
+    },
+    {
+      "link": "right_shoulder_roll_link",
+      "component": "JX1_ACT_S_Output",
+      "material": "RobStride RS02 (output share, VERIFIED total mass)",
+      "mass_kg": 0.057
+    },
+    {
+      "link": "right_shoulder_roll_link",
+      "component": "JX1_ShoulderRollBracket_R",
+      "material": "6061-T6",
+      "mass_kg": 0.1191
+    },
+    {
+      "link": "right_shoulder_roll_link",
+      "component": "JX1_ACT_XS_Housing",
+      "material": "RobStride RS00 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.2635
+    },
+    {
+      "link": "right_upper_arm_link",
+      "component": "JX1_ACT_XS_Output",
+      "material": "RobStride RS00 (output share, VERIFIED total mass)",
+      "mass_kg": 0.0465
+    },
+    {
+      "link": "right_upper_arm_link",
+      "component": "JX1_UpperArm_R",
+      "material": "6061-T6",
+      "mass_kg": 0.3576
+    },
+    {
+      "link": "right_upper_arm_link",
+      "component": "JX1_ACT_XS_Housing",
+      "material": "RobStride RS00 (housing share, VERIFIED total mass)",
+      "mass_kg": 0.2635
+    },
+    {
+      "link": "right_forearm_link",
+      "component": "JX1_ACT_XS_Output",
+      "material": "RobStride RS00 (output share, VERIFIED total mass)",
+      "mass_kg": 0.0465
+    },
+    {
+      "link": "right_forearm_link",
+      "component": "JX1_Forearm_R",
+      "material": "6061-T6",
+      "mass_kg": 0.1988
+    },
+    {
+      "link": "right_forearm_link",
+      "component": "JX1_Gripper",
+      "material": "fixed mass (BOM)",
+      "mass_kg": 0.25
+    },
+    {
+      "link": "neck_link",
+      "component": "JX1_Servo_ST3215_Horn",
+      "material": "fixed mass (ESTIMATED)",
+      "mass_kg": 0.005
+    },
+    {
+      "link": "neck_link",
+      "component": "JX1_NeckBracket",
+      "material": "PA-CF print",
+      "mass_kg": 0.0159
+    },
+    {
+      "link": "neck_link",
+      "component": "JX1_Servo_ST3215_Body",
+      "material": "fixed mass (ESTIMATED)",
+      "mass_kg": 0.05
+    },
+    {
+      "link": "head_link",
+      "component": "JX1_Servo_ST3215_Horn",
+      "material": "fixed mass (ESTIMATED)",
+      "mass_kg": 0.005
+    },
+    {
+      "link": "head_link",
+      "component": "JX1_Head",
+      "material": "PETG-CF shell",
+      "mass_kg": 0.3266
+    },
+    {
+      "link": "head_link",
+      "component": "JX1_StereoCamera",
+      "material": "fixed mass (ESTIMATED)",
+      "mass_kg": 0.04
+    }
+  ]
+}

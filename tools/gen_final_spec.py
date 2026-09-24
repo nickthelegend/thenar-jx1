@@ -45,7 +45,7 @@ def main():
     cat = load_yaml("actuators/actuator_catalog.yaml")["classes"]
     tag, req = latest_requirements()
     st = load_json("calculations/results/structural/summary.json")
-    pw = load_json("calculations/results/iter1_B_knee_and_pitch_RS04/power_budget.json")
+    pw = load_json(f"calculations/results/{tag}/power_budget.json") or load_json("calculations/results/iter1_B_knee_and_pitch_RS04/power_budget.json")
     g = dp["geometry"]
     ub = dp["upper_body_geometry"]
     leg_len = v(g["thigh_m"]) + v(g["shin_m"]) + v(g["sole_to_ankle_m"])
@@ -75,6 +75,24 @@ def main():
     L.append("  waist          : RobStride RS06     36 / 11 N m")
     L.append("  shoulder p/r   : RobStride RS02     17 / 6 N m ; shoulder yaw, elbow: RobStride RS00 14 / 5 N m ; neck: Waveshare ST3215 x2")
     L.append(f"  requirement source: calculations/results/{tag}/requirements.yaml (policy: peak = max(1.5 x dynamic, 1.25 x static))")
+    dyn = (load_json(f"calculations/results/{tag}/summary.json") or {}).get("dynamic", {}) if tag else {}
+    if dyn and req:
+        f_dyn = req["policy"]["dynamic_peak_factor"]
+        runs = []
+        for name, r in dyn.items():
+            over = []
+            for j, c in cls_of.items():
+                pk = r["joints"].get(j, {}).get("peak_torque_Nm")
+                cap = v(cat[c]["peak_torque_Nm"])
+                if pk and f_dyn * pk > cap:
+                    over.append(f"{j} {pk:.1f} N m x {f_dyn} = {f_dyn * pk:.1f} > {cap} N m")
+            runs.append(f"{name.split('_')[0] if name.startswith('squat') else name}: " + ("margins met" if not over else "; ".join(over)))
+        L.append("  per scenario (1.5 x dynamic peak vs actuator peak): " + runs[0])
+        L += [f"                                                      {x}" for x in runs[1:]]
+        st_ank = req["leg_joint_requirements"].get("ankle_motor", {}).get("static_peak_torque_Nm")
+        if st_ank:
+            L.append(f"  static worst case (edge-of-foot CoP): ankle motor {st_ank:.1f} N m raw = {v(cat['M']['peak_torque_Nm']) / st_ank:.2f}x margin "
+                     f"(policy {req['policy']['static_peak_factor']}x)")
     L.append("")
     L.append("Structure (FEA: actuator-capped GRF samples + walking fatigue; SF LC1 / LC2, required 1.5 / 1.5 for aluminium)")
     if st:
@@ -100,7 +118,9 @@ def main():
                     ("verification/upper_motion_verification.json", "upper body"), ("verification/robot_motion_verification.json", "whole robot")):
         d = load_json(f)
         if d:
-            ver.append(f"{name} {sum(r['kinematics_pass'] for r in d)}/{len(d)} kinematic, {sum(r['collision_free'] for r in d)}/{len(d)} collision-free")
+            inside = [r for r in d if r.get("within_coupled_ankle_limits", True) and not r.get("outside_documented_limits")]
+            extra = f" ({sum(r['collision_free'] for r in inside)}/{len(inside)} within the joint/controller limits)" if len(inside) < len(d) else ""
+            ver.append(f"{name} {sum(r['kinematics_pass'] for r in d)}/{len(d)} kinematic, {sum(r['collision_free'] for r in d)}/{len(d)} collision-free{extra}")
     L.append("CAD verification      : " + "; ".join(ver))
     aw = load_json("verification/ankle_workspace_L.json")
     if aw:

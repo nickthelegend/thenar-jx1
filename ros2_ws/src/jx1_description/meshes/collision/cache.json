@@ -1,0 +1,300 @@
+{
+ "pelvis": {
+  "key": "189e84e90efbaee8f081cf5c72c6286a",
+  "hulls": [
+   "collision/pelvis_c0.stl",
+   "collision/pelvis_c1.stl",
+   "collision/pelvis_c2.stl",
+   "collision/pelvis_c3.stl",
+   "collision/pelvis_c4.stl",
+   "collision/pelvis_c5.stl",
+   "collision/pelvis_c6.stl",
+   "collision/pelvis_c7.stl",
+   "collision/pelvis_c8.stl",
+   "collision/pelvis_c9.stl"
+  ]
+ },
+ "left_hip_yaw_link": {
+  "key": "f0c5f3d46a0b64f46778dd1093056b69",
+  "hulls": [
+   "collision/left_hip_yaw_link_c0.stl",
+   "collision/left_hip_yaw_link_c1.stl",
+   "collision/left_hip_yaw_link_c2.stl",
+   "collision/left_hip_yaw_link_c3.stl",
+   "collision/left_hip_yaw_link_c4.stl",
+   "collision/left_hip_yaw_link_c5.stl",
+   "collision/left_hip_yaw_link_c6.stl",
+   "collision/left_hip_yaw_link_c7.stl",
+   "collision/left_hip_yaw_link_c8.stl",
+   "collision/left_hip_yaw_link_c9.stl"
+  ]
+ },
+ "left_hip_roll_link": {
+  "key": "196d06856991827ff5fef33a04949f5f",
+  "hulls": [
+   "collision/left_hip_roll_link_c0.stl",
+   "collision/left_hip_roll_link_c1.stl",
+   "collision/left_hip_roll_link_c2.stl",
+   "collision/left_hip_roll_link_c3.stl",
+   "collision/left_hip_roll_link_c4.stl",
+   "collision/left_hip_roll_link_c5.stl",
+   "collision/left_hip_roll_link_c6.stl",
+   "collision/left_hip_roll_link_c7.stl",
+   "collision/left_hip_roll_link_c8.stl",
+   "collision/left_hip_roll_link_c9.stl"
+  ]
+ },
+ "left_thigh_link": {
+  "key": "2d69a0311edd6d6c674fc4234469793a",
+  "hulls": [
+   "collision/left_thigh_link_c0.stl",
+   "collision/left_thigh_link_c1.stl",
+   "collision/left_thigh_link_c2.stl",
+   "collision/left_thigh_link_c3.stl",
+   "collision/left_thigh_link_c4.stl"
+  ]
+ },
+ "left_shin_link": {
+  "key": "f13f2afc248e13a5e1a1912e52ba9db7",
+  "hulls": [
+   "collision/left_shin_link_c0.stl",
+   "collision/left_shin_link_c1.stl",
+   "collision/left_shin_link_c2.stl",
+   "collision/left_shin_link_c3.stl",
+   "collision/left_shin_link_c4.stl",
+   "collision/left_shin_link_c5.stl",
+   "collision/left_shin_link_c6.stl",
+   "collision/left_shin_link_c7.stl",
+   "collision/left_shin_link_c8.stl",
+   "collision/left_shin_link_c9.stl"
+  ]
+ },
+ "left_ankle_cross_link": {
+  "key": "aa2e6aafaa1099cac2e81c1215d354d4",
+  "hulls": [
+   "collision/left_ankle_cross_link_c0.stl",
+   "collision/left_ankle_cross_link_c1.stl",
+   "collision/left_ankle_cross_link_c2.stl",
+   "collision/left_ankle_cross_link_c3.stl",
+   "collision/left_ankle_cross_link_c4.stl",
+   "collision/left_ankle_cross_link_c5.stl",
+   "collision/left_ankle_cross_link_c6.stl",
+   "collision/left_ankle_cross_link_c7.stl",
+   "collision/left_ankle_cross_link_c8.stl",
+   "collision/left_ankle_cross_link_c9.stl"
+  ]
+ },
+ "right_hip_yaw_link": {
+  "key": "51ab2ceee6dd2301647fe124f108db4f",
+  "hulls": [
+   "collision/right_hip_yaw_link_c0.stl",
+   "collision/right_hip_yaw_link_c1.stl",
+   "collision/right_hip_yaw_link_c2.stl",
+   "collision/right_hip_yaw_link_c3.stl",
+   "collision/right_hip_yaw_link_c4.stl",
+   "collision/right_hip_yaw_link_c5.stl",
+   "collision/right_hip_yaw_link_c6.stl",
+   "collision/right_hip_yaw_link_c7.stl",
+   "collision/right_hip_yaw_link_c8.stl",
+   "collision/right_hip_yaw_link_c9.stl"
+  ]
+ },
+ "right_hip_roll_link": {
+  "key": "8fec9b8bd68eea966fcfe79ce365227b",
+  "hulls": [
+   "collision/right_hip_roll_link_c0.stl",
+   "collision/right_hip_roll_link_c1.stl",
+   "collision/right_hip_roll_link_c2.stl",
+   "collision/right_hip_roll_link_c3.stl",
+   "collision/right_hip_roll_link_c4.stl",
+   "collision/right_hip_roll_link_c5.stl",
+   "collision/right_hip_roll_link_c6.stl",
+   "collision/right_hip_roll_link_c7.stl",
+   "collision/right_hip_roll_link_c8.stl",
+   "collision/right_hip_roll_link_c9.stl"
+  ]
+ },
+ "right_thigh_link": {
+  "key": "7e38d37473e374ff25a19657589e2992",
+  "hulls": [
+   "collision/right_thigh_link_c0.stl",
+   "collision/right_thigh_link_c1.stl",
+   "collision/right_thigh_link_c2.stl",
+   "collision/right_thigh_link_c3.stl",
+   "collision/right_thigh_link_c4.stl"
+  ]
+ },
+ "right_shin_link": {
+  "key": "29ae31c2384414c99865cc3df94b70fc",
+  "hulls": [
+   "collision/right_shin_link_c0.stl",
+   "collision/right_shin_link_c1.stl",
+   "collision/right_shin_link_c2.stl",
+   "collision/right_shin_link_c3.stl",
+   "collision/right_shin_link_c4.stl",
+   "collision/right_shin_link_c5.stl",
+   "collision/right_shin_link_c6.stl",
+   "collision/right_shin_link_c7.stl",
+   "collision/right_shin_link_c8.stl",
+   "collision/right_shin_link_c9.stl"
+  ]
+ },
+ "right_ankle_cross_link": {
+  "key": "aa2e6aafaa1099cac2e81c1215d354d4",
+  "hulls": [
+   "collision/right_ankle_cross_link_c0.stl",
+   "collision/right_ankle_cross_link_c1.stl",
+   "collision/right_ankle_cross_link_c2.stl",
+   "collision/right_ankle_cross_link_c3.stl",
+   "collision/right_ankle_cross_link_c4.stl",
+   "collision/right_ankle_cross_link_c5.stl",
+   "collision/right_ankle_cross_link_c6.stl",
+   "collision/right_ankle_cross_link_c7.stl",
+   "collision/right_ankle_cross_link_c8.stl",
+   "collision/right_ankle_cross_link_c9.stl"
+  ]
+ },
+ "torso_link": {
+  "key": "852569d0838b80e0e8b8db45345ba2af",
+  "hulls": [
+   "collision/torso_link_c0.stl",
+   "collision/torso_link_c1.stl",
+   "collision/torso_link_c2.stl",
+   "collision/torso_link_c3.stl",
+   "collision/torso_link_c4.stl",
+   "collision/torso_link_c5.stl",
+   "collision/torso_link_c6.stl",
+   "collision/torso_link_c7.stl",
+   "collision/torso_link_c8.stl",
+   "collision/torso_link_c9.stl"
+  ]
+ },
+ "left_shoulder_pitch_link": {
+  "key": "2b9d1642a382e2f84c204cf3481d0ca1",
+  "hulls": [
+   "collision/left_shoulder_pitch_link_c0.stl",
+   "collision/left_shoulder_pitch_link_c1.stl",
+   "collision/left_shoulder_pitch_link_c2.stl",
+   "collision/left_shoulder_pitch_link_c3.stl",
+   "collision/left_shoulder_pitch_link_c4.stl",
+   "collision/left_shoulder_pitch_link_c5.stl",
+   "collision/left_shoulder_pitch_link_c6.stl",
+   "collision/left_shoulder_pitch_link_c7.stl",
+   "collision/left_shoulder_pitch_link_c8.stl",
+   "collision/left_shoulder_pitch_link_c9.stl"
+  ]
+ },
+ "left_shoulder_roll_link": {
+  "key": "d0380dbe823740786fdf751f9cf3ae1a",
+  "hulls": [
+   "collision/left_shoulder_roll_link_c0.stl",
+   "collision/left_shoulder_roll_link_c1.stl",
+   "collision/left_shoulder_roll_link_c2.stl",
+   "collision/left_shoulder_roll_link_c3.stl",
+   "collision/left_shoulder_roll_link_c4.stl",
+   "collision/left_shoulder_roll_link_c5.stl",
+   "collision/left_shoulder_roll_link_c6.stl",
+   "collision/left_shoulder_roll_link_c7.stl",
+   "collision/left_shoulder_roll_link_c8.stl",
+   "collision/left_shoulder_roll_link_c9.stl"
+  ]
+ },
+ "left_upper_arm_link": {
+  "key": "ab2a088a3ef35ed7bb58a9e089a9250e",
+  "hulls": [
+   "collision/left_upper_arm_link_c0.stl",
+   "collision/left_upper_arm_link_c1.stl",
+   "collision/left_upper_arm_link_c2.stl",
+   "collision/left_upper_arm_link_c3.stl",
+   "collision/left_upper_arm_link_c4.stl",
+   "collision/left_upper_arm_link_c5.stl",
+   "collision/left_upper_arm_link_c6.stl",
+   "collision/left_upper_arm_link_c7.stl",
+   "collision/left_upper_arm_link_c8.stl"
+  ]
+ },
+ "left_forearm_link": {
+  "key": "63191c69bedecb4789301af77951554e",
+  "hulls": [
+   "collision/left_forearm_link_c0.stl",
+   "collision/left_forearm_link_c1.stl",
+   "collision/left_forearm_link_c2.stl"
+  ]
+ },
+ "right_shoulder_pitch_link": {
+  "key": "c32f17299146b785787ce8e8bac3bed5",
+  "hulls": [
+   "collision/right_shoulder_pitch_link_c0.stl",
+   "collision/right_shoulder_pitch_link_c1.stl",
+   "collision/right_shoulder_pitch_link_c2.stl",
+   "collision/right_shoulder_pitch_link_c3.stl",
+   "collision/right_shoulder_pitch_link_c4.stl",
+   "collision/right_shoulder_pitch_link_c5.stl",
+   "collision/right_shoulder_pitch_link_c6.stl",
+   "collision/right_shoulder_pitch_link_c7.stl",
+   "collision/right_shoulder_pitch_link_c8.stl",
+   "collision/right_shoulder_pitch_link_c9.stl"
+  ]
+ },
+ "right_shoulder_roll_link": {
+  "key": "651e6fd827eeeecbdd6fce70bd8bab8c",
+  "hulls": [
+   "collision/right_shoulder_roll_link_c0.stl",
+   "collision/right_shoulder_roll_link_c1.stl",
+   "collision/right_shoulder_roll_link_c2.stl",
+   "collision/right_shoulder_roll_link_c3.stl",
+   "collision/right_shoulder_roll_link_c4.stl",
+   "collision/right_shoulder_roll_link_c5.stl",
+   "collision/right_shoulder_roll_link_c6.stl",
+   "collision/right_shoulder_roll_link_c7.stl",
+   "collision/right_shoulder_roll_link_c8.stl",
+   "collision/right_shoulder_roll_link_c9.stl"
+  ]
+ },
+ "right_upper_arm_link": {
+  "key": "9aae175b31a6c46827301367152b00ad",
+  "hulls": [
+   "collision/right_upper_arm_link_c0.stl",
+   "collision/right_upper_arm_link_c1.stl",
+   "collision/right_upper_arm_link_c2.stl",
+   "collision/right_upper_arm_link_c3.stl",
+   "collision/right_upper_arm_link_c4.stl",
+   "collision/right_upper_arm_link_c5.stl",
+   "collision/right_upper_arm_link_c6.stl",
+   "collision/right_upper_arm_link_c7.stl",
+   "collision/right_upper_arm_link_c8.stl"
+  ]
+ },
+ "right_forearm_link": {
+  "key": "39c99a842deb6023d431c32cc32ddcee",
+  "hulls": [
+   "collision/right_forearm_link_c0.stl",
+   "collision/right_forearm_link_c1.stl",
+   "collision/right_forearm_link_c2.stl"
+  ]
+ },
+ "neck_link": {
+  "key": "50c4f3fe1efe0e4f3d9a99ec0668bdb6",
+  "hulls": [
+   "collision/neck_link_c0.stl",
+   "collision/neck_link_c1.stl",
+   "collision/neck_link_c2.stl",
+   "collision/neck_link_c3.stl"
+  ]
+ },
+ "head_link": {
+  "key": "2b2ef98e7731c19863bafad2639b36e2",
+  "hulls": [
+   "collision/head_link_c0.stl",
+   "collision/head_link_c1.stl",
+   "collision/head_link_c2.stl",
+   "collision/head_link_c3.stl",
+   "collision/head_link_c4.stl",
+   "collision/head_link_c5.stl",
+   "collision/head_link_c6.stl",
+   "collision/head_link_c7.stl",
+   "collision/head_link_c8.stl",
+   "collision/head_link_c9.stl"
+  ]
+ }
+}

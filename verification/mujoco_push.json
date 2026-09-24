@@ -1,0 +1,22 @@
+{
+ "generated_by": "simulation/mujoco/push_jx1.py",
+ "gait": "nominal",
+ "push_duration_s": 0.1,
+ "push_time_s": 2.262,
+ "applied_to": "torso_link COM",
+ "controller": "walk_jx1.py (fixed footsteps, ankle + hip strategy)",
+ "baseline_fell": false,
+ "max_survived_impulse_Ns": {
+  "forward": 7.81,
+  "backward": 5.31,
+  "left": 6.25,
+  "right": 6.25
+ },
+ "robot_mass_kg": 33.61,
+ "equivalent_com_velocity_change_m_s": {
+  "forward": 0.232,
+  "backward": 0.158,
+  "left": 0.186,
+  "right": 0.186
+ }
+}

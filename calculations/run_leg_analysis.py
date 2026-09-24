@@ -232,7 +232,7 @@ def main():
             "REQ_speed_rad_s": round(max(POLICY["speed_factor"] * dyn_sp, floor), 1),
             "label": "CALCULATED (parametric model iteration " + args.tag + ")",
         }
-    summary = {"design_file": str(Path(args.design).relative_to(HERE.parent)), "tag": args.tag, "total_mass_kg": round(total_mass, 3),
+    summary = {"design_file": Path(args.design).resolve().relative_to(HERE.parent).as_posix(), "tag": args.tag, "total_mass_kg": round(total_mass, 3),
                "mass_table": mass_rows, "policy": POLICY, "dynamic": dyn_summary, "requirements": req}
     (out / "summary.json").write_text(json.dumps(summary, indent=2, default=float), encoding="utf-8")
     (out / "requirements.yaml").write_text(yaml.safe_dump({"leg_joint_requirements": req, "policy": POLICY}, sort_keys=False), encoding="utf-8")

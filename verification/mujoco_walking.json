@@ -1,0 +1,488 @@
+{
+ "generated_by": "simulation/mujoco/walk_jx1.py",
+ "gaits": {
+  "slow": {
+   "gait": "slow",
+   "gait_params": {
+    "name": "walk_slow",
+    "step_length": 0.15,
+    "step_time": 0.5,
+    "ds_ratio": 0.2,
+    "step_height": 0.04,
+    "n_steps": 8,
+    "hip_height": 0.54,
+    "zmp_offset_x": 0.015,
+    "lateral_step": 0.0,
+    "turn_per_step_deg": 0.0,
+    "dt": 0.005,
+    "t_start": 0.8,
+    "t_end": 1.2
+   },
+   "speed_m_s": 0.3,
+   "planning_model": "simulation/mujoco/jx1.xml (CAD masses/inertias); geometry from calculations/results/variant_C_cad_masses.yaml",
+   "zmp_error_history_m": [
+    0.077,
+    0.0371,
+    0.0359,
+    0.035
+   ],
+   "stabiliser": {
+    "k_ankle": 0.6,
+    "d_ankle": 0.05,
+    "k_hip": 0.3
+   },
+   "duration_s": 6.08,
+   "planned_duration_s": 6.095,
+   "fell": false,
+   "distance_m": {
+    "plan": 0.975,
+    "sim": 0.938,
+    "ratio": 0.962
+   },
+   "final_position_error_m": 0.037,
+   "final_heading_error_deg": 0.53,
+   "pelvis_height_final_m": 0.54,
+   "max_tilt_deg": 1.05,
+   "joint_tracking_error_deg": {
+    "rms": 0.3,
+    "max": 1.6
+   },
+   "peak_torque_Nm": {
+    "left_hip_yaw": 9.5,
+    "left_hip_roll": 35.7,
+    "left_hip_pitch": 21.1,
+    "left_knee": 45.9,
+    "left_ankle_pitch": 12.6,
+    "left_ankle_roll": 7.4,
+    "right_hip_yaw": 9.0,
+    "right_hip_roll": 36.6,
+    "right_hip_pitch": 21.4,
+    "right_knee": 45.8,
+    "right_ankle_pitch": 14.3,
+    "right_ankle_roll": 7.3,
+    "waist_yaw": 0.4,
+    "left_shoulder_pitch": 0.7,
+    "left_shoulder_roll": 0.9,
+    "left_shoulder_yaw": 0.1,
+    "left_elbow": 0.4,
+    "right_shoulder_pitch": 0.7,
+    "right_shoulder_roll": 0.9,
+    "right_shoulder_yaw": 0.1,
+    "right_elbow": 0.4,
+    "neck_yaw": 0.0,
+    "neck_pitch": 0.1
+   },
+   "peak_torque_fraction_of_limit": {
+    "left_hip_yaw": 0.264,
+    "left_hip_roll": 0.595,
+    "left_hip_pitch": 0.176,
+    "left_knee": 0.382,
+    "left_ankle_pitch": 0.274,
+    "left_ankle_roll": 0.144,
+    "right_hip_yaw": 0.251,
+    "right_hip_roll": 0.61,
+    "right_hip_pitch": 0.179,
+    "right_knee": 0.382,
+    "right_ankle_pitch": 0.312,
+    "right_ankle_roll": 0.142,
+    "waist_yaw": 0.01,
+    "left_shoulder_pitch": 0.041,
+    "left_shoulder_roll": 0.054,
+    "left_shoulder_yaw": 0.006,
+    "left_elbow": 0.025,
+    "right_shoulder_pitch": 0.042,
+    "right_shoulder_roll": 0.054,
+    "right_shoulder_yaw": 0.007,
+    "right_elbow": 0.026,
+    "neck_yaw": 0.008,
+    "neck_pitch": 0.051
+   },
+   "saturated_sample_fraction": {},
+   "stance_slip_mm": {
+    "left": {
+     "max": 2.0,
+     "mean": 0.5
+    },
+    "right": {
+     "max": 2.1,
+     "mean": 0.6
+    }
+   },
+   "landing_error_mm": {
+    "left": {
+     "max": 41.1,
+     "mean": 14.9
+    },
+    "right": {
+     "max": 33.1,
+     "mean": 10.8
+    }
+   },
+   "self_contact_pairs": [],
+   "pass": true
+  },
+  "nominal": {
+   "gait": "nominal",
+   "gait_params": {
+    "name": "walk_nominal",
+    "step_length": 0.22,
+    "step_time": 0.42,
+    "ds_ratio": 0.2,
+    "step_height": 0.05,
+    "n_steps": 10,
+    "hip_height": 0.54,
+    "zmp_offset_x": 0.015,
+    "lateral_step": 0.0,
+    "turn_per_step_deg": 0.0,
+    "dt": 0.005,
+    "t_start": 0.8,
+    "t_end": 1.2
+   },
+   "speed_m_s": 0.524,
+   "planning_model": "simulation/mujoco/jx1.xml (CAD masses/inertias); geometry from calculations/results/variant_C_cad_masses.yaml",
+   "zmp_error_history_m": [
+    0.1775,
+    0.0522,
+    0.0362,
+    0.0353
+   ],
+   "stabiliser": {
+    "k_ankle": 0.6,
+    "d_ankle": 0.05,
+    "k_hip": 0.3
+   },
+   "duration_s": 6.26,
+   "planned_duration_s": 6.28,
+   "fell": false,
+   "distance_m": {
+    "plan": 1.87,
+    "sim": 1.851,
+    "ratio": 0.99
+   },
+   "final_position_error_m": 0.019,
+   "final_heading_error_deg": 0.12,
+   "pelvis_height_final_m": 0.54,
+   "max_tilt_deg": 0.35,
+   "joint_tracking_error_deg": {
+    "rms": 0.12,
+    "max": 0.83
+   },
+   "peak_torque_Nm": {
+    "left_hip_yaw": 21.4,
+    "left_hip_roll": 38.0,
+    "left_hip_pitch": 45.4,
+    "left_knee": 53.1,
+    "left_ankle_pitch": 12.8,
+    "left_ankle_roll": 4.9,
+    "right_hip_yaw": 20.5,
+    "right_hip_roll": 37.7,
+    "right_hip_pitch": 45.2,
+    "right_knee": 52.9,
+    "right_ankle_pitch": 14.5,
+    "right_ankle_roll": 4.1,
+    "waist_yaw": 0.2,
+    "left_shoulder_pitch": 1.1,
+    "left_shoulder_roll": 1.0,
+    "left_shoulder_yaw": 0.1,
+    "left_elbow": 0.4,
+    "right_shoulder_pitch": 1.1,
+    "right_shoulder_roll": 1.0,
+    "right_shoulder_yaw": 0.1,
+    "right_elbow": 0.4,
+    "neck_yaw": 0.0,
+    "neck_pitch": 0.1
+   },
+   "peak_torque_fraction_of_limit": {
+    "left_hip_yaw": 0.594,
+    "left_hip_roll": 0.634,
+    "left_hip_pitch": 0.378,
+    "left_knee": 0.443,
+    "left_ankle_pitch": 0.279,
+    "left_ankle_roll": 0.095,
+    "right_hip_yaw": 0.571,
+    "right_hip_roll": 0.629,
+    "right_hip_pitch": 0.377,
+    "right_knee": 0.441,
+    "right_ankle_pitch": 0.314,
+    "right_ankle_roll": 0.08,
+    "waist_yaw": 0.007,
+    "left_shoulder_pitch": 0.063,
+    "left_shoulder_roll": 0.059,
+    "left_shoulder_yaw": 0.007,
+    "left_elbow": 0.03,
+    "right_shoulder_pitch": 0.063,
+    "right_shoulder_roll": 0.06,
+    "right_shoulder_yaw": 0.007,
+    "right_elbow": 0.031,
+    "neck_yaw": 0.008,
+    "neck_pitch": 0.071
+   },
+   "saturated_sample_fraction": {},
+   "stance_slip_mm": {
+    "left": {
+     "max": 2.0,
+     "mean": 0.4
+    },
+    "right": {
+     "max": 2.1,
+     "mean": 0.5
+    }
+   },
+   "landing_error_mm": {
+    "left": {
+     "max": 19.6,
+     "mean": 8.5
+    },
+    "right": {
+     "max": 17.4,
+     "mean": 7.2
+    }
+   },
+   "self_contact_pairs": [],
+   "pass": true
+  },
+  "fast": {
+   "gait": "fast",
+   "gait_params": {
+    "name": "walk_fast",
+    "step_length": 0.3,
+    "step_time": 0.38,
+    "ds_ratio": 0.2,
+    "step_height": 0.06,
+    "n_steps": 10,
+    "hip_height": 0.52,
+    "zmp_offset_x": 0.015,
+    "lateral_step": 0.0,
+    "turn_per_step_deg": 0.0,
+    "dt": 0.005,
+    "t_start": 0.8,
+    "t_end": 1.2
+   },
+   "speed_m_s": 0.789,
+   "planning_model": "simulation/mujoco/jx1.xml (CAD masses/inertias); geometry from calculations/results/variant_C_cad_masses.yaml",
+   "zmp_error_history_m": [
+    0.4256,
+    0.2266,
+    0.0646,
+    0.0402
+   ],
+   "stabiliser": {
+    "k_ankle": 0.6,
+    "d_ankle": 0.05,
+    "k_hip": 0.3
+   },
+   "duration_s": 5.86,
+   "planned_duration_s": 5.875,
+   "fell": false,
+   "distance_m": {
+    "plan": 2.55,
+    "sim": 2.426,
+    "ratio": 0.952
+   },
+   "final_position_error_m": 0.128,
+   "final_heading_error_deg": 0.93,
+   "pelvis_height_final_m": 0.52,
+   "max_tilt_deg": 1.21,
+   "joint_tracking_error_deg": {
+    "rms": 0.45,
+    "max": 2.05
+   },
+   "peak_torque_Nm": {
+    "left_hip_yaw": 36.0,
+    "left_hip_roll": 41.7,
+    "left_hip_pitch": 76.3,
+    "left_knee": 63.5,
+    "left_ankle_pitch": 37.6,
+    "left_ankle_roll": 14.0,
+    "right_hip_yaw": 33.7,
+    "right_hip_roll": 41.8,
+    "right_hip_pitch": 74.0,
+    "right_knee": 63.2,
+    "right_ankle_pitch": 40.2,
+    "right_ankle_roll": 14.7,
+    "waist_yaw": 1.5,
+    "left_shoulder_pitch": 1.5,
+    "left_shoulder_roll": 1.1,
+    "left_shoulder_yaw": 0.1,
+    "left_elbow": 0.6,
+    "right_shoulder_pitch": 1.6,
+    "right_shoulder_roll": 1.2,
+    "right_shoulder_yaw": 0.1,
+    "right_elbow": 0.6,
+    "neck_yaw": 0.0,
+    "neck_pitch": 0.2
+   },
+   "peak_torque_fraction_of_limit": {
+    "left_hip_yaw": 1.0,
+    "left_hip_roll": 0.694,
+    "left_hip_pitch": 0.636,
+    "left_knee": 0.529,
+    "left_ankle_pitch": 0.817,
+    "left_ankle_roll": 0.275,
+    "right_hip_yaw": 0.936,
+    "right_hip_roll": 0.696,
+    "right_hip_pitch": 0.617,
+    "right_knee": 0.526,
+    "right_ankle_pitch": 0.874,
+    "right_ankle_roll": 0.288,
+    "waist_yaw": 0.041,
+    "left_shoulder_pitch": 0.088,
+    "left_shoulder_roll": 0.064,
+    "left_shoulder_yaw": 0.009,
+    "left_elbow": 0.042,
+    "right_shoulder_pitch": 0.093,
+    "right_shoulder_roll": 0.068,
+    "right_shoulder_yaw": 0.009,
+    "right_elbow": 0.044,
+    "neck_yaw": 0.01,
+    "neck_pitch": 0.092
+   },
+   "saturated_sample_fraction": {
+    "left_hip_yaw": 0.0014
+   },
+   "stance_slip_mm": {
+    "left": {
+     "max": 3.7,
+     "mean": 2.6
+    },
+    "right": {
+     "max": 3.3,
+     "mean": 2.2
+    }
+   },
+   "landing_error_mm": {
+    "left": {
+     "max": 133.8,
+     "mean": 59.0
+    },
+    "right": {
+     "max": 121.9,
+     "mean": 49.0
+    }
+   },
+   "self_contact_pairs": [],
+   "pass": true
+  },
+  "turn": {
+   "gait": "turn",
+   "gait_params": {
+    "name": "walk_turn",
+    "step_length": 0.08,
+    "step_time": 0.45,
+    "ds_ratio": 0.2,
+    "step_height": 0.05,
+    "n_steps": 8,
+    "hip_height": 0.54,
+    "zmp_offset_x": 0.015,
+    "lateral_step": 0.0,
+    "turn_per_step_deg": 15.0,
+    "dt": 0.005,
+    "t_start": 0.8,
+    "t_end": 1.2
+   },
+   "speed_m_s": 0.178,
+   "planning_model": "simulation/mujoco/jx1.xml (CAD masses/inertias); geometry from calculations/results/variant_C_cad_masses.yaml",
+   "zmp_error_history_m": [
+    0.0738,
+    0.0371,
+    0.036,
+    0.035
+   ],
+   "stabiliser": {
+    "k_ankle": 0.6,
+    "d_ankle": 0.05,
+    "k_hip": 0.3
+   },
+   "duration_s": 5.68,
+   "planned_duration_s": 5.685,
+   "fell": false,
+   "distance_m": {
+    "plan": 0.47,
+    "sim": 0.462,
+    "ratio": 0.981
+   },
+   "final_position_error_m": 0.016,
+   "final_heading_error_deg": -2.92,
+   "pelvis_height_final_m": 0.54,
+   "max_tilt_deg": 0.51,
+   "joint_tracking_error_deg": {
+    "rms": 0.16,
+    "max": 0.82
+   },
+   "peak_torque_Nm": {
+    "left_hip_yaw": 17.6,
+    "left_hip_roll": 37.0,
+    "left_hip_pitch": 16.5,
+    "left_knee": 44.0,
+    "left_ankle_pitch": 12.6,
+    "left_ankle_roll": 5.0,
+    "right_hip_yaw": 9.6,
+    "right_hip_roll": 36.5,
+    "right_hip_pitch": 23.2,
+    "right_knee": 43.5,
+    "right_ankle_pitch": 14.4,
+    "right_ankle_roll": 4.9,
+    "waist_yaw": 3.3,
+    "left_shoulder_pitch": 1.3,
+    "left_shoulder_roll": 1.0,
+    "left_shoulder_yaw": 0.1,
+    "left_elbow": 0.5,
+    "right_shoulder_pitch": 0.9,
+    "right_shoulder_roll": 1.0,
+    "right_shoulder_yaw": 0.1,
+    "right_elbow": 0.5,
+    "neck_yaw": 0.0,
+    "neck_pitch": 0.1
+   },
+   "peak_torque_fraction_of_limit": {
+    "left_hip_yaw": 0.488,
+    "left_hip_roll": 0.616,
+    "left_hip_pitch": 0.137,
+    "left_knee": 0.367,
+    "left_ankle_pitch": 0.275,
+    "left_ankle_roll": 0.098,
+    "right_hip_yaw": 0.268,
+    "right_hip_roll": 0.609,
+    "right_hip_pitch": 0.193,
+    "right_knee": 0.363,
+    "right_ankle_pitch": 0.312,
+    "right_ankle_roll": 0.097,
+    "waist_yaw": 0.091,
+    "left_shoulder_pitch": 0.075,
+    "left_shoulder_roll": 0.062,
+    "left_shoulder_yaw": 0.008,
+    "left_elbow": 0.039,
+    "right_shoulder_pitch": 0.052,
+    "right_shoulder_roll": 0.06,
+    "right_shoulder_yaw": 0.007,
+    "right_elbow": 0.032,
+    "neck_yaw": 0.017,
+    "neck_pitch": 0.049
+   },
+   "saturated_sample_fraction": {},
+   "stance_slip_mm": {
+    "left": {
+     "max": 2.0,
+     "mean": 0.6
+    },
+    "right": {
+     "max": 2.1,
+     "mean": 0.5
+    }
+   },
+   "landing_error_mm": {
+    "left": {
+     "max": 11.9,
+     "mean": 5.3
+    },
+    "right": {
+     "max": 20.8,
+     "mean": 7.8
+    }
+   },
+   "self_contact_pairs": [],
+   "pass": true
+  }
+ },
+ "pass": true
+}
