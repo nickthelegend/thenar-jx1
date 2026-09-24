@@ -6,7 +6,8 @@ Rewards: contact/clock agreement, swing height, foot sliding, hip deviation, sta
 base height.
 Termination: base height.
 Action: joint position targets clamped to the joint limits, with the ankle (pitch, roll) projected into the
-collision-free polygon, ramped over the policy period like the CAN hubs, with 0-1 substep transport delay.
+collision-free polygon, ramped over the policy period like the CAN hubs, with a random transport delay; it also
+keeps per-substep state snapshots for the sensing delay of the delayed_* observations.
 Event: hold the non-policy joints at the default pose.
 
 Heights are measured from the ground under the point. On flat ground that is z = 0. On rough ground it is the nearest
@@ -162,7 +163,11 @@ class PolygonClippedJointPositionAction(JointPositionAction):
     """JointPositionAction + joint-limit clamp + ankle (pitch, roll) projection into the coupled polygon, applied like
     the hardware: each new target ramps linearly from the previous one over the policy period (CAN hub first-order
     hold, firmware alpha). A per-env transport delay of d substeps holds the previous target for the first d
-    substeps. After a reset the ramp starts from the default pose. This is the same pipeline as rl/jx1_rl/env.py step()."""
+    substeps. After a reset the ramp starts from the default pose. This is the same pipeline as rl/jx1_rl/env.py step().
+
+    Sensing latency: apply_actions() runs once per physics substep, so it also snapshots the robot state there. The
+    delayed_* observation terms serve each env the state from its obs_delay substeps before the end of the step, as
+    the MuJoCo env's obs_src does."""
 
     cfg: "PolygonClippedJointPositionActionCfg"
 
@@ -179,6 +184,31 @@ class PolygonClippedJointPositionAction(JointPositionAction):
         self._from = self._hold.clone()
         self._substep = 0
         self._delay = torch.zeros(self.num_envs, dtype=torch.long, device=self.device)
+        self._obs_delay = torch.zeros(self.num_envs, dtype=torch.long, device=self.device)
+        self._snap = {}                   # key -> (decimation, N, ...): state after substep i - 1, captured before substep i
+
+    SNAPSHOT_KEYS = ("joint_pos", "joint_vel", "root_ang_vel_b", "projected_gravity_b")
+
+    def _snapshot(self, i, env_ids=None):
+        data, dec = self._asset.data, self._env.cfg.decimation
+        for k in self.SNAPSHOT_KEYS:
+            v = getattr(data, k)
+            if k not in self._snap:
+                self._snap[k] = v.unsqueeze(0).repeat(dec, *([1] * v.dim())).clone()
+            if env_ids is None:
+                self._snap[k][i] = v
+            else:
+                self._snap[k][:, env_ids] = v[env_ids].unsqueeze(0)
+
+    def delayed(self, key: str, current: torch.Tensor) -> torch.Tensor:
+        """`current` (the state after the last substep) for envs without sensing delay, else the snapshot of the state
+        after substep (decimation - delay)."""
+        if key not in self._snap or self.cfg.obs_delay_substeps[1] == 0:
+            return current
+        idx = (self._env.cfg.decimation - self._obs_delay).clamp(max=self._env.cfg.decimation - 1)
+        old = self._snap[key][idx, torch.arange(self.num_envs, device=self.device)]
+        mask = (self._obs_delay > 0).view(-1, *([1] * (current.dim() - 1)))
+        return torch.where(mask, old, current)
 
     def process_actions(self, actions: torch.Tensor):
         super().process_actions(actions)
@@ -191,6 +221,8 @@ class PolygonClippedJointPositionAction(JointPositionAction):
 
     def apply_actions(self):
         self._substep += 1
+        if self.cfg.obs_delay_substeps[1] > 0:
+            self._snapshot(self._substep - 1)
         alpha = min(1.0, self._substep / self._env.cfg.decimation) if self.cfg.hub_interpolation else 1.0
         ramp = self._from + alpha * (self._processed_actions - self._from)
         late = (self._delay >= self._substep)[:, None]
@@ -204,6 +236,10 @@ class PolygonClippedJointPositionAction(JointPositionAction):
         lo, hi = self.cfg.action_delay_substeps
         n = self.num_envs if env_ids is None else len(env_ids)
         self._delay[ids] = torch.randint(lo, hi + 1, (n,), device=self.device)
+        lo, hi = self.cfg.obs_delay_substeps
+        self._obs_delay[ids] = torch.randint(lo, hi + 1, (n,), device=self.device)
+        if hi > 0 and self._snap:                         # after a reset every snapshot is the new state (env.py obs_src)
+            self._snapshot(None, env_ids if env_ids is not None else torch.arange(self.num_envs, device=self.device))
 
 
 @configclass
@@ -212,3 +248,29 @@ class PolygonClippedJointPositionActionCfg(JointPositionActionCfg):
     polygons_rad: dict = {}
     hub_interpolation: bool = True
     action_delay_substeps: tuple = (0, 0)
+    obs_delay_substeps: tuple = (0, 0)
+
+
+# ------------------------------------------------------------------------------------------------ delayed observations
+def _action_term(env, action_name):
+    return env.action_manager.get_term(action_name)
+
+
+def delayed_base_ang_vel(env, action_name: str = "joint_pos", asset_cfg: SceneEntityCfg = SceneEntityCfg("robot")) -> torch.Tensor:
+    return _action_term(env, action_name).delayed("root_ang_vel_b", env.scene[asset_cfg.name].data.root_ang_vel_b)
+
+
+def delayed_projected_gravity(env, action_name: str = "joint_pos", asset_cfg: SceneEntityCfg = SceneEntityCfg("robot")) -> torch.Tensor:
+    return _action_term(env, action_name).delayed("projected_gravity_b", env.scene[asset_cfg.name].data.projected_gravity_b)
+
+
+def delayed_joint_pos_rel(env, action_name: str = "joint_pos", asset_cfg: SceneEntityCfg = SceneEntityCfg("robot")) -> torch.Tensor:
+    data = env.scene[asset_cfg.name].data
+    q = _action_term(env, action_name).delayed("joint_pos", data.joint_pos)
+    return q[:, asset_cfg.joint_ids] - data.default_joint_pos[:, asset_cfg.joint_ids]
+
+
+def delayed_joint_vel_rel(env, action_name: str = "joint_pos", asset_cfg: SceneEntityCfg = SceneEntityCfg("robot")) -> torch.Tensor:
+    data = env.scene[asset_cfg.name].data
+    dq = _action_term(env, action_name).delayed("joint_vel", data.joint_vel)
+    return dq[:, asset_cfg.joint_ids] - data.default_joint_vel[:, asset_cfg.joint_ids]

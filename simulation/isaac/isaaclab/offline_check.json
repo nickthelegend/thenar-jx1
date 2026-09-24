@@ -109,6 +109,12 @@
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
+   "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
+   "ok": true,
+   "detail": "delays [0, 1, 2, 3] of [0, 3] substeps, max |diff| 2.4e-07"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX1-Play-v0",
    "check": "actuator groups cover every joint once with the task gains and limits",
    "ok": true,
    "detail": "23 joints in 4 groups"
@@ -220,6 +226,12 @@
    "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, hub ramp, delay, reset)",
    "ok": true,
    "detail": "max |diff| 1.37e-07 rad over 4 steps x 4 substeps"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX1-v0",
+   "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
+   "ok": true,
+   "detail": "delays [0, 1, 2] of [0, 3] substeps, max |diff| 2.4e-07"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-v0",
@@ -337,6 +349,12 @@
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
+   "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
+   "ok": true,
+   "detail": "delays [0, 1, 2, 3] of [0, 3] substeps, max |diff| 2.4e-07"
+  },
+  {
+   "task": "Isaac-Velocity-Rough-JX1-Play-v0",
    "check": "actuator groups cover every joint once with the task gains and limits",
    "ok": true,
    "detail": "23 joints in 4 groups"
@@ -451,6 +469,12 @@
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-v0",
+   "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
+   "ok": true,
+   "detail": "delays [0, 1, 2] of [0, 3] substeps, max |diff| 2.4e-07"
+  },
+  {
+   "task": "Isaac-Velocity-Rough-JX1-v0",
    "check": "actuator groups cover every joint once with the task gains and limits",
    "ok": true,
    "detail": "23 joints in 4 groups"
@@ -519,7 +543,7 @@
    "task": "export",
    "check": "export_offline ONNX == hand-computed rsl_rl 2.x actor (runner normaliser)",
    "ok": true,
-   "detail": "max |diff| 3.46e-06"
+   "detail": "max |diff| 2.65e-06"
   },
   {
    "task": "export",

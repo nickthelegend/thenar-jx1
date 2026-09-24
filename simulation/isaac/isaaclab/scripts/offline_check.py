@@ -348,6 +348,10 @@ def build_fake_env(torch, env_cfg, tc, joints, bodies, articulation_cls, articul
     class Actions:
         def __init__(self, dim):
             self.action, self.prev_action = U(-1, 1, n, dim), U(-1, 1, n, dim)
+            self.terms = {}
+
+        def get_term(self, name):
+            return self.terms[name]
 
     class Terminations:
         terminated = torch.tensor([True, False] * (n // 2))
@@ -440,6 +444,12 @@ def check_task(task_id, reg, rep, mods, tc_default):
     joints, bodies = mods["robot_joints"], mods["robot_bodies"]
     env = build_fake_env(torch, env_cfg, tc, joints, bodies, mods["Articulation"], mods["ArticulationData"], mods["ContactSensor"],
                          mods["ContactSensorData"], mods["RayCasterData"], mods["string_utils"])
+    act_cfg = env_cfg.actions.joint_pos                               # the delayed_* observations read the action term
+    try:
+        env.action_manager.terms["joint_pos"] = act_cfg.class_type(act_cfg, env)
+        env.action_manager.terms["joint_pos"].reset(None)
+    except Exception as e:                                            # noqa: BLE001
+        rep.add(task_id, "action term instantiates", False, f"{type(e).__name__}: {e}\n{traceback.format_exc()}")
 
     # 2 + 3: term resolution exactly as the managers do it, then scene entity resolution
     stub = types.SimpleNamespace(_env=env)
@@ -539,10 +549,40 @@ def check_task(task_id, reg, rep, mods, tc_default):
 
     # 6: action term vs the MuJoCo action pipeline (clamp, ankle polygon, hub ramp, delay, reset)
     check_action_term(task_id, env_cfg, env, tc, joints, rep, mods)
+    check_sensing_delay(task_id, env_cfg, env, rep, mods)
 
     # 7: actuators
     check_actuators(task_id, env_cfg, tc, joints, rep, mods)
     return env_cfg
+
+
+def check_sensing_delay(task_id, env_cfg, env, rep, mods):
+    """delayed_* observations serve each env the state after substep (decimation - delay), rl/jx1_rl/env.py's
+    obs_src = state_out[decimation - 1 - delay]; the fake robot's joint positions change at every substep."""
+    torch = mods["torch"]
+    term = env.action_manager.terms.get("joint_pos")
+    obs_term = getattr(env_cfg.observations.policy, "joint_pos", None)
+    if term is None or obs_term is None or term.cfg.obs_delay_substeps[1] == 0:
+        rep.add(task_id, "sensing delay", term is not None, "no sensing delay configured")
+        return
+    rob, dec = env.scene["robot"], env_cfg.decimation
+    vals = rob.data._values
+    base = vals["joint_pos"].clone()
+    term.reset(None)
+    term.process_actions(torch.zeros(env.num_envs, term.action_dim))
+    for k in range(1, dec + 1):
+        vals["joint_pos"] = base + (k - 1)                                 # state after substep k - 1
+        term.apply_actions()
+    vals["joint_pos"] = base + dec                                        # after the last substep
+    got = obs_term.func(env, **obs_term.params)
+    ids = obs_term.params["asset_cfg"].joint_ids
+    d = term._obs_delay.float()[:, None]
+    want = (base + dec - d)[:, ids] - rob.data.default_joint_pos[:, ids]
+    err = float((got - want).abs().max())
+    vals["joint_pos"] = base
+    lo, hi = term.cfg.obs_delay_substeps
+    rep.add(task_id, "sensing delay: delayed observations == MuJoCo obs_src indexing", err < 1e-5,
+            f"delays {sorted(set(term._obs_delay.tolist()))} of [{lo}, {hi}] substeps, max |diff| {err:.1e}")
 
 
 def check_action_term(task_id, env_cfg, env, tc, joints, rep, mods):
