@@ -45,8 +45,23 @@ def mjcf_armature() -> dict:
     return {j.get("name"): float(j.get("armature")) for j in ET.parse(path).getroot().iter("joint") if j.get("armature")}
 
 
+def _load_task_yaml(path: Path) -> dict:
+    """Task YAML with the `base:` inheritance of rl/jx1_rl/config.py (deep merge)."""
+    raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+    if "base" in raw:
+        base = _load_task_yaml(path.parent / raw.pop("base"))
+
+        def merge(a, b):
+            out = dict(a)
+            for k, v in b.items():
+                out[k] = merge(out[k], v) if isinstance(v, dict) and isinstance(out.get(k), dict) else v
+            return out
+        raw = merge(base, raw)
+    return raw
+
+
 def load(config_path: Path | None = None) -> dict:
-    cfg = yaml.safe_load((config_path or REPO / "rl" / "config" / "jx1_walk.yaml").read_text(encoding="utf-8"))
+    cfg = _load_task_yaml(Path(config_path or REPO / "rl" / "config" / "jx1_walk.yaml"))
     jm = yaml.safe_load((REPO / "simulation" / "joint_map.yaml").read_text(encoding="utf-8"))
     joints = [j["name"] for j in jm["joints"]]
     limits = {j["name"]: (j["lower_rad"], j["upper_rad"]) for j in jm["joints"]}
