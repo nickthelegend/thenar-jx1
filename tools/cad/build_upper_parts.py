@@ -125,8 +125,13 @@ def electronics(s):
     out["PowerSwitch"] = box_part(s, "JX1_PowerSwitch", "Electronics", [(-0.046, -0.002, -0.080, -0.042, 0.100, 0.119)], (0.2, 0.2, 0.2),
                                   "Flipsky anti-spark switch 300 A (motor bus, E-stop controlled)", "envelope 44 x 43 x 19 mm ASSUMED, 0.12 kg")
     bx = TOR["back_x"]
-    out["EStop"] = box_part(s, "JX1_EStop", "Electronics", [(bx - 0.020, bx, -0.020, 0.020, 0.215, 0.255), (bx + 0.005, bx + 0.049, -0.015, 0.015, 0.220, 0.250)],
-                            RED_RGB, "Schneider XB2BS8442C 40 mm mushroom E-stop, 1 NC", "head outside the back plate, contact block inside")
+    p = Part(s, "JX1_EStop", CAD / "Electronics" / "JX1_EStop.SLDPRT")
+    plate2d(p, "Head", "z", 0.215, 0.255, [(bx - 0.020, -0.020), (bx, -0.020), (bx, 0.020), (bx - 0.020, 0.020)])
+    # M22 bushing through the 22.3 mm back-plate hole, modelled as a 21 mm 16-gon so it clears the hole wall; it joins the head
+    # (outside) and the contact block (inside, 0.5 mm clear of the plate) into one body
+    plate(p, "Bushing", "x", bx - 0.0005, bx + 0.0055, [(0, a, b) for (a, b) in ngon(0.0, 0.235, 0.0105, n=16)])
+    plate2d(p, "Contact_Block", "z", 0.220, 0.250, [(bx + 0.005, -0.015), (bx + 0.049, -0.015), (bx + 0.049, 0.015), (bx + 0.005, 0.015)])
+    out["EStop"] = finish(p, RED_RGB, "Schneider XB2BS8442C 40 mm mushroom E-stop, 1 NC", "head outside the back plate, contact block inside")
     return out
 
 

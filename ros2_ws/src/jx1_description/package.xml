@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>jx1_description</name>
-  <version>0.3.0</version>
-  <description>JX1 humanoid description: URDF generated from the native SolidWorks CAD (tools/sim/build_robot_description.py).</description>
+  <version>0.4.0</version>
+  <description>JX1 humanoid description: URDF + xacro generated from the native SolidWorks CAD (tools/sim/build_robot_description.py).</description>
   <maintainer email="maintainer@jx1.invalid">JX1 project</maintainer>
   <license>Apache-2.0</license>
   <buildtool_depend>ament_cmake</buildtool_depend>

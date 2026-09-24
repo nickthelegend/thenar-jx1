@@ -37,3 +37,4 @@ tzdata==2026.4
 usd-core==26.8
 websockets==17.1
 zipp==4.1.0
+xacro==2.1.1
