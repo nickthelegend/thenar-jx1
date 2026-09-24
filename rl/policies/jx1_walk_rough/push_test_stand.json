@@ -1,0 +1,24 @@
+{
+ "policy": "rl\\policies\\jx1_walk_rough",
+ "command": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "push_duration_s": 0.1,
+ "push_time_s": 4.0,
+ "max_survived_impulse_Ns": {
+  "forward": 33.28,
+  "backward": 36.09,
+  "left": 23.44,
+  "right": 19.22
+ },
+ "baseline_upright": true,
+ "robot_mass_kg": 33.61,
+ "equivalent_com_velocity_change_m_s": {
+  "forward": 0.99,
+  "backward": 1.074,
+  "left": 0.697,
+  "right": 0.572
+ }
+}

@@ -47,16 +47,23 @@ Each bundle in `rl/policies/` has `policy.onnx`, `policy.pt`, `policy_io.yaml` a
 ROS 2 policy node, the launch files, the hardware launch, the Isaac Sim bridge and the rl tools (`jx1_rl.DEFAULT_POLICY`).
 
 <!-- policies:start -->
-| | `jx1_walk_flat` | `jx1_walk_rough` | `jx1_walk_sym_latency` |
-|---|---|---|---|
-| trained | walk_v2_final it 3000 | walk_v3_rough it 4000 | walk_v4_sym_latency it 5000 |
-| sim2sim flat | 7/7 upright; 0.5 m/s -> 0.50, turn 0.5 -> 0.47 rad/s, peak torque 90% | 7/7 upright; 0.5 m/s -> 0.52, turn 0.5 -> 0.49 rad/s, peak torque 71% | 7/7 upright; 0.5 m/s -> 0.51, turn 0.5 -> 0.49 rad/s, peak torque 70% |
-| sim2sim rough | 7/7 upright; 0.5 m/s -> 0.50, turn 0.5 -> 0.47 rad/s, peak torque 95% | 7/7 upright; 0.5 m/s -> 0.53, turn 0.5 -> 0.49 rad/s, peak torque 73% | 7/7 upright; 0.5 m/s -> 0.52, turn 0.5 -> 0.50 rad/s, peak torque 72% |
-| envelope flat | 99/130 tracked, 0 falls; fwd +1.13, back -0.59, yaw +0.85/-0.82 | 109/130 tracked, 0 falls; fwd +1.08, back -0.57, yaw +0.84/-0.86 | 102/130 tracked, 0 falls; fwd +1.05, back -0.58, yaw +0.89/-0.92 |
-| push (N s) | 12.7-21.6 (fwd 21.6, back 14.5, left 12.7, right 17.8) | 15.9-44.1 (fwd 32.8, back 35.6, left 15.9, right 44.1) | 11.7-39.8 (fwd 39.8, back 26.7, left 11.7, right 28.1) |
-| HIL (hub twin) | fwd 95% of 0.3 m/s, turn 74% of 0.3 rad/s | fwd 95% of 0.3 m/s, turn 88% of 0.3 rad/s | fwd 95% of 0.3 m/s, turn 72% of 0.3 rad/s |
-| turn 0.3 tracking | 85% (no delay), 70% (20 + 10 ms) | 101% (no delay), 94% (20 + 10 ms) | 84% (no delay), 74% (20 + 10 ms) |
-| envelope rough | - | 108/130 tracked, 0 falls; fwd +1.09, back -0.56, yaw +0.84/-0.86 | 98/130 tracked, 0 falls; fwd +1.07, back -0.58, yaw +0.89/-0.93 |
+| | `jx1_walk_flat` | `jx1_walk_rough` | `jx1_walk_stand` | `jx1_walk_sym_latency` |
+|---|---|---|---|---|
+| trained | walk_v2_final it 3000 | walk_v3_rough it 4000 | walk_v5_stand it 4800 | walk_v4_sym_latency it 5000 |
+| sim2sim flat | 7/7 upright; 0.5 m/s -> 0.50, turn 0.5 -> 0.47 rad/s, peak torque 90% | 8/8 upright; 0.5 m/s -> 0.52, turn 0.5 -> 0.49 rad/s, peak torque 81% | 8/8 upright; 0.5 m/s -> 0.52, turn 0.5 -> 0.46 rad/s, peak torque 83% | 7/7 upright; 0.5 m/s -> 0.51, turn 0.5 -> 0.49 rad/s, peak torque 70% |
+| sim2sim rough | 7/7 upright; 0.5 m/s -> 0.50, turn 0.5 -> 0.47 rad/s, peak torque 95% | 8/8 upright; 0.5 m/s -> 0.53, turn 0.5 -> 0.49 rad/s, peak torque 79% | 8/8 upright; 0.5 m/s -> 0.53, turn 0.5 -> 0.47 rad/s, peak torque 86% | 7/7 upright; 0.5 m/s -> 0.52, turn 0.5 -> 0.50 rad/s, peak torque 72% |
+| envelope flat | 99/130 tracked, 0 falls; fwd +1.13, back -0.59, yaw +0.85/-0.82 | 109/130 tracked, 0 falls; fwd +1.08, back -0.57, yaw +0.84/-0.86 | 98/130 tracked, 0 falls; fwd +1.12, back -0.62, yaw +0.83/-0.86 | 102/130 tracked, 0 falls; fwd +1.05, back -0.58, yaw +0.89/-0.92 |
+| push (N s) | 12.7-21.6 (fwd 21.6, back 14.5, left 12.7, right 17.8) | 15.9-44.1 (fwd 32.8, back 35.6, left 15.9, right 44.1) | 22.5-55.8 (fwd 36.1, back 38.4, left 22.5, right 55.8) | 11.7-39.8 (fwd 39.8, back 26.7, left 11.7, right 28.1) |
+| HIL (hub twin) | fwd 95% of 0.3 m/s, turn 74% of 0.3 rad/s | fwd 95% of 0.3 m/s, turn 88% of 0.3 rad/s | fwd 97% of 0.3 m/s, turn 75% of 0.3 rad/s | fwd 95% of 0.3 m/s, turn 72% of 0.3 rad/s |
+| turn 0.3 tracking | 85% (no delay), 70% (20 + 10 ms) | 101% (no delay), 94% (20 + 10 ms) | 83% (no delay), 75% (20 + 10 ms) | 84% (no delay), 74% (20 + 10 ms) |
+| self-contact, envelope flat | - | 3/130 commands (1 in the trained range): left_shin_link|right_shin_link (2), left_foot_link|right_foot_link (1) | 0/130 commands (0 in the trained range): none | - |
+| self-contact, envelope rough | - | 3/130 commands (1 in the trained range): left_shin_link|right_shin_link (2), left_foot_link|right_foot_link (1) | 0/130 commands (0 in the trained range): none | - |
+| envelope rough | - | 108/130 tracked, 0 falls; fwd +1.09, back -0.56, yaw +0.84/-0.86 | 94/130 tracked, 0 falls; fwd +1.13, back -0.61, yaw +0.83/-0.86 | 98/130 tracked, 0 falls; fwd +1.07, back -0.58, yaw +0.89/-0.93 |
+| stand -> walk 0.5 -> stand | - | upright, 2.50 foot lift-offs/s in the last 2 s | upright, 0.00 foot lift-offs/s in the last 2 s | - |
+| stand (zero command) | - | 2.51 foot lift-offs/s, drift 0.05 m, 163 W | 0.00 foot lift-offs/s, drift 0.00 m, 79 W | - |
+| power 0.5 / 0.8 m/s | - | 283 W / 368 W | 313 W / 382 W | - |
+| push standing (N s) | - | 19.2-36.1 | 27.7-47.8 | - |
+| HIL 0.8 m/s | - | 0.70 m/s, upright | 0.70 m/s, upright | - |
 <!-- policies:end -->
 
 - `jx1_walk_flat`: 1500 iterations on the placeholder model, then 1500 on the final CAD model (flat floor).
@@ -68,6 +75,12 @@ ROS 2 policy node, the launch files, the hardware launch, the Isaac Sim bridge a
   tracked, 72 vs 88 % turn tracking through the HIL chain, 11.7 N·s vs 15.9 N·s worst push, and back to 84 %
   tracking of 0.3 rad/s turns. The rough policy had already lost the yaw drift and tolerates 40 ms + 20 ms latency, so
   it stays the default. Kept for reference; not installed with the ROS 2 package.
+- `jx1_walk_stand` (experiment, OI-27): `jx1_walk_rough` + 800 iterations with the stand mode (clock features 0 below a
+  command norm of 0.1, both feet down, no swing target) and 20 % zero commands. It really stands: 0 foot lift-offs/s
+  instead of 2.5, 79 W instead of 163 W (4.7 h instead of 2.3 h on the pack), and it settles within 2 s after walking.
+  It also takes larger pushes (22.5–55.8 N·s walking, 27.7–47.8 N·s standing) and has no leg self-contact over the
+  envelope. But it tracks leftward side-steps and slow turns worse: 98 vs 109 commands, 0.3 rad/s turns at 83 % vs
+  101 %, HIL turn 75 % vs 88 %. So `jx1_walk_rough` stays the default until a stand-mode policy matches its tracking.
 - Every bundle's `policy_io.yaml` carries the hip-yaw toe-out coupling (`hip_yaw_toe_out_max_rad`, OI-24), applied by
   every runner. The learned gaits never reach it (22.9° max toe-out sum against the 40° limit).
 - Table generated by `rl/compare_policies.py <bundles>`. "HIL" is the hardware-in-the-loop run through `hw_node` and the

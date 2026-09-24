@@ -1,0 +1,93 @@
+{
+ "policy": "rl/policies/jx1_walk_stand",
+ "chain": "jx1_policy -> jx1_hw hw_node -> hub protocol over TCP -> fake_hub (firmware law) -> MuJoCo",
+ "started_by": "python -m (source tree)",
+ "phases": {
+  "stand": {
+   "command": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "sim_duration_s": 4.0,
+   "distance_m": 0.012,
+   "mean_speed_m_s": 0.003,
+   "yaw_change_deg": 0.0,
+   "min_pelvis_z_m": 0.585,
+   "max_tilt_deg": 1.23
+  },
+  "forward": {
+   "command": [
+    0.3,
+    0.0,
+    0.0
+   ],
+   "sim_duration_s": 10.0,
+   "distance_m": 2.923,
+   "mean_speed_m_s": 0.292,
+   "yaw_change_deg": -8.8,
+   "min_pelvis_z_m": 0.563,
+   "max_tilt_deg": 6.46
+  },
+  "turn": {
+   "command": [
+    0.0,
+    0.0,
+    0.3
+   ],
+   "sim_duration_s": 6.0,
+   "distance_m": 0.309,
+   "mean_speed_m_s": 0.052,
+   "yaw_change_deg": 77.4,
+   "min_pelvis_z_m": 0.564,
+   "max_tilt_deg": 3.92
+  },
+  "stop": {
+   "command": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "sim_duration_s": 4.0,
+   "distance_m": 0.02,
+   "mean_speed_m_s": 0.005,
+   "yaw_change_deg": 0.5,
+   "min_pelvis_z_m": 0.57,
+   "max_tilt_deg": 1.88
+  }
+ },
+ "reached_walk_state": true,
+ "run_accepted": true,
+ "hub_modes_after_run": {
+  "a": 2,
+  "b": 2
+ },
+ "upright": true,
+ "hub_status_end": {
+  "requested": 2,
+  "fall_latched": false,
+  "hubs": {
+   "a": {
+    "mode": 2,
+    "estop": false,
+    "fault": false,
+    "stale": []
+   },
+   "b": {
+    "mode": 2,
+    "estop": false,
+    "fault": false,
+    "stale": []
+   }
+  }
+ },
+ "fake_hub_log_tail": [
+  "[INFO] [1790241839.508716100] [jx1_fake_hubs]: hub emulator on ports [5555, 5556]; gantry holds the base until RUN"
+ ],
+ "hw_node_log_tail": [
+  "[INFO] [1790241840.659336800] [jx1_hw]: hubs a=socket://127.0.0.1:5555 b=socket://127.0.0.1:5556; DAMPING until /jx1/hw/run"
+ ],
+ "policy_log_tail": [
+  "[INFO] [1790241840.485087300] [jx1_policy]: policy D:\\Project\\thenar-jx1\\rl\\policies\\jx1_walk_stand: 12 joints, 50 Hz"
+ ]
+}
