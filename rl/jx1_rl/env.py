@@ -83,6 +83,7 @@ class JX1Env:
         self.state = np.tile(self.home_state, (N, 1))
         self._state_out = np.zeros((N, self.decimation, self.nstate))
         self._sens_out = np.zeros((N, self.decimation, m.nsensordata))
+        self._ws0 = np.zeros((N, m.nv))
         self.ctrl = np.tile(self.ctrl_hold, (N, 1))
         self.prev_ctrl = self.ctrl.copy()
         rr = cfg["randomization"]
@@ -229,7 +230,9 @@ class JX1Env:
             late = self.act_delay >= d                         # substep d-1 still runs on the previous targets
             control[late, d - 1, :] = self.prev_ctrl[late]
         self.prev_ctrl[:] = self.ctrl
-        self.pool.rollout(self.model_list, self.datas, self.state, control, nstep=self.decimation,
+        # explicit zero solver warm start: otherwise each thread's MjData carries the warm start of whichever env it ran
+        # last, which depends on thread scheduling and makes rollouts non-reproducible (no measurable speed cost)
+        self.pool.rollout(self.model_list, self.datas, self.state, control, nstep=self.decimation, initial_warmstart=self._ws0,
                           state=self._state_out, sensordata=self._sens_out, skip_checks=True)
         self.state[:] = self._state_out[:, -1, :]
         self.obs_src[:] = self._state_out[np.arange(self.N), self.decimation - 1 - self.obs_delay, :]

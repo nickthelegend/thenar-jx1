@@ -56,11 +56,34 @@ Resume or fine-tune on a regenerated CAD model with `--resume rl/runs/<run>/mode
 after falls (robots launched to hundreds of metres, 5/6 seeds); `ls_iterations >= 20` fixed it with no speed cost, so
 the task uses 50/50.
 
+### Rough ground
+
+`rl/config/jx1_walk_rough.yaml` inherits the flat task (`base:` key) and replaces the floor with a 16 m heightfield of
+2 m tiles: flat, ±2 cm uneven floor, domes/bowls up to 8°, and ±2 cm step strips (thresholds, cable covers). Every
+non-step tile returns to zero at its edges, so the only discontinuities are the step edges (≤ 4 cm). Robots spawn over
+the whole map; base height, foot clearance and the fall check are measured above the local ground; leaving the map ends
+the episode without penalty. The observation stays blind (same 47-D vector), so the rough policy fine-tunes from the flat
+one and deploys through the same `policy_io.yaml`, ROS 2 node and hardware bridge.
+
+```bash
+rl/.venv/Scripts/python rl/train.py --config rl/config/jx1_walk_rough.yaml --resume rl/runs/<flat run>/model_latest.pt --iterations <n>
+rl/.venv/Scripts/python rl/sim2sim.py --policy rl/policies/jx1_walk_rough --terrain rl/config/jx1_walk_rough.yaml
+```
+
+### Robustness checks
+
+- `rl/sim2sim.py [--terrain ...]`: 7 command scenarios on the full CAD model (mesh hulls, 500 Hz, hub target ramp);
+  velocity tracking, tilt, peak torque / effort limit and peak joint speed / speed limit per scenario.
+- `rl/push_test.py`: 0.1 s torso force pulse while walking at 0.5 m/s, bisection of the largest survived impulse per
+  direction (same method as `simulation/mujoco/push_jx1.py` for the model-based controller). Interim policy on the
+  placeholder-torso model: 11.7–23.4 N·s, vs 6.6–7.8 N·s for the fixed-footstep ZMP controller.
+
 ## Train in Isaac Lab (UNVERIFIED)
 
 ```bash
 cd <IsaacLab> && ./isaaclab.sh -p -m pip install -e <repo>/simulation/isaac/isaaclab
 ./isaaclab.sh -p <repo>/simulation/isaac/isaaclab/scripts/train.py --task Isaac-Velocity-Flat-JX1-v0 --headless --num_envs 4096
+./isaaclab.sh -p <repo>/simulation/isaac/isaaclab/scripts/train.py --task Isaac-Velocity-Rough-JX1-v0 --headless   # terrain generator
 ./isaaclab.sh -p <repo>/simulation/isaac/isaaclab/scripts/export_policy.py --checkpoint <log>/model_3000.pt --out <repo>/rl/policies/jx1_walk_flat_isaac --headless
 ```
 
