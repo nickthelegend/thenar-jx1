@@ -1,0 +1,142 @@
+{
+ "S0_pacf": {
+  "material": "PA-CF build y",
+  "mass_kg_solid": 0.396,
+  "SF_LC1": 0.35,
+  "SF_LC2": 0.43,
+  "required": [
+   2.0,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -31.0,
+   -22.0,
+   -65.0
+  ],
+  "interface_compliance": {
+   "interface": "fork",
+   "translation_mm_per_kN": [
+    13.1374,
+    233.3227,
+    1.5527
+   ],
+   "rotation_deg_per_100Nm": [
+    41.7066,
+    4.2798,
+    26.6656
+   ]
+  }
+ },
+ "S1_al": {
+  "material": "6061-T6",
+  "mass_kg_solid": 0.863,
+  "SF_LC1": 2.06,
+  "SF_LC2": 3.46,
+  "required": [
+   1.5,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -31.0,
+   -22.0,
+   -65.0
+  ],
+  "interface_compliance": {
+   "interface": "fork",
+   "translation_mm_per_kN": [
+    0.6092,
+    17.4144,
+    0.1066
+   ],
+   "rotation_deg_per_100Nm": [
+    3.1883,
+    0.2235,
+    1.7964
+   ]
+  }
+ },
+ "S2_al_deep_joggle": {
+  "material": "6061-T6",
+  "mass_kg_solid": 0.978,
+  "SF_LC1": 2.16,
+  "SF_LC2": 3.7,
+  "required": [
+   1.5,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -31.0,
+   -22.0,
+   -65.0
+  ],
+  "interface_compliance": {
+   "interface": "fork",
+   "translation_mm_per_kN": [
+    0.3423,
+    15.0811,
+    0.1058
+   ],
+   "rotation_deg_per_100Nm": [
+    2.8842,
+    0.19,
+    1.5221
+   ]
+  }
+ },
+ "S3_al_knee14": {
+  "material": "6061-T6",
+  "mass_kg_solid": 1.073,
+  "SF_LC1": 3.12,
+  "SF_LC2": 4.04,
+  "required": [
+   1.5,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -15.0,
+   -20.0,
+   -271.0
+  ],
+  "interface_compliance": {
+   "interface": "fork",
+   "translation_mm_per_kN": [
+    0.2742,
+    8.55,
+    0.0461
+   ],
+   "rotation_deg_per_100Nm": [
+    2.2795,
+    0.1844,
+    1.3552
+   ]
+  }
+ },
+ "S4_al_knee14_flanges": {
+  "material": "6061-T6",
+  "mass_kg_solid": 1.096,
+  "SF_LC1": 3.23,
+  "SF_LC2": 4.04,
+  "required": [
+   1.5,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -31.0,
+   -16.0,
+   -65.0
+  ],
+  "interface_compliance": {
+   "interface": "fork",
+   "translation_mm_per_kN": [
+    0.2359,
+    7.5807,
+    0.0334
+   ],
+   "rotation_deg_per_100Nm": [
+    2.1874,
+    0.1814,
+    1.3345
+   ]
+  }
+ }
+}

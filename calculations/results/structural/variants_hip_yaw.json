@@ -250,5 +250,61 @@
     0.2143
    ]
   }
+ },
+ "Y8_al_raised_walls": {
+  "material": "6061-T6",
+  "mass_kg_solid": 1.596,
+  "SF_LC1": 2.18,
+  "SF_LC2": 2.39,
+  "required": [
+   1.5,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -131.0,
+   3.0,
+   55.0
+  ],
+  "interface_compliance": {
+   "interface": "leg",
+   "translation_mm_per_kN": [
+    0.2143,
+    0.7965,
+    1.2149
+   ],
+   "rotation_deg_per_100Nm": [
+    0.0725,
+    0.413,
+    0.2119
+   ]
+  }
+ },
+ "Y4_al_box_keel": {
+  "material": "6061-T6",
+  "mass_kg_solid": 1.45,
+  "SF_LC1": 1.36,
+  "SF_LC2": 1.52,
+  "required": [
+   1.5,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -131.0,
+   3.0,
+   55.0
+  ],
+  "interface_compliance": {
+   "interface": "leg",
+   "translation_mm_per_kN": [
+    0.7451,
+    0.8321,
+    0.9257
+   ],
+   "rotation_deg_per_100Nm": [
+    0.4256,
+    0.8183,
+    0.0992
+   ]
+  }
  }
 }

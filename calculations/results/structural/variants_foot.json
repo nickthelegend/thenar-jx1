@@ -1,0 +1,58 @@
+{
+ "F0_pacf": {
+  "material": "PA-CF build z",
+  "mass_kg_solid": 0.274,
+  "SF_LC1": 0.74,
+  "SF_LC2": 0.33,
+  "required": [
+   2.0,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   27.0,
+   9.0,
+   -41.0
+  ],
+  "interface_compliance": {
+   "interface": "toe patch GRF (ankle-torque capped)",
+   "translation_mm_per_kN": [
+    1.6862,
+    11.8729,
+    10.4026
+   ],
+   "rotation_deg_per_100Nm": [
+    11.9436,
+    14.2,
+    4.7163
+   ]
+  }
+ },
+ "F1_al": {
+  "material": "6061-T6",
+  "mass_kg_solid": 0.597,
+  "SF_LC1": 4.29,
+  "SF_LC2": 2.5,
+  "required": [
+   1.5,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   27.0,
+   9.0,
+   -41.0
+  ],
+  "interface_compliance": {
+   "interface": "toe patch GRF (ankle-torque capped)",
+   "translation_mm_per_kN": [
+    0.0474,
+    0.3833,
+    0.7972
+   ],
+   "rotation_deg_per_100Nm": [
+    0.8545,
+    1.1982,
+    0.1523
+   ]
+  }
+ }
+}
