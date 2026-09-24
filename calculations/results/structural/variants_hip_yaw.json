@@ -1,0 +1,254 @@
+{
+ "Y0_pacf": {
+  "material": "PA-CF build z",
+  "mass_kg_solid": 0.312,
+  "SF_LC1": 0.08,
+  "SF_LC2": 0.07,
+  "required": [
+   2.0,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -131.0,
+   3.0,
+   55.0
+  ],
+  "interface_compliance": {
+   "interface": "leg",
+   "translation_mm_per_kN": [
+    23.8598,
+    98.1591,
+    156.4455
+   ],
+   "rotation_deg_per_100Nm": [
+    10.2895,
+    55.4595,
+    25.9826
+   ]
+  }
+ },
+ "Y1_al": {
+  "material": "6061-T6",
+  "mass_kg_solid": 0.68,
+  "SF_LC1": 0.7,
+  "SF_LC2": 0.79,
+  "required": [
+   1.5,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -131.0,
+   3.0,
+   55.0
+  ],
+  "interface_compliance": {
+   "interface": "leg",
+   "translation_mm_per_kN": [
+    1.1412,
+    3.2425,
+    4.1565
+   ],
+   "rotation_deg_per_100Nm": [
+    0.7236,
+    1.8637,
+    0.6994
+   ]
+  }
+ },
+ "Y1_7075": {
+  "material": "7075-T6",
+  "mass_kg_solid": 0.708,
+  "SF_LC1": 1.25,
+  "SF_LC2": 1.14,
+  "required": [
+   1.5,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -131.0,
+   3.0,
+   55.0
+  ],
+  "interface_compliance": {
+   "interface": "leg",
+   "translation_mm_per_kN": [
+    1.0966,
+    3.1159,
+    3.9942
+   ],
+   "rotation_deg_per_100Nm": [
+    0.6954,
+    1.7909,
+    0.6721
+   ]
+  }
+ },
+ "Y12_7075_back12": {
+  "material": "7075-T6",
+  "mass_kg_solid": 0.856,
+  "SF_LC1": 1.65,
+  "SF_LC2": 1.42,
+  "required": [
+   1.5,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -131.0,
+   3.0,
+   55.0
+  ],
+  "interface_compliance": {
+   "interface": "leg",
+   "translation_mm_per_kN": [
+    0.8749,
+    1.6221,
+    1.6654
+   ],
+   "rotation_deg_per_100Nm": [
+    0.6709,
+    1.0582,
+    0.2433
+   ]
+  }
+ },
+ "Y13_7075_back12_keel": {
+  "material": "7075-T6",
+  "mass_kg_solid": 0.864,
+  "SF_LC1": 1.87,
+  "SF_LC2": 1.6,
+  "required": [
+   1.5,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -131.0,
+   3.0,
+   55.0
+  ],
+  "interface_compliance": {
+   "interface": "leg",
+   "translation_mm_per_kN": [
+    0.8346,
+    1.5271,
+    1.5859
+   ],
+   "rotation_deg_per_100Nm": [
+    0.6315,
+    1.0194,
+    0.2381
+   ]
+  }
+ },
+ "Y2_al_back16": {
+  "material": "6061-T6",
+  "mass_kg_solid": 0.965,
+  "SF_LC1": 1.06,
+  "SF_LC2": 1.09,
+  "required": [
+   1.5,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -131.0,
+   3.0,
+   55.0
+  ],
+  "interface_compliance": {
+   "interface": "leg",
+   "translation_mm_per_kN": [
+    0.8526,
+    1.2194,
+    1.1479
+   ],
+   "rotation_deg_per_100Nm": [
+    0.6856,
+    0.9209,
+    0.1318
+   ]
+  }
+ },
+ "Y3_al_box": {
+  "material": "6061-T6",
+  "mass_kg_solid": 1.36,
+  "SF_LC1": 1.25,
+  "SF_LC2": 1.33,
+  "required": [
+   1.5,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -131.0,
+   3.0,
+   55.0
+  ],
+  "interface_compliance": {
+   "interface": "leg",
+   "translation_mm_per_kN": [
+    0.8223,
+    1.0866,
+    1.0749
+   ],
+   "rotation_deg_per_100Nm": [
+    0.5718,
+    0.8904,
+    0.116
+   ]
+  }
+ },
+ "Y6_al_raised_box": {
+  "material": "6061-T6",
+  "mass_kg_solid": 2.207,
+  "SF_LC1": 4.03,
+  "SF_LC2": 4.43,
+  "required": [
+   1.5,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -131.0,
+   3.0,
+   55.0
+  ],
+  "interface_compliance": {
+   "interface": "leg",
+   "translation_mm_per_kN": [
+    0.1208,
+    0.3459,
+    0.5348
+   ],
+   "rotation_deg_per_100Nm": [
+    0.05,
+    0.1972,
+    0.0828
+   ]
+  }
+ },
+ "Y7_al_raised_light": {
+  "material": "6061-T6",
+  "mass_kg_solid": 1.254,
+  "SF_LC1": 2.12,
+  "SF_LC2": 2.32,
+  "required": [
+   1.5,
+   1.5
+  ],
+  "worst_LC1_at_mm": [
+   -131.0,
+   3.0,
+   55.0
+  ],
+  "interface_compliance": {
+   "interface": "leg",
+   "translation_mm_per_kN": [
+    0.2206,
+    0.8109,
+    1.2245
+   ],
+   "rotation_deg_per_100Nm": [
+    0.0778,
+    0.4194,
+    0.2143
+   ]
+  }
+ }
+}

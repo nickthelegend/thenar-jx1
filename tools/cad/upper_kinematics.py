@@ -84,12 +84,16 @@ class UpperCAD:
             self.comps[f"{side}_SPO"] = ("ACT_S_Output", f"{side}_shoulder_pitch", T(R_out, [0, -s * S["T_OUT"], 0]))
             self.comps[f"{side}_ShPitchBr"] = ("ShoulderPitchBracket", f"{side}_shoulder_pitch", T())
             xr = UPK["roll_out_x"] - S["T_OUT"]
-            self.comps[f"{side}_SRH"] = ("ACT_S_Housing", f"{side}_shoulder_pitch", T(ry(np.pi / 2), [xr, s * SR_OFF[1], 0]))
-            self.comps[f"{side}_SRO"] = ("ACT_S_Output", f"{side}_shoulder_roll", T(ry(np.pi / 2), [xr, 0, 0]))
+            # connector zone (actuator +Y) must point laterally outward, away from the shoulder-pitch bracket output plate:
+            # housing and output are clocked together so the limit-mate calibration is unchanged
+            R_roll = ry(np.pi / 2) if s > 0 else ry(np.pi / 2) @ rz(np.pi)
+            self.comps[f"{side}_SRH"] = ("ACT_S_Housing", f"{side}_shoulder_pitch", T(R_roll, [xr, s * SR_OFF[1], 0]))
+            self.comps[f"{side}_SRO"] = ("ACT_S_Output", f"{side}_shoulder_roll", T(R_roll, [xr, 0, 0]))
             self.comps[f"{side}_ShRollBr"] = ("ShoulderRollBracket", f"{side}_shoulder_roll", T())
             zy = SY_OFF[2] + XS["T_OUT"]
-            self.comps[f"{side}_SYH"] = ("ACT_XS_Housing", f"{side}_shoulder_roll", T(rx(np.pi), [0, 0, zy]))
-            self.comps[f"{side}_SYO"] = ("ACT_XS_Output", f"{side}_upper_arm", T(rx(np.pi), [0, 0, XS["T_OUT"]]))
+            R_yaw = rx(np.pi) @ rz(np.pi) if s > 0 else rx(np.pi)          # connector outward (away from the pitch bracket)
+            self.comps[f"{side}_SYH"] = ("ACT_XS_Housing", f"{side}_shoulder_roll", T(R_yaw, [0, 0, zy]))
+            self.comps[f"{side}_SYO"] = ("ACT_XS_Output", f"{side}_upper_arm", T(R_yaw, [0, 0, XS["T_OUT"]]))
             self.comps[f"{side}_UpperArm"] = ("UpperArm", f"{side}_upper_arm", T())
             ye = s * (UPK["elbow_face_y"] - XS["T_OUT"])
             self.comps[f"{side}_ElH"] = ("ACT_XS_Housing", f"{side}_upper_arm", T(R_out, [0, ye, EL_OFF[2]]))

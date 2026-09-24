@@ -79,11 +79,14 @@ def add_upper(asm, include_pelvis=True, tag=""):
         calib[f"{joint}_LIMIT"] = {"joint": joint, "housing": hk, "output": ok, "axis_parent": list(axis), "zero_deg": 90 + kappa,
                                    "sign": sgn, "sw_limits_deg": win, "cad_limits_deg": (lo, hi), "parent_link": parent}
     asm.doc.EditRebuild3()
-    # sign check: +0.1 rad in the robot convention must rotate the output by +0.1 rad about the robot joint axis
+    # sign check: a 0.1 rad step in the robot convention must rotate the output by the same angle about the robot joint axis;
+    # the step goes toward the side of the range with room (the elbow's upper limit is only +5 deg)
     for mname, c in calib.items():
         hk, ok = c["housing"], c["output"]
+        probe = 0.1 if c["cad_limits_deg"][1] >= 6.0 else -0.1
+        c["probe_rad"] = probe
         R0 = asm.relative(hk, ok)
-        asm.set_mate_value(mname, math.radians(c["zero_deg"] + c["sign"] * math.degrees(0.1)))
+        asm.set_mate_value(mname, math.radians(c["zero_deg"] + c["sign"] * math.degrees(probe)))
         R1 = asm.relative(hk, ok)
         asm.set_mate_value(mname, math.radians(c["zero_deg"]))
         dR = R0[:3, :3].T @ R1[:3, :3]
@@ -91,9 +94,10 @@ def add_upper(asm, include_pelvis=True, tag=""):
         w = Rh @ np.array([dR[2, 1] - dR[1, 2], dR[0, 2] - dR[2, 0], dR[1, 0] - dR[0, 1]]) / 2.0
         ax_world = W0[c["parent_link"]][:3, :3] @ np.array(c["axis_parent"], float)
         about = float(np.dot(w, ax_world))
-        c["measured_sin_for_+0.1rad"] = about
-        c["sign_check_pass"] = abs(about - math.sin(0.1)) < 1e-3
-        print(f"CHECK {mname}: +0.1 rad robot -> measured {about:+.5f} (expect +0.09983) {'OK' if c['sign_check_pass'] else 'FAIL'}", flush=True)
+        c["measured_sin_for_probe"] = about
+        c["sign_check_pass"] = abs(about - math.sin(probe)) < 1e-3
+        print(f"CHECK {mname}: {probe:+.1f} rad robot -> measured {about:+.5f} (expect {math.sin(probe):+.5f}) "
+              f"{'OK' if c['sign_check_pass'] else 'FAIL'}", flush=True)
     asm.doc.EditRebuild3()
     return calib
 

@@ -1,0 +1,128 @@
+{
+ "V0": {
+  "mass_kg_6061": 0.68,
+  "SF_LC1": 1.01,
+  "SF_LC2": 1.19,
+  "worst_LC1_at_mm": [
+   29.0,
+   35.0,
+   -101.0
+  ],
+  "knee_lateral_mm_per_kN": 17.37,
+  "knee_roll_deg_per_100Nm": 3.879,
+  "knee_yaw_deg_per_100Nm": 3.337,
+  "knee_pitch_deg_per_100Nm": 0.068
+ },
+ "V1": {
+  "mass_kg_6061": 0.712,
+  "SF_LC1": 1.35,
+  "SF_LC2": 1.6,
+  "worst_LC1_at_mm": [
+   -23.0,
+   35.0,
+   -65.0
+  ],
+  "knee_lateral_mm_per_kN": 9.61,
+  "knee_roll_deg_per_100Nm": 2.514,
+  "knee_yaw_deg_per_100Nm": 2.955,
+  "knee_pitch_deg_per_100Nm": 0.061
+ },
+ "V2": {
+  "mass_kg_6061": 0.804,
+  "SF_LC1": 1.34,
+  "SF_LC2": 1.7,
+  "worst_LC1_at_mm": [
+   29.0,
+   35.0,
+   -65.0
+  ],
+  "knee_lateral_mm_per_kN": 9.25,
+  "knee_roll_deg_per_100Nm": 2.406,
+  "knee_yaw_deg_per_100Nm": 1.142,
+  "knee_pitch_deg_per_100Nm": 0.057
+ },
+ "V3": {
+  "mass_kg_6061": 1.103,
+  "SF_LC1": 2.91,
+  "SF_LC2": 3.35,
+  "worst_LC1_at_mm": [
+   29.0,
+   35.0,
+   -65.0
+  ],
+  "knee_lateral_mm_per_kN": 3.31,
+  "knee_roll_deg_per_100Nm": 0.835,
+  "knee_yaw_deg_per_100Nm": 0.489,
+  "knee_pitch_deg_per_100Nm": 0.041
+ },
+ "V4": {
+  "mass_kg_6061": 1.195,
+  "SF_LC1": 2.98,
+  "SF_LC2": 3.73,
+  "worst_LC1_at_mm": [
+   29.0,
+   35.0,
+   -65.0
+  ],
+  "knee_lateral_mm_per_kN": 3.24,
+  "knee_roll_deg_per_100Nm": 0.816,
+  "knee_yaw_deg_per_100Nm": 0.423,
+  "knee_pitch_deg_per_100Nm": 0.04
+ },
+ "V5": {
+  "mass_kg_6061": 1.023,
+  "SF_LC1": 3.27,
+  "SF_LC2": 3.65,
+  "worst_LC1_at_mm": [
+   23.0,
+   35.0,
+   -205.0
+  ],
+  "knee_lateral_mm_per_kN": 2.44,
+  "knee_roll_deg_per_100Nm": 0.756,
+  "knee_yaw_deg_per_100Nm": 1.1,
+  "knee_pitch_deg_per_100Nm": 0.04
+ },
+ "V6": {
+  "mass_kg_6061": 1.115,
+  "SF_LC1": 3.14,
+  "SF_LC2": 3.65,
+  "worst_LC1_at_mm": [
+   -29.0,
+   35.0,
+   -205.0
+  ],
+  "knee_lateral_mm_per_kN": 2.21,
+  "knee_roll_deg_per_100Nm": 0.689,
+  "knee_yaw_deg_per_100Nm": 0.451,
+  "knee_pitch_deg_per_100Nm": 0.038
+ },
+ "V7": {
+  "mass_kg_6061": 0.723,
+  "SF_LC1": 1.64,
+  "SF_LC2": 1.94,
+  "worst_LC1_at_mm": [
+   23.0,
+   35.0,
+   -205.0
+  ],
+  "knee_lateral_mm_per_kN": 5.44,
+  "knee_roll_deg_per_100Nm": 1.976,
+  "knee_yaw_deg_per_100Nm": 2.818,
+  "knee_pitch_deg_per_100Nm": 0.056
+ },
+ "V9": {
+  "mass_kg_6061": 0.873,
+  "SF_LC1": 2.35,
+  "SF_LC2": 2.81,
+  "worst_LC1_at_mm": [
+   23.0,
+   35.0,
+   -205.0
+  ],
+  "knee_lateral_mm_per_kN": 3.51,
+  "knee_roll_deg_per_100Nm": 1.158,
+  "knee_yaw_deg_per_100Nm": 1.698,
+  "knee_pitch_deg_per_100Nm": 0.047
+ }
+}

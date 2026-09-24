@@ -19,7 +19,8 @@
       "SK_Top_Plate": 3,
       "SK_Yaw_Pilot_Recess": 3,
       "SK_Back_Plate": 3,
-      "SK_Rib": 3
+      "SK_Rib": 3,
+      "SK_Keel": 3
     },
     "refpoints": {}
   },
@@ -135,7 +136,8 @@
       "SK_Top_Plate": 3,
       "SK_Yaw_Pilot_Recess": 3,
       "SK_Back_Plate": 3,
-      "SK_Rib": 3
+      "SK_Rib": 3,
+      "SK_Keel": 3
     },
     "refpoints": {}
   },

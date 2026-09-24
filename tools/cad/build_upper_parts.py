@@ -125,7 +125,7 @@ def electronics(s):
     out["PowerSwitch"] = box_part(s, "JX1_PowerSwitch", "Electronics", [(-0.046, -0.002, -0.080, -0.042, 0.100, 0.119)], (0.2, 0.2, 0.2),
                                   "Flipsky anti-spark switch 300 A (motor bus, E-stop controlled)", "envelope 44 x 43 x 19 mm ASSUMED, 0.12 kg")
     bx = TOR["back_x"]
-    out["EStop"] = box_part(s, "JX1_EStop", "Electronics", [(bx - 0.020, bx, -0.020, 0.020, 0.215, 0.255), (bx + 0.004, bx + 0.049, -0.015, 0.015, 0.220, 0.250)],
+    out["EStop"] = box_part(s, "JX1_EStop", "Electronics", [(bx - 0.020, bx, -0.020, 0.020, 0.215, 0.255), (bx + 0.005, bx + 0.049, -0.015, 0.015, 0.220, 0.250)],
                             RED_RGB, "Schneider XB2BS8442C 40 mm mushroom E-stop, 1 NC", "head outside the back plate, contact block inside")
     return out
 
@@ -162,9 +162,10 @@ def shoulder_roll_bracket(s):
     # octagon (circumradius 36 mm) over the whole RS02 output flange: stays inside the 40 mm clearance to the
     # shoulder-pitch bracket output plate for every roll angle
     plate(p, "Roll_Plate", "x", xf, xf + t, [(0, a, b) for (a, b) in ngon(0.0, 0.0, 0.036)], ho + [((0, 0, 0), 0.010)])
-    circle_cut(p, "Roll_Pilot_Recess", "x", xf, (xf, 0, 0), S["PILOT_D"] + 0.0003, S["PILOT_H"] + 0.0002, into_positive=True)
     hy = [(u, v, CLR_M3) for (u, v, _) in bolt_holes((0, 0), XS["PCD_REAR"], XS["N_REAR"], CLR_M3, 45)] + [(0, 0, 0.014)]
     plate2d(p, "Yaw_Plate", "z", zr, zr + t, [(xf, -0.032), (0.032, -0.032), (0.032, 0.032), (xf, 0.032)], hy)
+    # recess last: the yaw plate starts on the output-face plane and would otherwise re-fill part of it (pilot boss clash)
+    circle_cut(p, "Roll_Pilot_Recess", "x", xf, (xf, 0, 0), S["PILOT_D"] + 0.0003, S["PILOT_H"] + 0.0002, into_positive=True)
     return finish(p, ALU_RGB, "shoulder roll output -> shoulder yaw housing (L-bracket)", "6061-T6 6 mm plates, bolted; ASSUMED until FEA")
 
 
@@ -241,10 +242,15 @@ def head(s):
     yh = UPK["neck_pitch_face_y"] + UPK["horn_t"]              # horn face: internal head plate starts here
     p.gv("Head_top_z", mm(z1))
     plate(p, "Front", "x", x1 - t, x1, [(0, -hy, z0), (0, hy, z0), (0, hy, z1), (0, -hy, z1)], [((0, 0.030, 0.042), 0.012), ((0, -0.030, 0.042), 0.012)])
-    plate(p, "Back", "x", x0, x0 + t, [(0, -hy, z0), (0, hy, z0), (0, hy, z1), (0, -hy, z1)])
+    # rear-bottom chamfer: looking up (pitch -30 deg) with the neck yawed toward the back swings the rear-bottom corner over the
+    # back plate / E-stop (top z 0.262 torso frame; interference 128 mm3 found by verify_upper_motion 2026-09-24). With the corner cut
+    # from (x0, zc) to (xc, z0) every shell point outside r = 69.5 mm stays >= 6 mm above the back plate for pitch -30..+45 deg.
+    xc, zc = -0.025, 0.003
+    p.gv("Head_chamfer_x", mm(xc)); p.gv("Head_chamfer_z", mm(zc))
+    plate(p, "Back", "x", x0, x0 + t, [(0, -hy, zc), (0, hy, zc), (0, hy, z1), (0, -hy, z1)])
     plate2d(p, "Top", "z", z1 - t, z1, [(x0, -hy), (x1, -hy), (x1, hy), (x0, hy)])
     for tag, y0 in (("Side_L", hy - t), ("Side_R", -hy)):
-        plate(p, tag, "y", y0, y0 + t, [(x0, 0, z0), (x1, 0, z0), (x1, 0, z1), (x0, 0, z1)])
+        plate(p, tag, "y", y0, y0 + t, [(xc, 0, z0), (x1, 0, z0), (x1, 0, z1), (x0, 0, z1), (x0, 0, zc)])
     plate(p, "Horn_Plate", "y", yh, yh + 0.004, [(-0.020, 0, -0.012), (0.040, 0, -0.012), (0.040, 0, z1), (-0.020, 0, z1)], [((0, 0, 0), 0.004)])
     info = finish(p, ACCENT_RGB, "head shell (open bottom) on the neck-pitch horn", "FDM PETG-CF 3 mm shell; ASSUMED, ~0.3 kg (BOM)")
     q = Part(s, "JX1_StereoCamera", CAD / "Head" / "JX1_StereoCamera.SLDPRT")

@@ -270,7 +270,7 @@ def foot_def():
 def pelvis_def():
     Mh = M_
     z0 = PKG["yaw_out_z"] + Mh["T_OUT"] + Mh["L_HOUSING"]
-    z1 = z0 + T
+    z1 = z0 + PKG["pelvis_top_t"]                  # 6 mm 6061 top plate (structural redesign)
     return {
         "stl": "JX1_Pelvis", "h": 0.002, "materials": {"6061-T6": al()},
         "supports": [("waist actuator (torso)", lambda m: m.face_annulus(2, z1, (0, 0, z1), 0.0155, Mh["PCD_REAR"] / 2 + 0.006), (0, 1, 2))],
