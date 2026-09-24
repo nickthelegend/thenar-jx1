@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>jx1_hw</name>
+  <version>0.1.0</version>
+  <description>JX1 hardware bridge: joint space (jx1_policy / ros2 topics) to the two Teensy 4.1 CAN hubs over USB serial, parallel-ankle crank mapping, and a MuJoCo hub emulator for hardware-in-the-loop testing without hardware.</description>
+  <maintainer email="maintainer@jx1.invalid">JX1 project</maintainer>
+  <license>Apache-2.0</license>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>std_srvs</exec_depend>
+  <exec_depend>rosgraph_msgs</exec_depend>
+  <exec_depend>builtin_interfaces</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
+  <exec_depend>python3-serial</exec_depend>
+  <!-- fake_hub also needs: pip install mujoco==3.14.0 -->
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

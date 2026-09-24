@@ -1,0 +1,212 @@
+generated_by: ros2_ws/src/jx1_hw/scripts/gen_config.py (firmware configs + calculations/design_point.yaml)
+hubs:
+  a:
+    joints:
+    - name: left_hip_yaw
+      bus: 0
+      can_id: 11
+      model: RS06
+      sign: -1.0
+      zero: 0.0
+      q_min: -0.69813
+      q_max: 0.7854
+      tau_limit: 28.8
+    - name: left_hip_roll
+      bus: 0
+      can_id: 12
+      model: RS03
+      sign: 1.0
+      zero: 0.0
+      q_min: -0.43633
+      q_max: 0.7854
+      tau_limit: 48.0
+    - name: left_hip_pitch
+      bus: 0
+      can_id: 13
+      model: RS04
+      sign: 1.0
+      zero: 0.0
+      q_min: -2.00713
+      q_max: 0.61086
+      tau_limit: 96.0
+    - name: left_knee
+      bus: 1
+      can_id: 14
+      model: RS04
+      sign: -1.0
+      zero: 0.0
+      q_min: 0.0
+      q_max: 2.0944
+      tau_limit: 96.0
+    - name: left_ankle_motorA
+      bus: 1
+      can_id: 15
+      model: RS06
+      sign: 1.0
+      zero: 0.0
+      q_min: -1.309
+      q_max: 1.309
+      tau_limit: 28.8
+    - name: left_ankle_motorB
+      bus: 1
+      can_id: 16
+      model: RS06
+      sign: -1.0
+      zero: 0.0
+      q_min: -1.309
+      q_max: 1.309
+      tau_limit: 28.8
+    - name: left_shoulder_pitch
+      bus: 2
+      can_id: 21
+      model: RS02
+      sign: 1.0
+      zero: 0.0
+      q_min: -2.96706
+      q_max: 1.0472
+      tau_limit: 13.6
+    - name: left_shoulder_roll
+      bus: 2
+      can_id: 22
+      model: RS02
+      sign: 1.0
+      zero: 0.0
+      q_min: -0.17453
+      q_max: 2.61799
+      tau_limit: 13.6
+    - name: left_shoulder_yaw
+      bus: 2
+      can_id: 23
+      model: RS00
+      sign: -1.0
+      zero: 0.0
+      q_min: -1.5708
+      q_max: 1.5708
+      tau_limit: 11.2
+    - name: left_elbow
+      bus: 2
+      can_id: 24
+      model: RS00
+      sign: 1.0
+      zero: 0.0
+      q_min: -2.35619
+      q_max: 0.08727
+      tau_limit: 11.2
+    - name: waist_yaw
+      bus: 2
+      can_id: 31
+      model: RS06
+      sign: 1.0
+      zero: 0.0
+      q_min: -1.5708
+      q_max: 1.5708
+      tau_limit: 28.8
+    soft_margin_rad: 0.0349
+    damping_kd: 2.0
+    host_timeout_us: 50000
+    bus_period_us: 2000
+    state_div: 2
+  b:
+    joints:
+    - name: right_hip_yaw
+      bus: 0
+      can_id: 41
+      model: RS06
+      sign: -1.0
+      zero: 0.0
+      q_min: -0.7854
+      q_max: 0.69813
+      tau_limit: 28.8
+    - name: right_hip_roll
+      bus: 0
+      can_id: 42
+      model: RS03
+      sign: 1.0
+      zero: 0.0
+      q_min: -0.7854
+      q_max: 0.43633
+      tau_limit: 48.0
+    - name: right_hip_pitch
+      bus: 0
+      can_id: 43
+      model: RS04
+      sign: -1.0
+      zero: 0.0
+      q_min: -2.00713
+      q_max: 0.61086
+      tau_limit: 96.0
+    - name: right_knee
+      bus: 1
+      can_id: 44
+      model: RS04
+      sign: 1.0
+      zero: 0.0
+      q_min: 0.0
+      q_max: 2.0944
+      tau_limit: 96.0
+    - name: right_ankle_motorA
+      bus: 1
+      can_id: 45
+      model: RS06
+      sign: -1.0
+      zero: 0.0
+      q_min: -1.309
+      q_max: 1.309
+      tau_limit: 28.8
+    - name: right_ankle_motorB
+      bus: 1
+      can_id: 46
+      model: RS06
+      sign: 1.0
+      zero: 0.0
+      q_min: -1.309
+      q_max: 1.309
+      tau_limit: 28.8
+    - name: right_shoulder_pitch
+      bus: 2
+      can_id: 51
+      model: RS02
+      sign: -1.0
+      zero: 0.0
+      q_min: -2.96706
+      q_max: 1.0472
+      tau_limit: 13.6
+    - name: right_shoulder_roll
+      bus: 2
+      can_id: 52
+      model: RS02
+      sign: 1.0
+      zero: 0.0
+      q_min: -2.61799
+      q_max: 0.17453
+      tau_limit: 13.6
+    - name: right_shoulder_yaw
+      bus: 2
+      can_id: 53
+      model: RS00
+      sign: -1.0
+      zero: 0.0
+      q_min: -1.5708
+      q_max: 1.5708
+      tau_limit: 11.2
+    - name: right_elbow
+      bus: 2
+      can_id: 54
+      model: RS00
+      sign: -1.0
+      zero: 0.0
+      q_min: -2.35619
+      q_max: 0.08727
+      tau_limit: 11.2
+    soft_margin_rad: 0.0349
+    damping_kd: 2.0
+    host_timeout_us: 50000
+    bus_period_us: 2000
+    state_div: 2
+ankle:
+  crank_radius_m: 0.05
+  foot_lever_m: 0.04
+  rod_half_spacing_m: 0.045
+  crank_half_spacing_m: 0.057
+  motor_A_height_m: 0.182
+  motor_B_height_m: 0.094

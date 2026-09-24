@@ -12,6 +12,7 @@ model:
   ls_iterations: 50
   contact_solref: [0.01, 1.0]                 # >= 2 x timestep
   floor_friction: 1.0
+  hub_interpolation: true                     # targets ramp over the 20 ms policy period like the CAN hubs (first-order hold)
 
 # policy action order (joint names from simulation/joint_map.yaml)
 policy_joints:
@@ -48,8 +49,11 @@ pd_gains:
   hip_roll: [150.0, 3.0]
   hip_pitch: [200.0, 5.0]
   knee: [200.0, 5.0]
-  ankle_pitch: [60.0, 2.0]
-  ankle_roll: [40.0, 1.5]
+  # ankle: the two crank motors run independent MIT loops (kp_m 40, kd_m 1.5); through the linkage Jacobian
+  # J ~ [[0.8, 0.9], [0.8, -0.9]] that realises K_q = J^T K_m J -> pitch 51.2 / roll 64.8 (roll/pitch fixed at 1.27).
+  # Training with realisable gains (ros2_ws/src/jx1_hw/jx1_hw/ankle.py motor_gains) keeps sim and hardware consistent.
+  ankle_pitch: [51.2, 1.92]
+  ankle_roll: [64.8, 2.43]
   waist_yaw: [150.0, 4.0]
   shoulder_pitch: [40.0, 1.0]
   shoulder_roll: [40.0, 1.0]
@@ -121,6 +125,8 @@ randomization:
   push_velocity_m_s: 0.5
   init_joint_noise: 0.1
   init_base_vel: 0.2
+  action_delay_substeps: [0, 1]                   # 0-5 ms transport latency (host -> hub -> CAN) on top of the hub ramp
+  obs_delay_substeps: [0, 1]                      # 0-5 ms sensing latency (IMU / joint feedback)
 
 ppo:
   num_envs: 1024

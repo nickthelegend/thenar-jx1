@@ -37,14 +37,30 @@ class DeployPolicy(torch.nn.Module):
         return self.actor(self.norm(obs))
 
 
+# peak torque (N m) by joint_map actuator_class when a joint is not in the exported MJCF (ankle = linkage capability)
+CLASS_EFFORT = {"XL": 120.0, "L": 60.0, "M": 36.0, "S": 17.0, "XS": 14.0, "servo": 1.9}
+ANKLE_EFFORT = {"ankle_pitch": 46.0, "ankle_roll": 51.0}
+
+
+def class_effort(cfg, joint):
+    jt = config.joint_type(joint)
+    if jt in ANKLE_EFFORT:
+        return ANKLE_EFFORT[jt]
+    cls = next(j["actuator_class"] for j in cfg.joint_map["joints"] if j["name"] == joint)
+    return CLASS_EFFORT[cls.split()[0]]
+
+
 def policy_io(cfg, meta):
+    """The deployment contract describes the whole robot (all joint_map joints), whatever the exported MJCF models."""
     src = REPO / cfg["model"]["source_mjcf"]
     m = mujoco.MjModel.from_xml_path(str(src))
     effort = {}
     for a in range(m.nu):
         j = mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, m.actuator_trnid[a, 0])
         effort[j] = float(m.actuator_forcerange[a, 1])
-    present = [j for j in cfg.all_joints if j in effort]
+    present = list(cfg.all_joints)
+    for j in present:
+        effort.setdefault(j, class_effort(cfg, j))
     return {
         "format": "jx1-policy-io/1",
         "policy": {"onnx": "policy.onnx", "torchscript": "policy.pt", "input": "obs", "output": "actions",
@@ -71,7 +87,8 @@ def main():
     ap.add_argument("--out", default=str(RL_DIR / "policies" / "jx1_walk_flat"))
     a = ap.parse_args()
     ck = torch.load(a.checkpoint, map_location="cpu")
-    cfg = config.load(ck.get("config") or RL_DIR / "config" / "jx1_walk.yaml")
+    snapshot = Path(a.checkpoint).parent / "config.yaml"          # the task config the run was trained with
+    cfg = config.load(snapshot if snapshot.exists() else (ck.get("config") or RL_DIR / "config" / "jx1_walk.yaml"))
     pc = cfg["ppo"]
     ac = ActorCritic(ck["num_obs"], ck["num_privileged_obs"], ck["num_actions"], pc["actor_hidden"], pc["critic_hidden"], pc["activation"])
     ac.load_state_dict(ck["model"])
@@ -93,6 +110,7 @@ def main():
     err = {"onnx_max_abs_diff": float(np.abs(y - y_onnx).max()), "torchscript_max_abs_diff": float(np.abs(y - y_ts).max())}
     src = REPO / cfg["model"]["source_mjcf"]
     meta = {"checkpoint": Path(a.checkpoint).name, "run": Path(a.checkpoint).parent.name, "iteration": ck["iteration"] + 1,
+            "task_config": "run snapshot (config.yaml next to the checkpoint)" if snapshot.exists() else "rl/config (no run snapshot)",
             "source_mjcf": cfg["model"]["source_mjcf"], "source_mjcf_sha256": hashlib.sha256(src.read_bytes()).hexdigest(),
             "export_check": err}
     (out / "policy_io.yaml").write_text(yaml.safe_dump(policy_io(cfg, meta), sort_keys=False, width=140), encoding="utf-8")

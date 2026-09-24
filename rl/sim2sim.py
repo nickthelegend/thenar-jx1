@@ -66,7 +66,7 @@ def load_cad_model(io):
     return m, act_of
 
 
-def run(policy_dir: Path, render=True):
+def run(policy_dir: Path, render=True, hub_interp=True):
     rn = Runner(policy_dir)
     io = rn.io
     m, act_of = load_cad_model(io)
@@ -103,8 +103,10 @@ def run(policy_dir: Path, render=True):
             quat = d.qpos[3:7].copy()
             ang_b = d.qvel[3:6].copy()
             tgt = rn.targets(quat, ang_b, d.qpos[pol_q], d.qvel[pol_d], cmd, d.time)
-            d.ctrl[pol_a] = tgt
-            for _ in range(dec):
+            prev = d.ctrl[pol_a].copy()
+            for i in range(dec):
+                # CAN-hub first-order hold: the new target is reached at the end of the policy period (firmware alpha ramp)
+                d.ctrl[pol_a] = prev + (i + 1) / dec * (tgt - prev) if hub_interp else tgt
                 mujoco.mj_step(m, d)
                 peak = np.maximum(peak, np.abs(d.actuator_force))
             v_b = policy_io.quat_rotate_inverse(d.qpos[3:7], d.qvel[0:3])
@@ -137,7 +139,7 @@ def run(policy_dir: Path, render=True):
         r = results[name]
         print(f"{name:13s} cmd {cmd} -> {'FELL' if fell else 'ok  '} v_mean {r['mean_velocity_b']} rmse {r['velocity_rmse']} "
               f"tilt {r['max_tilt_deg']:5.1f} deg peak {r['peak_torque_joint']} {r['peak_torque_fraction']:.0%}", flush=True)
-    summary = {"policy": (policy_dir.resolve().relative_to(REPO).as_posix() if policy_dir.resolve().is_relative_to(REPO) else str(policy_dir)), "model": io["trained"]["source_mjcf"], "physics_dt_s": m.opt.timestep,
+    summary = {"hub_interpolation": hub_interp, "policy": (policy_dir.resolve().relative_to(REPO).as_posix() if policy_dir.resolve().is_relative_to(REPO) else str(policy_dir)), "model": io["trained"]["source_mjcf"], "physics_dt_s": m.opt.timestep,
                "decimation": dec, "scenarios": results, "all_upright": not any(r["fell"] for r in results.values())}
     (policy_dir / "sim2sim.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
     if frames:
@@ -151,8 +153,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--policy", default=str(RL_DIR / "policies" / "jx1_walk_flat"))
     ap.add_argument("--no-render", action="store_true")
+    ap.add_argument("--no-hub-interp", action="store_true", help="apply targets immediately instead of the hubs' 20 ms ramp")
     a = ap.parse_args()
-    s = run(Path(a.policy), render=not a.no_render)
+    s = run(Path(a.policy), render=not a.no_render, hub_interp=not a.no_hub_interp)
     print("all upright:", s["all_upright"])
 
 

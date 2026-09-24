@@ -109,10 +109,11 @@ def test_deploy_observation_matches_training_env():
         bundle = export_untrained(Path(tmp))
         ros = runner_mod.PolicyRunner(bundle)
         s2s = sim2sim.Runner(bundle)
-        qp, qv = env.qpos(), env.qvel()
+        src = env.obs_src                               # the (latency-randomised) state the actor observation is built from
+        qp, qv = src[:, 1:1 + env.nq], src[:, 1 + env.nq:1 + env.nq + env.nv]
         for i in range(16):
             ros.last_action = env.actions[i].copy()
-            args = (qp[i, 3:7], qv[i, 3:6], qp[i, env.qadr], qv[i, env.dadr], env.commands[i], env.state[i, 0])
+            args = (qp[i, 3:7], qv[i, 3:6], qp[i, env.qadr], qv[i, env.dadr], env.commands[i], env.state[i, 0])   # clock: current time
             o_ros = ros.observation(*args)
             assert np.allclose(o_ros, obs_env[i], atol=1e-5), np.abs(o_ros - obs_env[i]).max()
             # same targets from both deployment runners
@@ -123,6 +124,49 @@ def test_deploy_observation_matches_training_env():
         io = yaml.safe_load((bundle / "policy_io.yaml").read_text(encoding="utf-8"))
         assert io["policy"]["num_obs"] == CFG.num_obs and io["joints"]["policy"] == CFG.policy_joints
         assert max(io["trained"]["export_check"].values()) < 1e-4
+
+
+def test_latency_randomisation():
+    env = JX1Env(CFG, num_envs=64, nthread=4, seed=11)
+    env.reset()
+    assert env.act_delay.max() > 0 and env.obs_delay.max() > 0          # both randomised over the batch
+    rng = np.random.default_rng(2)
+    for _ in range(10):
+        env.step(rng.normal(0, 0.5, (64, CFG.num_actions)))
+    lag = env.obs_delay == 1
+    fresh = env.obs_delay == 0
+    assert np.allclose(env.obs_src[fresh], env.state[fresh])
+    assert not np.allclose(env.obs_src[lag, 1:], env.state[lag, 1:])      # one substep (5 ms) older
+    assert np.allclose(env.obs_src[lag, 0], env.state[lag, 0] - CFG["model"]["timestep"])
+
+
+def test_hub_interpolation_ramp():
+    """Targets ramp over the policy period like the CAN hubs, in the training env and in the ROS MuJoCo node."""
+    env = JX1Env(CFG, num_envs=8, nthread=2, seed=3, randomize=False)
+    env.reset()
+    seen = {}
+    orig = env.pool.rollout
+
+    def spy(models, datas, initial_state, control, **kw):
+        seen["control"] = control.copy()
+        return orig(models, datas, initial_state, control, **kw)
+    env.pool.rollout = spy
+    before = env.ctrl.copy()
+    env.step(np.ones((8, CFG.num_actions)))
+    c = seen["control"][:, :, env.act]                   # (N, decimation, n)
+    frac = (c - before[:, None, env.act]) / (env.ctrl[:, None, env.act] - before[:, None, env.act])
+    assert np.allclose(frac, (np.arange(1, env.decimation + 1) / env.decimation)[None, :, None], atol=1e-9)
+    from jx1_sim.sim_core import MujocoSim
+    sim = MujocoSim(REPO / "simulation" / "mujoco" / "jx1.xml")
+    a = sim.act[CFG.policy_joints[3]]
+    sim.set_targets({CFG.policy_joints[3]: 0.0})
+    sim.step(10)
+    sim.set_targets({CFG.policy_joints[3]: 1.0})         # new command 20 ms after the previous one
+    vals = []
+    for _ in range(10):
+        sim.step(1)
+        vals.append(sim.d.ctrl[a])
+    assert np.allclose(vals, np.arange(1, 11) / 10, atol=1e-9), vals
 
 
 def test_isaac_policy_io_schema_matches_mujoco_export():
@@ -139,6 +183,66 @@ def test_isaac_policy_io_schema_matches_mujoco_export():
     for s in a["ankle_polygons_rad"]:
         assert np.allclose(a["ankle_polygons_rad"][s], b["ankle_polygons_rad"][s], atol=1e-6)
     assert abs(tc_mod.load()["base_height"] - JX1Env(CFG, 2, nthread=1, randomize=False).base_height_target) < 0.01
+
+
+def _hw():
+    sys.path.insert(0, str(REPO / "ros2_ws" / "src" / "jx1_hw"))
+    from jx1_hw import protocol, bridge, ankle
+    return protocol, bridge, ankle
+
+
+def test_hw_protocol_frames_and_crc():
+    P, _, _ = _hw()
+    assert P.crc16(b"123456789") == 0x4B37                              # CRC-16/MODBUS check value
+    rows = [(0.1 * j, -0.2, 40.0 + j, 1.5, 0.25) for j in range(11)]
+    f = P.pack_command(77, P.RUN, rows)
+    assert len(f) == P.command_size(11)
+    seq, mode, back = P.unpack_command(f, 11)
+    assert seq == 77 and mode == P.RUN and np.allclose(back, rows, atol=1e-6)
+    st = P.HubState(seq=5, estop=True, fault=False, mode=P.DAMPING, q=[0.5] * 10, dq=[1.0] * 10, tau=[-2.0] * 10, temp=[41.0] * 10,
+                    faults=[0x80] + [0] * 9)
+    s = P.pack_state(st)
+    assert len(s) == P.state_size(10)
+    back = P.unpack_state(s, 10)
+    assert back.estop and back.mode == P.DAMPING and back.stale[0] and not back.stale[1] and np.allclose(back.q, st.q)
+    rd = P.FrameReader(P.STATE_HEAD, P.state_size(10))
+    bad = bytearray(s)
+    bad[20] ^= 0xFF                                                      # corrupted frame is dropped, stream resynchronises
+    stream = b"\x00\x13garbage" + bytes(bad) + s[:30]
+    frames = rd.feed(stream) + rd.feed(s[30:] + s)
+    assert len(frames) == 2 and rd.crc_errors == 1 and all(fr == s for fr in frames)
+
+
+def test_hw_bridge_joint_motor_roundtrip():
+    P, B, A = _hw()
+    sys.path.insert(0, str(REPO / "calculations"))
+    from jx1calc.ankle import from_design
+    from jx1calc.design import Design
+    hw = yaml.safe_load((REPO / "ros2_ws" / "src" / "jx1_hw" / "config" / "hw.yaml").read_text(encoding="utf-8"))
+    export = load_module(RL / "export.py", "jx1_export3")
+    br = B.Bridge(hw, export.policy_io(CFG, {}))
+    ref = from_design(Design())
+    rng = np.random.default_rng(4)
+    for _ in range(30):
+        tgt = {j: rng.uniform(*CFG.limits[j]) * 0.8 for j in br.hub_joints}
+        for s, poly in CFG.ankle_polygons.items():                     # ankle targets inside the reachable polygon
+            p = policy_io._project_to_convex_polygon(rng.uniform([-0.9, -0.33], [0.5, 0.33]), poly)
+            tgt[f"{s}_ankle_pitch_joint"], tgt[f"{s}_ankle_roll_joint"] = p
+        rows = br.commands(tgt)
+        # hub echoes the commanded motor positions as its measured state -> the bridge must return the joint targets
+        states = {h: P.HubState(seq=1, estop=False, fault=False, mode=P.RUN, q=[r[0] for r in rs], dq=[0.0] * len(rs),
+                                tau=[0.0] * len(rs), temp=[40.0] * len(rs), faults=[0] * len(rs)) for h, rs in rows.items()}
+        js = br.decode(states)
+        for j, v in tgt.items():
+            assert abs(js[j][0] - v) < 1e-7, (j, js[j][0], v)
+        la = br.ankle["left"]
+        assert np.allclose(la.crank_angles(tgt["left_ankle_pitch_joint"], tgt["left_ankle_roll_joint"]),
+                           ref.crank_angles(tgt["left_ankle_pitch_joint"], tgt["left_ankle_roll_joint"]), atol=1e-12)
+    # gains: the realisable ankle gains of the task are reproduced by the per-motor loops (pitch exact, roll within 2 %)
+    (kp_m, kd_m), K = br.ankle["left"].motor_gains(0.0, 0.0, [CFG.gains["left_ankle_pitch_joint"][0], CFG.gains["left_ankle_roll_joint"][0]],
+                                                    [CFG.gains["left_ankle_pitch_joint"][1], CFG.gains["left_ankle_roll_joint"][1]])
+    assert abs(K[0, 0] - CFG.gains["left_ankle_pitch_joint"][0]) < 1e-6
+    assert abs(K[1, 1] / CFG.gains["left_ankle_roll_joint"][0] - 1) < 0.02, K
 
 
 def test_normalizer_and_gae():

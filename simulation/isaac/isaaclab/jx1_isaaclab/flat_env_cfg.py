@@ -82,7 +82,8 @@ class JX1Observations:
 @configclass
 class JX1Actions:
     joint_pos = jx1.PolygonClippedJointPositionActionCfg(asset_name="robot", joint_names=POLICY, scale=R["action_scale"],
-                                                         use_default_offset=True, preserve_order=True, polygons_rad=POLYGONS)
+                                                         use_default_offset=True, preserve_order=True, polygons_rad=POLYGONS,
+                                                         hub_interpolation=R["model"].get("hub_interpolation", False))
 
 
 @configclass

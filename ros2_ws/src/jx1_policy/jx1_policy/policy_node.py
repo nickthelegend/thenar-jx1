@@ -70,8 +70,10 @@ class PolicyNode(Node):
 
     def fresh(self, t):
         to = self.get_parameter("state_timeout_s").value
+        # only the policy joints must be reported: held joints without feedback (e.g. the neck servos, not on the CAN hubs)
+        # keep their default targets
         return (self.stamp_js is not None and self.stamp_imu is not None and t - self.stamp_js < to and t - self.stamp_imu < to
-                and all(j in self.joint_pos for j in self.runner.all_joints))
+                and all(j in self.joint_pos for j in self.runner.policy_joints))
 
     def publish(self, targets: dict):
         names = self.runner.all_joints
@@ -93,7 +95,7 @@ class PolicyNode(Node):
             self.state, self.t_state = "WAIT", t
         elif self.state == "WAIT":
             self.state, self.t_state = "RAMP", t
-            self.ramp_from = {j: self.joint_pos[j] for j in self.runner.all_joints}
+            self.ramp_from = {j: self.joint_pos.get(j, self.runner.default_all[j]) for j in self.runner.all_joints}
         if self.state == "RAMP":
             a = min(1.0, (t - self.t_state) / self.get_parameter("ramp_s").value)
             self.publish({j: (1 - a) * self.ramp_from[j] + a * self.runner.default_all[j] for j in self.runner.all_joints})

@@ -26,6 +26,16 @@ joints:
   - right_ankle_roll_joint
   held:
   - waist_yaw_joint
+  - left_shoulder_pitch_joint
+  - left_shoulder_roll_joint
+  - left_shoulder_yaw_joint
+  - left_elbow_joint
+  - right_shoulder_pitch_joint
+  - right_shoulder_roll_joint
+  - right_shoulder_yaw_joint
+  - right_elbow_joint
+  - neck_yaw_joint
+  - neck_pitch_joint
 default_joint_pos:
   left_hip_yaw_joint: 0.0
   left_hip_roll_joint: 0.0
@@ -40,6 +50,16 @@ default_joint_pos:
   right_ankle_pitch_joint: -0.35
   right_ankle_roll_joint: 0.0
   waist_yaw_joint: 0.0
+  left_shoulder_pitch_joint: 0.0
+  left_shoulder_roll_joint: 0.14
+  left_shoulder_yaw_joint: 0.0
+  left_elbow_joint: -0.35
+  right_shoulder_pitch_joint: 0.0
+  right_shoulder_roll_joint: -0.14
+  right_shoulder_yaw_joint: 0.0
+  right_elbow_joint: -0.35
+  neck_yaw_joint: 0.0
+  neck_pitch_joint: 0.0
 action_scale: 0.25
 pd_gains:
   left_hip_yaw_joint:
@@ -81,6 +101,36 @@ pd_gains:
   waist_yaw_joint:
   - 150.0
   - 4.0
+  left_shoulder_pitch_joint:
+  - 40.0
+  - 1.0
+  left_shoulder_roll_joint:
+  - 40.0
+  - 1.0
+  left_shoulder_yaw_joint:
+  - 20.0
+  - 0.5
+  left_elbow_joint:
+  - 20.0
+  - 0.5
+  right_shoulder_pitch_joint:
+  - 40.0
+  - 1.0
+  right_shoulder_roll_joint:
+  - 40.0
+  - 1.0
+  right_shoulder_yaw_joint:
+  - 20.0
+  - 0.5
+  right_elbow_joint:
+  - 20.0
+  - 0.5
+  neck_yaw_joint:
+  - 5.0
+  - 0.1
+  neck_pitch_joint:
+  - 5.0
+  - 0.1
 effort_limits_Nm:
   left_hip_yaw_joint: 36.0
   left_hip_roll_joint: 60.0
@@ -95,6 +145,16 @@ effort_limits_Nm:
   right_ankle_pitch_joint: 46.0
   right_ankle_roll_joint: 51.0
   waist_yaw_joint: 36.0
+  left_shoulder_pitch_joint: 17.0
+  left_shoulder_roll_joint: 17.0
+  left_shoulder_yaw_joint: 14.0
+  left_elbow_joint: 14.0
+  right_shoulder_pitch_joint: 17.0
+  right_shoulder_roll_joint: 17.0
+  right_shoulder_yaw_joint: 14.0
+  right_elbow_joint: 14.0
+  neck_yaw_joint: 1.9
+  neck_pitch_joint: 1.9
 joint_limits_rad:
   left_hip_yaw_joint:
   - -0.698132
@@ -135,6 +195,36 @@ joint_limits_rad:
   waist_yaw_joint:
   - -1.570796
   - 1.570796
+  left_shoulder_pitch_joint:
+  - -2.96706
+  - 1.047198
+  left_shoulder_roll_joint:
+  - -0.174533
+  - 2.617994
+  left_shoulder_yaw_joint:
+  - -1.570796
+  - 1.570796
+  left_elbow_joint:
+  - -2.356194
+  - 0.087266
+  right_shoulder_pitch_joint:
+  - -2.96706
+  - 1.047198
+  right_shoulder_roll_joint:
+  - -2.617994
+  - 0.174533
+  right_shoulder_yaw_joint:
+  - -1.570796
+  - 1.570796
+  right_elbow_joint:
+  - -2.356194
+  - 0.087266
+  neck_yaw_joint:
+  - -1.396263
+  - 1.396263
+  neck_pitch_joint:
+  - -0.523599
+  - 0.785398
 ankle_polygons_rad:
   left:
   - - -0.959931
@@ -203,6 +293,7 @@ trained:
   checkpoint: model_latest.pt
   run: walk_v1_warmstart
   iteration: 1500
+  task_config: run snapshot (config.yaml next to the checkpoint)
   source_mjcf: simulation/mujoco/jx1.xml
   source_mjcf_sha256: b978d1f373b0cccf8b565ce5794eb7cdd11186673dfe4ba036f8c91c2a2fe106
   export_check:

@@ -83,6 +83,14 @@ class JX1Env:
         self._state_out = np.zeros((N, self.decimation, self.nstate))
         self._sens_out = np.zeros((N, self.decimation, m.nsensordata))
         self.ctrl = np.tile(self.ctrl_hold, (N, 1))
+        self.prev_ctrl = self.ctrl.copy()
+        rr = cfg["randomization"]
+        self.act_delay_range = rr.get("action_delay_substeps", [0, 0]) if randomize else [0, 0]
+        self.obs_delay_range = rr.get("obs_delay_substeps", [0, 0]) if randomize else [0, 0]
+        self.hub_interp = bool(cfg["model"].get("hub_interpolation", False))
+        self.act_delay = np.zeros(N, dtype=np.int64)          # physics substeps before new targets reach the motors
+        self.obs_delay = np.zeros(N, dtype=np.int64)          # substeps by which the actor's sensor data is old
+        self.obs_src = self.state.copy()                      # (possibly delayed) state the actor observation is built from
         self.actions = np.zeros((N, n))
         self.last_actions = np.zeros((N, n))
         self.last_dq = np.zeros((N, n))
@@ -148,11 +156,16 @@ class JX1Env:
         self.last_actions[ids] = 0.0
         self.last_dq[ids] = 0.0
         self.episode_step[ids] = 0
+        self.act_delay[ids] = self.rng.integers(self.act_delay_range[0], self.act_delay_range[1] + 1, size=len(ids))
+        self.obs_delay[ids] = self.rng.integers(self.obs_delay_range[0], self.obs_delay_range[1] + 1, size=len(ids))
+        self.prev_ctrl[ids] = self.ctrl_hold
+        self.obs_src[ids] = s
         self.resample_commands(ids)
 
     # ------------------------------------------------------------------ observations
-    def _base(self):
-        qp, qv = self.qpos(), self.qvel()
+    def _base(self, rows=None):
+        st = self.state if rows is None else rows
+        qp, qv = st[:, 1:1 + self.nq], st[:, 1 + self.nq:1 + self.nq + self.nv]
         quat = qp[:, 3:7]
         lin_b = policy_io.quat_rotate_inverse(quat, qv[:, 0:3])
         ang_b = qv[:, 3:6].copy()                           # free-joint angular velocity is already in the body frame
@@ -163,7 +176,7 @@ class JX1Env:
         return policy_io.gait_phase(self.state[:, 0], self.period)
 
     def observations(self, noise=True):
-        qp, qv, lin_b, ang_b, grav_b = self._base()
+        qp, qv, lin_b, ang_b, grav_b = self._base(self.obs_src)                 # what the robot's sensors report (delayed)
         q_rel = qp[:, self.qadr] - self.default
         dq = qv[:, self.dadr]
         ph = self.phase()
@@ -176,6 +189,7 @@ class JX1Env:
                                           self.actions, ph, self.obs_scales, self.cfg["observation"]["clip"])
         clean = policy_io.build_observation(ang_b, grav_b, self.commands, q_rel, dq, self.actions, ph, self.obs_scales,
                                             self.cfg["observation"]["clip"]) if nz else obs
+        qp, qv, lin_b, _, _ = self._base()                                   # critic: true current state
         contact = (self.foot_force > 1.0).astype(np.float64)
         priv = np.concatenate([clean, lin_b * self.obs_scales["lin_vel"], (qp[:, 2:3] - self.base_height_target) * 5.0, contact,
                                self.foot_pos[:, :, 2] * 10.0], axis=1)
@@ -194,10 +208,20 @@ class JX1Env:
         targets = policy_io.actions_to_targets(self.actions, self.default, self.action_scale, self.lower, self.upper)
         targets = policy_io.clip_ankle_targets(targets, self.joints, self.cfg.ankle_polygons)
         self.ctrl[:, self.act] = targets
-        control = np.repeat(self.ctrl[:, None, :], self.decimation, axis=1)
+        if self.hub_interp:
+            # the CAN hubs ramp each new host target linearly over the next host period (firmware command_for(): alpha)
+            ramp = (np.arange(1, self.decimation + 1) / self.decimation)[None, :, None]
+            control = self.prev_ctrl[:, None, :] + ramp * (self.ctrl - self.prev_ctrl)[:, None, :]
+        else:
+            control = np.repeat(self.ctrl[:, None, :], self.decimation, axis=1)
+        for d in range(1, min(self.decimation, self.act_delay_range[1] + 1)):
+            late = self.act_delay >= d                         # substep d-1 still runs on the previous targets
+            control[late, d - 1, :] = self.prev_ctrl[late]
+        self.prev_ctrl[:] = self.ctrl
         self.pool.rollout(self.model_list, self.datas, self.state, control, nstep=self.decimation,
                           state=self._state_out, sensordata=self._sens_out, skip_checks=True)
         self.state[:] = self._state_out[:, -1, :]
+        self.obs_src[:] = self._state_out[np.arange(self.N), self.decimation - 1 - self.obs_delay, :]
         self._sense(self._sens_out)
         self.episode_step += 1
         self.global_step += 1
@@ -206,6 +230,7 @@ class JX1Env:
         if bad.any():
             self.unstable_resets += int(bad.sum())
             self.state[bad] = self.home_state
+            self.obs_src[bad] = self.home_state
             self._sens_out[bad] = 0.0
             self._sense(self._sens_out)
 

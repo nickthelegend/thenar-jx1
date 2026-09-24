@@ -47,6 +47,8 @@ class MujocoSim:
 
     def reset(self, base_xy=(0.0, 0.0)):
         m, d = self.m, self.d
+        if hasattr(self, "_t_cmd"):
+            del self._t_cmd
         mujoco.mj_resetData(m, d)
         pose = self.default_pose()
         for j, a in self.act.items():
@@ -58,14 +60,29 @@ class MujocoSim:
         d.qpos[2] = 1.0 - min(d.site_xpos[s][2] for s in self.soles) + 0.002
         mujoco.mj_forward(m, d)
 
+    hub_interpolation = True          # ramp each new target over the command period, like the CAN hubs (firmware alpha)
+
     def set_targets(self, targets: dict):
+        t = self.d.time
+        if not hasattr(self, "_t_cmd"):
+            self._t_cmd, self._period, self._from, self._to = t, 0.02, self.d.ctrl.copy(), self.d.ctrl.copy()
+        if t > self._t_cmd:
+            self._period = min(max(t - self._t_cmd, 0.005), 0.04)
+        self._from = self.d.ctrl.copy()                 # where the ramp currently is
+        self._to = self._from.copy()
         for j, v in targets.items():
             a = self.act.get(j)
             if a is not None:
-                self.d.ctrl[a] = v
+                self._to[a] = v
+        self._t_cmd = t
+        if not self.hub_interpolation:
+            self.d.ctrl[:] = self._to
 
     def step(self, n=1):
         for _ in range(n):
+            if self.hub_interpolation and hasattr(self, "_t_cmd"):
+                alpha = min(1.0, (self.d.time + self.dt - self._t_cmd) / self._period)
+                self.d.ctrl[:] = self._from + alpha * (self._to - self._from)
             mujoco.mj_step(self.m, self.d)
 
     def joint_state(self):

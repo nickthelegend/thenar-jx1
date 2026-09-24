@@ -108,14 +108,28 @@ class PolygonClippedJointPositionAction(JointPositionAction):
                         if f"{s}_ankle_pitch_joint" in names]
 
     def process_actions(self, actions: torch.Tensor):
+        prev = getattr(self, "_applied", None)
         super().process_actions(actions)
         p = torch.clamp(self._processed_actions, self._lo, self._hi)
         for ip, ir, poly in self._ankles:
             p[:, [ip, ir]] = project_to_polygon(p[:, [ip, ir]], poly)
         self._processed_actions = p
+        self._from = p.clone() if prev is None else prev.clone()
+        self._substep = 0
+
+    def apply_actions(self):
+        """CAN-hub first-order hold: ramp from the previous to the new target over the decimation (firmware alpha)."""
+        if not self.cfg.hub_interpolation:
+            self._applied = self._processed_actions
+        else:
+            self._substep += 1
+            a = min(1.0, self._substep / self._env.cfg.decimation)
+            self._applied = self._from + a * (self._processed_actions - self._from)
+        self._asset.set_joint_position_target(self._applied, joint_ids=self._joint_ids)
 
 
 @configclass
 class PolygonClippedJointPositionActionCfg(JointPositionActionCfg):
     class_type: type = PolygonClippedJointPositionAction
     polygons_rad: dict = {}
+    hub_interpolation: bool = True

@@ -50,6 +50,7 @@ def load(config_path: Path | None = None) -> dict:
     jm = yaml.safe_load((REPO / "simulation" / "joint_map.yaml").read_text(encoding="utf-8"))
     joints = [j["name"] for j in jm["joints"]]
     limits = {j["name"]: (j["lower_rad"], j["upper_rad"]) for j in jm["joints"]}
+    classes = {j["name"]: str(j["actuator_class"]).split()[0] for j in jm["joints"]}
     effort, velocity, links = {}, {}, []
     if URDF.exists():
         root = ET.parse(URDF).getroot()
@@ -70,6 +71,7 @@ def load(config_path: Path | None = None) -> dict:
         "effort": effort,
         "velocity": velocity,
         "links": links,
+        "classes": classes,
         "armature": mjcf_armature(),
         "base_height": base_height(cfg, jm),
         "polygons_deg": {s: jm["coupled_limits"]["ankle_pitch_roll"][f"{s}_polygon_deg"] for s in ("left", "right")},
@@ -85,7 +87,10 @@ def policy_io(tc: dict, meta: dict) -> dict:
     """policy_io.yaml content (same schema as rl/export.py) for a policy trained in Isaac Lab."""
     import math
     raw = tc["raw"]
-    present = tc["present"]
+    present = tc["joints"]                                   # whole robot (joint_map), like rl/export.py
+    class_effort = {"XL": 120.0, "L": 60.0, "M": 36.0, "S": 17.0, "XS": 14.0, "servo": 1.9}
+    effort = {j: tc["effort"].get(j, 46.0 if "ankle_pitch" in j else 51.0 if "ankle_roll" in j else class_effort[tc["classes"][j]])
+              for j in present}
     n = len(tc["policy_joints"])
     return {
         "format": "jx1-policy-io/1",
@@ -96,7 +101,7 @@ def policy_io(tc: dict, meta: dict) -> dict:
         "default_joint_pos": {j: tc["default_pos"][j] for j in present},
         "action_scale": raw["action_scale"],
         "pd_gains": {j: list(tc["gains"][j]) for j in present},
-        "effort_limits_Nm": {j: tc["effort"][j] for j in present if j in tc["effort"]},
+        "effort_limits_Nm": effort,
         "joint_limits_rad": {j: list(tc["limits"][j]) for j in present},
         "ankle_polygons_rad": {s: [[round(math.radians(a), 6), round(math.radians(b), 6)] for a, b in p] for s, p in tc["polygons_deg"].items()},
         "observation": {"size": 9 + 3 * n + 2, "layout": OBS_LAYOUT, "scales": raw["observation"]["scales"], "clip": raw["observation"]["clip"]},
