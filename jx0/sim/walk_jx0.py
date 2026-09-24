@@ -8,7 +8,7 @@
 Pass: no fall, final position within 5 cm + 10 % of the planned distance, heading within 10 deg.
 Outputs jx0/results/walking.json, jx0/results/images/walk_*.png and walk.gif, and jx0/software/jx0bot/gaits/*.json
 (the verified joint trajectories the robot plays).
-Usage: .venv/Scripts/python jx0/sim/walk_jx0.py [--gait all|forward|turn_left|...] [--no-render] [--kp 40]
+Usage: .venv/Scripts/python jx0/sim/walk_jx0.py [--gait all|forward|turn_left|...] [--no-render] [--kp 60]
 """
 from __future__ import annotations
 
@@ -67,7 +67,7 @@ def plan(model, design, name):
     return g, synthesize(model, design, g)
 
 
-def run(name, kp=40.0, kd=0.15, bus_hz=50.0, stabiliser=True, render=False):
+def run(name, kp=60.0, kd=0.6, bus_hz=50.0, stabiliser=True, render=False):
     design = Design(DESIGN)
     servo_leg = design.act_classes["ST"]
     m = mujoco.MjModel.from_xml_string(build(design))
@@ -179,7 +179,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--gait", default="all", choices=["all"] + list(GAITS))
     ap.add_argument("--no-render", action="store_true")
-    ap.add_argument("--kp", type=float, default=40.0)
+    ap.add_argument("--kp", type=float, default=60.0)
     ap.add_argument("--no-stabiliser", action="store_true")
     a = ap.parse_args()
     names = list(GAITS) if a.gait == "all" else [a.gait]

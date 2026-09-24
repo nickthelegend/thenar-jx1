@@ -21,10 +21,10 @@
    },
    "speed_m_s": 0.067,
    "servo_model": {
-    "kp_nm_per_rad": 40.0,
-    "kd_nm_s_per_rad": 0.15,
+    "kp_nm_per_rad": 60.0,
+    "kd_nm_s_per_rad": 0.6,
     "bus_hz": 50.0,
-    "stall_nm": 1.91,
+    "stall_nm": 2.94,
     "no_load_rad_s": 4.72,
     "label": "ASSUMED servo stiffness; datasheet stall/speed"
    },
@@ -38,39 +38,33 @@
    "planned_duration_s": 7.95,
    "distance_m": {
     "plan": 0.34,
-    "sim": 0.327
+    "sim": 0.341
    },
-   "final_position_error_m": 0.015,
+   "final_position_error_m": 0.001,
    "heading_deg": {
     "plan": 0.0,
-    "error": 7.9
+    "error": -0.1
    },
-   "max_tilt_deg": 1.9,
+   "max_tilt_deg": 0.8,
    "tracking_error_deg": {
-    "rms": 1.04,
-    "max": 7.2
+    "rms": 0.63,
+    "max": 4.2
    },
    "peak_torque_fraction_of_stall": {
-    "l_hip_yaw": 0.37,
-    "l_hip_roll": 0.88,
-    "l_hip_pitch": 0.77,
-    "l_knee": 0.99,
-    "l_ankle_pitch": 1.0,
-    "l_ankle_roll": 0.89,
-    "r_hip_yaw": 0.4,
-    "r_hip_roll": 0.84,
-    "r_hip_pitch": 0.78,
-    "r_knee": 1.0,
-    "r_ankle_pitch": 1.0,
-    "r_ankle_roll": 1.0
+    "l_hip_yaw": 0.07,
+    "l_hip_roll": 0.58,
+    "l_hip_pitch": 0.68,
+    "l_knee": 0.79,
+    "l_ankle_pitch": 0.72,
+    "l_ankle_roll": 0.53,
+    "r_hip_yaw": 0.06,
+    "r_hip_roll": 0.57,
+    "r_hip_pitch": 0.68,
+    "r_knee": 0.79,
+    "r_ankle_pitch": 0.72,
+    "r_ankle_roll": 0.53
    },
-   "saturated_fraction": {
-    "l_knee": 0.0,
-    "l_ankle_pitch": 0.019,
-    "r_knee": 0.0,
-    "r_ankle_pitch": 0.018,
-    "r_ankle_roll": 0.0
-   },
+   "saturated_fraction": {},
    "pass": true
   },
   "forward_slow": {
@@ -92,10 +86,10 @@
    },
    "speed_m_s": 0.05,
    "servo_model": {
-    "kp_nm_per_rad": 40.0,
-    "kd_nm_s_per_rad": 0.15,
+    "kp_nm_per_rad": 60.0,
+    "kd_nm_s_per_rad": 0.6,
     "bus_hz": 50.0,
-    "stall_nm": 1.91,
+    "stall_nm": 2.94,
     "no_load_rad_s": 4.72,
     "label": "ASSUMED servo stiffness; datasheet stall/speed"
    },
@@ -109,39 +103,33 @@
    "planned_duration_s": 6.75,
    "distance_m": {
     "plan": 0.195,
-    "sim": 0.204
+    "sim": 0.198
    },
-   "final_position_error_m": 0.009,
+   "final_position_error_m": 0.003,
    "heading_deg": {
     "plan": 0.0,
-    "error": -6.1
+    "error": -0.1
    },
-   "max_tilt_deg": 2.0,
+   "max_tilt_deg": 0.8,
    "tracking_error_deg": {
-    "rms": 1.03,
-    "max": 7.2
+    "rms": 0.57,
+    "max": 3.6
    },
    "peak_torque_fraction_of_stall": {
-    "l_hip_yaw": 0.36,
-    "l_hip_roll": 0.9,
-    "l_hip_pitch": 0.76,
-    "l_knee": 1.0,
-    "l_ankle_pitch": 1.0,
-    "l_ankle_roll": 0.89,
-    "r_hip_yaw": 0.4,
-    "r_hip_roll": 0.83,
-    "r_hip_pitch": 0.71,
-    "r_knee": 1.0,
-    "r_ankle_pitch": 1.0,
-    "r_ankle_roll": 1.0
+    "l_hip_yaw": 0.07,
+    "l_hip_roll": 0.58,
+    "l_hip_pitch": 0.62,
+    "l_knee": 0.76,
+    "l_ankle_pitch": 0.63,
+    "l_ankle_roll": 0.53,
+    "r_hip_yaw": 0.04,
+    "r_hip_roll": 0.57,
+    "r_hip_pitch": 0.63,
+    "r_knee": 0.76,
+    "r_ankle_pitch": 0.63,
+    "r_ankle_roll": 0.53
    },
-   "saturated_fraction": {
-    "l_knee": 0.001,
-    "l_ankle_pitch": 0.019,
-    "r_knee": 0.001,
-    "r_ankle_pitch": 0.016,
-    "r_ankle_roll": 0.0
-   },
+   "saturated_fraction": {},
    "pass": true
   },
   "backward": {
@@ -163,10 +151,10 @@
    },
    "speed_m_s": 0.042,
    "servo_model": {
-    "kp_nm_per_rad": 40.0,
-    "kd_nm_s_per_rad": 0.15,
+    "kp_nm_per_rad": 60.0,
+    "kd_nm_s_per_rad": 0.6,
     "bus_hz": 50.0,
-    "stall_nm": 1.91,
+    "stall_nm": 2.94,
     "no_load_rad_s": 4.72,
     "label": "ASSUMED servo stiffness; datasheet stall/speed"
    },
@@ -180,37 +168,33 @@
    "planned_duration_s": 6.75,
    "distance_m": {
     "plan": 0.163,
-    "sim": 0.114
+    "sim": 0.156
    },
-   "final_position_error_m": 0.052,
+   "final_position_error_m": 0.007,
    "heading_deg": {
     "plan": 0.0,
-    "error": 2.9
+    "error": -0.1
    },
-   "max_tilt_deg": 1.9,
+   "max_tilt_deg": 0.8,
    "tracking_error_deg": {
-    "rms": 1.06,
-    "max": 7.3
+    "rms": 0.55,
+    "max": 3.5
    },
    "peak_torque_fraction_of_stall": {
-    "l_hip_yaw": 0.39,
-    "l_hip_roll": 0.81,
-    "l_hip_pitch": 0.72,
-    "l_knee": 0.95,
-    "l_ankle_pitch": 1.0,
-    "l_ankle_roll": 0.81,
-    "r_hip_yaw": 0.38,
-    "r_hip_roll": 0.9,
-    "r_hip_pitch": 0.64,
-    "r_knee": 1.0,
-    "r_ankle_pitch": 1.0,
-    "r_ankle_roll": 0.88
+    "l_hip_yaw": 0.05,
+    "l_hip_roll": 0.56,
+    "l_hip_pitch": 0.55,
+    "l_knee": 0.74,
+    "l_ankle_pitch": 0.64,
+    "l_ankle_roll": 0.52,
+    "r_hip_yaw": 0.04,
+    "r_hip_roll": 0.55,
+    "r_hip_pitch": 0.55,
+    "r_knee": 0.76,
+    "r_ankle_pitch": 0.64,
+    "r_ankle_roll": 0.52
    },
-   "saturated_fraction": {
-    "l_ankle_pitch": 0.023,
-    "r_knee": 0.006,
-    "r_ankle_pitch": 0.029
-   },
+   "saturated_fraction": {},
    "pass": true
   },
   "turn_left": {
@@ -232,10 +216,10 @@
    },
    "speed_m_s": 0.0,
    "servo_model": {
-    "kp_nm_per_rad": 40.0,
-    "kd_nm_s_per_rad": 0.15,
+    "kp_nm_per_rad": 60.0,
+    "kd_nm_s_per_rad": 0.6,
     "bus_hz": 50.0,
-    "stall_nm": 1.91,
+    "stall_nm": 2.94,
     "no_load_rad_s": 4.72,
     "label": "ASSUMED servo stiffness; datasheet stall/speed"
    },
@@ -249,39 +233,34 @@
    "planned_duration_s": 6.75,
    "distance_m": {
     "plan": 0.008,
-    "sim": 0.039
+    "sim": 0.012
    },
-   "final_position_error_m": 0.032,
+   "final_position_error_m": 0.005,
    "heading_deg": {
     "plan": 70.0,
-    "error": -13.1
+    "error": -1.1
    },
-   "max_tilt_deg": 1.9,
+   "max_tilt_deg": 0.8,
    "tracking_error_deg": {
-    "rms": 1.05,
-    "max": 7.9
+    "rms": 0.53,
+    "max": 3.5
    },
    "peak_torque_fraction_of_stall": {
-    "l_hip_yaw": 0.49,
-    "l_hip_roll": 0.87,
-    "l_hip_pitch": 0.59,
-    "l_knee": 1.0,
-    "l_ankle_pitch": 1.0,
-    "l_ankle_roll": 0.79,
-    "r_hip_yaw": 0.54,
-    "r_hip_roll": 0.75,
-    "r_hip_pitch": 0.63,
-    "r_knee": 1.0,
-    "r_ankle_pitch": 1.0,
-    "r_ankle_roll": 0.9
+    "l_hip_yaw": 0.21,
+    "l_hip_roll": 0.54,
+    "l_hip_pitch": 0.35,
+    "l_knee": 0.73,
+    "l_ankle_pitch": 0.68,
+    "l_ankle_roll": 0.52,
+    "r_hip_yaw": 0.2,
+    "r_hip_roll": 0.55,
+    "r_hip_pitch": 0.45,
+    "r_knee": 0.76,
+    "r_ankle_pitch": 0.68,
+    "r_ankle_roll": 0.5
    },
-   "saturated_fraction": {
-    "l_knee": 0.002,
-    "l_ankle_pitch": 0.023,
-    "r_knee": 0.003,
-    "r_ankle_pitch": 0.021
-   },
-   "pass": false
+   "saturated_fraction": {},
+   "pass": true
   },
   "turn_right": {
    "gait": "turn_right",
@@ -302,10 +281,10 @@
    },
    "speed_m_s": 0.0,
    "servo_model": {
-    "kp_nm_per_rad": 40.0,
-    "kd_nm_s_per_rad": 0.15,
+    "kp_nm_per_rad": 60.0,
+    "kd_nm_s_per_rad": 0.6,
     "bus_hz": 50.0,
-    "stall_nm": 1.91,
+    "stall_nm": 2.94,
     "no_load_rad_s": 4.72,
     "label": "ASSUMED servo stiffness; datasheet stall/speed"
    },
@@ -319,39 +298,33 @@
    "planned_duration_s": 6.75,
    "distance_m": {
     "plan": 0.008,
-    "sim": 0.023
+    "sim": 0.005
    },
-   "final_position_error_m": 0.028,
+   "final_position_error_m": 0.003,
    "heading_deg": {
     "plan": -70.0,
-    "error": 5.0
+    "error": 1.0
    },
-   "max_tilt_deg": 1.9,
+   "max_tilt_deg": 0.8,
    "tracking_error_deg": {
-    "rms": 1.03,
-    "max": 7.3
+    "rms": 0.53,
+    "max": 3.5
    },
    "peak_torque_fraction_of_stall": {
-    "l_hip_yaw": 0.56,
-    "l_hip_roll": 0.82,
-    "l_hip_pitch": 0.66,
-    "l_knee": 1.0,
-    "l_ankle_pitch": 1.0,
-    "l_ankle_roll": 1.0,
-    "r_hip_yaw": 0.51,
-    "r_hip_roll": 0.82,
-    "r_hip_pitch": 0.64,
-    "r_knee": 1.0,
-    "r_ankle_pitch": 1.0,
-    "r_ankle_roll": 0.9
+    "l_hip_yaw": 0.2,
+    "l_hip_roll": 0.56,
+    "l_hip_pitch": 0.44,
+    "l_knee": 0.73,
+    "l_ankle_pitch": 0.7,
+    "l_ankle_roll": 0.51,
+    "r_hip_yaw": 0.21,
+    "r_hip_roll": 0.54,
+    "r_hip_pitch": 0.42,
+    "r_knee": 0.76,
+    "r_ankle_pitch": 0.7,
+    "r_ankle_roll": 0.52
    },
-   "saturated_fraction": {
-    "l_knee": 0.002,
-    "l_ankle_pitch": 0.023,
-    "l_ankle_roll": 0.0,
-    "r_knee": 0.001,
-    "r_ankle_pitch": 0.022
-   },
+   "saturated_fraction": {},
    "pass": true
   },
   "side_left": {
@@ -373,10 +346,10 @@
    },
    "speed_m_s": 0.0,
    "servo_model": {
-    "kp_nm_per_rad": 40.0,
-    "kd_nm_s_per_rad": 0.15,
+    "kp_nm_per_rad": 60.0,
+    "kd_nm_s_per_rad": 0.6,
     "bus_hz": 50.0,
-    "stall_nm": 1.91,
+    "stall_nm": 2.94,
     "no_load_rad_s": 4.72,
     "label": "ASSUMED servo stiffness; datasheet stall/speed"
    },
@@ -390,40 +363,35 @@
    "planned_duration_s": 5.54,
    "distance_m": {
     "plan": 0.075,
-    "sim": 0.087
+    "sim": 0.075
    },
-   "final_position_error_m": 0.04,
+   "final_position_error_m": 0.004,
    "heading_deg": {
     "plan": 0.0,
-    "error": -5.0
+    "error": -0.1
    },
-   "max_tilt_deg": 2.3,
+   "max_tilt_deg": 0.8,
    "tracking_error_deg": {
-    "rms": 1.08,
-    "max": 7.2
+    "rms": 0.52,
+    "max": 3.8
    },
    "peak_torque_fraction_of_stall": {
-    "l_hip_yaw": 0.36,
-    "l_hip_roll": 0.77,
-    "l_hip_pitch": 0.59,
-    "l_knee": 1.0,
-    "l_ankle_pitch": 1.0,
-    "l_ankle_roll": 0.83,
-    "r_hip_yaw": 0.39,
-    "r_hip_roll": 0.87,
-    "r_hip_pitch": 0.63,
-    "r_knee": 1.0,
-    "r_ankle_pitch": 1.0,
-    "r_ankle_roll": 0.86
+    "l_hip_yaw": 0.06,
+    "l_hip_roll": 0.51,
+    "l_hip_pitch": 0.42,
+    "l_knee": 0.71,
+    "l_ankle_pitch": 0.7,
+    "l_ankle_roll": 0.56,
+    "r_hip_yaw": 0.02,
+    "r_hip_roll": 0.63,
+    "r_hip_pitch": 0.46,
+    "r_knee": 0.75,
+    "r_ankle_pitch": 0.69,
+    "r_ankle_roll": 0.61
    },
-   "saturated_fraction": {
-    "l_knee": 0.001,
-    "l_ankle_pitch": 0.026,
-    "r_knee": 0.003,
-    "r_ankle_pitch": 0.026
-   },
+   "saturated_fraction": {},
    "pass": true
   }
  },
- "pass": false
+ "pass": true
 }

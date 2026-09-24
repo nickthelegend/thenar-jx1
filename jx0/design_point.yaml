@@ -3,9 +3,9 @@
 # dynamics) sizes it unchanged. Every value carries an evidence label: VERIFIED / MEASURED / CALCULATED / ESTIMATED /
 # ASSUMED / UNVERIFIED. Masses are ASSUMED until the CAD mass properties replace them.
 meta:
-  version: "0.1"
+  version: "0.2"
   date: "2026-09-24"
-  status: "Concept: serial-bus hobby servos, PETG structure, Raspberry Pi 5; budget < ₹50,000"
+  status: "CAD v0.2 (jx0/cad, SolidWorks): 12 V ST3215 leg servos, PETG parts, Raspberry Pi 4; parts list ₹46,858 (jx0/bom)"
 
 frames:
   convention: "ROS REP-103: x forward, y left, z up. Joint rotation positive by right-hand rule about the listed axis."
@@ -13,8 +13,8 @@ frames:
   zero_pose: "legs straight and vertical, feet flat and parallel, arms hanging, all joint angles 0"
 
 overall:
-  height_m: {value: 0.46, label: ASSUMED, note: "sole to top of head; hobby-humanoid class (Bioloid / TonyPi size)"}
-  mass_target_kg: {value: 1.8, label: ASSUMED}
+  height_m: {value: 0.505, label: CALCULATED, note: "CAD: sole 235 mm below the hip centres, head top 269.5 mm above"}
+  mass_target_kg: {value: 2.0, label: ESTIMATED}
 
 geometry:
   sole_to_ankle_m: {value: 0.035, label: ASSUMED, note: "foot plate 8 mm + ankle-roll servo block; pitch and roll axes intersect"}
@@ -24,8 +24,8 @@ geometry:
   foot:
     length_m: {value: 0.120, label: ASSUMED}
     width_m: {value: 0.070, label: ASSUMED}
-    ankle_from_heel_m: {value: 0.050, label: ASSUMED}
-    thickness_m: {value: 0.008, label: ASSUMED, note: "PETG plate 6 mm + 2 mm rubber"}
+    ankle_from_heel_m: {value: 0.062, label: CALCULATED, note: "CAD foot x -62..58 mm (the ankle-roll servo sits over the heel)"}
+    thickness_m: {value: 0.007, label: CALCULATED, note: "PETG sole 6 mm + 1 mm rubber"}
   torso:
     pelvis_to_shoulder_m: {value: 0.140, label: ASSUMED}
     shoulder_width_m: {value: 0.170, label: ASSUMED}
@@ -47,10 +47,10 @@ joint_ranges_deg:
 # inertia estimate. Reflected rotor inertia ASSUMED: ~0.4 g·cm² rotor x (1:345 gearbox)^2 ≈ 0.005 kg·m² — hobby servos are
 # NOT back-drivable, so this is large relative to the links; the sizing report shows its effect.
 actuator_classes:
-  ST: {mass_kg: 0.055, diameter_m: 0.035, length_m: 0.045, reflected_inertia_kgm2: 0.005,
-       stall_torque_nm: 1.91, rated_torque_nm: 0.64, no_load_speed_rad_s: 4.72,
-       product: "Waveshare ST3215 serial bus servo (19.5 kg·cm = 1.91 N·m stall at 7.4 V)", label: ASSUMED,
-       note: "rated = 1/3 of stall (hobby-servo rule of thumb, ASSUMED); no-load 0.222 s/60 deg at 7.4 V (ASSUMED)"}
+  ST: {mass_kg: 0.089, diameter_m: 0.035, length_m: 0.045, reflected_inertia_kgm2: 0.005,
+       stall_torque_nm: 2.94, rated_torque_nm: 0.98, no_load_speed_rad_s: 4.72,
+       product: "Feetech ST3215-C018 / Waveshare ST3215 12 V serial bus servo (30 kg·cm stall, 10 kg·cm rated at 12 V)", label: VERIFIED,
+       note: "Waveshare product page: 30 kg·cm and 0.222 s/60 deg (45 rpm) at 12 V, 0.089 kg; Evelta: 10 kg·cm rated. Reflected inertia ASSUMED. research/raw/jx0_india_sourcing_raw.md"}
 
 leg_actuator_assignment:
   hip_yaw: ST
@@ -67,17 +67,17 @@ ankle_linkage:
   foot_lever_m: {value: 0.020, label: ASSUMED, note: "unused by JX0 (serial ankle)"}
   rod_half_spacing_m: {value: 0.0, label: ASSUMED, note: "0 = no roll coupling: the serial ankle maps motor = joint"}
   crank_half_spacing_m: {value: 0.0, label: ASSUMED}
-  motor_A_height_above_ankle_m: {value: 0.025, label: ASSUMED, note: "ankle-pitch servo centre above the ankle axis"}
-  motor_B_height_above_ankle_m: {value: 0.005, label: ASSUMED, note: "ankle-roll servo centre, in the ankle block"}
-  motor_height_above_ankle_m: {value: 0.015, label: ASSUMED}
+  motor_A_height_above_ankle_m: {value: 0.0125, label: CALCULATED, note: "CAD: ankle-pitch servo case centre 12.5 mm above the ankle axis"}
+  motor_B_height_above_ankle_m: {value: 0.0, label: CALCULATED, note: "CAD: ankle-roll servo on the roll axis (37 mm behind it: lumped on the shin here)"}
+  motor_height_above_ankle_m: {value: 0.006, label: CALCULATED}
 
 # Smaller-robot layout (jx1calc.design reads this block; JX1 uses the defaults)
 layout:
-  pelvis_box_m: [0.06, 0.12, 0.04]
-  hip_yaw_actuator_z_m: 0.030           # hip-yaw servo centre above the hip centre
+  pelvis_box_m: [0.051, 0.124, 0.018]
+  hip_yaw_actuator_z_m: 0.0486          # CAD: hip-yaw servo centre 48.6 mm above the hip centre
   actuator_offsets_m:
-    hip_roll: [-0.020, 0.0, 0.0]        # hip-roll servo behind the hip centre, axis x
-    hip_pitch: [0.0, 0.018, 0.0]        # hip-pitch servo lateral of the hip centre, axis y
+    hip_roll: [-0.0336, -0.0125, 0.0]   # CAD: hip-roll servo behind the hip centre (case toward the robot's centre)
+    hip_pitch: [0.0125, 0.0, 0.0]       # CAD: hip-pitch servo case forward of the hip centre
   ankle_actuator_y_m: 0.0
   structure_box_m:
     hip_yaw_link: [0.05, 0.03, 0.04]
@@ -89,45 +89,45 @@ layout:
 # Mass budget per link (printed structure + mounted servos, via `carries`). COM in the link frame (m).
 mass_budget:
   pelvis:
-    structure_kg: {value: 0.080, label: ASSUMED, note: "PETG pelvis frame + hip-yaw servo mounts"}
+    structure_kg: {value: 0.033, label: ESTIMATED, note: "CAD JX0_Pelvis printed 23.3 g + screws"}
     carries: [hip_yaw, hip_yaw]
     com_m: [0.0, 0.0, 0.025]
   upper_body:
-    mass_kg: {value: 0.78, label: ASSUMED, note: "torso frame 0.18, Raspberry Pi 5 + cooler 0.07, 2S LiPo 2200 mAh 0.13, bus adapter + buck + IMU 0.04, speaker + mic + round display 0.05, wiring 0.06, arms (2 x 3 servos + printed links) 0.18, head + neck servo 0.07"}
-    com_m: [0.0, 0.0, 0.085]
-    inertia_box_m: [0.08, 0.17, 0.20]
+    mass_kg: {value: 0.687, label: ESTIMATED, note: "CAD printed torso 97 g + head 43 g + arm links 30 g; 7 MG90S 94 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, driver + UBEC + buck 35 g, sensors/voice/face/camera 27 g, switch 10 g, wiring 60 g, screws 20 g"}
+    com_m: [0.0, 0.0, 0.130]
+    inertia_box_m: [0.08, 0.13, 0.20]
   hip_yaw_link:
-    structure_kg: {value: 0.015, label: ASSUMED}
+    structure_kg: {value: 0.014, label: ESTIMATED, note: "CAD 9.0 g + screws"}
     carries: [hip_roll]
     com_m: [-0.010, 0.0, -0.005]
   hip_roll_link:
-    structure_kg: {value: 0.015, label: ASSUMED}
+    structure_kg: {value: 0.010, label: ESTIMATED, note: "CAD 4.8 g + screws"}
     carries: [hip_pitch]
     com_m: [0.0, 0.010, 0.0]
   thigh:
-    structure_kg: {value: 0.030, label: ASSUMED}
+    structure_kg: {value: 0.017, label: ESTIMATED, note: "CAD 11.7 g + screws"}
     carries: [knee]
     com_m: [0.0, 0.0, -0.055]
   shin:
-    structure_kg: {value: 0.030, label: ASSUMED}
+    structure_kg: {value: 0.016, label: ESTIMATED, note: "CAD 11.0 g + screws"}
     carries: [ankle_A, ankle_B]
     com_m: [0.0, 0.0, -0.050]
   ankle_cross:
-    structure_kg: {value: 0.008, label: ASSUMED}
+    structure_kg: {value: 0.011, label: ESTIMATED, note: "CAD ankle bracket 7.2 g + screws"}
     carries: []
     com_m: [0.0, 0.0, 0.0]
   foot:
-    structure_kg: {value: 0.045, label: ASSUMED, note: "PETG sole 120 x 70 x 6 mm + rubber pad"}
+    structure_kg: {value: 0.044, label: ESTIMATED, note: "CAD foot 36.3 g + 1 mm rubber pad"}
     carries: []
     com_m: [0.010, 0.0, -0.030]
 
 # Upper body (arms and head) — used by the simulation model; lumped into upper_body for the leg analysis.
 upper_body_geometry:
-  shoulder_pitch_origin: {value: [0.0, 0.085, 0.140], label: ASSUMED, note: "pelvis -> left shoulder centre (right mirrors y)"}
-  upper_arm_m: {value: 0.070, label: ASSUMED}
-  forearm_m: {value: 0.075, label: ASSUMED}
-  neck_yaw_origin: {value: [0.0, 0.0, 0.160], label: ASSUMED}
-  head_size_m: {value: [0.07, 0.08, 0.07], label: ASSUMED}
+  shoulder_pitch_origin: {value: [0.0, 0.066, 0.176], label: CALCULATED, note: "CAD: shoulder-pitch axis at the torso side wall"}
+  upper_arm_m: {value: 0.055, label: CALCULATED, note: "CAD: shoulder-roll axis to elbow axis"}
+  forearm_m: {value: 0.085, label: CALCULATED}
+  neck_yaw_origin: {value: [0.0, 0.0, 0.1975], label: CALCULATED}
+  head_size_m: {value: [0.07, 0.08, 0.072], label: CALCULATED}
 
 upper_body_joint_ranges_deg:
   shoulder_pitch: {min: -180, max: 60,  label: ASSUMED, note: "- = arm raises forward"}
