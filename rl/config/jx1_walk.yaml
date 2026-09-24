@@ -76,10 +76,13 @@ gait:                                            # phase clock shared by actor, 
   offset: 0.5                                    # right leg phase = left + offset
   stance_fraction: 0.55
   swing_height_m: 0.08
+  # stand mode (OI-27): |(vx, vy, wz)| below this = stand still. The clock features read 0, the contact reward wants both
+  # feet down and there is no swing target (a free-running clock made the policy step in place: 163 W standing)
+  stand_command_threshold: 0.1
 
 commands:
   resample_s: 10.0
-  zero_fraction: 0.1                             # share of envs commanded to stand still
+  zero_fraction: 0.2                             # share of envs commanded to stand still (0.1 before the stand mode)
   ranges: {lin_vel_x: [-0.4, 0.8], lin_vel_y: [-0.3, 0.3], ang_vel_yaw: [-0.6, 0.6]}
 
 episode_s: 20.0
@@ -125,11 +128,11 @@ randomization:
   push_velocity_m_s: 0.5
   init_joint_noise: 0.1
   init_base_vel: 0.2
-  # latency (substeps of 5 ms, at most decimation - 1). The hardware-in-the-loop chain (policy -> hw_node -> hub
-  # protocol -> hub twin) tracked 0.3 rad/s turns at 62 % vs 85 % in pure MuJoCo; sim2sim.py with added delays
-  # reproduces that at ~30 ms obs + 10 ms actuation, so training now covers 0-15 ms sensing and 0-10 ms actuation
-  action_delay_substeps: [0, 2]                   # 0-10 ms transport latency (host -> hub -> CAN) on top of the hub ramp
-  obs_delay_substeps: [0, 3]                      # 0-15 ms sensing latency (IMU / joint feedback / ROS hops)
+  # latency (substeps of 5 ms, at most decimation - 1). walk_v4 (jx1_walk_sym_latency) trained with 0-10 / 0-15 ms and
+  # came out worse than jx1_walk_rough, which was trained with 0-5 / 0-5 ms and still tracks 0.3 rad/s turns at 89 %
+  # under 40 ms sensing + 20 ms actuation delay (rl/latency_test.py), so the ranges are back to 0-5 ms
+  action_delay_substeps: [0, 1]                   # 0-5 ms transport latency (host -> hub -> CAN) on top of the hub ramp
+  obs_delay_substeps: [0, 1]                      # 0-5 ms sensing latency (IMU / joint feedback)
 
 ppo:
   num_envs: 1024
@@ -152,5 +155,6 @@ ppo:
   max_grad_norm: 1.0
   # left/right mirror loss on the actor mean (jx1_rl/symmetry.py). The free policy drifted -0.03 rad/s in yaw at zero
   # command and tracked +0.3 rad/s turns at 85 % but -0.3 at 109 % on a symmetric robot (COM y offset 0.2 mm)
-  symmetry_coef: 0.5
+  # 0.5 in walk_v4 (jx1_walk_sym_latency, worse overall); jx1_walk_rough has no yaw drift without it -> off
+  symmetry_coef: 0.0
   save_interval: 100

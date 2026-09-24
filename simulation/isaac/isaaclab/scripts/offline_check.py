@@ -516,7 +516,8 @@ def check_task(task_id, reg, rep, mods, tc_default):
     ref = pio.build_observation(rob.data.root_ang_vel_b.numpy(), rob.data.projected_gravity_b.numpy(), env.command_manager.cmd.numpy(),
                                 q[:, pj] - rob.data.default_joint_pos.numpy()[:, pj], rob.data.joint_vel.numpy()[:, pj],
                                 env.action_manager.action.numpy(), pio.gait_phase(t, tc["raw"]["gait"]["period_s"]), S,
-                                tc["raw"]["observation"]["clip"])
+                                tc["raw"]["observation"]["clip"],
+                                moving=pio.gait_moving(env.command_manager.cmd.numpy(), tc["raw"]["gait"].get("stand_command_threshold")))
     err = float(np.abs(obs - ref).max()) if obs.shape == ref.shape else float("inf")
     rep.add(task_id, "policy observation == policy_io.build_observation (MuJoCo / ROS 2)", err < 1e-5,
             f"max |diff| {err:.2e}, shape {obs.shape} vs {ref.shape}")

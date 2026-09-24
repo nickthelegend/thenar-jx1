@@ -104,7 +104,12 @@ def test_deploy_observation_matches_training_env():
     rng = np.random.default_rng(3)
     for _ in range(25):
         env.step(rng.normal(0, 0.5, (16, CFG.num_actions)))
+    env.commands[:2] = 0.0                              # stand mode (OI-27): the clock features read 0 below the threshold
+    env.commands[2] = [0.06, 0.0, 0.05]
     obs_env, _ = env.observations(noise=False)
+    moving = policy_io.gait_moving(env.commands, CFG["gait"]["stand_command_threshold"])
+    assert moving[:3].sum() == 0 and moving[3:].sum() > 0
+    assert np.allclose(np.linalg.norm(obs_env[:, -2:], axis=1), moving)
     with tempfile.TemporaryDirectory() as tmp:
         bundle = export_untrained(Path(tmp))
         ros = runner_mod.PolicyRunner(bundle)

@@ -99,7 +99,7 @@ def load(config_path: Path | None = None) -> dict:
 
 OBS_LAYOUT = ["base_ang_vel_body x3 (rad/s) * scales.ang_vel", "projected_gravity_body x3", "command (vx m/s, vy m/s, wz rad/s) * scales.commands",
               "joint_pos - default (policy joints) * scales.dof_pos", "joint_vel (policy joints) * scales.dof_vel",
-              "last_action (raw policy output)", "sin(2 pi phase)", "cos(2 pi phase)"]
+              "last_action (raw policy output)", "sin(2 pi phase), 0 in stand mode", "cos(2 pi phase), 0 in stand mode"]
 
 
 def policy_io(tc: dict, meta: dict) -> dict:

@@ -109,6 +109,7 @@ class JX1Env:
         self.sigma = cfg["rewards"]["tracking_sigma"]
         g = cfg["gait"]
         self.period, self.offset, self.stance, self.swing_h = g["period_s"], g["offset"], g["stance_fraction"], g["swing_height_m"]
+        self.stand_thr = g.get("stand_command_threshold")
         self._sense(self._sens_out)                           # placeholders
         self.reset_envs(np.arange(N))
 
@@ -192,15 +193,16 @@ class JX1Env:
         q_rel = qp[:, self.qadr] - self.default
         dq = qv[:, self.dadr]
         ph = self.phase()
+        mv = policy_io.gait_moving(self.commands, self.stand_thr)
         nz = self.cfg["observation"]["noise"] if (noise and self.randomize) else None
 
         def u(scale, shape):
             return self.rng.uniform(-scale, scale, shape) if nz else 0.0
         obs = policy_io.build_observation(ang_b + u(nz and nz["ang_vel"], ang_b.shape), grav_b + u(nz and nz["gravity"], grav_b.shape),
                                           self.commands, q_rel + u(nz and nz["dof_pos"], q_rel.shape), dq + u(nz and nz["dof_vel"], dq.shape),
-                                          self.actions, ph, self.obs_scales, self.cfg["observation"]["clip"])
+                                          self.actions, ph, self.obs_scales, self.cfg["observation"]["clip"], moving=mv)
         clean = policy_io.build_observation(ang_b, grav_b, self.commands, q_rel, dq, self.actions, ph, self.obs_scales,
-                                            self.cfg["observation"]["clip"]) if nz else obs
+                                            self.cfg["observation"]["clip"], moving=mv) if nz else obs
         qp, qv, lin_b, _, _ = self._base()                                   # critic: true current state
         contact = (self.foot_force > 1.0).astype(np.float64)
         h_base = qp[:, 2:3] - self.ground(qp[:, 0:1], qp[:, 1:2])
@@ -292,8 +294,9 @@ class JX1Env:
         contact = self.foot_force > 1.0
         ph = self.phase()
         leg_phase = np.stack([ph, np.mod(ph + self.offset, 1.0)], axis=1)
-        stance = leg_phase < self.stance
-        standing = np.linalg.norm(self.commands, axis=1) < 0.1
+        moving = policy_io.gait_moving(self.commands, self.stand_thr) > 0.5
+        stance = np.where(moving[:, None], leg_phase < self.stance, True)      # stand mode: both feet down
+        standing = ~moving if self.stand_thr is not None else np.linalg.norm(self.commands, axis=1) < 0.1
         dof_err = np.abs(q - self.default).sum(axis=1)
         terms = {
             "tracking_lin_vel": np.exp(-np.sum((self.commands[:, :2] - lin_b[:, :2]) ** 2, axis=1) / self.sigma),
@@ -313,7 +316,7 @@ class JX1Env:
             "hip_pos": np.sum(q[:, self.hip_idx] ** 2, axis=1),
             "contact": np.sum(contact == stance, axis=1).astype(np.float64),
             "feet_swing_height": np.sum(((self.foot_pos[:, :, 2] - self.ground(self.foot_pos[:, :, 0], self.foot_pos[:, :, 1])
-                                          - self.swing_h) ** 2) * ~contact, axis=1),
+                                          - self.swing_h) ** 2) * ~contact, axis=1) * moving,
             "contact_no_vel": np.sum(np.sum(self.foot_vel ** 2, axis=2) * contact, axis=1),
             "stand_still": dof_err * standing,
             "termination": died.astype(np.float64),

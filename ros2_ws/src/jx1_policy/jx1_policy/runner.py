@@ -70,10 +70,13 @@ class PolicyRunner:
         """q, dq: policy-joint positions/velocities (policy order); command (vx, vy, wz); phase_time: s since start."""
         g = quat_rotate_inverse(np.asarray(quat_wxyz, float), np.array([0.0, 0.0, -1.0]))
         phase = np.mod(phase_time / self.period, 1.0)
+        # stand mode (policy_io gait.stand_command_threshold): the clock reads 0 when the command is (nearly) zero
+        thr = self.io["gait"].get("stand_command_threshold")
+        mv = 1.0 if thr is None or np.linalg.norm(np.asarray(command, float)) >= thr else 0.0
         obs = np.concatenate([np.asarray(ang_vel_body, float) * self.scales["ang_vel"], g,
                               np.asarray(command, float) * np.asarray(self.scales["commands"], float),
                               (np.asarray(q, float) - self.default) * self.scales["dof_pos"], np.asarray(dq, float) * self.scales["dof_vel"],
-                              self.last_action, [np.sin(2 * np.pi * phase), np.cos(2 * np.pi * phase)]])
+                              self.last_action, [mv * np.sin(2 * np.pi * phase), mv * np.cos(2 * np.pi * phase)]])
         return np.clip(obs, -self.clip, self.clip)
 
     def step(self, quat_wxyz, ang_vel_body, q, dq, command, phase_time):

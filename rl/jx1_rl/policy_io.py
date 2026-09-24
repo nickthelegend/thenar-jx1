@@ -29,11 +29,21 @@ def gait_phase(t: np.ndarray, period: float) -> np.ndarray:
     return np.mod(t / period, 1.0)
 
 
-def build_observation(ang_vel_b, gravity_b, command, dof_pos_rel, dof_vel, last_action, phase, scales, clip=100.0):
+def gait_moving(command, threshold):
+    """1 while walking, 0 in stand mode: |(vx, vy, wz)| below gait.stand_command_threshold (OI-27; None = always 1)."""
+    command = np.asarray(command, dtype=np.float64)
+    if threshold is None:
+        return np.ones(command.shape[:-1])
+    return (np.linalg.norm(command, axis=-1) >= threshold).astype(np.float64)
+
+
+def build_observation(ang_vel_b, gravity_b, command, dof_pos_rel, dof_vel, last_action, phase, scales, clip=100.0, moving=None):
     """Actor observation. ang_vel_b: body angular velocity (rad/s); gravity_b: unit gravity in the body frame;
     command: (vx, vy, wz); dof_pos_rel: q - q_default (policy joints); dof_vel: dq; last_action: previous raw action;
-    phase: gait phase in [0, 1). scales: dict from the task config (observation.scales)."""
+    phase: gait phase in [0, 1). scales: dict from the task config (observation.scales). moving: gait_moving(); the
+    clock features are 0 in stand mode."""
     cmd_scale = np.asarray(scales["commands"], dtype=np.float64)
+    m = 1.0 if moving is None else np.asarray(moving, dtype=np.float64)[..., None]
     obs = np.concatenate([
         ang_vel_b * scales["ang_vel"],
         gravity_b,
@@ -41,8 +51,8 @@ def build_observation(ang_vel_b, gravity_b, command, dof_pos_rel, dof_vel, last_
         dof_pos_rel * scales["dof_pos"],
         dof_vel * scales["dof_vel"],
         last_action,
-        np.sin(2 * np.pi * phase)[..., None],
-        np.cos(2 * np.pi * phase)[..., None],
+        np.sin(2 * np.pi * phase)[..., None] * m,
+        np.cos(2 * np.pi * phase)[..., None] * m,
     ], axis=-1)
     return np.clip(obs, -clip, clip)
 

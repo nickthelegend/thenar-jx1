@@ -46,7 +46,8 @@ class Runner:
         grav = policy_io.projected_gravity(np.asarray(quat_wxyz, dtype=np.float64))
         ph = policy_io.gait_phase(np.asarray(t, dtype=np.float64), self.io["gait"]["period_s"])
         obs = policy_io.build_observation(np.asarray(ang_vel_b), grav, np.asarray(command, dtype=np.float64), q - self.default, dq,
-                                          self.last_action, ph, self.io["observation"]["scales"], self.io["observation"]["clip"])
+                                          self.last_action, ph, self.io["observation"]["scales"], self.io["observation"]["clip"],
+                                          moving=policy_io.gait_moving(command, self.io["gait"].get("stand_command_threshold")))
         act = self.sess.run([self.io["policy"]["output"]], {self.io["policy"]["input"]: obs[None].astype(np.float32)})[0][0]
         self.last_action = act.astype(np.float64)
         tgt = policy_io.actions_to_targets(self.last_action, self.default, self.io["action_scale"], self.lower, self.upper)

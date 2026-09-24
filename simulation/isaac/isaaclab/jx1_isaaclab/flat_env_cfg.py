@@ -32,6 +32,8 @@ TRUNK = "torso_link" if "torso_link" in TC["links"] else "pelvis"
 POLYGONS = {s: [[math.radians(a), math.radians(b)] for a, b in p] for s, p in TC["polygons_deg"].items()}
 SOLE = tuple(TC["sole_offset"])            # sole point in the foot-link frame (joint_map fixed frame left_sole_fixed)
 SIGMA = math.sqrt(W["tracking_sigma"])     # exp(-err^2 / sigma) in MuJoCo == exp(-err^2 / std^2) in Isaac Lab
+# stand mode (OI-27): below this |command| the clock reads 0, both feet should be down, no swing target
+STAND = {"command_name": "base_velocity", "stand_threshold": G.get("stand_command_threshold")}
 
 
 def robot(joints=None, bodies=None):
@@ -56,7 +58,7 @@ class JX1Observations:
         joint_vel = ObsTerm(func=jx1.delayed_joint_vel_rel, params={"asset_cfg": robot(POLICY)}, scale=S["dof_vel"],
                             noise=Unoise(n_min=-NZ["dof_vel"], n_max=NZ["dof_vel"]))
         actions = ObsTerm(func=mdp.last_action)
-        gait_phase = ObsTerm(func=jx1.gait_phase, params={"period": G["period_s"]})
+        gait_phase = ObsTerm(func=jx1.gait_phase, params={"period": G["period_s"], **STAND})
 
         def __post_init__(self):
             self.enable_corruption = True
@@ -71,7 +73,7 @@ class JX1Observations:
         joint_pos = ObsTerm(func=jx1.delayed_joint_pos_rel, params={"asset_cfg": robot(POLICY)}, scale=S["dof_pos"])
         joint_vel = ObsTerm(func=jx1.delayed_joint_vel_rel, params={"asset_cfg": robot(POLICY)}, scale=S["dof_vel"])
         actions = ObsTerm(func=mdp.last_action)
-        gait_phase = ObsTerm(func=jx1.gait_phase, params={"period": G["period_s"]})
+        gait_phase = ObsTerm(func=jx1.gait_phase, params={"period": G["period_s"], **STAND})
         # privileged, same as rl/jx1_rl/env.py: lin vel x2, (base height - standing height) x5, foot contact, sole heights x10
         base_lin_vel = ObsTerm(func=mdp.base_lin_vel, scale=S["lin_vel"])
         base_height = ObsTerm(func=jx1.base_height_above_target, params={"target_height": BASE_HEIGHT}, scale=5.0)
@@ -118,15 +120,16 @@ class JX1Rewards:
                       params={"asset_cfg": robot([j for j in POLICY if "hip_roll" in j or "hip_yaw" in j])})
     contact = RewTerm(func=jx1.contact_phase_match, weight=W["contact"],
                       params={"period": G["period_s"], "offset": G["offset"], "stance_fraction": G["stance_fraction"],
-                              "sensor_cfg": SceneEntityCfg("contact_forces", body_names=FEET, preserve_order=True)})
+                              "sensor_cfg": SceneEntityCfg("contact_forces", body_names=FEET, preserve_order=True), **STAND})
     feet_swing_height = RewTerm(func=jx1.feet_swing_height, weight=W["feet_swing_height"],
                                 params={"target_height": G["swing_height_m"], "sole_offset": SOLE,
                                         "sensor_cfg": SceneEntityCfg("contact_forces", body_names=FEET, preserve_order=True),
-                                        "asset_cfg": robot(bodies=FEET)})
+                                        "asset_cfg": robot(bodies=FEET), **STAND})
     contact_no_vel = RewTerm(func=jx1.feet_contact_velocity, weight=W["contact_no_vel"],
                              params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=FEET, preserve_order=True),
                                      "asset_cfg": robot(bodies=FEET)})
-    stand_still = RewTerm(func=jx1.stand_still_deviation, weight=W["stand_still"], params={"command_name": "base_velocity", "asset_cfg": robot(POLICY)})
+    stand_still = RewTerm(func=jx1.stand_still_deviation, weight=W["stand_still"],
+                          params={"command_name": "base_velocity", "asset_cfg": robot(POLICY), "stand_threshold": G.get("stand_command_threshold", 0.1)})
     termination = RewTerm(func=mdp.is_terminated, weight=W["termination"])
 
 

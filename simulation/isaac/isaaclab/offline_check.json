@@ -1,6 +1,8 @@
 {
- "isaaclab_source": "IsaacLab v2.3.2 (git tag), isaaclab extension 0.54.2",
- "isaacsim_source": "IsaacSim v5.1.0 (git tag, sparse: ros2.bridge, core.nodes, core.api, core.prims, core.utils, sensors.physics, simulation_app, asset.importer.urdf)",
+ "isaaclab_version": "0.54.2",
+ "isaaclab_source": "D:/jx1-deps/IsaacLab-2.3.2",
+ "isaacsim_source": "D:/jx1-deps/IsaacSim-5.1.0",
+ "rsl_rl_checked": true,
  "mocked_modules": [
   "carb",
   "cuda",
@@ -87,7 +89,7 @@
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
    "check": "policy observation == policy_io.build_observation (MuJoCo / ROS 2)",
    "ok": true,
-   "detail": "max |diff| 2.98e-08, shape (8, 47) vs (8, 47)"
+   "detail": "max |diff| 0.00e+00, shape (8, 47) vs (8, 47)"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
@@ -105,13 +107,13 @@
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
    "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, toe-out, hub ramp, delay, reset)",
    "ok": true,
-   "detail": "max |diff| 1.37e-07 rad over 4 steps x 4 substeps"
+   "detail": "max |diff| 1.35e-07 rad over 4 steps x 4 substeps"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
    "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
    "ok": true,
-   "detail": "delays [0, 2, 3] of [0, 3] substeps, max |diff| 2.4e-07"
+   "detail": "delays [0, 1] of [0, 1] substeps, max |diff| 2.4e-07"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
@@ -153,7 +155,7 @@
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
    "check": "rsl_rl symmetry: mirror loss wired to the MuJoCo mirror maps",
    "ok": true,
-   "detail": "mirror loss 0.5 via jx1_isaaclab.symmetry:mirror_augmentation; [original; mirrored] batches, mirroring twice = identity"
+   "detail": "mirror loss None via None"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
@@ -207,7 +209,7 @@
    "task": "Isaac-Velocity-Flat-JX1-v0",
    "check": "policy observation == policy_io.build_observation (MuJoCo / ROS 2)",
    "ok": true,
-   "detail": "max |diff| 2.98e-08, shape (8, 47) vs (8, 47)"
+   "detail": "max |diff| 0.00e+00, shape (8, 47) vs (8, 47)"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-v0",
@@ -231,7 +233,7 @@
    "task": "Isaac-Velocity-Flat-JX1-v0",
    "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
    "ok": true,
-   "detail": "delays [0, 1, 2, 3] of [0, 3] substeps, max |diff| 2.4e-07"
+   "detail": "delays [0, 1] of [0, 1] substeps, max |diff| 2.4e-07"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-v0",
@@ -273,7 +275,7 @@
    "task": "Isaac-Velocity-Flat-JX1-v0",
    "check": "rsl_rl symmetry: mirror loss wired to the MuJoCo mirror maps",
    "ok": true,
-   "detail": "mirror loss 0.5 via jx1_isaaclab.symmetry:mirror_augmentation; [original; mirrored] batches, mirroring twice = identity"
+   "detail": "mirror loss None via None"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-v0",
@@ -351,7 +353,7 @@
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
    "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
    "ok": true,
-   "detail": "delays [0, 2, 3] of [0, 3] substeps, max |diff| 2.4e-07"
+   "detail": "delays [0, 1] of [0, 1] substeps, max |diff| 2.4e-07"
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
@@ -393,7 +395,7 @@
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
    "check": "rsl_rl symmetry: mirror loss wired to the MuJoCo mirror maps",
    "ok": true,
-   "detail": "mirror loss 0.5 via jx1_isaaclab.symmetry:mirror_augmentation; [original; mirrored] batches, mirroring twice = identity"
+   "detail": "mirror loss None via None"
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
@@ -465,13 +467,13 @@
    "task": "Isaac-Velocity-Rough-JX1-v0",
    "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, toe-out, hub ramp, delay, reset)",
    "ok": true,
-   "detail": "max |diff| 1.35e-07 rad over 4 steps x 4 substeps"
+   "detail": "max |diff| 1.37e-07 rad over 4 steps x 4 substeps"
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-v0",
    "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
    "ok": true,
-   "detail": "delays [0, 2, 3] of [0, 3] substeps, max |diff| 2.4e-07"
+   "detail": "delays [0, 1] of [0, 1] substeps, max |diff| 2.4e-07"
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-v0",
@@ -513,7 +515,7 @@
    "task": "Isaac-Velocity-Rough-JX1-v0",
    "check": "rsl_rl symmetry: mirror loss wired to the MuJoCo mirror maps",
    "ok": true,
-   "detail": "mirror loss 0.5 via jx1_isaaclab.symmetry:mirror_augmentation; [original; mirrored] batches, mirroring twice = identity"
+   "detail": "mirror loss None via None"
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-v0",
@@ -537,13 +539,13 @@
    "task": "export",
    "check": "export_offline ONNX == rsl_rl 3 ActorCritic.act_inference (normaliser in the policy)",
    "ok": true,
-   "detail": "max |diff| 1.12e-07; rsl_rl>=3 (policy normaliser)"
+   "detail": "max |diff| 8.94e-08; rsl_rl>=3 (policy normaliser)"
   },
   {
    "task": "export",
    "check": "export_offline ONNX == hand-computed rsl_rl 2.x actor (runner normaliser)",
    "ok": true,
-   "detail": "max |diff| 2.86e-06"
+   "detail": "max |diff| 3.34e-06"
   },
   {
    "task": "export",
@@ -575,6 +577,5 @@
    "ok": true,
    "detail": "ok"
   }
- ],
- "rsl_rl": "rsl-rl-lib 3.1.2"
+ ]
 }

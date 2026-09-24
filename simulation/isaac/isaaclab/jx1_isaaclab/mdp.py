@@ -33,9 +33,17 @@ def _time(env):
     return env.episode_length_buf.float() * env.step_dt
 
 
-def gait_phase(env, period: float) -> torch.Tensor:
+def _moving(env, command_name: str | None, stand_threshold: float | None) -> torch.Tensor:
+    """1 while walking, 0 in stand mode (|command| < gait.stand_command_threshold, OI-27), as policy_io.gait_moving."""
+    if command_name is None or stand_threshold is None:
+        return torch.ones(env.num_envs, device=env.device)
+    return (env.command_manager.get_command(command_name).norm(dim=1) >= stand_threshold).float()
+
+
+def gait_phase(env, period: float, command_name: str | None = None, stand_threshold: float | None = None) -> torch.Tensor:
     ph = torch.remainder(_time(env) / period, 1.0)
-    return torch.stack([torch.sin(2 * math.pi * ph), torch.cos(2 * math.pi * ph)], dim=-1)
+    m = _moving(env, command_name, stand_threshold)[:, None]
+    return torch.stack([torch.sin(2 * math.pi * ph), torch.cos(2 * math.pi * ph)], dim=-1) * m
 
 
 def _leg_phase(env, period, offset):
@@ -91,15 +99,19 @@ def feet_height(env, sole_offset, asset_cfg: SceneEntityCfg, ground_cfg: SceneEn
 
 
 # ------------------------------------------------------------------------------------------------ rewards
-def contact_phase_match(env, period: float, offset: float, stance_fraction: float, sensor_cfg: SceneEntityCfg) -> torch.Tensor:
+def contact_phase_match(env, period: float, offset: float, stance_fraction: float, sensor_cfg: SceneEntityCfg,
+                        command_name: str | None = None, stand_threshold: float | None = None) -> torch.Tensor:
     stance = _leg_phase(env, period, offset) < stance_fraction
+    stance = torch.where(_moving(env, command_name, stand_threshold)[:, None] > 0.5, stance, torch.ones_like(stance))   # stand: both down
     return (_contact(env, sensor_cfg) == stance).float().sum(dim=1)
 
 
 def feet_swing_height(env, target_height: float, sole_offset, sensor_cfg: SceneEntityCfg, asset_cfg: SceneEntityCfg,
-                      ground_cfg: SceneEntityCfg | None = None) -> torch.Tensor:
+                      ground_cfg: SceneEntityCfg | None = None, command_name: str | None = None,
+                      stand_threshold: float | None = None) -> torch.Tensor:
     h = feet_height(env, sole_offset, asset_cfg, ground_cfg)
-    return (((h - target_height) ** 2) * (~_contact(env, sensor_cfg)).float()).sum(dim=1)
+    swing = (((h - target_height) ** 2) * (~_contact(env, sensor_cfg)).float()).sum(dim=1)
+    return swing * _moving(env, command_name, stand_threshold)                        # no swing target in stand mode
 
 
 def feet_contact_velocity(env, sensor_cfg: SceneEntityCfg, asset_cfg: SceneEntityCfg) -> torch.Tensor:
@@ -119,10 +131,10 @@ def joint_deviation_l2(env, asset_cfg: SceneEntityCfg) -> torch.Tensor:
     return (d ** 2).sum(dim=1)
 
 
-def stand_still_deviation(env, command_name: str, asset_cfg: SceneEntityCfg) -> torch.Tensor:
+def stand_still_deviation(env, command_name: str, asset_cfg: SceneEntityCfg, stand_threshold: float = 0.1) -> torch.Tensor:
     asset: Articulation = env.scene[asset_cfg.name]
     d = (asset.data.joint_pos[:, asset_cfg.joint_ids] - asset.data.default_joint_pos[:, asset_cfg.joint_ids]).abs().sum(dim=1)
-    return d * (env.command_manager.get_command(command_name).norm(dim=1) < 0.1).float()
+    return d * (env.command_manager.get_command(command_name).norm(dim=1) < stand_threshold).float()
 
 
 def torque_limits(env, soft_ratio: float, asset_cfg: SceneEntityCfg) -> torch.Tensor:
