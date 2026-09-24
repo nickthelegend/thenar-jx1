@@ -15,3 +15,8 @@ terrain:
   max_step_m: 0.02              # thresholds / cable covers, +-2 cm (<= 4 cm between strips)
   flat_spawn_radius_m: 1.0
   seed: 0
+
+# fine-tuning from the flat policy: half the entropy bonus. walk_v3_rough (0.01) let the action std climb from 0.25
+# to 0.33 over 500 iterations on the heightfield while the reward per step fell
+ppo:
+  entropy_coef: 0.005
