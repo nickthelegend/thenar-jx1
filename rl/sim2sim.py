@@ -113,8 +113,9 @@ class CadSim:
         self.rn.last_action[:] = 0.0
         return d
 
-    def rollout(self, cmd, T, frame_cb=None, settle_s=2.0):
-        """Walk with a constant command for T seconds; tracking error is measured after settle_s."""
+    def rollout(self, cmd, T, frame_cb=None, settle_s=2.0, step_cb=None):
+        """Walk with a constant command for T seconds; tracking error is measured after settle_s. frame_cb(k, d) runs every
+        policy step, step_cb(d, settled) every physics step (e.g. torque / speed traces for the power model)."""
         m, rn, dec = self.m, self.rn, self.dec
         d = self.reset()
         vel_err, tilt_max, peak = [], 0.0, np.zeros(m.nu)
@@ -135,6 +136,8 @@ class CadSim:
                 d.ctrl[self.pol_a] = ctrl_hist[0]
                 mujoco.mj_step(m, d)
                 obs_hist.append(snap())
+                if step_cb is not None:
+                    step_cb(d, k * self.dt_pol > settle_s)
                 peak = np.maximum(peak, np.abs(d.actuator_force))
                 vmax = np.maximum(vmax, np.abs(d.qvel[self.pol_d]))
                 if k * self.dt_pol > settle_s:

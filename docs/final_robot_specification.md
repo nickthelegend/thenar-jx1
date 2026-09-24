@@ -63,6 +63,8 @@ Learned walking controller (jx1_walk_rough: 47 obs -> 12 leg targets at 50 Hz, P
     knee      : peak  61.5 N m x 1.5 =  92.2 <= 120 N m; RMS 24.6 <= 40 N m rated
     ankle_pitch: peak  32.9 N m = 71% of the 46 N m linkage capability; RMS  9.8 N m
     ankle_roll: peak  18.2 N m = 36% of the 51 N m linkage capability; RMS  5.5 N m
+  power (run_power_budget model): walking 0.5 m/s 282.9 W, 0.8 m/s 367.5 W mean / 542.9 W peak (13.1 A at 41.6 V vs the 40 A BMS), standing 163.2 W; runtime 1.32 h at 0.5 m/s, 2.29 h standing
+  actuator thermal (worst I_rms / rated): hip_yaw 39%, hip_roll 69%, hip_pitch 35%, knee 60%, ankle_motor 79%
   push recovery (0.5 m/s, 0.1 s torso pulse): 15.9-44.1 N s survived (forward 32.8, backward 35.6, left 15.9, right 44.1)
   latency: 0.3 rad/s turn tracked 101% without delay, 89% with 40 ms sensing + 20 ms actuation delay
   ROS 2 jazzy (separate node processes, /cmd_vel -> walk): 3 start paths (python -m, ros2 launch, ros2_control), all upright True; forward 0.37-0.41 m/s at 0.4

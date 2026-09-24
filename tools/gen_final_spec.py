@@ -84,6 +84,14 @@ def rl_policy_lines(cat, req):
             pk, rms = f8["joint_torque_peak_Nm"][f"left_{j}_joint"], f8["joint_torque_rms_Nm"][f"left_{j}_joint"]
             lim = io["effort_limits_Nm"][f"left_{j}_joint"]
             out.append(f"    {j:10s}: peak {pk:5.1f} N m = {pk / lim:.0%} of the {lim:g} N m linkage capability; RMS {rms:4.1f} N m")
+    pw = load_json(f"{pol}/power.json")
+    if pw:
+        sc, pk = pw["scenarios"], pw["pack_13S2P_50S"]
+        out.append(f"  power (run_power_budget model): walking 0.5 m/s {sc['walk_0.5']['mean_W']} W, 0.8 m/s {sc['walk_0.8']['mean_W']} W mean / "
+                   f"{sc['walk_0.8']['peak_W']} W peak ({pk['worst_peak_current_A']} A at 41.6 V vs the {pk['bms_rating_A']} A BMS), standing "
+                   f"{sc['stand']['mean_W']} W; runtime {pk['runtime_h']['walk_0.5']} h at 0.5 m/s, {pk['runtime_h']['stand']} h standing")
+        th = pw["thermal"]
+        out.append("  actuator thermal (worst I_rms / rated): " + ", ".join(f"{j} {v['utilisation']:.0%}" for j, v in th.items()))
     p = load_json(f"{pol}/push_test.json")
     if p:
         imp = p["max_survived_impulse_Ns"]
