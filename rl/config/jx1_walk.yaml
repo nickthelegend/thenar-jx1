@@ -82,7 +82,7 @@ gait:                                            # phase clock shared by actor, 
 
 commands:
   resample_s: 10.0
-  zero_fraction: 0.2                             # share of envs commanded to stand still (0.1 before the stand mode)
+  zero_fraction: 0.1                             # share of envs commanded to stand still (0.2 in walk_v5_stand: weaker tracking)
   ranges: {lin_vel_x: [-0.4, 0.8], lin_vel_y: [-0.3, 0.3], ang_vel_yaw: [-0.6, 0.6]}
 
 episode_s: 20.0
@@ -155,6 +155,7 @@ ppo:
   max_grad_norm: 1.0
   # left/right mirror loss on the actor mean (jx1_rl/symmetry.py). The free policy drifted -0.03 rad/s in yaw at zero
   # command and tracked +0.3 rad/s turns at 85 % but -0.3 at 109 % on a symmetric robot (COM y offset 0.2 mm)
-  # 0.5 in walk_v4 (jx1_walk_sym_latency, worse overall); jx1_walk_rough has no yaw drift without it -> off
-  symmetry_coef: 0.0
+  # 0.5 in walk_v4 (jx1_walk_sym_latency, worse overall, trained with more latency and half the entropy). walk_v5_stand
+  # (off) came out left/right asymmetric: +vy side-steps at 50-65 % and a yaw bias, -vy fine. A mild mirror loss for walk_v6
+  symmetry_coef: 0.2
   save_interval: 100

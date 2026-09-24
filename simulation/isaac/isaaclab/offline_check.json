@@ -155,7 +155,7 @@
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
    "check": "rsl_rl symmetry: mirror loss wired to the MuJoCo mirror maps",
    "ok": true,
-   "detail": "mirror loss None via None"
+   "detail": "mirror loss 0.2 via jx1_isaaclab.symmetry:mirror_augmentation; [original; mirrored] batches, mirroring twice = identity"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
@@ -275,7 +275,7 @@
    "task": "Isaac-Velocity-Flat-JX1-v0",
    "check": "rsl_rl symmetry: mirror loss wired to the MuJoCo mirror maps",
    "ok": true,
-   "detail": "mirror loss None via None"
+   "detail": "mirror loss 0.2 via jx1_isaaclab.symmetry:mirror_augmentation; [original; mirrored] batches, mirroring twice = identity"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-v0",
@@ -347,7 +347,7 @@
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
    "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, toe-out, hub ramp, delay, reset)",
    "ok": true,
-   "detail": "max |diff| 1.35e-07 rad over 4 steps x 4 substeps"
+   "detail": "max |diff| 1.37e-07 rad over 4 steps x 4 substeps"
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
@@ -395,7 +395,7 @@
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
    "check": "rsl_rl symmetry: mirror loss wired to the MuJoCo mirror maps",
    "ok": true,
-   "detail": "mirror loss None via None"
+   "detail": "mirror loss 0.2 via jx1_isaaclab.symmetry:mirror_augmentation; [original; mirrored] batches, mirroring twice = identity"
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
@@ -467,7 +467,7 @@
    "task": "Isaac-Velocity-Rough-JX1-v0",
    "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, toe-out, hub ramp, delay, reset)",
    "ok": true,
-   "detail": "max |diff| 1.37e-07 rad over 4 steps x 4 substeps"
+   "detail": "max |diff| 1.35e-07 rad over 4 steps x 4 substeps"
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-v0",
@@ -515,7 +515,7 @@
    "task": "Isaac-Velocity-Rough-JX1-v0",
    "check": "rsl_rl symmetry: mirror loss wired to the MuJoCo mirror maps",
    "ok": true,
-   "detail": "mirror loss None via None"
+   "detail": "mirror loss 0.2 via jx1_isaaclab.symmetry:mirror_augmentation; [original; mirrored] batches, mirroring twice = identity"
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-v0",
@@ -545,7 +545,7 @@
    "task": "export",
    "check": "export_offline ONNX == hand-computed rsl_rl 2.x actor (runner normaliser)",
    "ok": true,
-   "detail": "max |diff| 3.34e-06"
+   "detail": "max |diff| 5.72e-06"
   },
   {
    "task": "export",
