@@ -105,7 +105,7 @@
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
    "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, hub ramp, delay, reset)",
    "ok": true,
-   "detail": "max |diff| 1.37e-07 rad over 4 steps x 4 substeps"
+   "detail": "max |diff| 1.35e-07 rad over 4 steps x 4 substeps"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
@@ -142,6 +142,12 @@
    "check": "algorithm keys accepted by rsl_rl PPO",
    "ok": true,
    "detail": "15 keys"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX1-Play-v0",
+   "check": "rsl_rl symmetry: mirror loss wired to the MuJoCo mirror maps",
+   "ok": true,
+   "detail": "mirror loss 0.5 via jx1_isaaclab.symmetry:mirror_augmentation; [original; mirrored] batches, mirroring twice = identity"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-Play-v0",
@@ -213,7 +219,7 @@
    "task": "Isaac-Velocity-Flat-JX1-v0",
    "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, hub ramp, delay, reset)",
    "ok": true,
-   "detail": "max |diff| 1.35e-07 rad over 4 steps x 4 substeps"
+   "detail": "max |diff| 1.37e-07 rad over 4 steps x 4 substeps"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-v0",
@@ -250,6 +256,12 @@
    "check": "algorithm keys accepted by rsl_rl PPO",
    "ok": true,
    "detail": "15 keys"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX1-v0",
+   "check": "rsl_rl symmetry: mirror loss wired to the MuJoCo mirror maps",
+   "ok": true,
+   "detail": "mirror loss 0.5 via jx1_isaaclab.symmetry:mirror_augmentation; [original; mirrored] batches, mirroring twice = identity"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-v0",
@@ -321,7 +333,7 @@
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
    "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, hub ramp, delay, reset)",
    "ok": true,
-   "detail": "max |diff| 1.37e-07 rad over 4 steps x 4 substeps"
+   "detail": "max |diff| 1.35e-07 rad over 4 steps x 4 substeps"
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
@@ -358,6 +370,12 @@
    "check": "algorithm keys accepted by rsl_rl PPO",
    "ok": true,
    "detail": "15 keys"
+  },
+  {
+   "task": "Isaac-Velocity-Rough-JX1-Play-v0",
+   "check": "rsl_rl symmetry: mirror loss wired to the MuJoCo mirror maps",
+   "ok": true,
+   "detail": "mirror loss 0.5 via jx1_isaaclab.symmetry:mirror_augmentation; [original; mirrored] batches, mirroring twice = identity"
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-Play-v0",
@@ -469,6 +487,12 @@
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-v0",
+   "check": "rsl_rl symmetry: mirror loss wired to the MuJoCo mirror maps",
+   "ok": true,
+   "detail": "mirror loss 0.5 via jx1_isaaclab.symmetry:mirror_augmentation; [original; mirrored] batches, mirroring twice = identity"
+  },
+  {
+   "task": "Isaac-Velocity-Rough-JX1-v0",
    "check": "empirical_normalization unset (deprecated in rsl_rl >= 3)",
    "ok": true,
    "detail": "None"
@@ -489,13 +513,13 @@
    "task": "export",
    "check": "export_offline ONNX == rsl_rl 3 ActorCritic.act_inference (normaliser in the policy)",
    "ok": true,
-   "detail": "max |diff| 1.19e-07; rsl_rl>=3 (policy normaliser)"
+   "detail": "max |diff| 8.94e-08; rsl_rl>=3 (policy normaliser)"
   },
   {
    "task": "export",
    "check": "export_offline ONNX == hand-computed rsl_rl 2.x actor (runner normaliser)",
    "ok": true,
-   "detail": "max |diff| 2.86e-06"
+   "detail": "max |diff| 3.46e-06"
   },
   {
    "task": "export",

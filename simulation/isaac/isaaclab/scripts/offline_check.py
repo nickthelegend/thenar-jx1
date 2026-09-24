@@ -639,6 +639,24 @@ def check_agent(task_id, reg, rep, mods):
     sig = inspect.signature(PPO.__init__).parameters
     extra = [k for k in alg if k not in sig]
     rep.add(task_id, "algorithm keys accepted by rsl_rl PPO", not extra, f"unknown {extra}" if extra else f"{len(alg)} keys")
+    sym = d["algorithm"].get("symmetry_cfg") or {}
+    want = mods["tc"]["raw"]["ppo"].get("symmetry_coef", 0.0)
+    ok = (not want) or (sym.get("use_mirror_loss") and abs(sym.get("mirror_loss_coeff", 0) - want) < 1e-12 and sym.get("data_augmentation_func"))
+    detail = f"mirror loss {sym.get('mirror_loss_coeff')} via {sym.get('data_augmentation_func')}"
+    if ok and want:
+        import torch
+        from rsl_rl.utils import string_to_callable
+        fn = string_to_callable(sym["data_augmentation_func"])
+        rl_cfg = mods["rl_config"].load(REPO / "rl" / "config" / "jx1_walk.yaml")
+        g = torch.Generator().manual_seed(3)
+        obs = {"policy": torch.randn(4, rl_cfg.num_obs, generator=g), "critic": torch.randn(4, rl_cfg.num_privileged_obs, generator=g)}
+        act = torch.randn(4, rl_cfg.num_actions, generator=g)
+        o2, a2 = fn(env=None, obs=obs, actions=act)
+        back, back_a = fn(env=None, obs={k: v[4:] for k, v in o2.items()}, actions=a2[4:])
+        ok = (o2["policy"].shape[0] == 8 and torch.equal(o2["policy"][:4], obs["policy"]) and torch.allclose(back["policy"][4:], obs["policy"])
+              and torch.allclose(back["critic"][4:], obs["critic"]) and torch.allclose(back_a[4:], act))
+        detail += "; [original; mirrored] batches, mirroring twice = identity"
+    rep.add(task_id, "rsl_rl symmetry: mirror loss wired to the MuJoCo mirror maps", ok, detail)
     runner_src = inspect.getsource(importlib.import_module("rsl_rl.runners.on_policy_runner"))
     rep.add(task_id, "empirical_normalization unset (deprecated in rsl_rl >= 3)", d.get("empirical_normalization") is None
             or "empirical_normalization" not in runner_src, str(d.get("empirical_normalization")))

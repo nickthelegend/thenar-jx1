@@ -2,7 +2,13 @@
 from isaaclab.utils import configclass
 from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticCfg, RslRlPpoAlgorithmCfg
 
+from ..symmetry import mirror_augmentation
 from ..task_config import load
+
+try:
+    from isaaclab_rl.rsl_rl import RslRlSymmetryCfg
+except ImportError:                                  # Isaac Lab < 2.2
+    RslRlSymmetryCfg = None
 
 P = load()["raw"]["ppo"]
 
@@ -30,6 +36,10 @@ class JX1FlatPPORunnerCfg(RslRlOnPolicyRunnerCfg):
             self.policy.actor_obs_normalization = True
             self.policy.critic_obs_normalization = True
             self.empirical_normalization = None
+        # left/right mirror loss, as rl/train.py (ppo.symmetry_coef); rsl_rl >= 2.3 symmetry support
+        if P.get("symmetry_coef", 0.0) > 0 and RslRlSymmetryCfg is not None and hasattr(self.algorithm, "symmetry_cfg"):
+            self.algorithm.symmetry_cfg = RslRlSymmetryCfg(use_data_augmentation=False, use_mirror_loss=True,
+                                                           mirror_loss_coeff=P["symmetry_coef"], data_augmentation_func=mirror_augmentation)
 
 
 @configclass
