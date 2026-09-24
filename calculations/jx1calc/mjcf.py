@@ -28,6 +28,11 @@ def joint_armature(design: Design, joint: str) -> float:
     """Reflected actuator inertia in joint space. The parallel ankle maps both motors through the
     linkage Jacobian J ~ [[1, w/a], [1, -w/a]] (crank radius = foot lever): pitch sees 2*I, roll 2*I*(w/a)^2."""
     cls = design.act_classes
+    if getattr(design, "ankle_type", "parallel") == "serial":     # one actuator per ankle axis
+        if joint == "ankle_pitch":
+            return cls[design.assign["ankle_A"]]["reflected_inertia_kgm2"]
+        if joint == "ankle_roll":
+            return cls[design.assign["ankle_B"]]["reflected_inertia_kgm2"]
     if joint == "ankle_pitch":
         return 2 * cls[design.assign["ankle_A"]]["reflected_inertia_kgm2"]
     if joint == "ankle_roll":

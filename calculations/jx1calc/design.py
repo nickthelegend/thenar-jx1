@@ -83,6 +83,11 @@ class Design:
         self.crank_half_spacing = _v(al.get("crank_half_spacing_m", {"value": self.rod_half_spacing}))
         # knee actuator housing position along the thigh (default: coaxial with the knee)
         self.knee_act_z = _v(g.get("knee_actuator_z_m", {"value": -self.thigh}))
+        # optional layout block (smaller robots, e.g. JX0): actuator housing positions and structure boxes per link;
+        # the defaults are the JX1 values
+        self.layout = self.raw.get("layout", {}) or {}
+        # "parallel" (JX1: two motors on the shin drive the foot through push rods) or "serial" (JX0: one servo per axis)
+        self.ankle_type = self.raw.get("ankle_type", "parallel")
         self.links = self._build_links()
 
     # ------------------------------------------------------------------ geometry helpers
@@ -109,32 +114,37 @@ class Design:
         mb = self.raw["mass_budget"]
         links = {}
         hs = self.hip_spacing / 2
+        lay = self.layout
         # Pelvis: structure + both hip-yaw actuators (vertical axis, above each hip centre)
         p = mb["pelvis"]
-        parts = [(_v(p["structure_kg"]), p["com_m"], box_inertia(_v(p["structure_kg"]), 0.12, 0.26, 0.10))]
+        pbox = lay.get("pelvis_box_m", (0.12, 0.26, 0.10))
+        parts = [(_v(p["structure_kg"]), p["com_m"], box_inertia(_v(p["structure_kg"]), *pbox))]
         for s in (+1, -1):
-            parts.append(self._actuator_part("hip_yaw", [0.0, s * hs, 0.075], "z"))
+            parts.append(self._actuator_part("hip_yaw", [0.0, s * hs, lay.get("hip_yaw_actuator_z_m", 0.075)], "z"))
         m, c, i, _ = combine(parts)
         links["pelvis"] = LinkMass("pelvis", m, c, i, parts)
         ub = mb["upper_body"]
         um = _v(ub["mass_kg"])
         links["upper_body"] = LinkMass("upper_body", um, np.array(ub["com_m"], float), box_inertia(um, *ub["inertia_box_m"]))
         # Leg links (left leg frame; right mirrors y)
+        ao = lay.get("actuator_offsets_m", {})
+        ay = lay.get("ankle_actuator_y_m", 0.028)
         spec = {
-            "hip_yaw_link": [("hip_roll", [-0.055, 0.0, 0.0], "x")],       # roll actuator behind hip centre, axis x
-            "hip_roll_link": [("hip_pitch", [0.0, 0.055, 0.0], "y")],      # pitch actuator lateral of hip centre, axis y
+            "hip_yaw_link": [("hip_roll", ao.get("hip_roll", [-0.055, 0.0, 0.0]), "x")],   # roll actuator behind hip centre, axis x
+            "hip_roll_link": [("hip_pitch", ao.get("hip_pitch", [0.0, 0.055, 0.0]), "y")],  # pitch actuator lateral of hip centre, axis y
             "thigh": [("knee", [0.0, 0.0, self.knee_act_z], "y")],          # knee actuator (coaxial with knee by default)
-            "shin": [("ankle_A", [0.0, 0.028, -self.shin + self.ankle_hA], "y"),
-                      ("ankle_B", [0.0, -0.028, -self.shin + self.ankle_hB], "y")],
+            "shin": [("ankle_A", [0.0, ay, -self.shin + self.ankle_hA], "y"),
+                      ("ankle_B", [0.0, -ay, -self.shin + self.ankle_hB], "y")],
             "ankle_cross": [],
             "foot": [],
         }
+        sb = lay.get("structure_box_m", {})
         struct_box = {
-            "hip_yaw_link": (0.10, 0.08, 0.06),
-            "hip_roll_link": (0.08, 0.10, 0.08),
-            "thigh": (0.07, 0.07, self.thigh),
-            "shin": (0.06, 0.06, self.shin),
-            "ankle_cross": (0.03, 0.03, 0.03),
+            "hip_yaw_link": tuple(sb.get("hip_yaw_link", (0.10, 0.08, 0.06))),
+            "hip_roll_link": tuple(sb.get("hip_roll_link", (0.08, 0.10, 0.08))),
+            "thigh": tuple(sb.get("thigh", (0.07, 0.07, self.thigh))),
+            "shin": tuple(sb.get("shin", (0.06, 0.06, self.shin))),
+            "ankle_cross": tuple(sb.get("ankle_cross", (0.03, 0.03, 0.03))),
             "foot": (self.foot_length, self.foot_width, 0.03),
         }
         for name in LEG_LINKS:
