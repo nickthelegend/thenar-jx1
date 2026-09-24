@@ -4,6 +4,7 @@ Subscribes  /jx1/joint_command (sensor_msgs/JointState position targets, e.g. fr
 Publishes   /jx1/joint_states (joint space, ankle pitch/roll from the crank motors), /jx1/hw/status (JSON)
 Services    /jx1/hw/run (Trigger): request RUN (hubs refuse while the E-stop is pressed or a fault is latched)
             /jx1/hw/damp (Trigger): back to DAMPING
+Fall guard  /jx1/imu tilt above fall_tilt_deg (50) latches DAMPING until the next /jx1/hw/run
 Parameters  port_a / port_b: serial devices (e.g. /dev/ttyACM0) or pyserial URLs (socket://localhost:5555 for the emulator)
             policy_io: policy_io.yaml (PD gains, default pose); hw_config: config/hw.yaml; rate_hz: command rate (50)
 The hubs interpolate between host commands at 500 Hz, apply soft limits, temperature derating and watchdogs; this node
@@ -12,6 +13,7 @@ only converts spaces and keeps the stream going. Starts in DAMPING; RUN must be 
 from __future__ import annotations
 
 import json
+import math
 import threading
 import time
 from pathlib import Path
@@ -20,7 +22,7 @@ import rclpy
 import serial
 import yaml
 from rclpy.node import Node
-from sensor_msgs.msg import JointState
+from sensor_msgs.msg import Imu, JointState
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
 
@@ -36,6 +38,7 @@ class HwNode(Node):
         self.declare_parameter("policy_io", "")
         self.declare_parameter("hw_config", "")
         self.declare_parameter("rate_hz", 50.0)
+        self.declare_parameter("fall_tilt_deg", 50.0)
         hw_cfg = self.get_parameter("hw_config").value
         if not hw_cfg:
             from ament_index_python.packages import get_package_share_directory
@@ -52,6 +55,8 @@ class HwNode(Node):
         self.pub_js = self.create_publisher(JointState, "/jx1/joint_states", 10)
         self.pub_status = self.create_publisher(String, "/jx1/hw/status", 10)
         self.create_subscription(JointState, "/jx1/joint_command", self.on_cmd, 10)
+        self.create_subscription(Imu, "/jx1/imu", self.on_imu, 10)
+        self.fall_latched = False
         self.create_service(Trigger, "/jx1/hw/run", self.on_run)
         self.create_service(Trigger, "/jx1/hw/damp", self.on_damp)
         self.create_timer(1.0 / self.get_parameter("rate_hz").value, self.tick)
@@ -76,7 +81,15 @@ class HwNode(Node):
         with self.lock:
             self.targets.update(dict(zip(msg.name, msg.position)))
 
+    def on_imu(self, msg: Imu):
+        q = msg.orientation
+        tilt = math.degrees(math.acos(max(-1.0, min(1.0, 1.0 - 2.0 * (q.x * q.x + q.y * q.y)))))
+        if self.mode == P.RUN and tilt > self.get_parameter("fall_tilt_deg").value:
+            self.mode, self.fall_latched = P.DAMPING, True
+            self.get_logger().error(f"fall detected (tilt {tilt:.0f} deg): hubs -> DAMPING until /jx1/hw/run")
+
     def on_run(self, req, res):
+        self.fall_latched = False
         self.mode = P.RUN
         res.success, res.message = True, "RUN requested (hubs stay in DAMPING while E-stop pressed / fault latched)"
         return res
@@ -94,7 +107,7 @@ class HwNode(Node):
             port.write(P.pack_command(self.seq, self.mode, rows[h]))
         st = {h: {"mode": s.mode, "estop": s.estop, "fault": s.fault, "stale": [n for n, x in zip(self.bridge.hubs[h], s.stale) if x]}
               for h, s in self.states.items()}
-        self.pub_status.publish(String(data=json.dumps({"requested": self.mode, "hubs": st})))
+        self.pub_status.publish(String(data=json.dumps({"requested": self.mode, "fall_latched": self.fall_latched, "hubs": st})))
 
     def read_loop(self, h):
         nj = len(self.bridge.hubs[h])

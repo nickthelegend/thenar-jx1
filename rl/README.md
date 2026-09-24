@@ -35,6 +35,8 @@ MuJoCo, Isaac Lab and ROS 2. The walking task, its conventions and the deploymen
 | `ros2_ws/src/jx1_sim` | MuJoCo ROS 2 node: `/clock`, `/jx1/joint_states`, `/jx1/imu`, `/jx1/odom`, TF; applies `/jx1/joint_command` | see below |
 | `ros2_ws/src/jx1_bringup` | `mujoco_sim.launch.py`, `isaac_sim.launch.py`, `ros2_control.launch.py`, controllers | see below |
 | `tools/sim/gen_ros2_control.py` | `jx1.ros2_control.xacro` (mock / topic_based_ros2_control), `jx1_system.urdf.xacro`, `controllers.yaml` | generated |
+| `ros2_ws/src/jx1_hw` | Jetson ↔ CAN-hub bridge (firmware USB protocol, parallel-ankle IK/FK, motor gains), hub-firmware digital twin, `hardware.launch.py` | protocol + bridge tested; HIL run on the emulator |
+| `rl/ros2_check.py`, `rl/hw_loop_check.py` | end-to-end checks over real ROS 2 (sim node / hardware bridge + emulated hubs) | run on this machine (RoboStack Jazzy) |
 
 ## Train in MuJoCo (this machine: Windows, RTX 3050 6 GB, i5-13420H)
 
@@ -90,6 +92,34 @@ pixi run --manifest-path rl/ros2_env/pixi.toml python rl/ros2_check.py --policy 
 Topics (sim and hardware alike): `/jx1/joint_states` (JointState, all actuated joints), `/jx1/imu` (pelvis IMU),
 `/cmd_vel` (vx, vy, wz) → `/jx1/joint_command` (JointState position targets). PD gains are applied downstream (MuJoCo
 position actuators, PhysX drives, RobStride MIT mode) from `policy_io.yaml` → `pd_gains`.
+
+## Real robot: hardware bridge and hardware-in-the-loop (`ros2_ws/src/jx1_hw`)
+
+`hw_node` runs on the Jetson: `/jx1/joint_command` (joint space) → the two Teensy 4.1 CAN hubs over USB serial, in the
+byte format of `firmware/hub/jx1_hub/jx1_hub.ino` (CRC-16/MODBUS frames, hub joint order/signs/limits generated from the
+firmware configs into `config/hw.yaml`), and hub feedback → `/jx1/joint_states`. The ankle is driven as its two crank
+motors: closed-form IK (identical to `calculations/jx1calc/ankle.py`), Newton FK for the feedback, J⁻¹ velocities,
+Jᵀ torques. The hubs start in DAMPING; `ros2 service call /jx1/hw/run std_srvs/srv/Trigger` enables them (robot on the
+gantry), `/jx1/hw/damp` goes back.
+
+`fake_hub` is a digital twin of the hub firmware on the MuJoCo CAD model: the same protocol over TCP, the RobStride MIT
+law at the 500 Hz bus rate with soft limits, the hub torque caps, the 20 ms target ramp, DAMPING/RUN and the host
+watchdog, the push-rod ankle, and a bring-up gantry. `rl/hw_loop_check.py` runs policy → hw_node → "serial" → emulated
+hubs → physics → back as separate ROS 2 processes and walks the robot over `/cmd_vel`:
+
+```bash
+pixi run --manifest-path rl/ros2_env/pixi.toml python rl/hw_loop_check.py --policy rl/policies/jx1_walk_flat
+ros2 launch jx1_hw hardware.launch.py hil:=true            # the same chain from a launch file
+ros2 launch jx1_hw hardware.launch.py port_a:=/dev/ttyACM0 port_b:=/dev/ttyACM1   # the real robot (+ IMU driver on /jx1/imu)
+```
+
+**What the hardware-in-the-loop run changed in training (MEASURED on the emulator, then modelled):**
+- the hubs ramp each 50 Hz host target over the next 20 ms (first-order hold, ≈10 ms effective lag): now reproduced in
+  the training environment, `sim2sim.py`, the `jx1_sim` node and the Isaac Lab action term;
+- the two ankle motors run independent MIT loops, so the realisable joint-space roll/pitch stiffness ratio is fixed by the
+  linkage (1.27): the task's ankle gains are now the realisable pair 51.2 / 64.8 N·m/rad (motor kp 40, kd 1.5);
+- 0–5 ms actuation and 0–5 ms sensing latency are randomised per episode; torques above 85 % of the actuator peak are
+  penalised (the hubs cap at 80 %).
 
 ## Conventions (policy_io.yaml)
 

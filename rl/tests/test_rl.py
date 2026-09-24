@@ -245,6 +245,23 @@ def test_hw_bridge_joint_motor_roundtrip():
     assert abs(K[1, 1] / CFG.gains["left_ankle_roll_joint"][0] - 1) < 0.02, K
 
 
+def test_imu_rotations():
+    sys.path.insert(0, str(REPO / "ros2_ws" / "src" / "jx1_hw"))
+    from jx1_hw.rotations import matrix_to_quat, quat_to_matrix, rpy_matrix
+    rng = np.random.default_rng(9)
+    for _ in range(200):
+        q = rng.normal(size=4)
+        q /= np.linalg.norm(q)
+        q *= np.sign(q[0]) if q[0] != 0 else 1.0
+        R = quat_to_matrix(*q)
+        ref = np.zeros(9)
+        mujoco.mju_quat2Mat(ref, q)
+        assert np.allclose(R, ref.reshape(3, 3), atol=1e-12)
+        assert np.allclose(matrix_to_quat(R), q, atol=1e-9)
+    Rm = rpy_matrix(0.1, -0.2, 0.3)
+    assert np.allclose(Rm @ Rm.T, np.eye(3), atol=1e-12) and abs(np.linalg.det(Rm) - 1) < 1e-12
+
+
 def test_normalizer_and_gae():
     x = torch.randn(1000, 5) * 3 + 2
     n = Normalizer(5)

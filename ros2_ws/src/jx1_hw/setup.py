@@ -18,5 +18,6 @@ setup(
     maintainer_email="maintainer@jx1.invalid",
     description="JX1 hardware bridge and hub emulator",
     license="Apache-2.0",
-    entry_points={"console_scripts": ["hw_node = jx1_hw.hw_node:main", "fake_hub = jx1_hw.fake_hub:main"]},
+    entry_points={"console_scripts": ["hw_node = jx1_hw.hw_node:main", "fake_hub = jx1_hw.fake_hub:main",
+                                  "imu_node = jx1_hw.imu_node:main"]},
 )

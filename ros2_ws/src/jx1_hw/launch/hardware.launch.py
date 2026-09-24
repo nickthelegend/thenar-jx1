@@ -3,8 +3,8 @@
   ros2 launch jx1_hw hardware.launch.py port_a:=/dev/ttyACM0 port_b:=/dev/ttyACM1
   ros2 service call /jx1/hw/run std_srvs/srv/Trigger          # enable (robot on the gantry!), hubs leave DAMPING
   ros2 service call /jx1/hw/damp std_srvs/srv/Trigger         # back to damping
-The pelvis IMU (BNO085) driver must publish /jx1/imu (sensor_msgs/Imu, orientation + angular velocity in the pelvis
-frame) - it is not part of this package. hil:=true starts the MuJoCo hub emulator instead of real hubs (no hardware).
+The pelvis IMU (BNO085) is read by jx1_hw imu_node (imu:=true, default) and published on /jx1/imu.
+hil:=true starts the MuJoCo hub emulator instead of real hubs (no hardware); the emulator publishes /jx1/imu itself.
 """
 from pathlib import Path
 
@@ -33,6 +33,8 @@ def setup(context):
              remappings=[("/joint_states", "/jx1/joint_states")]),
         Node(package="jx1_policy", executable="policy_node", output="screen", parameters=[{"policy_dir": policy_dir, "use_sim_time": hil}]),
     ]
+    if not hil and get("imu") == "true":
+        nodes.append(Node(package="jx1_hw", executable="imu_node", output="screen"))
     if hil:
         import os
         repo = get("repo") or os.environ.get("JX1_REPO", "")
@@ -46,4 +48,5 @@ def generate_launch_description():
     return LaunchDescription([DeclareLaunchArgument("port_a", default_value="/dev/ttyACM0"),
                               DeclareLaunchArgument("port_b", default_value="/dev/ttyACM1"),
                               DeclareLaunchArgument("policy_dir", default_value=""), DeclareLaunchArgument("hil", default_value="false"),
-                              DeclareLaunchArgument("repo", default_value=""), OpaqueFunction(function=setup)])
+                              DeclareLaunchArgument("repo", default_value=""), DeclareLaunchArgument("imu", default_value="true"),
+                              OpaqueFunction(function=setup)])
