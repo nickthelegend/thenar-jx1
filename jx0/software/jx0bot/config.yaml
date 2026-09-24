@@ -1,0 +1,63 @@
+# JX0 robot configuration (Raspberry Pi 4). Joint angles in radians, sign convention = the simulation model
+# (x forward, y left, z up; right-hand rule). Fill in `zero_ticks` and check `direction` with calibrate.py.
+
+bus:
+  port: /dev/ttyUSB0          # Waveshare serial bus servo driver on USB (or /dev/serial0 on the Pi UART)
+  baud: 1000000
+  rate_hz: 50                 # goal packets per second (the rate the gaits were verified at)
+  # servo stiffness/damping the walking simulation needs (N·m/rad, N·m·s/rad): set the ST3215 P/D registers so a
+  # joint deflects ~2.8 deg at stall torque (calibrate.py --stiffness measures it)
+  stiffness_nm_per_rad: 60
+  damping_nm_s_per_rad: 0.6
+
+# ST3215 leg servos: bus ID, direction (+1 / -1: servo tick direction vs the joint sign — ALL PLACEHOLDERS until
+# calibrate.py --directions checks each joint), zero_ticks (servo reading
+# with the joint at 0 rad — robot in the zero pose), limits from jx0/design_point.yaml
+leg_servos:
+  l_hip_yaw:     {id: 1,  direction: 1,  zero_ticks: 2048, limits_deg: [-30, 30]}
+  l_hip_roll:    {id: 2,  direction: 1,  zero_ticks: 2048, limits_deg: [-20, 40]}
+  l_hip_pitch:   {id: 3,  direction: 1,  zero_ticks: 2048, limits_deg: [-100, 30]}
+  l_knee:        {id: 4,  direction: 1,  zero_ticks: 2048, limits_deg: [0, 130]}
+  l_ankle_pitch: {id: 5,  direction: 1,  zero_ticks: 2048, limits_deg: [-60, 45]}
+  l_ankle_roll:  {id: 6,  direction: 1,  zero_ticks: 2048, limits_deg: [-25, 25]}
+  r_hip_yaw:     {id: 7,  direction: 1,  zero_ticks: 2048, limits_deg: [-30, 30]}
+  r_hip_roll:    {id: 8,  direction: 1,  zero_ticks: 2048, limits_deg: [-40, 20]}
+  r_hip_pitch:   {id: 9,  direction: 1,  zero_ticks: 2048, limits_deg: [-100, 30]}
+  r_knee:        {id: 10, direction: 1,  zero_ticks: 2048, limits_deg: [0, 130]}
+  r_ankle_pitch: {id: 11, direction: 1,  zero_ticks: 2048, limits_deg: [-60, 45]}
+  r_ankle_roll:  {id: 12, direction: 1,  zero_ticks: 2048, limits_deg: [-25, 25]}
+
+# MG90S micro servos on Pi GPIO (pigpio DMA-timed pulses, 50 Hz): BCM pin, pulse at -90 / 0 / +90 deg (µs), direction
+# (GPIO 18-21 are taken by I2S audio, 8-11 by the display SPI, 2-3 by the IMU I2C)
+micro_servos:
+  l_shoulder_pitch: {gpio: 5,  pulse_us: [500, 1500, 2500], direction: 1}
+  l_shoulder_roll:  {gpio: 6,  pulse_us: [500, 1500, 2500], direction: 1}
+  l_elbow:          {gpio: 12, pulse_us: [500, 1500, 2500], direction: 1}
+  r_shoulder_pitch: {gpio: 13, pulse_us: [500, 1500, 2500], direction: 1}
+  r_shoulder_roll:  {gpio: 16, pulse_us: [500, 1500, 2500], direction: 1}
+  r_elbow:          {gpio: 22, pulse_us: [500, 1500, 2500], direction: 1}
+  neck_yaw:         {gpio: 23, pulse_us: [500, 1500, 2500], direction: 1}
+
+imu:
+  type: mpu6050
+  i2c_bus: 1
+  address: 0x68
+  mount: identity             # rotation from the sensor axes to the pelvis axes (x forward, y left, z up)
+
+balance:                      # the stabiliser the gaits were verified with (jx0/sim/walk_jx0.py)
+  k_ankle: 0.6
+  d_ankle: 0.05
+  k_hip: 0.3
+
+voice:
+  talk_button_gpio: 17        # push-to-talk button to GND (internal pull-up)
+  vosk_model: models/vosk-model-small-en-us-0.15
+  piper_voice: models/en_US-lessac-medium.onnx
+
+face:
+  backend: gc9a01             # gc9a01 | none (renders to face.png for testing)
+  spi_port: 0
+  spi_device: 0
+  gpio_dc: 25
+  gpio_rst: 24
+  gpio_backlight: 27          # GPIO 18-21 are the I2S mic + amplifier

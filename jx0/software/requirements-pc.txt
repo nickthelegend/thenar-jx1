@@ -1,0 +1,8 @@
+# JX0 on a PC with the simulated body: python -m jx0bot.main --sim --text   (run from jx0/software)
+# the simulated body loads jx0/sim/jx0_model.py, which puts the repo's calculations/ (jx1calc) on the path itself
+anthropic>=1.0
+numpy
+pyyaml
+mujoco>=3.1
+scipy               # jx1calc gait synthesis (imported by the sim model)
+pillow

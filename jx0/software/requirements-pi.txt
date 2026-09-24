@@ -1,0 +1,14 @@
+# JX0 on the Raspberry Pi 4 (Raspberry Pi OS 64-bit, Python 3.11): pip install -r requirements-pi.txt
+# plus: sudo apt install pigpio espeak-ng portaudio19-dev && sudo systemctl enable --now pigpiod
+anthropic>=1.0
+numpy
+pyyaml
+pyserial            # servo bus (Waveshare serial bus servo driver)
+smbus2              # MPU6050 IMU
+pigpio              # MG90S arm/neck servos (DMA-timed pulses)
+gpiozero            # push-to-talk button
+vosk                # offline speech recognition
+sounddevice         # microphone (INMP441 I2S) and speaker (MAX98357A I2S)
+piper-tts           # offline text to speech (falls back to espeak-ng)
+pillow              # face drawing
+luma.lcd            # face display SPI (GC9A01 init in face.py, or its ST7789 driver)

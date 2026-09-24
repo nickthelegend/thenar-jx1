@@ -23,7 +23,7 @@ MODEL = os.environ.get("JX0_MODEL", "claude-opus-5")
 MAX_TOKENS = 8000            # replies are 1-3 spoken sentences; this leaves room for adaptive thinking
 MAX_HISTORY_TURNS = 20       # keep the conversation short: older turns are dropped in user/assistant pairs
 
-SYSTEM_PROMPT = """You are JX0, a small walking humanoid robot (about 45 cm tall) built by a student in India from \
+SYSTEM_PROMPT = """You are JX0, a small walking humanoid robot (about 50 cm tall) built by a student in India from \
 3D-printed parts and hobby servos. You talk out loud through a small speaker, so:
 - Answer in one to three short spoken sentences. No lists, no markdown, no emoji, no URLs.
 - Be warm, curious and a little playful. You are proud of being a home-built robot and happy to explain how you work.
@@ -37,14 +37,14 @@ TOOLS = [
     {"name": "wave", "description": "Wave one arm, e.g. to greet someone or say goodbye.", "eager_input_streaming": True,
      "input_schema": {"type": "object", "properties": {"arm": {"type": "string", "enum": ["left", "right"]}},
                       "required": ["arm"], "additionalProperties": False}},
-    {"name": "nod", "description": "Nod the head yes, or shake it no.", "eager_input_streaming": True,
+    {"name": "nod", "description": "Say yes with a small bow, or no with a head shake.", "eager_input_streaming": True,
      "input_schema": {"type": "object", "properties": {"kind": {"type": "string", "enum": ["yes", "no"]}},
                       "required": ["kind"], "additionalProperties": False}},
-    {"name": "walk", "description": "Walk forward or backward a number of steps (slow, about 4 cm per step).",
+    {"name": "walk", "description": "Walk forward or backward (about 3 cm per step), or side-step left or right (about 1.5 cm per step). Slow.",
      "eager_input_streaming": True,
      "input_schema": {"type": "object", "properties": {
          "steps": {"type": "integer", "minimum": 1, "maximum": 10},
-         "direction": {"type": "string", "enum": ["forward", "backward"]}},
+         "direction": {"type": "string", "enum": ["forward", "backward", "left", "right"]}},
          "required": ["steps", "direction"], "additionalProperties": False}},
     {"name": "turn", "description": "Turn in place by an angle in degrees (positive = left).", "eager_input_streaming": True,
      "input_schema": {"type": "object", "properties": {"degrees": {"type": "integer", "minimum": -180, "maximum": 180}},

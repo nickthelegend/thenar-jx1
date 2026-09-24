@@ -155,4 +155,4 @@ class FakeBus:
         return int(round(self.pos[sid]))
 
     def status(self, sid):
-        return {"position": self.position(sid), "speed": 0, "load": 0, "voltage_v": 7.4, "temperature_c": 30}
+        return {"position": self.position(sid), "speed": 0, "load": 0, "voltage_v": 12.0, "temperature_c": 30}

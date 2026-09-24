@@ -39,6 +39,15 @@ GAITS = {
     "turn_left": dict(step_length=0.0, step_time=0.60, n_steps=8, turn_per_step_deg=10.0),
     "turn_right": dict(step_length=0.0, step_time=0.60, n_steps=8, turn_per_step_deg=-10.0),
     "side_left": dict(step_length=0.0, step_time=0.60, n_steps=6, lateral_step=0.015),
+    # the robot's building blocks: 2 steps from standing to standing, repeated by jx0bot.robot.walk / turn
+    "forward_2": dict(step_length=0.040, step_time=0.60, n_steps=2),
+    "forward_4": dict(step_length=0.040, step_time=0.60, n_steps=4),
+    "backward_2": dict(step_length=-0.025, step_time=0.60, n_steps=2),
+    "backward_4": dict(step_length=-0.025, step_time=0.60, n_steps=4),
+    "turn_left_2": dict(step_length=0.0, step_time=0.60, n_steps=2, turn_per_step_deg=10.0),
+    "turn_right_2": dict(step_length=0.0, step_time=0.60, n_steps=2, turn_per_step_deg=-10.0),
+    "side_left_2": dict(step_length=0.0, step_time=0.60, n_steps=2, lateral_step=0.015),
+    "side_right_2": dict(step_length=0.0, step_time=0.60, n_steps=2, lateral_step=-0.015),
 }
 ARM_POSE = {"l_shoulder_roll": np.radians(6), "r_shoulder_roll": np.radians(-6), "l_elbow": np.radians(-25), "r_elbow": np.radians(-25)}
 K_ANKLE, D_ANKLE, K_HIP = 0.6, 0.05, 0.3          # stabiliser (rad per rad of tilt, per rad/s) — as JX1
