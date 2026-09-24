@@ -36,6 +36,10 @@ def row_values(b: Path) -> dict:
         e = load(b / f"envelope{tag}.json")
         if e:
             sm = e["summary"]
+            if "self_contact_commands" in sm:
+                pairs = ", ".join(f"{p} ({w['commands']})" for p, w in sm["self_contact_pairs"].items()) or "none"
+                out[f"self-contact, {key}"] = (f"{sm['self_contact_commands']}/{sm['commands']} commands "
+                                               f"({sm['self_contact_commands_trained_range']} in the trained range): {pairs}")
             g = lambda k: f"{sm[k]['achieved']:+.2f}" if sm.get(k) else "-"  # noqa: E731
             out[key] = (f"{sm['tracked']}/{sm['commands']} tracked, {sm['falls']} falls; fwd {g('forward')}, back {g('backward')}, "
                         f"yaw {g('yaw_left')}/{g('yaw_right')}")

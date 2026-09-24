@@ -99,6 +99,7 @@ class CadSim:
         self.pol_a = np.array([self.act_of[j] for j in self.rn.joints])
         self.sole = [mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_SITE, f"{s}_sole") for s in ("left", "right")]
         self.foot_body = np.array([m.site_bodyid[s] for s in self.sole])
+        self.bname = [mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_BODY, b) for b in range(m.nbody)]
         self.jname = [mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, m.actuator_trnid[a, 0]) for a in range(m.nu)]
         self.effort = np.array([self.io["effort_limits_Nm"].get(self.jname[a], np.inf) for a in range(m.nu)])
         vlim = self.io.get("velocity_limits_rad_s")
@@ -121,6 +122,17 @@ class CadSim:
         b1, b2 = self.m.geom_bodyid[d.contact.geom1], self.m.geom_bodyid[d.contact.geom2]
         return np.isin(self.foot_body, np.concatenate([b2[b1 == 0], b1[b2 == 0]]))
 
+    def self_contacts(self, d):
+        """{"body_a|body_b": hull overlap m} of the contacts between two robot bodies (OI-7 legs, OI-24 hip-yaw brackets,
+        OI-18 arm-thigh); the CAD model collides every body pair that is not excluded as adjacent."""
+        b1, b2 = self.m.geom_bodyid[d.contact.geom1], self.m.geom_bodyid[d.contact.geom2]
+        pairs = {}
+        for a, b, dist in zip(b1, b2, d.contact.dist):
+            if a and b:
+                k = "|".join(sorted((self.bname[a], self.bname[b])))
+                pairs[k] = max(pairs.get(k, 0.0), float(-dist))
+        return pairs
+
     def rollout(self, cmd, T, frame_cb=None, settle_s=2.0, step_cb=None):
         """Walk with a constant command for T seconds; tracking error is measured after settle_s. frame_cb(k, d) runs every
         policy step, step_cb(d, settled) every physics step (e.g. torque / speed traces for the power model)."""
@@ -131,6 +143,7 @@ class CadSim:
         vmax = np.zeros(len(rn.joints))
         slip, fell = [], False
         was_down, liftoffs, swing_steps, n_settled, xy0 = None, 0, 0, 0, None     # stepping (in place) after the settle time
+        self_pairs, self_steps, n_steps = {}, 0, 0                                # self-contact over the whole rollout
         snap = lambda: (d.qpos[3:7].copy(), d.qvel[3:6].copy(), d.qpos[self.pol_q].copy(), d.qvel[self.pol_d].copy())  # noqa: E731
         obs_hist = deque([snap()] * (self.n_obs + 1), maxlen=self.n_obs + 1)
         ctrl_hist = deque([d.ctrl[self.pol_a].copy()] * (self.n_act + 1), maxlen=self.n_act + 1)
@@ -159,6 +172,11 @@ class CadSim:
                 liftoffs += 0 if was_down is None else int(np.sum(was_down & ~down))
                 was_down, swing_steps, n_settled = down, swing_steps + int(not down.all()), n_settled + 1
                 xy0 = d.qpos[0:2].copy() if xy0 is None else xy0
+            sc = self.self_contacts(d)
+            for pair, pen in sc.items():
+                n, p = self_pairs.get(pair, (0, 0.0))
+                self_pairs[pair] = (n + 1, max(p, pen))
+            self_steps, n_steps = self_steps + bool(sc), n_steps + 1
             g = policy_io.projected_gravity(d.qpos[3:7])
             tilt_max = max(tilt_max, float(np.degrees(np.arccos(np.clip(-g[2], -1, 1)))))
             for s in self.sole:
@@ -180,6 +198,9 @@ class CadSim:
              "foot_liftoffs_per_s": round(liftoffs / max(n_settled * self.dt_pol, 1e-9), 2),
              "swing_fraction": round(swing_steps / max(n_settled, 1), 3),
              "base_travel_m": round(float(np.linalg.norm(d.qpos[0:2] - xy0)), 3) if xy0 is not None else None,
+             "self_contact_fraction": round(self_steps / max(n_steps, 1), 3),
+             "self_contact_pairs": {k: {"fraction": round(n / max(n_steps, 1), 3), "max_hull_overlap_mm": round(p * 1000, 1)}
+                                    for k, (n, p) in sorted(self_pairs.items())},
              "peak_torque_fraction": round(float(peak[worst] / self.effort[worst]), 3),
              "peak_torque_joint": mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_ACTUATOR, worst),
              "joint_torque_peak_Nm": {self.jname[a]: round(float(peak[a]), 2) for a in range(m.nu)},
@@ -218,7 +239,7 @@ def run(policy_dir: Path, render=True, hub_interp=True, terrain=None):
         r = results[name] = sim.rollout(cmd, T, frame_cb=grab if renderer is not None and name == "forward_0.5" else None)
         print(f"{name:13s} cmd {cmd} -> {'FELL' if r['fell'] else 'ok  '} v_mean {r['mean_velocity_b']} rmse {r['velocity_rmse']} "
               f"tilt {r['max_tilt_deg']:5.1f} deg peak {r['peak_torque_joint']} {r['peak_torque_fraction']:.0%} "
-              f"lift-offs {r['foot_liftoffs_per_s']:.2f}/s", flush=True)
+              f"lift-offs {r['foot_liftoffs_per_s']:.2f}/s self-contact {r['self_contact_fraction']:.0%}", flush=True)
     summary = {"terrain": terrain or "flat", "hub_interpolation": hub_interp, "policy": rel(policy_dir),
                "model": sim.io["trained"].get("source_mjcf", "simulation/mujoco/jx1.xml"), "physics_dt_s": sim.m.opt.timestep,
                "decimation": sim.dec, "scenarios": results, "all_upright": not any(r["fell"] for r in results.values())}

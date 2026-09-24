@@ -77,6 +77,11 @@ def main():
                     f"`{s['model']}` as generated: CoACD mesh-hull collisions, {s['physics_dt_s'] * 1000:.0f} ms physics, "
                     f"nominal masses, CAN-hub target ramp {'on' if s['hub_interpolation'] else 'off'}. "
                     f"{'All scenarios upright.' if s['all_upright'] else '**At least one fall.**'}", "", sim2sim_table(s), ""]
+            sc = {n: r["self_contact_pairs"] for n, r in s["scenarios"].items() if r.get("self_contact_pairs")}
+            if any("self_contact_pairs" in r for r in s["scenarios"].values()):
+                out += ["Self-contact between robot bodies (CoACD hulls, whole rollout): " + ("none." if not sc else "; ".join(
+                    f"{n}: " + ", ".join(f"{p} {v['fraction']:.0%} of steps" for p, v in pr.items())
+                    for n, pr in sc.items()) + "."), ""]
             if tag == "" and (pdir / "sim2sim_walk.gif").exists():
                 out += ["![walking at 0.5 m/s on the CAD model](sim2sim_walk.gif)", ""]
     for tag in ("", "_rough"):
@@ -94,6 +99,12 @@ def main():
                     f"- left {best('left', 'm/s')}, right {best('right', 'm/s')}",
                     f"- yaw left {best('yaw_left', 'rad/s')}, yaw right {best('yaw_right', 'rad/s')}", "",
                     f"![command envelope](envelope{tag}.png)", ""]
+            if "self_contact_commands" in sm:
+                pairs = sm["self_contact_pairs"]
+                out += [f"Self-contact on the CAD hulls: {sm['self_contact_commands']}/{sm['commands']} commands "
+                        f"({sm['self_contact_commands_trained_range']} inside the trained ranges)" + (": " + "; ".join(
+                            f"{p} in {w['commands']} commands (worst {w['worst_command']}: {w['worst_fraction']:.0%} of steps)"
+                            for p, w in pairs.items()) if pairs else "") + ".", ""]
     lat = load(pdir / "latency.json")
     if lat:
         out += ["## Latency sensitivity (CAD model, added sensing / actuation delay)", "",

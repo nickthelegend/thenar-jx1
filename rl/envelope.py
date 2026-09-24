@@ -48,6 +48,24 @@ def tracked(cmd, r):
     return bool(np.all(np.abs(v - np.array(cmd)) <= tol))
 
 
+def in_range(c, ranges):
+    lo_hi = (ranges["lin_vel_x"], ranges["lin_vel_y"], ranges["ang_vel_yaw"])
+    return all(lo <= v <= hi for v, (lo, hi) in zip(c, lo_hi))
+
+
+def worst_pairs(res):
+    """Per contacting body pair: the command with the largest contact fraction, that fraction and the largest hull overlap (convex-hull depth, not a physical penetration)."""
+    out = {}
+    for key, r in res.items():
+        for pair, s in r.get("self_contact_pairs", {}).items():
+            w = out.setdefault(pair, {"commands": 0, "worst_command": key, "worst_fraction": 0.0, "max_hull_overlap_mm": 0.0})
+            w["commands"] += 1
+            if s["fraction"] > w["worst_fraction"]:
+                w["worst_command"], w["worst_fraction"] = key, s["fraction"]
+            w["max_hull_overlap_mm"] = max(w["max_hull_overlap_mm"], s["max_hull_overlap_mm"])
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--policy", default=str(DEFAULT_POLICY))
@@ -57,6 +75,7 @@ def main():
     a = ap.parse_args()
     policy = Path(a.policy)
     cmds = sorted({(vx, 0.0, wz) for vx in VX for wz in WZ} | {(vx, vy, 0.0) for vx in VX for vy in VY})
+    io_trained = ranges = __import__("yaml").safe_load((policy / "policy_io.yaml").read_text(encoding="utf-8"))["commands"]
     t0 = time.time()
     with Pool(a.workers, initializer=_init, initargs=(str(policy), a.terrain)) as pool:
         out = dict(pool.map(_walk, [(c, a.duration) for c in cmds], chunksize=1))
@@ -73,8 +92,11 @@ def main():
     summary = {"forward": best(0, 1, (1, 2)), "backward": best(0, -1, (1, 2)), "left": best(1, 1, (0, 2)), "right": best(1, -1, (0, 2)),
                "yaw_left": best(2, 1, (0, 1)), "yaw_right": best(2, -1, (0, 1)),
                "tracked": sum(r["tracked"] for r in res.values()), "commands": len(res),
-               "falls": sum(r["fell"] for r in res.values())}
-    io_trained = __import__("yaml").safe_load((policy / "policy_io.yaml").read_text(encoding="utf-8"))["commands"]
+               "falls": sum(r["fell"] for r in res.values()),
+               # self-contact on the CAD hulls (OI-7 legs, OI-24 hip-yaw brackets): commands with any, and the worst per pair
+               "self_contact_commands": sum(bool(r.get("self_contact_pairs")) for r in res.values()),
+               "self_contact_commands_trained_range": sum(bool(r.get("self_contact_pairs")) for c, r in out.items() if in_range(c, ranges)),
+               "self_contact_pairs": worst_pairs(res)}
     doc = {"policy": policy.as_posix(), "terrain": a.terrain or "flat", "duration_s": a.duration, "settle_s": 2.0,
            "criterion": "upright and |mean v - cmd| <= max(0.1, 20%) per axis (wz: max(0.15, 20%))", "training_ranges": io_trained,
            "summary": summary, "results": res, "wall_time_s": round(time.time() - t0, 1)}
