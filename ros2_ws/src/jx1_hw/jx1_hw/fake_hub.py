@@ -71,6 +71,8 @@ class HubEmu:
         dq_des, kp, kd, tff = self.next[:, 1], self.next[:, 2], self.next[:, 3], self.next[:, 4]
         if self.mode != P.RUN:
             return np.clip(-self.cfg["damping_kd"] * dq, -self.tau_lim, self.tau_lim)
+        # the firmware caps the total MIT torque by moving the position target from the latest feedback (the motor runs the
+        # PD law itself); with the state of this bus period that is exactly this clip
         return np.clip(kp * (q_des - q) + kd * (dq_des - dq) + tff, -self.tau_lim, self.tau_lim)
 
 

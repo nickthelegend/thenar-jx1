@@ -50,10 +50,20 @@ static Frame command_for(int j, float alpha) {
   Target t;
   t.q = tgt_prev[j].q + alpha * (tgt_next[j].q - tgt_prev[j].q);
   t.dq = tgt_next[j].dq; t.kp = tgt_next[j].kp; t.kd = tgt_next[j].kd; t.tau = tgt_next[j].tau;
-  t.q = clampf(t.q, c.q_min + SOFT_MARGIN, c.q_max - SOFT_MARGIN);
   float tmax = c.tau_limit;
   if (state[j].valid && state[j].temp_c > TEMP_DERATE_C) tmax *= clampf((TEMP_STOP_C - state[j].temp_c) / (TEMP_STOP_C - TEMP_DERATE_C), 0.f, 1.f);
   t.tau = clampf(t.tau, -tmax, tmax);
+  // Total-torque cap: the motor applies kp (q* - q) + kd (dq* - dq) + tau itself, so clamping tau alone leaves the PD part
+  // up to the motor's own peak. Move the position target so that the torque predicted from the latest feedback stays
+  // within tmax (the hub-firmware twin, ros2_ws/src/jx1_hw/jx1_hw/fake_hub.py, caps the same sum).
+  if (state[j].valid && t.kp > 0.f) {
+    const float q = c.sign * (state[j].q - c.zero), dq = c.sign * state[j].dq;
+    const float rest = t.kd * (t.dq - dq) + t.tau;
+    const float pd = t.kp * (t.q - q) + rest;
+    if (pd > tmax) t.q = q + (tmax - rest) / t.kp;
+    else if (pd < -tmax) t.q = q + (-tmax - rest) / t.kp;
+  }
+  t.q = clampf(t.q, c.q_min + SOFT_MARGIN, c.q_max - SOFT_MARGIN);   // soft limits last: they win over the torque cap
   if (mode != RUN) { t.kp = 0; t.dq = 0; t.tau = 0; t.kd = DAMPING_KD; t.q = state[j].valid ? c.sign * (state[j].q - c.zero) : 0; }
   // joint -> motor frame
   float qm = c.sign * t.q + c.zero, dqm = c.sign * t.dq, taum = c.sign * t.tau;

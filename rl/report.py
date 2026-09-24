@@ -133,6 +133,11 @@ def main():
                        f"{pw['pack_13S2P_50S']['runtime_h'][name]:.2f} h | {lift} |")
         out += ["", "Worst actuator RMS current vs rated: " + ", ".join(
             f"{j} {t['utilisation']:.0%} ({t['scenario']})" for j, t in pw["thermal"].items()), ""]
+        ts = {j: t for j, t in pw.get("torque_speed", {}).items() if j != "model"}
+        if ts:
+            out += ["Torque-speed envelope (" + pw["torque_speed"]["model"] + "): " + ", ".join(
+                f"{j} {t['worst_utilisation']:.0%} ({t['tau_Nm']:.1f} N·m at {t['omega_rad_s']:.1f} rad/s, {t['scenario']})"
+                for j, t in ts.items()) + ".", ""]
     paths = [(f, load(pdir / f)) for f in ("ros2_check.json", "ros2_launch_check.json", "ros2_control_check.json")]
     paths = [(f, r) for f, r in paths if r and r.get("phases")]
     if paths:

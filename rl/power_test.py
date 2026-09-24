@@ -5,6 +5,8 @@ I = |tau| / Kt, P_cu = 3 I^2 R_phase, P_in = max(tau * omega, 0) + P_cu (no rege
 non-actuator loads through the DC-DC and the upper-body allowance. Joint torques and speeds come from constant-command
 walks of the exported policy on the CAD model (rl/sim2sim.py CadSim, every physics step after the 2 s settle). The two
 ankle motors per leg get their torques and speeds through the parallel linkage (ros2_ws/src/jx1_hw ankle.py, as the hubs).
+Torque-speed check (OI-23): every actuator's (|tau|, |omega|) against a conservative linear envelope from the peak torque
+at stall to zero at the no-load speed, scaled to the pack's minimum voltage (the real curve is flat up to a corner speed).
 Writes <policy>/power.json.
 Usage: rl/.venv/Scripts/python rl/power_test.py [--policy rl/policies/jx1_walk_rough]
 """
@@ -57,9 +59,17 @@ def main():
     standby_w = sum(pb.V_NOM * pb.V(c["standby_current_A"]) * c["count"] for c in pb.CAT.values() if "standby_current_A" in c)
     non_act_w = sum(pb.NON_ACT.values()) / pb.DCDC_EFF
     out = {"policy": pdir.name, "model": "calculations/run_power_budget.py actuator model (Kt VERIFIED, R_phase ESTIMATED), no regeneration",
-           "duration_s": a.duration, "scenarios": {}, "thermal": {}}
+           "duration_s": a.duration, "scenarios": {}, "thermal": {},
+           "torque_speed": {"model": f"|tau| / (peak torque * (1 - |omega| / no-load speed at {pb.V_MIN:.1f} V)), linear stall-to-no-load "
+                                     "line (conservative: the real curve is flat up to its corner speed); worst point per actuator"}}
+    classes = [c for c in pb.CAT if "no_load_speed_rpm" in pb.CAT[c]]                     # RobStride classes (not the neck servo)
+    w0 = {c: pb.V(pb.CAT[c]["no_load_speed_rpm"]) * 2 * np.pi / 60 * pb.V_MIN / pb.V(pb.CAT[c]["rated_voltage_V"]) for c in classes}
+    tpk = {c: pb.V(pb.CAT[c]["peak_torque_Nm"]) for c in classes}
+
+    def ts_util(tau, w, cls):
+        return abs(tau) / (tpk[cls] * max(1e-6, 1.0 - abs(w) / w0[cls]))
     for name, cmd in SCENARIOS:
-        p_steps, i_sq, n = [], {}, 0
+        p_steps, i_sq, n, ts = [], {}, 0, {}
 
         def step(d, settled):
             nonlocal n
@@ -72,6 +82,10 @@ def main():
                     pj, ij = pb.actuator_power(np.array([d.actuator_force[act[jn]]]), np.array([d.qvel[dadr[jn]]]), cls)
                     p += float(pj[0])
                     i_sq[j] = i_sq.get(j, 0.0) + float(ij[0]) ** 2 / 2          # mean over both legs
+                    tq, wq = float(d.actuator_force[act[jn]]), float(d.qvel[dadr[jn]])
+                    u = ts_util(tq, wq, cls)
+                    if u > ts.get(j, (0.0,))[0]:
+                        ts[j] = (u, tq, wq, cls)
                 pa, ra = d.qpos[qadr[f"{side}_ankle_pitch_joint"]], d.qpos[qadr[f"{side}_ankle_roll_joint"]]
                 ta, tb = ankles[side].motor_torque(pa, ra, d.actuator_force[act[f"{side}_ankle_pitch_joint"]],
                                                    d.actuator_force[act[f"{side}_ankle_roll_joint"]])
@@ -80,6 +94,9 @@ def main():
                     pj, ij = pb.actuator_power(np.array([tm]), np.array([wm]), pb.ANKLE_CLASS)
                     p += float(pj[0])
                     i_sq["ankle_motor"] = i_sq.get("ankle_motor", 0.0) + float(ij[0]) ** 2 / 4
+                    u = ts_util(tm, wm, pb.ANKLE_CLASS)
+                    if u > ts.get("ankle_motor", (0.0,))[0]:
+                        ts["ankle_motor"] = (u, float(tm), float(wm), pb.ANKLE_CLASS)
             p_steps.append(p)
             n += 1
         r = sim.rollout(cmd, a.duration, step_cb=step)
@@ -99,6 +116,10 @@ def main():
             if irms > prev["worst_I_rms_A"]:
                 out["thermal"][j] = {"class": cls, "worst_I_rms_A": round(irms, 2), "rated_I_rms_A": round(float(rated), 2),
                                      "utilisation": round(irms / rated, 2), "scenario": name}
+        for j, (u, tq, wq, cls) in ts.items():
+            if u > out["torque_speed"].get(j, {"worst_utilisation": 0.0})["worst_utilisation"]:
+                out["torque_speed"][j] = {"class": cls, "worst_utilisation": round(u, 2), "tau_Nm": round(abs(tq), 1),
+                                          "omega_rad_s": round(abs(wq), 2), "no_load_rad_s_at_min_V": round(w0[cls], 1), "scenario": name}
         sc = out["scenarios"][name]
         print(f"{name:9s} {'FELL' if r['fell'] else 'ok  '} mean {sc['mean_W']:6.1f} W (legs {sc['legs_mean_W']:6.1f})  peak {sc['peak_W']:7.1f} W  "
               f"peak current {sc['peak_current_A_at_min_V']:5.1f} A at {pb.V_MIN:.1f} V", flush=True)
@@ -108,7 +129,7 @@ def main():
                              "runtime_h": {k: round(usable / v["mean_W"], 2) for k, v in out["scenarios"].items()},
                              "bms_rating_A": 40, "worst_peak_current_A": max(v["peak_current_A_at_min_V"] for v in out["scenarios"].values())}
     (pdir / "power.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
-    print(json.dumps(out["pack_13S2P_50S"]), json.dumps(out["thermal"]))
+    print(json.dumps(out["pack_13S2P_50S"]), json.dumps(out["thermal"]), json.dumps(out["torque_speed"]))
 
 
 if __name__ == "__main__":

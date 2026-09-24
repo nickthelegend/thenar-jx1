@@ -77,7 +77,7 @@ ros2 service call /jx1/hw/run std_srvs/srv/Trigger     # hubs track the policy t
 |---|---|
 | E-stop | hardware line into both hubs; RUN is refused while it is pressed |
 | hub watchdog | no host frame for 50 ms → DAMPING |
-| hub limits | targets clamped to the joint limits minus a soft margin; torque capped at 80 % of the motor peak; temperature derating |
+| hub limits | targets clamped to the joint limits minus a soft margin; the total MIT torque (PD + feedforward) capped at 80 % of the motor peak: the motor runs the PD law itself, so the hub moves the position target to keep the torque predicted from the latest feedback within the cap; temperature derating of the cap |
 | fall guard (`hw_node`) | pelvis tilt above 50° (`fall_tilt_deg`) latches DAMPING until the next `/jx1/hw/run` |
 | policy node | holds the measured pose and drops to WAIT when joint states or the IMU are older than 0.1 s |
 
