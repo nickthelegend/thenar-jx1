@@ -76,6 +76,7 @@ class JX1Env:
         self.home_state = np.zeros(self.nstate)
         mujoco.mj_getState(m, d, self.home_state, STATE_SPEC)
         self.base_height_target = self.info["base_height"]
+        self.terrain = self.info.get("terrain")               # None on flat ground
 
         # buffers
         N, n = num_envs, len(self.joints)
@@ -142,6 +143,11 @@ class JX1Env:
         qv = s[:, 1 + self.nq:1 + self.nq + self.nv]
         noise = r["init_joint_noise"] if self.randomize else 0.0
         qp[:, self.qadr] = np.clip(self.default + self.rng.uniform(-noise, noise, (len(ids), len(self.joints))), self.lower, self.upper)
+        if self.terrain is not None:                          # random spawn on the map, standing on the local ground
+            half = self.terrain.size / 2 - 1.5
+            xy = self.rng.uniform(-half, half, (len(ids), 2))
+            qp[:, 0:2] = xy
+            qp[:, 2] += self.terrain.height(xy[:, 0], xy[:, 1])
         yaw = self.rng.uniform(-np.pi, np.pi, len(ids)) if self.randomize else np.zeros(len(ids))
         qp[:, 3:7] = np.stack([np.cos(yaw / 2), np.zeros_like(yaw), np.zeros_like(yaw), np.sin(yaw / 2)], axis=1)
         if self.randomize:
@@ -172,6 +178,9 @@ class JX1Env:
         grav_b = policy_io.projected_gravity(quat)
         return qp, qv, lin_b, ang_b, grav_b
 
+    def ground(self, x, y):
+        return np.zeros_like(x) if self.terrain is None else self.terrain.height(x, y)
+
     def phase(self):
         return policy_io.gait_phase(self.state[:, 0], self.period)
 
@@ -191,8 +200,10 @@ class JX1Env:
                                             self.cfg["observation"]["clip"]) if nz else obs
         qp, qv, lin_b, _, _ = self._base()                                   # critic: true current state
         contact = (self.foot_force > 1.0).astype(np.float64)
-        priv = np.concatenate([clean, lin_b * self.obs_scales["lin_vel"], (qp[:, 2:3] - self.base_height_target) * 5.0, contact,
-                               self.foot_pos[:, :, 2] * 10.0], axis=1)
+        h_base = qp[:, 2:3] - self.ground(qp[:, 0:1], qp[:, 1:2])
+        h_feet = self.foot_pos[:, :, 2] - self.ground(self.foot_pos[:, :, 0], self.foot_pos[:, :, 1])
+        priv = np.concatenate([clean, lin_b * self.obs_scales["lin_vel"], (h_base - self.base_height_target) * 5.0, contact,
+                               h_feet * 10.0], axis=1)
         return obs.astype(np.float32), priv.astype(np.float32)
 
     def reset(self):
@@ -238,8 +249,11 @@ class JX1Env:
         q = qp[:, self.qadr]
         dq = qv[:, self.dadr]
         tilt_limit = -np.cos(np.radians(self.cfg["termination"]["max_tilt_deg"]))
-        terminated = (qp[:, 2] < self.cfg["termination"]["min_base_height_m"]) | (grav_b[:, 2] > tilt_limit) | bad
+        h_base = qp[:, 2] - self.ground(qp[:, 0], qp[:, 1])
+        terminated = (h_base < self.cfg["termination"]["min_base_height_m"]) | (grav_b[:, 2] > tilt_limit) | bad
         time_out = self.episode_step >= self.max_episode_steps
+        if self.terrain is not None:                          # leaving the map ends the episode without penalty
+            time_out |= np.max(np.abs(qp[:, 0:2]), axis=1) > self.terrain.size / 2 - 0.5
 
         rew, terms = self._rewards(qp, q, dq, lin_b, ang_b, grav_b, terminated & ~time_out)
         self.last_dq[:] = dq
@@ -281,7 +295,7 @@ class JX1Env:
             "lin_vel_z": lin_b[:, 2] ** 2,
             "ang_vel_xy": np.sum(ang_b[:, :2] ** 2, axis=1),
             "orientation": np.sum(grav_b[:, :2] ** 2, axis=1),
-            "base_height": (qp[:, 2] - self.base_height_target) ** 2,
+            "base_height": (qp[:, 2] - self.ground(qp[:, 0], qp[:, 1]) - self.base_height_target) ** 2,
             "torques": np.sum(self.tau ** 2, axis=1),
             "torque_limits": np.sum(np.clip(np.abs(self.tau) - self.soft_torque * self.tau_limit, 0, None), axis=1),
             "dof_vel": np.sum(dq ** 2, axis=1),
@@ -292,7 +306,8 @@ class JX1Env:
             "alive": np.ones(self.N),
             "hip_pos": np.sum(q[:, self.hip_idx] ** 2, axis=1),
             "contact": np.sum(contact == stance, axis=1).astype(np.float64),
-            "feet_swing_height": np.sum(((self.foot_pos[:, :, 2] - self.swing_h) ** 2) * ~contact, axis=1),
+            "feet_swing_height": np.sum(((self.foot_pos[:, :, 2] - self.ground(self.foot_pos[:, :, 0], self.foot_pos[:, :, 1])
+                                          - self.swing_h) ** 2) * ~contact, axis=1),
             "contact_no_vel": np.sum(np.sum(self.foot_vel ** 2, axis=2) * contact, axis=1),
             "stand_still": dof_err * standing,
             "termination": died.astype(np.float64),

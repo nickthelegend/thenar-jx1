@@ -109,6 +109,10 @@ def build_spec(cfg: TaskConfig) -> mujoco.MjSpec:
         elif g.group != 3 and g.type == mujoco.mjtGeom.mjGEOM_BOX and g.contype != 0 and not g.name:
             g.contype, g.conaffinity = 0, 0          # torso placeholder box (older generator output)
 
+    terrain = make_terrain(cfg)
+    if terrain is not None:
+        terrain.add_to_spec(spec)
+
     # deployment PD gains on the position actuators
     for a in spec.actuators:
         kp, kd = cfg.gains[a.target]
@@ -152,12 +156,22 @@ def build_spec(cfg: TaskConfig) -> mujoco.MjSpec:
     return spec
 
 
+def make_terrain(cfg: TaskConfig):
+    """The task's terrain object (deterministic from its seed), or None on flat ground."""
+    tc = cfg.raw.get("terrain", {"type": "plane"})
+    if tc.get("type", "plane") != "rough":
+        return None
+    from .terrain import Terrain
+    return Terrain(tc, seed=tc.get("seed", 0))
+
+
 def build(cfg: TaskConfig):
     """Compiled training model + facts the environment needs."""
     spec = build_spec(cfg)
     m = spec.compile()
     key = m.key("home")
     info = {"base_height": float(key.qpos[2]), "mass_kg": float(m.body_subtreemass[1]), "spec": spec,
+            "terrain": make_terrain(cfg),
             "joints_present": [j for j in cfg.all_joints if mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, j) >= 0]}
     return m, info
 

@@ -53,8 +53,24 @@ class TaskConfig:
         return np.array([self.default_pos[j] for j in (joints or self.policy_joints)], dtype=np.float64)
 
 
+def _merge(base: dict, over: dict) -> dict:
+    out = dict(base)
+    for k, v in over.items():
+        out[k] = _merge(out[k], v) if isinstance(v, dict) and isinstance(out.get(k), dict) else v
+    return out
+
+
+def load_raw(path: str | Path) -> dict:
+    """Task YAML; a `base: <file>` key inherits another task file (relative to this one) and deep-merges the rest."""
+    path = Path(path)
+    raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+    if "base" in raw:
+        raw = _merge(load_raw(path.parent / raw.pop("base")), raw)
+    return raw
+
+
 def load(path: str | Path = RL_DIR / "config" / "jx1_walk.yaml") -> TaskConfig:
-    raw = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    raw = load_raw(path)
     jm = yaml.safe_load((REPO / "simulation" / "joint_map.yaml").read_text(encoding="utf-8"))
     cfg = TaskConfig(raw=raw, joint_map=jm)
     cfg.all_joints = [j["name"] for j in jm["joints"]]

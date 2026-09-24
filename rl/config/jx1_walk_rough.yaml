@@ -1,0 +1,17 @@
+# Rough-ground walking: the flat task (jx1_walk.yaml) on a 16 m heightfield of flat, uneven, sloped and stepped 2 m tiles.
+# Same observation/action/deployment contract (the policy stays blind), so it fine-tunes from the flat policy and runs
+# through the same policy_io.yaml, ROS 2 node and hardware bridge.
+base: jx1_walk.yaml
+name: jx1_walk_rough
+
+terrain:
+  type: rough
+  size_m: 16.0
+  resolution_m: 0.05
+  tile_m: 2.0
+  tiles: [flat, noise, slope, steps]
+  noise_m: 0.02                 # uneven floor, +-2 cm
+  max_slope_deg: 8.0            # ramps
+  max_step_m: 0.02              # thresholds / cable covers, +-2 cm (<= 4 cm between strips)
+  flat_spawn_radius_m: 1.0
+  seed: 0

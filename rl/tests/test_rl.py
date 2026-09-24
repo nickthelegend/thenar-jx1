@@ -264,6 +264,32 @@ def test_imu_rotations():
     assert np.allclose(Rm @ Rm.T, np.eye(3), atol=1e-12) and abs(np.linalg.det(Rm) - 1) < 1e-12
 
 
+def test_rough_terrain():
+    """Heightfield continuity (only step tiles may jump) and the numpy height lookup against MuJoCo ray-casts."""
+    rcfg = config.load(RL / "config" / "jx1_walk_rough.yaml")
+    assert rcfg["name"] == "jx1_walk_rough" and rcfg["action_scale"] == CFG["action_scale"]      # inherits the flat task
+    env = JX1Env(rcfg, num_envs=32, nthread=2, seed=1)
+    t = env.terrain
+    jump = max(np.abs(np.diff(t.h, axis=a)).max() for a in (0, 1))
+    assert jump <= 2 * rcfg["terrain"]["max_step_m"] + 0.021, jump                              # steps or noise blocks only
+    m, d = env.model, mujoco.MjData(env.model)
+    mujoco.mj_forward(m, d)
+    rng = np.random.default_rng(1)
+    err = []
+    for _ in range(200):
+        x, y = rng.uniform(-7, 7, 2)
+        dist = mujoco.mj_ray(m, d, np.array([x, y, 2.0]), np.array([0, 0, -1.0]), None, 1, -1, np.zeros(1, dtype=np.int32))
+        err.append(abs((2.0 - dist) - float(env.ground(np.array([x]), np.array([y]))[0])))
+    assert np.median(err) < 1e-4 and max(err) < 0.02, (np.median(err), max(err))
+    env.reset()
+    qp = env.qpos()
+    assert np.all(np.abs(qp[:, :2]) < t.size / 2)                                                # spawned on the map
+    for _ in range(20):
+        obs, priv, rew, done, info = env.step(np.zeros((32, rcfg.num_actions)))
+        assert np.isfinite(obs).all() and np.isfinite(rew).all()
+    assert env.unstable_resets == 0
+
+
 def test_normalizer_and_gae():
     x = torch.randn(1000, 5) * 3 + 2
     n = Normalizer(5)
