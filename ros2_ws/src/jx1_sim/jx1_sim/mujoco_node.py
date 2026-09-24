@@ -7,6 +7,10 @@ Steps the CAD MJCF (simulation/mujoco/jx1.xml) in scaled real time on its own th
   /jx1/odom (nav_msgs/Odometry) + TF odom -> pelvis   ground truth
 and applies /jx1/joint_command (sensor_msgs/JointState, position targets by joint name) through the MJCF position
 actuators with the PD gains of policy_io.yaml. Service /jx1/reset (std_srvs/Trigger) puts the robot back on its feet.
+
+Bring-up gantry (parameter gantry, default "until_walk"): the base is held in the stand pose until the policy node
+reports WALK on /jx1/policy_state, as the robot hangs in its gantry until the policy runs. The stack may take seconds
+to come up (e.g. ros2_control spawners), and a passive robot on PD alone topples within about 3 s. "off" disables it.
 """
 from __future__ import annotations
 
@@ -20,6 +24,7 @@ from nav_msgs.msg import Odometry
 from rclpy.node import Node
 from rosgraph_msgs.msg import Clock
 from sensor_msgs.msg import Imu, JointState
+from std_msgs.msg import String
 from std_srvs.srv import Trigger
 from tf2_ros import TransformBroadcaster
 
@@ -39,6 +44,7 @@ class MujocoNode(Node):
         self.declare_parameter("publish_rate_hz", 200.0)
         self.declare_parameter("real_time_factor", 1.0)
         self.declare_parameter("viewer", False)
+        self.declare_parameter("gantry", "until_walk")               # until_walk | off
         model = self.get_parameter("model_path").value
         if not model:
             raise RuntimeError("parameter model_path is required (repo/simulation/mujoco/jx1.xml)")
@@ -51,6 +57,10 @@ class MujocoNode(Node):
         self.tf = TransformBroadcaster(self)
         self.create_subscription(JointState, "/jx1/joint_command", self.on_cmd, 10)
         self.create_service(Trigger, "/jx1/reset", self.on_reset)
+        self.gantry = self.get_parameter("gantry").value == "until_walk"
+        if self.gantry:
+            self.sim.hold_base()
+            self.create_subscription(String, "/jx1/policy_state", self.on_policy_state, 10)
         self.viewer = None
         if self.get_parameter("viewer").value:
             import mujoco.viewer
@@ -64,10 +74,18 @@ class MujocoNode(Node):
         with self.lock:
             self.sim.set_targets(dict(zip(msg.name, msg.position)))
 
+    def on_policy_state(self, msg: String):
+        if msg.data == "WALK" and self.sim.base_hold is not None:
+            with self.lock:
+                self.sim.release_base()
+            self.get_logger().info("policy walking: gantry released")
+
     def on_reset(self, req, res):
         with self.lock:
             self.sim.reset()
-        res.success, res.message = True, "reset to the stand pose"
+            if self.gantry:
+                self.sim.hold_base()
+        res.success, res.message = True, "reset to the stand pose" + (" (gantry holds the base until WALK)" if self.gantry else "")
         return res
 
     def loop(self):

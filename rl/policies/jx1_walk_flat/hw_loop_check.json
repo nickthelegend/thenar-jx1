@@ -9,11 +9,11 @@
     0.0
    ],
    "sim_duration_s": 3.99,
-   "distance_m": 0.219,
-   "mean_speed_m_s": 0.055,
-   "yaw_change_deg": -0.1,
-   "min_pelvis_z_m": 0.584,
-   "max_tilt_deg": 5.47
+   "distance_m": 0.156,
+   "mean_speed_m_s": 0.039,
+   "yaw_change_deg": -8.8,
+   "min_pelvis_z_m": 0.586,
+   "max_tilt_deg": 5.24
   },
   "forward": {
    "command": [
@@ -22,11 +22,11 @@
     0.0
    ],
    "sim_duration_s": 9.99,
-   "distance_m": 3.135,
-   "mean_speed_m_s": 0.314,
-   "yaw_change_deg": -31.4,
-   "min_pelvis_z_m": 0.581,
-   "max_tilt_deg": 8.51
+   "distance_m": 2.471,
+   "mean_speed_m_s": 0.247,
+   "yaw_change_deg": -15.7,
+   "min_pelvis_z_m": 0.585,
+   "max_tilt_deg": 5.41
   },
   "turn": {
    "command": [
@@ -35,11 +35,11 @@
     0.3
    ],
    "sim_duration_s": 6.0,
-   "distance_m": 0.187,
-   "mean_speed_m_s": 0.031,
-   "yaw_change_deg": 88.2,
-   "min_pelvis_z_m": 0.587,
-   "max_tilt_deg": 6.97
+   "distance_m": 0.279,
+   "mean_speed_m_s": 0.047,
+   "yaw_change_deg": 64.0,
+   "min_pelvis_z_m": 0.588,
+   "max_tilt_deg": 5.38
   },
   "stop": {
    "command": [
@@ -48,11 +48,11 @@
     0.0
    ],
    "sim_duration_s": 3.99,
-   "distance_m": 0.24,
-   "mean_speed_m_s": 0.06,
-   "yaw_change_deg": 1.1,
-   "min_pelvis_z_m": 0.592,
-   "max_tilt_deg": 5.62
+   "distance_m": 0.215,
+   "mean_speed_m_s": 0.054,
+   "yaw_change_deg": -8.2,
+   "min_pelvis_z_m": 0.588,
+   "max_tilt_deg": 4.65
   }
  },
  "reached_walk_state": true,
@@ -64,6 +64,7 @@
  "upright": true,
  "hub_status_end": {
   "requested": 2,
+  "fall_latched": false,
   "hubs": {
    "a": {
     "mode": 2,
@@ -80,12 +81,12 @@
   }
  },
  "fake_hub_log_tail": [
-  "[INFO] [1790225261.761608800] [jx1_fake_hubs]: hub emulator on ports [5555, 5556]; gantry holds the base until RUN"
+  "[INFO] [1790230498.283829600] [jx1_fake_hubs]: hub emulator on ports [5555, 5556]; gantry holds the base until RUN"
  ],
  "hw_node_log_tail": [
-  "[INFO] [1790225262.855002700] [jx1_hw]: hubs a=socket://127.0.0.1:5555 b=socket://127.0.0.1:5556; DAMPING until /jx1/hw/run"
+  "[INFO] [1790230498.868135200] [jx1_hw]: hubs a=socket://127.0.0.1:5555 b=socket://127.0.0.1:5556; DAMPING until /jx1/hw/run"
  ],
  "policy_log_tail": [
-  "[INFO] [1790225262.860416800] [jx1_policy]: policy D:\\Project\\thenar-jx1\\rl\\policies\\jx1_walk_flat: 12 joints, 50 Hz"
+  "[INFO] [1790230498.836711400] [jx1_policy]: policy D:\\Project\\thenar-jx1\\rl\\policies\\jx1_walk_flat: 12 joints, 50 Hz"
  ]
 }

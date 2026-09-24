@@ -97,10 +97,20 @@ def main():
                 "| direction | largest survived impulse | CoM velocity change |", "|---|---|---|"]
         out += [f"| {d} | {v:.1f} N·s | {push['equivalent_com_velocity_change_m_s'][d]:.2f} m/s |" for d, v in push["max_survived_impulse_Ns"].items()]
         out += [""]
-    r2 = load(pdir / "ros2_check.json")
-    if r2:
-        out += [f"## ROS 2 {r2.get('ros_distro', '')}: `jx1_sim` + `jx1_policy` as separate processes, `/cmd_vel` → walk", "",
-                f"Reached WALK: {r2['reached_walk_state']}, upright throughout: {r2['upright']}.", "", phases_table(r2), ""]
+    paths = [(f, load(pdir / f)) for f in ("ros2_check.json", "ros2_launch_check.json", "ros2_control_check.json")]
+    paths = [(f, r) for f, r in paths if r and r.get("phases")]
+    if paths:
+        r2 = paths[0][1]
+        out += [f"## ROS 2 {r2.get('ros_distro', '')}: separate node processes driven over `/cmd_vel`, measured from `/jx1/odom`", "",
+                "Same script on every path: forward 0.4 m/s for 10 s, turn 0.4 rad/s for 6 s (137.5° commanded), stop.", "",
+                "| started by | forward speed | turn | max tilt | upright |", "|---|---|---|---|---|"]
+        for f, r in paths:
+            ph = r["phases"]
+            fw, tn = ph.get("forward", {}), ph.get("turn", {})
+            out.append(f"| {r.get('started_by', 'python -m (source tree)')} | {fw.get('mean_speed_m_s', float('nan')):.2f} m/s | "
+                       f"{tn.get('yaw_change_deg', float('nan')):.0f}° | {max(p['max_tilt_deg'] for p in ph.values()):.1f}° | "
+                       f"{r.get('upright')} |")
+        out += ["", phases_table(r2), ""]
     hw = load(pdir / "hw_loop_check.json")
     if hw:
         hubs = hw.get("hub_status_end", {}).get("hubs", {})

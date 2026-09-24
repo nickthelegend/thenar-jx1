@@ -36,6 +36,7 @@ class MujocoSim:
             return slice(m.sensor_adr[sid], m.sensor_adr[sid] + m.sensor_dim[sid]) if sid >= 0 else None
         self.s_gyro, self.s_acc = sensor("imu_gyro"), sensor("imu_acc")
         self.soles = [mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_SITE, f"{s}_sole") for s in ("left", "right")]
+        self.base_hold = None             # bring-up gantry: base pose held while set (see hold_base)
         self.reset()
 
     @property
@@ -78,12 +79,21 @@ class MujocoSim:
         if not self.hub_interpolation:
             self.d.ctrl[:] = self._to
 
+    def hold_base(self):
+        """Bring-up gantry: keep the base where it is (joints still move) until release_base()."""
+        self.base_hold = self.d.qpos[:7].copy()
+
+    def release_base(self):
+        self.base_hold = None
+
     def step(self, n=1):
         for _ in range(n):
             if self.hub_interpolation and hasattr(self, "_t_cmd"):
                 alpha = min(1.0, (self.d.time + self.dt - self._t_cmd) / self._period)
                 self.d.ctrl[:] = self._from + alpha * (self._to - self._from)
             mujoco.mj_step(self.m, self.d)
+            if self.base_hold is not None:
+                self.d.qpos[:7], self.d.qvel[:6] = self.base_hold, 0.0
 
     def joint_state(self):
         d = self.d

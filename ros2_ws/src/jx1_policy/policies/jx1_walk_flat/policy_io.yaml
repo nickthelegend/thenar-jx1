@@ -75,11 +75,11 @@ pd_gains:
   - 200.0
   - 5.0
   left_ankle_pitch_joint:
-  - 60.0
-  - 2.0
+  - 51.2
+  - 1.92
   left_ankle_roll_joint:
-  - 40.0
-  - 1.5
+  - 64.8
+  - 2.43
   right_hip_yaw_joint:
   - 100.0
   - 2.5
@@ -93,11 +93,11 @@ pd_gains:
   - 200.0
   - 5.0
   right_ankle_pitch_joint:
-  - 60.0
-  - 2.0
+  - 51.2
+  - 1.92
   right_ankle_roll_joint:
-  - 40.0
-  - 1.5
+  - 64.8
+  - 2.43
   waist_yaw_joint:
   - 150.0
   - 4.0
@@ -315,11 +315,11 @@ commands:
 targets: q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad
 trained:
   checkpoint: model_latest.pt
-  run: walk_v1_warmstart
-  iteration: 1500
+  run: walk_v2_final
+  iteration: 3000
   task_config: run snapshot (config.yaml next to the checkpoint)
   source_mjcf: simulation/mujoco/jx1.xml
-  source_mjcf_sha256: b978d1f373b0cccf8b565ce5794eb7cdd11186673dfe4ba036f8c91c2a2fe106
+  source_mjcf_sha256: 13e00221a0d062a2e3a426d2313e3b7f7fff8d5f6aca1dc60a093813af340898
   export_check:
     onnx_max_abs_diff: 1.9073486328125e-06
     torchscript_max_abs_diff: 0.0

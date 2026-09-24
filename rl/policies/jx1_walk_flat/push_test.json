@@ -8,17 +8,17 @@
  "push_duration_s": 0.1,
  "push_time_s": 4.0,
  "max_survived_impulse_Ns": {
-  "forward": 22.03,
-  "backward": 14.06,
-  "left": 11.72,
-  "right": 23.44
+  "forward": 21.56,
+  "backward": 14.53,
+  "left": 12.66,
+  "right": 17.81
  },
  "baseline_upright": true,
- "robot_mass_kg": 32.94,
+ "robot_mass_kg": 33.61,
  "equivalent_com_velocity_change_m_s": {
-  "forward": 0.669,
-  "backward": 0.427,
-  "left": 0.356,
-  "right": 0.712
+  "forward": 0.642,
+  "backward": 0.432,
+  "left": 0.377,
+  "right": 0.53
  }
 }

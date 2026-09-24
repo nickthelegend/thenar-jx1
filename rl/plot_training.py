@@ -47,11 +47,22 @@ def main():
         def clean(ys):
             pts = [(x, y) for x, y in zip(it, ys) if y == y]
             return ([p[0] for p in pts], [p[1] for p in pts]) if pts else ([], [])
+
+        def smooth(axis, ys, **kw):
+            # episode statistics are per iteration: between the synchronised 20 s time-outs only the (short) falls end,
+            # so the raw series spikes; draw it faint and a 50-iteration rolling mean on top
+            x, y = clean(ys)
+            if not x:
+                return
+            line, = axis.plot(x, y, lw=0.5, alpha=0.25, **{k: v for k, v in kw.items() if k != "label"})
+            w = 50
+            ym = [sum(y[max(0, i - w + 1):i + 1]) / len(y[max(0, i - w + 1):i + 1]) for i in range(len(y))]
+            axis.plot(x, ym, lw=1.4, color=line.get_color(), **kw)
         if "ep_length_s" in d:
-            ax[1].plot(*clean(d["ep_length_s"]), lw=0.8, label=run.name)
+            smooth(ax[1], d["ep_length_s"], label=run.name)
         if "ep_tracking_lin_vel" in d:
-            ax[2].plot(*clean(d["ep_tracking_lin_vel"]), lw=0.8, label=f"{run.name} lin")
-            ax[2].plot(*clean(d["ep_tracking_ang_vel"]), lw=0.8, ls="--", label=f"{run.name} yaw")
+            smooth(ax[2], d["ep_tracking_lin_vel"], label=f"{run.name} lin")
+            smooth(ax[2], d["ep_tracking_ang_vel"], ls="--", label=f"{run.name} yaw")
         offset += len(it)
     for x, t in zip(ax, ("mean reward per policy step", "episode length at reset (s)", "velocity tracking reward (per s, max 1.0 / 0.5)")):
         x.set_title(t, fontsize=10)

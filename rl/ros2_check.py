@@ -65,9 +65,11 @@ def spin_until(node, cond, timeout_s):
     return False
 
 
-def start_launch(install: Path, policy: Path):
-    """`ros2 launch jx1_bringup mujoco_sim.launch.py` from a colcon install space (rl/ros2_env/build_ws.py)."""
-    args = ["ros2", "launch", "jx1_bringup", "mujoco_sim.launch.py", f"repo:={REPO}", f"policy_dir:={policy}"]
+def start_launch(install: Path, policy: Path, launch_file: str):
+    """`ros2 launch jx1_bringup <launch_file>` from a colcon install space (rl/ros2_env/build_ws.py)."""
+    args = ["ros2", "launch", "jx1_bringup", launch_file, f"repo:={REPO}", f"policy_dir:={policy}"]
+    if launch_file == "ros2_control.launch.py":
+        args += ["hardware:=topic", "sim:=mujoco"]
     if sys.platform == "win32":
         cmd = f'call "{install / "setup.bat"}" >NUL && ' + " ".join(f'"{x}"' if " " in x else x for x in args)
         # one command-line string: a list would have its inner quotes escaped (\"), which cmd.exe does not understand
@@ -102,10 +104,15 @@ def main():
     ap.add_argument("--launch", type=Path, default=None,
                     help="colcon install space: start the stack with `ros2 launch jx1_bringup mujoco_sim.launch.py` from it "
                          "instead of running the two nodes from the source tree (writes ros2_launch_check.json)")
+    ap.add_argument("--launch-file", default="mujoco_sim.launch.py", choices=["mujoco_sim.launch.py", "ros2_control.launch.py"],
+                    help="ros2_control.launch.py: controller_manager + topic_based_ros2_control hardware between the policy and "
+                         "the MuJoCo node (writes ros2_control_check.json)")
     a = ap.parse_args()
+    out_name = "ros2_check.json" if not a.launch else ("ros2_control_check.json" if a.launch_file == "ros2_control.launch.py"
+                                                         else "ros2_launch_check.json")
     policy = Path(a.policy).resolve()
     if a.launch:
-        procs = {"launch": start_launch(a.launch.resolve(), policy)}
+        procs = {"launch": start_launch(a.launch.resolve(), policy, a.launch_file)}
     else:
         env = dict(os.environ)
         env["PYTHONPATH"] = os.pathsep.join([str(REPO / "ros2_ws" / "src" / "jx1_sim"), str(REPO / "ros2_ws" / "src" / "jx1_policy"),
@@ -119,7 +126,7 @@ def main():
     rclpy.init()
     probe = Probe()
     result = {"policy": policy.relative_to(REPO).as_posix() if policy.is_relative_to(REPO) else policy.name, "ros_distro": os.environ.get("ROS_DISTRO", "?"),
-              "started_by": "ros2 launch jx1_bringup mujoco_sim.launch.py (colcon install)" if a.launch else "python -m (source tree)",
+              "started_by": f"ros2 launch jx1_bringup {a.launch_file} (colcon install)" if a.launch else "python -m (source tree)",
               "phases": {}}
     try:
         ok = spin_until(probe, lambda: probe.state == "WALK", 90.0)
@@ -148,7 +155,7 @@ def main():
         rclpy.try_shutdown()
         for tag, p in procs.items():
             result[f"{tag}_log_tail"] = clean(stop(p).strip().splitlines())[-(25 if a.launch else 5):]
-    (policy / ("ros2_launch_check.json" if a.launch else "ros2_check.json")).write_text(json.dumps(result, indent=1), encoding="utf-8")
+    (policy / out_name).write_text(json.dumps(result, indent=1), encoding="utf-8")
     print(json.dumps({k: v for k, v in result.items() if not k.endswith("log_tail") or "error" in result}, indent=1))
     if "error" in result:
         sys.exit(1)

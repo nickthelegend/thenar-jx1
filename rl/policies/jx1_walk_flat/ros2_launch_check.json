@@ -1,0 +1,56 @@
+{
+ "policy": "rl/policies/jx1_walk_flat",
+ "ros_distro": "jazzy",
+ "started_by": "ros2 launch jx1_bringup mujoco_sim.launch.py (colcon install)",
+ "phases": {
+  "forward": {
+   "command": [
+    0.4,
+    0.0,
+    0.0
+   ],
+   "sim_duration_s": 10.0,
+   "distance_m": 3.842,
+   "mean_speed_m_s": 0.384,
+   "yaw_change_deg": -11.2,
+   "min_pelvis_z_m": 0.575,
+   "max_tilt_deg": 5.68
+  },
+  "turn": {
+   "command": [
+    0.0,
+    0.0,
+    0.4
+   ],
+   "sim_duration_s": 6.0,
+   "distance_m": 0.375,
+   "mean_speed_m_s": 0.063,
+   "yaw_change_deg": 117.8,
+   "min_pelvis_z_m": 0.587,
+   "max_tilt_deg": 5.48
+  },
+  "stop": {
+   "command": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "sim_duration_s": 4.0,
+   "distance_m": 0.18,
+   "mean_speed_m_s": 0.045,
+   "yaw_change_deg": -5.9,
+   "min_pelvis_z_m": 0.588,
+   "max_tilt_deg": 4.98
+  }
+ },
+ "reached_walk_state": true,
+ "upright": true,
+ "launch_log_tail": [
+  "[INFO] [launch]: Default logging verbosity is set to INFO",
+  "[INFO] [mujoco_node.EXE-1]: process started with pid [49688]",
+  "[INFO] [robot_state_publisher.EXE-2]: process started with pid [51360]",
+  "[INFO] [policy_node.EXE-3]: process started with pid [31536]",
+  "[robot_state_publisher.EXE-2] [WARN] [1790230584.571529000] [kdl_parser]: The root link pelvis has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.",
+  "[robot_state_publisher.EXE-2] [INFO] [1790230584.571771300] [robot_state_publisher]: Robot initialized"
+ ]
+}
