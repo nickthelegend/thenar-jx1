@@ -29,8 +29,9 @@ def servo_axes(x_dir, z_dir):
 def components():
     """(key, part file, 4x4 pose in the pelvis frame) at the zero pose."""
     hf = G.ST["HORN_FACE"]
+    head = pose(p=(0, 0, G.NECK_Z + 1.5))
     comps = [("pelvis", "JX0_Pelvis", pose()), ("torso", "JX0_Torso", pose()),
-             ("head", "JX0_Head", pose(p=(0, 0, G.NECK_Z + 1.5)))]
+             ("head", "JX0_Head", head), ("display", "JX0_Display_GC9A01", head), ("screen_face", "JX0_Screen_Face", head)]
     for side, sg in (("L", 1), ("R", -1)):
         hip = np.array([0.0, sg * G.HIP_Y, 0.0])
         knee, ankle = hip + [0, 0, -G.THIGH], hip + [0, 0, -G.THIGH - G.SHIN]
@@ -50,17 +51,19 @@ def components():
             (f"servo_ankle_roll_{side}", st, pose(servo_axes((0, -sg, 0), (1, 0, 0)), ankle + [G.XA - hf, 0, 0])),
         ]
         sh = np.array([G.SHOULDER[0], sg * G.SHOULDER[1], G.SHOULDER[2]])
-        ua = sh + [0, sg * 10.0, -16.0]
+        ua = sh + [0, sg * G.ARM_Y, -16.0]
         fa = ua + [8.0, 0, -55.0]
         comps += [(f"shoulder_{side}", f"JX0_ShoulderBracket_{side}", pose(p=sh)),
                   (f"upper_arm_{side}", "JX0_UpperArm", pose(p=ua)),
-                  (f"forearm_{side}", f"JX0_Forearm_{side}", pose(p=fa))]
+                  (f"forearm_{side}", f"JX0_Forearm_{side}", pose(p=fa)),
+                  (f"finger_{side}", f"JX0_Finger_{side}", pose(p=fa + [0, sg * G.GRIP_Y, G.GRIP_Z]))]
         mg = "JX0_Servo_MG90S"
         spline = G.MG["H"] / 2 + G.MG["SPLINE"]
         comps += [
             (f"servo_shoulder_pitch_{side}", mg, pose(servo_axes((1, 0, 0), (0, sg, 0)), sh + [0, sg * 1.5, 0])),
             (f"servo_shoulder_roll_{side}", mg, pose(servo_axes((0, 0, -1), (1, 0, 0)), ua + [15.4, 0, 0])),
             (f"servo_elbow_{side}", mg, pose(servo_axes((0, 0, 1), (0, sg, 0)), fa + [0, sg * spline, 0])),
+            (f"servo_grip_{side}", mg, pose(servo_axes((0, 0, 1), (0, -sg, 0)), fa + [0, sg * G.GRIP_Y, G.GRIP_Z])),
         ]
     comps.append(("servo_neck", "JX0_Servo_MG90S", pose(servo_axes((-1, 0, 0), (0, 0, 1)), (0, 0, G.NECK_Z + 1.5))))
     return comps
@@ -76,7 +79,7 @@ def link_of(key):
     hip = np.array([0.0, sg * G.HIP_Y, 0.0])
     knee, ankle = hip + [0, 0, -G.THIGH], hip + [0, 0, -G.THIGH - G.SHIN]
     sh = np.array([G.SHOULDER[0], sg * G.SHOULDER[1], G.SHOULDER[2]])
-    ua = sh + [0, sg * 10.0, -16.0]
+    ua = sh + [0, sg * G.ARM_Y, -16.0]
     fa = ua + [8.0, 0, -55.0]
     base = key[:-2] if side else key
     table = {"pelvis": ("pelvis", (0, 0, 0)), "torso": ("torso", (0, 0, 0)), "head": ("head", (0, 0, G.NECK_Z + 1.5)),
@@ -89,6 +92,8 @@ def link_of(key):
              "foot": (f"{s}_foot", ankle),
              "servo_shoulder_pitch": ("torso", (0, 0, 0)), "shoulder": (f"{s}_shoulder", sh),
              "servo_shoulder_roll": (f"{s}_shoulder", sh), "upper_arm": (f"{s}_upper_arm", ua),
-             "servo_elbow": (f"{s}_upper_arm", ua), "forearm": (f"{s}_forearm", fa)}
+             "servo_elbow": (f"{s}_upper_arm", ua), "forearm": (f"{s}_forearm", fa),
+             "servo_grip": (f"{s}_forearm", fa), "finger": (f"{s}_finger", fa + [0, sg * G.GRIP_Y, G.GRIP_Z]),
+             "display": ("head", (0, 0, G.NECK_Z + 1.5)), "screen_face": ("head", (0, 0, G.NECK_Z + 1.5))}
     link, origin = table[base]
     return link, np.asarray(origin, float)

@@ -31,7 +31,11 @@ XA = -18.0         # ankle-roll horn face (servo behind the ankle centre, horn f
 SOLE_TO_ANKLE, FOOT_X, FOOT_W = 35.0, (-62.0, 58.0), 70.0
 TORSO = dict(x=(-40.0, 40.0), y=(-66.0, 66.0), z=(68.625, 196.0), wall=2.5)
 SHOULDER = (0.0, 66.0, 176.0)
+ARM_Y = 17.0       # shoulder-roll axis outboard of the torso side wall (upper arm clears the wall by 2.8 mm)
+GRIP_Z = -44.0     # gripper MG90S shaft below the elbow axis (forearm frame)
+GRIP_Y = -MG["H"] / 2    # gripper spline top (y) in the left forearm frame: the case bottom rests on the plate
 NECK_Z = 196.0
+FACE_Z = 30.0      # display centre above the neck horn (head frame)
 
 
 def horn_holes(axis, c, s, pcd=ST["PCD"], d=ST["HORN_HOLE"], centre=6.0):
@@ -195,22 +199,64 @@ def torso():
 
 
 def head():
-    """Head shell (frame: neck horn top, 1.5 mm above the torso top): round 1.28" display window in the face."""
-    p = [("box", (-35.0, 35.0), (-40.0, 40.0), (0.0, 72.0)),
-         ("cut", (-36.0, 32.5), (-37.5, 37.5), (2.5, 69.5)),
-         ("hole", "x", (0.0, 38.0), 33.0, (32.4, 35.1)),                                 # GC9A01 active area Ø32.4
-         ("hole", "z", (0.0, 0.0), 3.0, (-0.1, 2.6))]
-    for x, y in ((0.0, 7.0), (0.0, -7.0)):
-        p.append(("hole", "z", (x, y), 1.6, (-0.1, 2.6)))                               # MG90S horn screws
+    """Head shell (frame: neck horn top, 1.5 mm above the torso top). The round 1.28" GC9A01 display IS the face (eyes and
+    mouth drawn by jx0bot/face.py): it sits behind a 33 mm window with a raised bezel. OV5647 camera lens above it, ears
+    with vent holes, rounded top edges, open back for wiring."""
+    x0, x1, y, zt, r, w = -32.0, 32.0, 40.0, 76.0, 8.0, 2.5
+    p = [("box", (x0, x1), (-y, y), (0.0, zt)),
+         ("box", (x0 + r, x1 - r), (-y, y), (zt - 0.1, zt + r)),                        # top between the rounded edges
+         ("cyl", "y", (x0 + r, zt), r, (-y, y)),
+         ("cyl", "y", (x1 - r, zt), r, (-y, y)),
+         ("cyl", "x", (0.0, FACE_Z), 21.0, (x1 - 0.1, x1 + 1.5)),                       # display bezel
+         ("cyl", "y", (-2.0, 40.0), 12.0, (y - 0.1, y + 5.0)),                          # ears
+         ("cyl", "y", (-2.0, 40.0), 12.0, (-y - 5.0, -y + 0.1)),
+         ("cut", (x0 - 1.0, x1 - w), (-y + w, y - w), (w, zt)),                         # hollow, open back
+         ("cut", (x0 + r, x1 - r), (-y + w, y - w), (zt - 0.1, zt + r - w)),
+         ("hole", "y", (x0 + r, zt), 2 * (r - w), (-y + w, y - w)),
+         ("hole", "y", (x1 - r, zt), 2 * (r - w), (-y + w, y - w)),
+         ("hole", "x", (0.0, FACE_Z), 33.0, (x1 - w - 0.1, x1 + 1.6)),                  # display window (active area 32.4)
+         ("hole", "x", (0.0, 64.0), 8.0, (x1 - w - 0.1, x1 + 0.1)),                     # OV5647 lens
+         ("hole", "z", (0.0, 0.0), 3.0, (-0.1, w + 0.1))]
+    for x, yy in ((0.0, 7.0), (0.0, -7.0)):
+        p.append(("hole", "z", (x, yy), 1.6, (-0.1, w + 0.1)))                          # MG90S horn screws
+    for dz in (-5.0, 0.0, 5.0):                                                          # ear vents
+        p.append(("hole", "y", (-2.0, 40.0 + dz), 2.5, (y - w - 0.1, y + 5.1)))
+        p.append(("hole", "y", (-2.0, 40.0 + dz), 2.5, (-y - 5.1, -y + w + 0.1)))
+    return p
+
+
+def display():
+    """GC9A01 round display module stand-in (head frame): PCB 38.5 mm (ASSUMED, fit-check) and the 35.6 mm glass, pressed
+    against the inside of the face window (hot glue or a printed clip)."""
+    return [("cyl", "x", (0.0, FACE_Z), 19.25, (26.3, 27.9)),
+            ("cyl", "x", (0.0, FACE_Z), 17.8, (27.9, 29.5))]
+
+
+def screen_face():
+    """What the display shows at rest (a render stand-in, not a part): the eyes and smile from jx0bot/face.py, scaled
+    0.135 mm/pixel onto the 32.4 mm active area."""
+    px = 32.4 / 240
+    xs = (29.5, 29.8)
+    p = []
+    for sgn in (1, -1):                                                                  # eyes: 48 x 72 px pills
+        cy, cz, hw, hh = sgn * 42 * px, FACE_Z + 18 * px, 24 * px, 12 * px
+        p += [("box", xs, (cy - hw, cy + hw), (cz - hh, cz + hh)),
+              ("cyl", "x", (cy, cz - hh), hw, xs), ("cyl", "x", (cy, cz + hh), hw, xs)]
+    for k in range(-2, 3):                                                               # smile
+        yc = k * 2.0
+        zc = FACE_Z - 8.4 + 0.075 * yc * yc
+        p.append(("box", xs, (yc - 1.2, yc + 1.2), (zc - 0.75, zc + 0.75)))
     return p
 
 
 def shoulder_bracket():
     """Arm link 1 (frame at the shoulder-pitch axis on the torso side wall; y outward): holds the shoulder-roll MG90S."""
-    yc, zc = 10.0, -16.0
+    yc, zc = ARM_Y, -16.0
+    zlo, zhi = zc - MG["LB"] - C - 2.0, zc + MG["LA"] + C + 2.0
     p = [("box", (-10.0, 10.0), (1.5, 4.0), (-34.0, 8.0)),
-         ("box", (-MG["H"] + 11.4 - 2.0, 11.4), (yc - MG["W"] / 2 - C - 2.0, yc + MG["W"] / 2 + C + 2.0), (zc - MG["LB"] - C - 2.0, zc + MG["LA"] + C + 2.0)),
+         ("box", (-MG["H"] + 11.4 - 2.0, 11.4), (1.5, yc + MG["W"] / 2 + C + 2.0), (zlo, zhi)),       # holder, bridged to the plate
          ("cut", (-MG["H"] + 11.4 - 2.1, 11.5), (yc - MG["W"] / 2 - C, yc + MG["W"] / 2 + C), (zc - MG["LB"] - C, zc + MG["LA"] + C)),
+         ("cut", (-15.0, 8.0), (4.5, yc - MG["W"] / 2 - C - 2.0), (zlo - 0.1, zhi - 4.0)),            # lightening slot, open below
          ("hole", "y", (0.0, 0.0), 3.0, (1.4, 4.1))]
     return p
 
@@ -225,12 +271,41 @@ def upper_arm():
     return p
 
 
+# claw fingers (forearm-frame y of the slots, left hand): 3 fingers on the paddle and 3 on the palm, 3 mm slots
+FINGER_SLOTS = ((-8.63, -5.63), (4.43, 7.43))
+PALM_SLOTS = FINGER_SLOTS                          # aligned: the three fingers meet three palm fingers
+
+
 def forearm():
-    """Arm link 3 (frame at the elbow axis): plate on the elbow horn and a hand block."""
-    y0 = MG["H"] / 2 + MG["SPLINE"]
-    return [("box", (-9.0, 9.0), (y0, y0 + 2.5), (-72.0, 8.0)),
-            ("box", (-10.0, 10.0), (y0 - 14.0, y0 + 0.5), (-88.0, -70.0)),
-            ("hole", "y", (0.0, 0.0), 3.0, (y0 - 0.1, y0 + 2.6))]
+    """Arm link 3 = the hand (frame at the elbow axis, left side). Plate on the elbow horn; the gripper MG90S sits in a
+    sleeve against the plate with its shaft pointing inboard (-y) 44 mm below the elbow; the fixed palm at the back is what
+    the finger (JX0_Finger) closes against. Opening up to ~45 mm at 60 deg."""
+    y0 = MG["H"] / 2 + MG["SPLINE"]                       # inner face of the plate (elbow spline top)
+    zs, c0 = GRIP_Z, GRIP_Z + (MG["LB"] - MG["LA"]) / 2   # gripper shaft, gripper case centre
+    tab = GRIP_Y + MG["SPLINE"] + 10.0                     # y of the tab underside (the tabs rest on the sleeve end)
+    zlo, zhi = zs - MG["LA"] - 5.2, zs + MG["LB"] + 5.2
+    p = [("box", (-9.0, 9.0), (y0, y0 + 2.5), (-80.0, 8.0)),
+         ("box", (-MG["W"] / 2 - C - 2.0, MG["W"] / 2 + C + 2.0), (tab, y0), (zlo, zhi)),                 # servo sleeve
+         ("cut", (-MG["W"] / 2 - C, MG["W"] / 2 + C), (tab - 0.1, y0), (zs - MG["LA"] - C, zs + MG["LB"] + C)),
+         ("box", (-10.0, -4.5), (GRIP_Y - 4.5, y0 + 2.5), (-88.0, zlo)),                                  # palm
+         ("hole", "y", (0.0, 0.0), 3.0, (y0 - 0.1, y0 + 2.6))]
+    for z in (c0 - MG["TAB_SPAN"] / 2, c0 + MG["TAB_SPAN"] / 2):                                          # tab screws
+        p.append(("hole", "y", (0.0, z), 1.6, (tab - 0.1, tab + 6.0)))
+    for y_lo, y_hi in PALM_SLOTS:                                                                        # 3 palm fingers
+        p.append(("cut", (-10.1, -4.4), (y_lo, y_hi), (-88.1, -74.0)))
+    return p
+
+
+def finger():
+    """Gripper finger (frame: gripper MG90S spline top, left hand; the shaft points -y). Hub screwed to the servo horn and a
+    paddle that closes against the palm; modelled closed (0.5 mm gap), opens by swinging forward up to 60 deg."""
+    y_in = MG["H"] / 2 + MG["SPLINE"] - GRIP_Y - 0.7      # paddle stops 0.7 mm short of the forearm plate
+    p = [("box", (-4.0, 4.0), (-4.5, -2.0), (-16.0, 4.0)),
+         ("box", (-4.0, 3.0), (-4.5, y_in), (-44.0, -16.0)),
+         ("hole", "y", (0.0, 0.0), 2.5, (-4.6, -1.9))]
+    for y_lo, y_hi in FINGER_SLOTS:                                                                      # 3 fingers
+        p.append(("cut", (-4.1, 3.1), (y_lo - GRIP_Y, y_hi - GRIP_Y), (-44.1, -30.0)))
+    return p
 
 
 # ------------------------------------------------------------------------------------------------ catalogue
@@ -255,6 +330,8 @@ PARTS = {
     "JX0_UpperArm": (upper_arm(), "white", 2),
     "JX0_Forearm_L": (forearm(), "white", 1),
     "JX0_Forearm_R": (mirror_y(forearm()), "white", 1),
+    "JX0_Finger_L": (finger(), "orange", 1),
+    "JX0_Finger_R": (mirror_y(finger()), "orange", 1),
 }
 
 
@@ -273,7 +350,8 @@ def servo_mg():
             ("cyl", "z", (0.0, 0.0), 2.4, (-MG["SPLINE"] - 0.5, 0.0))]
 
 
-SERVOS = {"JX0_Servo_ST3215": (servo_st(), "black", 12), "JX0_Servo_MG90S": (servo_mg(), "blue", 7)}
+SERVOS = {"JX0_Servo_ST3215": (servo_st(), "black", 12), "JX0_Servo_MG90S": (servo_mg(), "blue", 9),
+          "JX0_Display_GC9A01": (display(), "black", 1), "JX0_Screen_Face": (screen_face(), "cyan", 1)}
 
 
 def bbox(prims):

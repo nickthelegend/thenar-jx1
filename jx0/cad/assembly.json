@@ -83,6 +83,60 @@
    ]
   },
   {
+   "key": "display",
+   "part": "JX0_Display_GC9A01",
+   "name": "JX0_Display_GC9A01-1",
+   "pose_mm": [
+    0.0,
+    0.0,
+    197.5
+   ],
+   "R": [
+    [
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     1.0
+    ]
+   ]
+  },
+  {
+   "key": "screen_face",
+   "part": "JX0_Screen_Face",
+   "name": "JX0_Screen_Face-1",
+   "pose_mm": [
+    0.0,
+    0.0,
+    197.5
+   ],
+   "R": [
+    [
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     1.0
+    ]
+   ]
+  },
+  {
    "key": "hip_yaw_L",
    "part": "JX0_HipYawBracket_L",
    "name": "JX0_HipYawBracket_L-1",
@@ -439,7 +493,7 @@
    "name": "JX0_UpperArm-1",
    "pose_mm": [
     0.0,
-    76.0,
+    83.0,
     160.0
    ],
    "R": [
@@ -466,8 +520,35 @@
    "name": "JX0_Forearm_L-1",
    "pose_mm": [
     8.0,
-    76.0,
+    83.0,
     105.0
+   ],
+   "R": [
+    [
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     1.0
+    ]
+   ]
+  },
+  {
+   "key": "finger_L",
+   "part": "JX0_Finger_L",
+   "name": "JX0_Finger_L-1",
+   "pose_mm": [
+    8.0,
+    68.8,
+    61.0
    ],
    "R": [
     [
@@ -520,7 +601,7 @@
    "name": "JX0_Servo_MG90S-2",
    "pose_mm": [
     15.4,
-    76.0,
+    83.0,
     160.0
    ],
    "R": [
@@ -547,7 +628,7 @@
    "name": "JX0_Servo_MG90S-3",
    "pose_mm": [
     8.0,
-    94.2,
+    101.2,
     105.0
    ],
    "R": [
@@ -560,6 +641,33 @@
      0.0,
      0.0,
      1.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ]
+  },
+  {
+   "key": "servo_grip_L",
+   "part": "JX0_Servo_MG90S",
+   "name": "JX0_Servo_MG90S-4",
+   "pose_mm": [
+    8.0,
+    68.8,
+    61.0
+   ],
+   "R": [
+    [
+     0.0,
+     -1.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     -1.0
     ],
     [
      1.0,
@@ -925,7 +1033,7 @@
    "name": "JX0_UpperArm-2",
    "pose_mm": [
     0.0,
-    -76.0,
+    -83.0,
     160.0
    ],
    "R": [
@@ -952,8 +1060,35 @@
    "name": "JX0_Forearm_R-1",
    "pose_mm": [
     8.0,
-    -76.0,
+    -83.0,
     105.0
+   ],
+   "R": [
+    [
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     1.0
+    ]
+   ]
+  },
+  {
+   "key": "finger_R",
+   "part": "JX0_Finger_R",
+   "name": "JX0_Finger_R-1",
+   "pose_mm": [
+    8.0,
+    -68.8,
+    61.0
    ],
    "R": [
     [
@@ -976,7 +1111,7 @@
   {
    "key": "servo_shoulder_pitch_R",
    "part": "JX0_Servo_MG90S",
-   "name": "JX0_Servo_MG90S-4",
+   "name": "JX0_Servo_MG90S-5",
    "pose_mm": [
     0.0,
     -67.5,
@@ -1003,10 +1138,10 @@
   {
    "key": "servo_shoulder_roll_R",
    "part": "JX0_Servo_MG90S",
-   "name": "JX0_Servo_MG90S-5",
+   "name": "JX0_Servo_MG90S-6",
    "pose_mm": [
     15.4,
-    -76.0,
+    -83.0,
     160.0
    ],
    "R": [
@@ -1030,10 +1165,10 @@
   {
    "key": "servo_elbow_R",
    "part": "JX0_Servo_MG90S",
-   "name": "JX0_Servo_MG90S-6",
+   "name": "JX0_Servo_MG90S-7",
    "pose_mm": [
     8.0,
-    -94.2,
+    -101.2,
     105.0
    ],
    "R": [
@@ -1055,9 +1190,36 @@
    ]
   },
   {
+   "key": "servo_grip_R",
+   "part": "JX0_Servo_MG90S",
+   "name": "JX0_Servo_MG90S-8",
+   "pose_mm": [
+    8.0,
+    -68.8,
+    61.0
+   ],
+   "R": [
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     1.0
+    ],
+    [
+     1.0,
+     0.0,
+     0.0
+    ]
+   ]
+  },
+  {
    "key": "servo_neck",
    "part": "JX0_Servo_MG90S",
-   "name": "JX0_Servo_MG90S-7",
+   "name": "JX0_Servo_MG90S-9",
    "pose_mm": [
     0.0,
     0.0,

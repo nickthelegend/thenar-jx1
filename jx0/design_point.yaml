@@ -13,7 +13,7 @@ frames:
   zero_pose: "legs straight and vertical, feet flat and parallel, arms hanging, all joint angles 0"
 
 overall:
-  height_m: {value: 0.505, label: CALCULATED, note: "CAD: sole 235 mm below the hip centres, head top 269.5 mm above"}
+  height_m: {value: 0.517, label: CALCULATED, note: "CAD: sole 235 mm below the hip centres, head top 281.5 mm above"}
   mass_target_kg: {value: 2.0, label: ESTIMATED}
 
 geometry:
@@ -93,7 +93,7 @@ mass_budget:
     carries: [hip_yaw, hip_yaw]
     com_m: [0.0, 0.0, 0.025]
   upper_body:
-    mass_kg: {value: 0.687, label: ESTIMATED, note: "CAD printed torso 97 g + head 43 g + arm links 30 g; 7 MG90S 94 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, driver + UBEC + buck 35 g, sensors/voice/face/camera 27 g, switch 10 g, wiring 60 g, screws 20 g"}
+    mass_kg: {value: 0.747, label: ESTIMATED, note: "CAD printed torso 97 g + head 48 g + arm links 55 g (shoulder 6.6, upper arm 4.7, forearm/hand 10.8, finger 5.2 g per side); 9 MG90S 121 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, driver + UBEC + buck 35 g, sensors/voice/face/camera 27 g, switch 10 g, wiring 62 g, screws 22 g"}
     com_m: [0.0, 0.0, 0.130]
     inertia_box_m: [0.08, 0.13, 0.20]
   hip_yaw_link:
@@ -127,10 +127,11 @@ upper_body_geometry:
   upper_arm_m: {value: 0.055, label: CALCULATED, note: "CAD: shoulder-roll axis to elbow axis"}
   forearm_m: {value: 0.085, label: CALCULATED}
   neck_yaw_origin: {value: [0.0, 0.0, 0.1975], label: CALCULATED}
-  head_size_m: {value: [0.07, 0.08, 0.072], label: CALCULATED}
+  head_size_m: {value: [0.064, 0.08, 0.084], label: CALCULATED, note: "CAD head shell without bezel and ears"}
 
 upper_body_joint_ranges_deg:
   shoulder_pitch: {min: -180, max: 60,  label: ASSUMED, note: "- = arm raises forward"}
   shoulder_roll:  {min: -10,  max: 120, label: ASSUMED, note: "+ = abduction (left arm)"}
   elbow:          {min: -120, max: 0,   label: ASSUMED}
   neck_yaw:       {min: -80,  max: 80,  label: ASSUMED}
+  grip:           {min: 0,    max: 60,  label: CALCULATED, note: "gripper finger: 0 = closed on the palm, + = open (CAD clearance to 60 deg)"}

@@ -27,7 +27,8 @@ leg_servos:
   r_ankle_pitch: {id: 11, direction: 1,  zero_ticks: 2048, limits_deg: [-60, 45]}
   r_ankle_roll:  {id: 12, direction: 1,  zero_ticks: 2048, limits_deg: [-25, 25]}
 
-# MG90S micro servos on Pi GPIO (pigpio DMA-timed pulses, 50 Hz): BCM pin, pulse at -90 / 0 / +90 deg (µs), direction
+# MG90S micro servos on Pi GPIO (pigpio DMA-timed pulses, 50 Hz): BCM pin, pulse at -90 / 0 / +90 deg (µs), direction.
+# Grippers: 0 deg = finger shut on the palm, +55 deg = open; set the horn so 0 deg is just touching the palm.
 # (GPIO 18-21 are taken by I2S audio, 8-11 by the display SPI, 2-3 by the IMU I2C)
 micro_servos:
   l_shoulder_pitch: {gpio: 5,  pulse_us: [500, 1500, 2500], direction: 1}
@@ -37,6 +38,8 @@ micro_servos:
   r_shoulder_roll:  {gpio: 16, pulse_us: [500, 1500, 2500], direction: 1}
   r_elbow:          {gpio: 22, pulse_us: [500, 1500, 2500], direction: 1}
   neck_yaw:         {gpio: 23, pulse_us: [500, 1500, 2500], direction: 1}
+  l_grip:           {gpio: 4,  pulse_us: [500, 1500, 2500], direction: 1}
+  r_grip:           {gpio: 26, pulse_us: [500, 1500, 2500], direction: 1}
 
 imu:
   type: mpu6050
@@ -55,7 +58,11 @@ voice:
   piper_voice: models/en_US-lessac-medium.onnx
 
 face:
-  backend: gc9a01             # gc9a01 | none (renders to face.png for testing)
+  backend: gc9a01             # gc9a01 | st7789 | none (renders to face.png for testing)
+  # if the colours or the picture are wrong on first power-up (python -m jx0bot.face --test), flip these, no code change:
+  bgr: true                   # GC9A01 panel colour order (red and blue swapped -> false)
+  invert: true                # display inversion (washed-out / negative colours -> false)
+  rotate: 0                   # 0-3, quarter turns, if the face is sideways
   spi_port: 0
   spi_device: 0
   gpio_dc: 25

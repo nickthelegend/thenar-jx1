@@ -1,13 +1,16 @@
 """JX0's face: two eyes and a mouth on the round 1.28" 240x240 display in the head, drawn with Pillow.
 
-Moods: idle (blinking, eyes drift), listening (big eyes), busy (eyes look down, moving). `mouth(level)` opens the
-mouth with the speech loudness (voice.Speaker calls it), so the face talks in sync.
+Moods: idle (smile, blinking, eyes drift), listening (big eyes), busy (eyes look down, moving), happy (^ ^ eyes, while
+waving). `mouth(level)` opens the mouth with the speech loudness (voice.Speaker calls it), so the face talks in sync.
+The CAD head (JX0_Screen_Face) shows the same idle face, scaled 0.135 mm per pixel.
 
 Backends:
   none     - no display; writes face.png every second (PC / simulation testing)
   gc9a01   - the round GC9A01 module in the BOM, on SPI0 through luma.core's SPI interface. The init sequence is the
              GC9A01 vendor sequence used by the common open-source drivers; UNVERIFIED on the JX0 hardware.
   st7789   - a 240x240 ST7789 module (luma.lcd's own driver), the fallback if the round module gives trouble.
+First power-up: python -m jx0bot.face --test draws colour bars and an arrow; config.yaml face.bgr / invert / rotate fix
+swapped colours, a negative picture or a sideways face without touching the code.
 """
 from __future__ import annotations
 
@@ -28,7 +31,7 @@ GC9A01_INIT = [
     (0x84, [0x40], 0), (0x85, [0xFF], 0), (0x86, [0xFF], 0), (0x87, [0xFF], 0), (0x88, [0x0A], 0),
     (0x89, [0x21], 0), (0x8A, [0x00], 0), (0x8B, [0x80], 0), (0x8C, [0x01], 0), (0x8D, [0x01], 0),
     (0x8E, [0xFF], 0), (0x8F, [0xFF], 0), (0xB6, [0x00, 0x20], 0),
-    (0x36, [0x08], 0),                                   # MADCTL: BGR order
+    (0x36, [0x08], 0),                                   # MADCTL: BGR order (face.bgr: false -> 0x00)
     (0x3A, [0x06], 0),                                   # COLMOD: 18 bit/pixel (what luma's RGB writer sends)
     (0x90, [0x08, 0x08, 0x08, 0x08], 0), (0xBD, [0x06], 0), (0xBC, [0x00], 0), (0xFF, [0x60, 0x01, 0x04], 0),
     (0xC3, [0x13], 0), (0xC4, [0x13], 0), (0xC9, [0x22], 0), (0xBE, [0x11], 0), (0xE1, [0x10, 0x0E], 0),
@@ -55,17 +58,20 @@ def open_display(cfg: dict, backend: str):
     serial = spi(port=cfg.get("spi_port", 0), device=cfg.get("spi_device", 0), gpio_DC=cfg["gpio_dc"],
                  gpio_RST=cfg["gpio_rst"], bus_speed_hz=cfg.get("spi_hz", 40_000_000))
     from luma.lcd.device import backlit_device, st7789
+    rotate = int(cfg.get("rotate", 0))
     if backend == "st7789":
-        return st7789(serial, width=SIZE, height=SIZE, gpio_LIGHT=cfg["gpio_backlight"])
+        return st7789(serial, width=SIZE, height=SIZE, rotate=rotate, gpio_LIGHT=cfg["gpio_backlight"])
     if backend != "gc9a01":
         raise ValueError(f"unknown face backend {backend!r}")
+    init = [(0x36, [0x08 if cfg.get("bgr", True) else 0x00], 0) if c == 0x36 else
+            (0x21 if cfg.get("invert", True) else 0x20, [], 0) if c == 0x21 else (c, d, t) for c, d, t in GC9A01_INIT]
 
     class GC9A01(st7789):
         """st7789's window/RGB writer is the same MIPI command set; only the power-on sequence differs."""
         def __init__(self, serial_interface, **kw):
             backlit_device.__init__(self, None, serial_interface, **kw)   # skip the ST7789 init
-            self.capabilities(SIZE, SIZE, 0, mode="RGB")
-            for cmd, data, delay in GC9A01_INIT:
+            self.capabilities(SIZE, SIZE, rotate, mode="RGB")
+            for cmd, data, delay in init:
                 self.command(cmd, *data)
                 if delay:
                     time.sleep(delay)
@@ -112,18 +118,23 @@ class Face:
             blink = 1.0 - abs(1.0 - phase) if phase < 2.0 else 0.0
             if phase >= 2.0:
                 self._blink_at = t + random.uniform(2.0, 5.0)
-        w = 44 if self.mood == "listening" else 36
-        h = (64 if self.mood == "listening" else 52) * (1.0 - 0.9 * blink)
+        w = 56 if self.mood == "listening" else 48
+        h = (84 if self.mood == "listening" else 72) * (1.0 - 0.9 * blink)
         gx, gy = 14 * self._gaze[0], 10 * self._gaze[1]
-        for cx in (80, 160):
-            x, y = cx + gx, 95 + gy
-            d.rounded_rectangle([x - w / 2, y - h / 2, x + w / 2, y + h / 2], radius=min(w, h) / 2, fill=FG)
+        for cx in (78, 162):                                   # eyes 84 px apart, 18 px above the centre
+            x, y = cx + gx, 102 + gy
+            if self.mood == "happy":                           # ^ ^
+                d.arc([x - 30, y - 12, x + 30, y + 44], 195, 345, fill=FG, width=13)
+            else:
+                d.rounded_rectangle([x - w / 2, y - h / 2, x + w / 2, y + h / 2], radius=min(w, h) / 2, fill=FG)
 
-        open_h = 4 + 30 * self.level
-        mw = 60 + 10 * self.level
-        color = ACCENT if self.level > 0.05 else FG
-        d.rounded_rectangle([120 - mw / 2, 165 - open_h / 2, 120 + mw / 2, 165 + open_h / 2],
-                            radius=min(open_h, mw) / 2, fill=color)
+        if self.level > 0.05:                                  # talking: the mouth opens with the loudness
+            open_h = 8 + 34 * self.level
+            mw = 60 + 12 * self.level
+            d.rounded_rectangle([120 - mw / 2, 172 - open_h / 2, 120 + mw / 2, 172 + open_h / 2],
+                                radius=min(open_h, mw) / 2, fill=ACCENT)
+        else:                                                  # resting: a smile
+            d.arc([74, 128, 166, 184], 25, 155, fill=FG, width=10)
         return img
 
     def show_once(self, t: float | None = None):
@@ -151,10 +162,36 @@ class Face:
         self._stop.set()
 
 
+def test_pattern() -> Image.Image:
+    """Colour bars (R, G, B, white) and an arrow pointing up: shows swapped colours, inversion and rotation at a glance."""
+    img = Image.new("RGB", (SIZE, SIZE), BG)
+    d = ImageDraw.Draw(img)
+    for k, c in enumerate(((255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 255))):
+        d.rectangle([40 + 40 * k, 130, 79 + 40 * k, 190], fill=c)
+    d.polygon([(120, 30), (90, 90), (150, 90)], fill=(255, 255, 255))
+    d.ellipse([2, 2, SIZE - 3, SIZE - 3], outline=(255, 170, 60), width=3)
+    return img
+
+
+def self_test(cfg: dict, backend: str):
+    """On the robot: bars should read red, green, blue, white left to right on black, arrow up, orange ring at the edge."""
+    dev = open_display(cfg, backend)
+    dev.display(test_pattern())
+    print("Expect: red, green, blue, white bars (left to right) on black, a white arrow pointing UP, an orange ring.\n"
+          "red/blue swapped -> face.bgr; negative colours -> face.invert; arrow sideways -> face.rotate (config.yaml)")
+    time.sleep(10)
+
+
 if __name__ == "__main__":                        # python -m jx0bot.face  -> face_idle.png, face_talking.png ...
+    import sys
+    if "--test" in sys.argv:                      # python -m jx0bot.face --test  (on the Pi, display connected)
+        from .robot import load_config
+        c = load_config()["face"]
+        self_test(c, c["backend"])
+        raise SystemExit
     f = Face()
     for mood, level, name in (("idle", 0.0, "idle"), ("listening", 0.0, "listening"), ("busy", 0.0, "busy"),
-                              ("idle", 0.8, "talking")):
+                              ("happy", 0.0, "happy"), ("idle", 0.8, "talking")):
         f.set_mood(mood)
         f.mouth(level)
         for i in range(30):

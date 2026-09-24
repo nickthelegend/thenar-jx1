@@ -3,6 +3,7 @@
 
     python -m jx0bot.calibrate scan                      # which IDs answer, with voltage and temperature
     python -m jx0bot.calibrate set-id 1 7                # ONE servo on the bus: change its ID from 1 to 7
+    python -m jx0bot.calibrate center                    # all servos to mid-travel, BEFORE fitting horns and links
     python -m jx0bot.calibrate zero                      # torque off, pose the robot in the zero pose, press Enter
     python -m jx0bot.calibrate directions                # moves each joint +10 deg; you answer y/n
     python -m jx0bot.calibrate stiffness l_knee          # holds a joint; push on it and read the stiffness
@@ -55,6 +56,25 @@ def scan(bus: ServoBus, ids=range(1, 21)):
             print(f"id {i:2d}: position {s['position']:5d}  {s['voltage_v']:.1f} V  {s['temperature_c']} C")
     print(f"{len(found)} servo(s) found" + ("" if found else " - check power (12 V on the driver) and the baud rate"))
     return found
+
+
+def center(bus: ServoBus, cfg: dict):
+    """Leg servos to 2048 ticks and the MG90S to 1500 us (0 deg), so every horn goes on near the joint's zero."""
+    ids = scan(bus)
+    bus.set_positions({i: 2048 for i in ids})
+    for i in ids:
+        bus.torque(i, True)
+    try:
+        import pigpio
+        pi = pigpio.pi()
+        for name, m in cfg["micro_servos"].items():
+            pi.set_servo_pulsewidth(m["gpio"], m["pulse_us"][1])
+        print("MG90S at 1500 us: fit the arm/neck horns straight, and each gripper finger just touching its palm")
+    except Exception as exc:                          # pigpio not installed or its daemon not running
+        print(f"MG90S not centred ({exc}); sudo systemctl start pigpiod")
+    input("Servos holding mid-travel. Fit the horns and links now, then press Enter to release... ")
+    for i in ids:
+        bus.torque(i, False)
 
 
 def zero(bus: ServoBus, cfg: dict):
@@ -119,6 +139,7 @@ def main():
     p = sub.add_parser("set-id")
     p.add_argument("old", type=int)
     p.add_argument("new", type=int)
+    sub.add_parser("center")
     sub.add_parser("zero")
     sub.add_parser("directions")
     p = sub.add_parser("stiffness")
@@ -133,6 +154,8 @@ def main():
             raise SystemExit(f"no servo answers at id {a.old}")
         bus.change_id(a.old, a.new)
         print(f"id {a.old} -> {a.new}: " + ("ok" if bus.ping(a.new) else "no answer at the new id"))
+    elif a.cmd == "center":
+        center(bus, cfg)
     elif a.cmd == "zero":
         zero(bus, cfg)
     elif a.cmd == "directions":

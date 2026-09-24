@@ -26,7 +26,8 @@ import geometry as G  # noqa: E402
 
 PARTS_DIR = ROOT / "jx0" / "cad" / "parts"
 STL_DIR = ROOT / "jx0" / "cad" / "stl"
-COLOURS = {"white": (0.92, 0.92, 0.94), "orange": (0.95, 0.42, 0.11), "black": (0.12, 0.12, 0.14), "blue": (0.15, 0.3, 0.75)}
+COLOURS = {"white": (0.92, 0.92, 0.94), "orange": (0.95, 0.42, 0.11), "black": (0.12, 0.12, 0.14), "blue": (0.15, 0.3, 0.75),
+           "cyan": (0.45, 0.9, 1.0)}
 BASE = {"z": ("Front Plane", "XY"), "y": ("Top Plane", "XZ"), "x": ("Right Plane", "YZ")}
 PETG_DENSITY = 1270.0          # kg/m^3
 PRINT_FILL = 0.55              # printed mass / solid mass (3 walls + 25 % gyroid on these small parts, ESTIMATED)
