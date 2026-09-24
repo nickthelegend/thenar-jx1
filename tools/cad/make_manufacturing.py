@@ -47,7 +47,7 @@ PARTS = [
     ("Arms/JX1_ShoulderPitchBracket_R", "as L, mirrored", "6061-T6", 1, False),
     ("Arms/JX1_ShoulderRollBracket_L", "laser 6 mm plates, bolted L-bracket (FEA SF 2.05/1.66)", "6061-T6", 1, True),
     ("Arms/JX1_ShoulderRollBracket_R", "as L, mirrored", "6061-T6", 1, False),
-    ("Arms/JX1_UpperArm_L", "laser 10 + 8 mm plates + 2x 6 mm gussets, bolted/welded (FEA SF 3.12/2.52)", "6061-T6", 1, True),
+    ("Arms/JX1_UpperArm_L", "laser 10 + 8 mm plates + 2x 6 mm gussets, bolted/welded (FEA SF 5.99/4.84)", "6061-T6", 1, True),
     ("Arms/JX1_UpperArm_R", "as L, mirrored", "6061-T6", 1, False),
     ("Arms/JX1_Forearm_L", "laser 6 mm plates, bolted (FEA SF 3.27/2.65)", "6061-T6", 1, True),
     ("Arms/JX1_Forearm_R", "as L, mirrored", "6061-T6", 1, False),

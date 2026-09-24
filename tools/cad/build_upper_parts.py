@@ -100,7 +100,7 @@ def torso(s):
         plate2d(p, f"Post_{k}", "z", bt, dz, [(u - po / 2, v - po / 2), (u + po / 2, v - po / 2), (u + po / 2, v + po / 2), (u - po / 2, v + po / 2)],
                 merge=False)
     return finish(p, ALU_RGB, "torso frame: waist output -> shoulder-pitch housings, neck, electronics bay",
-                  "6061-T6 laser-cut plates (bottom 5, sides/deck/back 4 mm) + 4x EasyMech 2020 extrusion posts; ASSUMED until FEA")
+                  "6061-T6 laser-cut plates (bottom 5, sides/deck/back 4 mm) + 4x EasyMech 2020 extrusion posts; FEA SF 4.44/3.59 (PA-CF print fails 0.70/0.42)")
 
 
 # ------------------------------------------------------------------------------------------------ electronics envelopes (torso frame)
@@ -153,7 +153,7 @@ def shoulder_pitch_bracket(s):
           [((0, yr, 0), 0.016)] + [((0, y, z), d) for (_, y, z), d in hr])
     for tag, z0 in (("Top_Plate", h), ("Bottom_Plate", -h - t)):
         plate(p, tag, "z", z0, z0 + t, [(xr - t, 0, 0), (xo, 0, 0), (xo, yr + h, 0), (xr - t, yr + h, 0)])
-    return finish(p, ALU_RGB, "shoulder pitch output -> shoulder roll housing (U-bracket)", "6061-T6 5 mm laser-cut plates, bolted; ASSUMED until FEA")
+    return finish(p, ALU_RGB, "shoulder pitch output -> shoulder roll housing (U-bracket)", "6061-T6 5 mm laser-cut plates, bolted; FEA SF 2.17/1.75")
 
 
 def shoulder_roll_bracket(s):
@@ -171,7 +171,7 @@ def shoulder_roll_bracket(s):
     plate2d(p, "Yaw_Plate", "z", zr, zr + t, [(xf, -0.032), (0.032, -0.032), (0.032, 0.032), (xf, 0.032)], hy)
     # recess last: the yaw plate starts on the output-face plane and would otherwise re-fill part of it (pilot boss clash)
     circle_cut(p, "Roll_Pilot_Recess", "x", xf, (xf, 0, 0), S["PILOT_D"] + 0.0003, S["PILOT_H"] + 0.0002, into_positive=True)
-    return finish(p, ALU_RGB, "shoulder roll output -> shoulder yaw housing (L-bracket)", "6061-T6 6 mm plates, bolted; ASSUMED until FEA")
+    return finish(p, ALU_RGB, "shoulder roll output -> shoulder yaw housing (L-bracket)", "6061-T6 6 mm plates, bolted; FEA SF 2.05/1.66")
 
 
 def upper_arm(s):
@@ -180,7 +180,8 @@ def upper_arm(s):
     yb = -UPK["elbow_face_y"]                                  # elbow housing rear face (medial)
     ze = EL_OFF[2]
     # structural variant U3 (calculations/structural/part_variants.py upper_arm): 6 mm plates failed (SF 1.34 / 1.08, L-corner);
-    # elbow plate 10 mm (added medially), yaw plate 8 mm, two 6 mm gussets above the elbow housing -> SF 3.12 / 2.52
+    # elbow plate 10 mm (added medially), yaw plate 8 mm, two 6 mm gussets above the elbow housing -> variant SF 3.12 / 2.52,
+    # final CAD 5.99 / 4.84 (run_structural)
     te, ty, tg, e = 0.010, 0.008, 0.006, 0.0005
     z_gus = -0.085                                             # gusset tip, 16 mm above the RS00 elbow housing
     p.gv("Elbow_z", mm(ze)); p.gv("Elbow_plate_t", mm(te)); p.gv("Yaw_plate_t", mm(ty))
@@ -194,7 +195,7 @@ def upper_arm(s):
     for tag, x0 in (("Gusset_Front", 0.0185), ("Gusset_Back", -0.0245)):
         plate(p, tag, "x", x0, x0 + tg, [(0, yb - e, -ty + e), (0, 0.020, -ty + e), (0, yb - e, z_gus)])
     return finish(p, ALU_RGB, "shoulder yaw output -> elbow housing",
-                  "6061-T6: elbow plate 10 mm, yaw plate 8 mm, 2x 6 mm gussets (laser-cut, bolted/welded); FEA SF 3.12/2.52 (variant U3)")
+                  "6061-T6: elbow plate 10 mm, yaw plate 8 mm, 2x 6 mm gussets (laser-cut, bolted/welded); FEA SF 5.99/4.84")
 
 
 def forearm(s):
@@ -208,7 +209,7 @@ def forearm(s):
     plate(p, "Forearm_Plate", "y", yo, yo + t, [(-0.024, 0, 0.028), (0.024, 0, 0.028), (0.024, 0, zh), (-0.024, 0, zh)], ho + [((0, 0, 0), 0.008)])
     circle_cut(p, "Elbow_Pilot_Recess", "y", yo, (0, yo, 0), XS["PILOT_D"] + 0.0003, XS["PILOT_H"] + 0.0002, into_positive=True)
     plate2d(p, "Hand_Plate", "z", zh - t, zh, [(-0.024, -0.022), (0.024, -0.022), (0.024, yo + t), (-0.024, yo + t)], [(0, 0, 0.006)])
-    return finish(p, ALU_RGB, "elbow output -> gripper mount", "6061-T6 6 mm plates, bolted; ASSUMED until FEA")
+    return finish(p, ALU_RGB, "elbow output -> gripper mount", "6061-T6 6 mm plates, bolted; FEA SF 3.27/2.65")
 
 
 def gripper(s):

@@ -57,86 +57,44 @@
        ]
       }
      ],
-     "scenarios": {
-      "all loads": {
-       "load_groups": [
-        {
-         "name": "rod-end stud (rod force; radial component up to 0.7 F at +-45 deg crank)",
-         "nodes": 168,
-         "point_m": [
-          -0.05,
-          0.0,
-          0.003
-         ],
-         "LC1": [
-          504.0,
-          720.0,
-          86.4,
-          0,
-          0,
-          0
-         ],
-         "LC2": [
-          119.1,
-          170.2,
-          20.4,
-          0,
-          0,
-          0
-         ]
-        }
-       ],
-       "LC1": {
-        "p99_9": 0.06923029268575584,
-        "p99": 0.05906134538527105,
-        "max": 0.0728504523920022,
-        "max_at_mm": [
-         -37.5,
-         -18.5,
-         5.5
-        ],
-        "elements_evaluated": 17282,
-        "SF": 14.44
-       },
-       "LC2_fatigue": {
-        "p99_9": 0.040491394553662005,
-        "p99": 0.03454378345214135,
-        "max": 0.04260875256741847,
-        "max_at_mm": [
-         -37.5,
-         -18.5,
-         5.5
-        ],
-        "elements_evaluated": 17282,
-        "SF": 24.7
-       },
-       "interface_compliance_unit": {
-        "translation_mm_per_kN": [
-         0.0028,
-         0.0081,
-         0.1251
-        ],
-        "rotation_deg_per_100Nm": [
-         2.2353,
-         3.7026,
-         0.3691
-        ]
-       },
-       "LC2_interface_motion": {
-        "translation_mm": [
-         0.0,
-         0.001,
-         0.003
-        ],
-        "rotation_deg": [
-         0.0,
-         0.009,
-         0.002
-        ]
-       }
-      }
-     },
      "voxel_volume_error_pct": 1.03,
+     "LC1": {
+      "p99_9": 0.06923029268575584,
+      "p99": 0.05906134538527105,
+      "max": 0.0728504523920022,
+      "max_at_mm": [
+       -37.5,
+       -18.5,
+       5.5
+      ],
+      "elements_evaluated": 17282,
+      "SF": 14.44
+     },
+     "LC2_fatigue": {
+      "p99_9": 0.040491394553662005,
+      "p99": 0.03454378345214135,
+      "max": 0.04260875256741847,
+      "max_at_mm": [
+       -37.5,
+       -18.5,
+       5.5
+      ],
+      "elements_evaluated": 17282,
+      "SF": 24.7
+     },
+     "interface_compliance": {
+      "interface": "rod-end stud (rod force; radial component up to 0.7 F at +-45 deg crank)",
+      "translation_mm_per_kN": [
+       0.0028,
+       0.0081,
+       0.1251
+      ],
+      "rotation_deg_per_100Nm": [
+       2.2353,
+       3.7026,
+       0.3691
+      ]
+     },
      "SF_LC1": 14.44,
      "SF_LC2": 24.7,
      "required": {
@@ -144,10 +102,11 @@
       "LC2": 1.5
      },
      "pass": true,
-     "solve_s": 27.4
+     "solve_s": 42.9
     }
    },
    "mesh_volume_cm3": 20.87,
+   "load_model": "capped envelope",
    "recommended": "6061-T6"
   },
   "thigh": {
@@ -157,8 +116,8 @@
    "note": "thigh plate + medial flanges; knee housing and hip-pitch output bolt to the same plane (y = pitch_out_y)",
    "materials": {
     "6061-T6": {
-     "elements": 31500,
-     "dof": 124995,
+     "elements": 40278,
+     "dof": 153936,
      "supports": [
       {
        "name": "hip pitch output flange",
@@ -170,97 +129,56 @@
        ]
       }
      ],
-     "scenarios": {
-      "all loads": {
-       "load_groups": [
-        {
-         "name": "knee housing (shin wrench @ knee centre)",
-         "nodes": 2283,
-         "point_m": [
-          0.0,
-          0.0,
-          -0.27
-         ],
-         "LC1": [
-          161.7,
-          161.7,
-          808.3,
-          60.0,
-          120.0,
-          36.0
-         ],
-         "LC2": [
-          53.9,
-          53.9,
-          404.2,
-          33.3,
-          47.4,
-          24.9
-         ]
-        }
-       ],
-       "LC1": {
-        "p99_9": 1.6666636104128187,
-        "p99": 1.1848105573537122,
-        "max": 2.3281164193865305,
-        "max_at_mm": [
-         23.0,
-         35.0,
-         -101.0
-        ],
-        "elements_evaluated": 24984,
-        "SF": 0.6
-       },
-       "LC2_fatigue": {
-        "p99_9": 2.1010034267168956,
-        "p99": 1.4548481550594088,
-        "max": 2.934752411286349,
-        "max_at_mm": [
-         23.0,
-         35.0,
-         -101.0
-        ],
-        "elements_evaluated": 24984,
-        "SF": 0.48
-       },
-       "interface_compliance_unit": {
-        "translation_mm_per_kN": [
-         1.2551,
-         17.3718,
-         1.0709
-        ],
-        "rotation_deg_per_100Nm": [
-         3.8787,
-         0.068,
-         3.3369
-        ]
-       },
-       "LC2_interface_motion": {
-        "translation_mm": [
-         0.729,
-         5.706,
-         1.534
-        ],
-        "rotation_deg": [
-         2.213,
-         0.039,
-         0.903
-        ]
-       }
-      }
+     "voxel_volume_error_pct": 0.24,
+     "LC1": {
+      "p99_9": 0.43381757742166605,
+      "p99": 0.30155636042356465,
+      "max": 0.774128794670105,
+      "max_at_mm": [
+       23.0,
+       35.0,
+       -205.0
+      ],
+      "elements_evaluated": 33762,
+      "SF": 2.31
      },
-     "voxel_volume_error_pct": 0.21,
-     "SF_LC1": 0.6,
-     "SF_LC2": 0.48,
+     "LC2_fatigue": {
+      "p99_9": 0.3593214866817003,
+      "p99": 0.3043865397572517,
+      "max": 0.6397639513015747,
+      "max_at_mm": [
+       23.0,
+       35.0,
+       -205.0
+      ],
+      "elements_evaluated": 33762,
+      "SF": 2.78
+     },
+     "interface_compliance": {
+      "interface": "knee",
+      "translation_mm_per_kN": [
+       0.7458,
+       3.7481,
+       0.3328
+      ],
+      "rotation_deg_per_100Nm": [
+       1.1871,
+       0.0471,
+       1.7081
+      ]
+     },
+     "SF_LC1": 2.31,
+     "SF_LC2": 2.78,
      "required": {
       "LC1": 1.5,
       "LC2": 1.5
      },
-     "pass": false,
-     "solve_s": 34.0
+     "pass": true,
+     "solve_s": 104.8
     }
    },
-   "mesh_volume_cm3": 251.47,
+   "mesh_volume_cm3": 321.45,
+   "load_model": "actuator-capped GRF samples + walking time series (leg_loads.py)",
    "recommended": "6061-T6"
   },
   "hip_roll": {
@@ -269,9 +187,9 @@
    "voxel_mm": 2.0,
    "note": "L-bracket: roll output (back plate, normal x) -> pitch housing (medial plate, normal y)",
    "materials": {
-    "PA-CF build x": {
-     "elements": 18164,
-     "dof": 72198,
+    "6061-T6": {
+     "elements": 20997,
+     "dof": 80835,
      "supports": [
       {
        "name": "hip roll output flange",
@@ -283,304 +201,57 @@
        ]
       }
      ],
-     "scenarios": {
-      "all loads": {
-       "load_groups": [
-        {
-         "name": "hip pitch housing (leg wrench @ hip centre)",
-         "nodes": 2291,
-         "point_m": [
-          0.0,
-          0.0,
-          0.0
-         ],
-         "LC1": [
-          161.7,
-          161.7,
-          808.3,
-          60.0,
-          120.0,
-          36.0
-         ],
-         "LC2": [
-          53.9,
-          53.9,
-          404.2,
-          33.3,
-          56.9,
-          24.9
-         ]
-        }
-       ],
-       "LC1": {
-        "p99_9": 6.430972543180074,
-        "p99": 3.9654659797631466,
-        "max": 8.881517020073673,
-        "max_at_mm": [
-         -67.0,
-         -21.0,
-         -45.0
-        ],
-        "elements_evaluated": 11682,
-        "SF": 0.16
-       },
-       "LC2_fatigue": {
-        "p99_9": 11.845396566981577,
-        "p99": 7.356140632533247,
-        "max": 16.303346234350368,
-        "max_at_mm": [
-         -67.0,
-         -21.0,
-         -45.0
-        ],
-        "elements_evaluated": 11682,
-        "SF": 0.08
-       },
-       "interface_compliance_unit": {
-        "translation_mm_per_kN": [
-         4.6815,
-         18.3419,
-         2.7484
-        ],
-        "rotation_deg_per_100Nm": [
-         19.7393,
-         0.6156,
-         46.8444
-        ]
-       },
-       "LC2_interface_motion": {
-        "translation_mm": [
-         5.587,
-         10.694,
-         4.484
-        ],
-        "rotation_deg": [
-         8.802,
-         0.647,
-         13.457
-        ]
-       }
-      }
+     "voxel_volume_error_pct": 0.24,
+     "LC1": {
+      "p99_9": 0.3623621053099639,
+      "p99": 0.2430929690599442,
+      "max": 0.509535014629364,
+      "max_at_mm": [
+       -69.0,
+       -19.0,
+       -39.0
+      ],
+      "elements_evaluated": 14515,
+      "SF": 2.76
      },
-     "voxel_volume_error_pct": -0.04,
-     "SF_LC1": 0.16,
-     "SF_LC2": 0.08,
+     "LC2_fatigue": {
+      "p99_9": 0.26301450181007713,
+      "p99": 0.16398222595453263,
+      "max": 0.31972837448120117,
+      "max_at_mm": [
+       -67.0,
+       -21.0,
+       -41.0
+      ],
+      "elements_evaluated": 14515,
+      "SF": 3.8
+     },
+     "interface_compliance": {
+      "interface": "leg",
+      "translation_mm_per_kN": [
+       0.0646,
+       0.2491,
+       0.052
+      ],
+      "rotation_deg_per_100Nm": [
+       0.2806,
+       0.0156,
+       0.5987
+      ]
+     },
+     "SF_LC1": 2.76,
+     "SF_LC2": 3.8,
      "required": {
-      "LC1": 2.0,
+      "LC1": 1.5,
       "LC2": 1.5
      },
-     "pass": false,
-     "solve_s": 21.9
-    },
-    "PA-CF build y": {
-     "elements": 18164,
-     "dof": 72198,
-     "supports": [
-      {
-       "name": "hip roll output flange",
-       "nodes": 492,
-       "dofs": [
-        0,
-        1,
-        2
-       ]
-      }
-     ],
-     "scenarios": {
-      "all loads": {
-       "load_groups": [
-        {
-         "name": "hip pitch housing (leg wrench @ hip centre)",
-         "nodes": 2291,
-         "point_m": [
-          0.0,
-          0.0,
-          0.0
-         ],
-         "LC1": [
-          161.7,
-          161.7,
-          808.3,
-          60.0,
-          120.0,
-          36.0
-         ],
-         "LC2": [
-          53.9,
-          53.9,
-          404.2,
-          33.3,
-          56.9,
-          24.9
-         ]
-        }
-       ],
-       "LC1": {
-        "p99_9": 3.4904464835803277,
-        "p99": 2.4241030609746135,
-        "max": 4.620269079583254,
-        "max_at_mm": [
-         -67.0,
-         -21.0,
-         -45.0
-        ],
-        "elements_evaluated": 11682,
-        "SF": 0.29
-       },
-       "LC2_fatigue": {
-        "p99_9": 6.394691959018649,
-        "p99": 4.48174158913011,
-        "max": 8.382948820076487,
-        "max_at_mm": [
-         -67.0,
-         -21.0,
-         -45.0
-        ],
-        "elements_evaluated": 11682,
-        "SF": 0.16
-       },
-       "interface_compliance_unit": {
-        "translation_mm_per_kN": [
-         1.2965,
-         5.6125,
-         0.9421
-        ],
-        "rotation_deg_per_100Nm": [
-         6.4098,
-         0.2169,
-         13.0432
-        ]
-       },
-       "LC2_interface_motion": {
-        "translation_mm": [
-         1.549,
-         3.097,
-         1.519
-        ],
-        "rotation_deg": [
-         2.891,
-         0.25,
-         3.744
-        ]
-       }
-      }
-     },
-     "voxel_volume_error_pct": -0.04,
-     "SF_LC1": 0.29,
-     "SF_LC2": 0.16,
-     "required": {
-      "LC1": 2.0,
-      "LC2": 1.5
-     },
-     "pass": false,
-     "solve_s": 26.2
-    },
-    "PA-CF build z": {
-     "elements": 18164,
-     "dof": 72198,
-     "supports": [
-      {
-       "name": "hip roll output flange",
-       "nodes": 492,
-       "dofs": [
-        0,
-        1,
-        2
-       ]
-      }
-     ],
-     "scenarios": {
-      "all loads": {
-       "load_groups": [
-        {
-         "name": "hip pitch housing (leg wrench @ hip centre)",
-         "nodes": 2291,
-         "point_m": [
-          0.0,
-          0.0,
-          0.0
-         ],
-         "LC1": [
-          161.7,
-          161.7,
-          808.3,
-          60.0,
-          120.0,
-          36.0
-         ],
-         "LC2": [
-          53.9,
-          53.9,
-          404.2,
-          33.3,
-          56.9,
-          24.9
-         ]
-        }
-       ],
-       "LC1": {
-        "p99_9": 5.036345526585483,
-        "p99": 3.4030542946084763,
-        "max": 6.240599228361783,
-        "max_at_mm": [
-         -69.0,
-         -19.0,
-         -43.0
-        ],
-        "elements_evaluated": 11682,
-        "SF": 0.2
-       },
-       "LC2_fatigue": {
-        "p99_9": 9.282204175408909,
-        "p99": 6.284569292863313,
-        "max": 11.362407442550364,
-        "max_at_mm": [
-         -69.0,
-         -19.0,
-         -43.0
-        ],
-        "elements_evaluated": 11682,
-        "SF": 0.11
-       },
-       "interface_compliance_unit": {
-        "translation_mm_per_kN": [
-         1.3207,
-         5.3621,
-         2.0718
-        ],
-        "rotation_deg_per_100Nm": [
-         14.0282,
-         0.3439,
-         13.3596
-        ]
-       },
-       "LC2_interface_motion": {
-        "translation_mm": [
-         1.596,
-         3.117,
-         3.313
-        ],
-        "rotation_deg": [
-         6.397,
-         0.46,
-         3.872
-        ]
-       }
-      }
-     },
-     "voxel_volume_error_pct": -0.04,
-     "SF_LC1": 0.2,
-     "SF_LC2": 0.11,
-     "required": {
-      "LC1": 2.0,
-      "LC2": 1.5
-     },
-     "pass": false,
-     "solve_s": 22.6
+     "pass": true,
+     "solve_s": 60.6
     }
    },
-   "mesh_volume_cm3": 145.37,
-   "recommended": "PA-CF build y"
+   "mesh_volume_cm3": 167.57,
+   "load_model": "actuator-capped GRF samples + walking time series (leg_loads.py)",
+   "recommended": "6061-T6"
   },
   "hip_yaw": {
    "part": "hip_yaw",
@@ -588,9 +259,9 @@
    "voxel_mm": 2.0,
    "note": "L-bracket: yaw output (top plate, normal z) -> roll housing (back plate, normal x)",
    "materials": {
-    "PA-CF build x": {
-     "elements": 31474,
-     "dof": 120072,
+    "7075-T6": {
+     "elements": 38205,
+     "dof": 141348,
      "supports": [
       {
        "name": "hip yaw output flange",
@@ -602,201 +273,57 @@
        ]
       }
      ],
-     "scenarios": {
-      "all loads": {
-       "load_groups": [
-        {
-         "name": "hip roll housing (leg wrench @ hip centre)",
-         "nodes": 1732,
-         "point_m": [
-          0.0,
-          0.0,
-          0.0
-         ],
-         "LC1": [
-          161.7,
-          161.7,
-          808.3,
-          60.0,
-          120.0,
-          36.0
-         ],
-         "LC2": [
-          53.9,
-          53.9,
-          404.2,
-          33.3,
-          56.9,
-          24.9
-         ]
-        }
-       ],
-       "LC1": {
-        "p99_9": 10.288293844126393,
-        "p99": 5.992178228653039,
-        "max": 21.774781436233788,
-        "max_at_mm": [
-         -131.0,
-         3.0,
-         55.0
-        ],
-        "elements_evaluated": 26412,
-        "SF": 0.1
-       },
-       "LC2_fatigue": {
-        "p99_9": 16.34771543755657,
-        "p99": 9.598035951104562,
-        "max": 35.58366620064207,
-        "max_at_mm": [
-         -131.0,
-         3.0,
-         55.0
-        ],
-        "elements_evaluated": 26412,
-        "SF": 0.06
-       },
-       "interface_compliance_unit": {
-        "translation_mm_per_kN": [
-         38.6034,
-         66.5044,
-         69.4223
-        ],
-        "rotation_deg_per_100Nm": [
-         28.3082,
-         46.0042,
-         10.2224
-        ]
-       },
-       "LC2_interface_motion": {
-        "translation_mm": [
-         48.919,
-         24.05,
-         68.047
-        ],
-        "rotation_deg": [
-         11.263,
-         43.277,
-         3.924
-        ]
-       }
-      }
+     "voxel_volume_error_pct": 0.06,
+     "LC1": {
+      "p99_9": 0.5651192886829396,
+      "p99": 0.31436254560947424,
+      "max": 1.146782636642456,
+      "max_at_mm": [
+       -131.0,
+       3.0,
+       55.0
+      ],
+      "elements_evaluated": 33143,
+      "SF": 1.77
      },
-     "voxel_volume_error_pct": 0.12,
-     "SF_LC1": 0.1,
-     "SF_LC2": 0.06,
+     "LC2_fatigue": {
+      "p99_9": 0.6324340130090714,
+      "p99": 0.3872985643148422,
+      "max": 1.250372290611267,
+      "max_at_mm": [
+       -131.0,
+       3.0,
+       55.0
+      ],
+      "elements_evaluated": 33143,
+      "SF": 1.58
+     },
+     "interface_compliance": {
+      "interface": "leg",
+      "translation_mm_per_kN": [
+       0.8448,
+       1.519,
+       1.6288
+      ],
+      "rotation_deg_per_100Nm": [
+       0.6211,
+       1.0395,
+       0.2367
+      ]
+     },
+     "SF_LC1": 1.77,
+     "SF_LC2": 1.58,
      "required": {
-      "LC1": 2.0,
+      "LC1": 1.5,
       "LC2": 1.5
      },
-     "pass": false,
-     "solve_s": 33.7
-    },
-    "PA-CF build z": {
-     "elements": 31474,
-     "dof": 120072,
-     "supports": [
-      {
-       "name": "hip yaw output flange",
-       "nodes": 370,
-       "dofs": [
-        0,
-        1,
-        2
-       ]
-      }
-     ],
-     "scenarios": {
-      "all loads": {
-       "load_groups": [
-        {
-         "name": "hip roll housing (leg wrench @ hip centre)",
-         "nodes": 1732,
-         "point_m": [
-          0.0,
-          0.0,
-          0.0
-         ],
-         "LC1": [
-          161.7,
-          161.7,
-          808.3,
-          60.0,
-          120.0,
-          36.0
-         ],
-         "LC2": [
-          53.9,
-          53.9,
-          404.2,
-          33.3,
-          56.9,
-          24.9
-         ]
-        }
-       ],
-       "LC1": {
-        "p99_9": 12.65017866917726,
-        "p99": 8.791251205586766,
-        "max": 29.674355533848274,
-        "max_at_mm": [
-         -131.0,
-         3.0,
-         55.0
-        ],
-        "elements_evaluated": 26412,
-        "SF": 0.08
-       },
-       "LC2_fatigue": {
-        "p99_9": 20.536597748361604,
-        "p99": 14.250369057014444,
-        "max": 48.57747213722915,
-        "max_at_mm": [
-         -131.0,
-         3.0,
-         55.0
-        ],
-        "elements_evaluated": 26412,
-        "SF": 0.05
-       },
-       "interface_compliance_unit": {
-        "translation_mm_per_kN": [
-         23.8814,
-         98.1604,
-         156.4463
-        ],
-        "rotation_deg_per_100Nm": [
-         10.2915,
-         55.4797,
-         25.9828
-        ]
-       },
-       "LC2_interface_motion": {
-        "translation_mm": [
-         47.13,
-         26.542,
-         133.8
-        ],
-        "rotation_deg": [
-         4.3,
-         60.562,
-         8.847
-        ]
-       }
-      }
-     },
-     "voxel_volume_error_pct": 0.12,
-     "SF_LC1": 0.08,
-     "SF_LC2": 0.05,
-     "required": {
-      "LC1": 2.0,
-      "LC2": 1.5
-     },
-     "pass": false,
-     "solve_s": 30.8
+     "pass": true,
+     "solve_s": 123.1
     }
    },
-   "mesh_volume_cm3": 251.5,
-   "recommended": "PA-CF build x"
+   "mesh_volume_cm3": 305.44,
+   "load_model": "actuator-capped GRF samples + walking time series (leg_loads.py)",
+   "recommended": "7075-T6"
   },
   "shin": {
    "part": "shin",
@@ -804,9 +331,9 @@
    "voxel_mm": 2.0,
    "note": "knee output plate -> joggle -> central web (both ankle motors) -> ankle fork; fork pin load includes both rod reactions",
    "materials": {
-    "PA-CF build x": {
-     "elements": 39938,
-     "dof": 152127,
+    "6061-T6": {
+     "elements": 54333,
+     "dof": 197424,
      "supports": [
       {
        "name": "knee output flange",
@@ -818,301 +345,57 @@
        ]
       }
      ],
-     "scenarios": {
-      "all loads": {
-       "load_groups": [
-        {
-         "name": "ankle fork pin (foot force + yaw moment @ ankle centre)",
-         "nodes": 308,
-         "point_m": [
-          0.0,
-          0.0,
-          -0.3
-         ],
-         "LC1": [
-          161.7,
-          161.7,
-          2248.3,
-          0,
-          0,
-          36.0
-         ],
-         "LC2": [
-          53.9,
-          53.9,
-          744.6,
-          0,
-          0,
-          24.9
-         ]
-        },
-        {
-         "name": "ankle motor A housing (rod A force @ crank pin)",
-         "nodes": 1262,
-         "point_m": [
-          -0.05,
-          0.057,
-          -0.118
-         ],
-         "LC1": [
-          0,
-          0,
-          720.0,
-          0,
-          0,
-          0
-         ],
-         "LC2": [
-          0,
-          0,
-          170.2,
-          0,
-          0,
-          0
-         ]
-        },
-        {
-         "name": "ankle motor B housing (rod B force @ crank pin)",
-         "nodes": 1261,
-         "point_m": [
-          -0.05,
-          -0.057,
-          -0.206
-         ],
-         "LC1": [
-          0,
-          0,
-          720.0,
-          0,
-          0,
-          0
-         ],
-         "LC2": [
-          0,
-          0,
-          170.2,
-          0,
-          0,
-          0
-         ]
-        }
-       ],
-       "LC1": {
-        "p99_9": 6.676880339013996,
-        "p99": 5.27272901254459,
-        "max": 8.853408611447504,
-        "max_at_mm": [
-         -31.0,
-         -22.0,
-         -65.0
-        ],
-        "elements_evaluated": 31486,
-        "SF": 0.15
-       },
-       "LC2_fatigue": {
-        "p99_9": 7.021621927338436,
-        "p99": 5.560054523256926,
-        "max": 9.70456841223351,
-        "max_at_mm": [
-         -33.0,
-         -6.0,
-         -83.0
-        ],
-        "elements_evaluated": 31486,
-        "SF": 0.14
-       },
-       "interface_compliance_unit": {
-        "translation_mm_per_kN": [
-         13.6598,
-         202.5891,
-         1.2587
-        ],
-        "rotation_deg_per_100Nm": [
-         36.7735,
-         4.7446,
-         57.3751
-        ]
-       },
-       "LC2_interface_motion": {
-        "translation_mm": [
-         3.134,
-         19.421,
-         1.553
-        ],
-        "rotation_deg": [
-         5.15,
-         1.033,
-         14.556
-        ]
-       }
-      }
+     "voxel_volume_error_pct": 0.93,
+     "LC1": {
+      "p99_9": 0.29705967724323656,
+      "p99": 0.20454710423946387,
+      "max": 0.46584489941596985,
+      "max_at_mm": [
+       -15.0,
+       -20.0,
+       -271.0
+      ],
+      "elements_evaluated": 45861,
+      "SF": 3.37
      },
-     "voxel_volume_error_pct": 0.7,
-     "SF_LC1": 0.15,
-     "SF_LC2": 0.14,
+     "LC2_fatigue": {
+      "p99_9": 0.2395503386855295,
+      "p99": 0.13753729164600384,
+      "max": 0.4550059735774994,
+      "max_at_mm": [
+       15.0,
+       -20.0,
+       -271.0
+      ],
+      "elements_evaluated": 45861,
+      "SF": 4.17
+     },
+     "interface_compliance": {
+      "interface": "fork",
+      "translation_mm_per_kN": [
+       0.2488,
+       7.4568,
+       0.0352
+      ],
+      "rotation_deg_per_100Nm": [
+       2.1782,
+       0.1824,
+       1.3216
+      ]
+     },
+     "SF_LC1": 3.37,
+     "SF_LC2": 4.17,
      "required": {
-      "LC1": 2.0,
+      "LC1": 1.5,
       "LC2": 1.5
      },
-     "pass": false,
-     "solve_s": 31.3
-    },
-    "PA-CF build y": {
-     "elements": 39938,
-     "dof": 152127,
-     "supports": [
-      {
-       "name": "knee output flange",
-       "nodes": 688,
-       "dofs": [
-        0,
-        1,
-        2
-       ]
-      }
-     ],
-     "scenarios": {
-      "all loads": {
-       "load_groups": [
-        {
-         "name": "ankle fork pin (foot force + yaw moment @ ankle centre)",
-         "nodes": 308,
-         "point_m": [
-          0.0,
-          0.0,
-          -0.3
-         ],
-         "LC1": [
-          161.7,
-          161.7,
-          2248.3,
-          0,
-          0,
-          36.0
-         ],
-         "LC2": [
-          53.9,
-          53.9,
-          744.6,
-          0,
-          0,
-          24.9
-         ]
-        },
-        {
-         "name": "ankle motor A housing (rod A force @ crank pin)",
-         "nodes": 1262,
-         "point_m": [
-          -0.05,
-          0.057,
-          -0.118
-         ],
-         "LC1": [
-          0,
-          0,
-          720.0,
-          0,
-          0,
-          0
-         ],
-         "LC2": [
-          0,
-          0,
-          170.2,
-          0,
-          0,
-          0
-         ]
-        },
-        {
-         "name": "ankle motor B housing (rod B force @ crank pin)",
-         "nodes": 1261,
-         "point_m": [
-          -0.05,
-          -0.057,
-          -0.206
-         ],
-         "LC1": [
-          0,
-          0,
-          720.0,
-          0,
-          0,
-          0
-         ],
-         "LC2": [
-          0,
-          0,
-          170.2,
-          0,
-          0,
-          0
-         ]
-        }
-       ],
-       "LC1": {
-        "p99_9": 6.32144287408512,
-        "p99": 4.682284927095493,
-        "max": 7.165699579643527,
-        "max_at_mm": [
-         37.0,
-         -28.0,
-         -53.0
-        ],
-        "elements_evaluated": 31486,
-        "SF": 0.16
-       },
-       "LC2_fatigue": {
-        "p99_9": 6.619970600859786,
-        "p99": 4.8092674972641785,
-        "max": 7.454130489345963,
-        "max_at_mm": [
-         31.0,
-         -22.0,
-         -65.0
-        ],
-        "elements_evaluated": 31486,
-        "SF": 0.15
-       },
-       "interface_compliance_unit": {
-        "translation_mm_per_kN": [
-         13.1374,
-         233.3227,
-         1.5527
-        ],
-        "rotation_deg_per_100Nm": [
-         41.7066,
-         4.2798,
-         26.6656
-        ]
-       },
-       "LC2_interface_motion": {
-        "translation_mm": [
-         1.414,
-         22.537,
-         1.877
-        ],
-        "rotation_deg": [
-         5.936,
-         0.536,
-         6.714
-        ]
-       }
-      }
-     },
-     "voxel_volume_error_pct": 0.7,
-     "SF_LC1": 0.16,
-     "SF_LC2": 0.15,
-     "required": {
-      "LC1": 2.0,
-      "LC2": 1.5
-     },
-     "pass": false,
-     "solve_s": 31.3
+     "pass": true,
+     "solve_s": 109.7
     }
    },
-   "mesh_volume_cm3": 317.28,
-   "recommended": "PA-CF build y"
+   "mesh_volume_cm3": 430.64,
+   "load_model": "actuator-capped GRF samples + walking time series (leg_loads.py)",
+   "recommended": "6061-T6"
   },
   "foot": {
    "part": "foot",
@@ -1120,9 +403,9 @@
    "voxel_mm": 2.0,
    "note": "sole plate + roll clevis + rod posts; three non-simultaneous GRF patch scenarios",
    "materials": {
-    "PA-CF build z": {
-     "elements": 27626,
-     "dof": 104844,
+    "6061-T6": {
+     "elements": 23194,
+     "dof": 91167,
      "supports": [
       {
        "name": "roll pin (cross)",
@@ -1141,252 +424,57 @@
        ]
       }
      ],
-     "scenarios": {
-      "toe": {
-       "load_groups": [
-        {
-         "name": "toe patch GRF",
-         "nodes": 519,
-         "point_m": [
-          0.1158,
-          -0.0,
-          -0.05
-         ],
-         "LC1": [
-          161.7,
-          161.7,
-          808.3,
-          0,
-          0,
-          0
-         ],
-         "LC2": [
-          53.9,
-          53.9,
-          404.2,
-          0,
-          0,
-          0
-         ]
-        }
-       ],
-       "LC1": {
-        "p99_9": 1.9221590921956022,
-        "p99": 1.1337318285912086,
-        "max": 4.273420591019622,
-        "max_at_mm": [
-         27.0,
-         9.0,
-         -41.0
-        ],
-        "elements_evaluated": 25544,
-        "SF": 0.52
-       },
-       "LC2_fatigue": {
-        "p99_9": 3.1170168241660305,
-        "p99": 1.8542629216612392,
-        "max": 6.998802850350599,
-        "max_at_mm": [
-         27.0,
-         9.0,
-         -41.0
-        ],
-        "elements_evaluated": 25544,
-        "SF": 0.32
-       },
-       "interface_compliance_unit": {
-        "translation_mm_per_kN": [
-         1.6873,
-         12.0649,
-         10.6806
-        ],
-        "rotation_deg_per_100Nm": [
-         12.0993,
-         14.4331,
-         4.7248
-        ]
-       },
-       "LC2_interface_motion": {
-        "translation_mm": [
-         0.511,
-         0.675,
-         4.375
-        ],
-        "rotation_deg": [
-         0.17,
-         3.309,
-         0.308
-        ]
-       }
-      },
-      "heel": {
-       "load_groups": [
-        {
-         "name": "heel patch GRF",
-         "nodes": 560,
-         "point_m": [
-          -0.055,
-          -0.0,
-          -0.05
-         ],
-         "LC1": [
-          161.7,
-          161.7,
-          808.3,
-          0,
-          0,
-          0
-         ],
-         "LC2": [
-          53.9,
-          53.9,
-          404.2,
-          0,
-          0,
-          0
-         ]
-        }
-       ],
-       "LC1": {
-        "p99_9": 0.4656243987199335,
-        "p99": 0.28526557447344536,
-        "max": 0.8549789064589127,
-        "max_at_mm": [
-         19.0,
-         11.0,
-         -39.0
-        ],
-        "elements_evaluated": 25392,
-        "SF": 2.15
-       },
-       "LC2_fatigue": {
-        "p99_9": 0.6356156199159894,
-        "p99": 0.38740318290980963,
-        "max": 1.0977532679021456,
-        "max_at_mm": [
-         19.0,
-         11.0,
-         -39.0
-        ],
-        "elements_evaluated": 25392,
-        "SF": 1.57
-       },
-       "interface_compliance_unit": {
-        "translation_mm_per_kN": [
-         1.6202,
-         2.7093,
-         0.443
-        ],
-        "rotation_deg_per_100Nm": [
-         0.9136,
-         4.4353,
-         4.6184
-        ]
-       },
-       "LC2_interface_motion": {
-        "translation_mm": [
-         0.155,
-         0.149,
-         0.188
-        ],
-        "rotation_deg": [
-         0.007,
-         0.365,
-         0.133
-        ]
-       }
-      },
-      "lateral edge": {
-       "load_groups": [
-        {
-         "name": "lateral edge GRF",
-         "nodes": 560,
-         "point_m": [
-          0.025,
-          0.035,
-          -0.05
-         ],
-         "LC1": [
-          161.7,
-          161.7,
-          808.3,
-          0,
-          0,
-          0
-         ],
-         "LC2": [
-          53.9,
-          53.9,
-          404.2,
-          0,
-          0,
-          0
-         ]
-        }
-       ],
-       "LC1": {
-        "p99_9": 0.6836447562113231,
-        "p99": 0.40545846654224166,
-        "max": 1.9179023780450934,
-        "max_at_mm": [
-         25.0,
-         11.0,
-         -39.0
-        ],
-        "elements_evaluated": 25292,
-        "SF": 1.46
-       },
-       "LC2_fatigue": {
-        "p99_9": 1.036844136718945,
-        "p99": 0.6159319318981413,
-        "max": 3.0357518899862885,
-        "max_at_mm": [
-         25.0,
-         11.0,
-         -39.0
-        ],
-        "elements_evaluated": 25292,
-        "SF": 0.96
-       },
-       "interface_compliance_unit": {
-        "translation_mm_per_kN": [
-         2.6131,
-         1.2303,
-         0.9827
-        ],
-        "rotation_deg_per_100Nm": [
-         4.7661,
-         2.8011,
-         4.6697
-        ]
-       },
-       "LC2_interface_motion": {
-        "translation_mm": [
-         0.186,
-         0.288,
-         0.422
-        ],
-        "rotation_deg": [
-         0.512,
-         0.404,
-         0.281
-        ]
-       }
-      }
-     },
      "voxel_volume_error_pct": 0.66,
-     "SF_LC1": 0.52,
-     "SF_LC2": 0.32,
+     "LC1": {
+      "p99_9": 0.28559478685956186,
+      "p99": 0.18793742467204105,
+      "max": 0.4328533887808966,
+      "max_at_mm": [
+       25.0,
+       11.0,
+       -41.0
+      ],
+      "elements_evaluated": 18152,
+      "SF": 3.5
+     },
+     "LC2_fatigue": {
+      "p99_9": 0.4934200725693104,
+      "p99": 0.3232676446513233,
+      "max": 0.7478377068877204,
+      "max_at_mm": [
+       25.0,
+       11.0,
+       -41.0
+      ],
+      "elements_evaluated": 18152,
+      "SF": 2.03
+     },
+     "interface_compliance": {
+      "interface": "toe patch GRF (ankle-torque capped)",
+      "translation_mm_per_kN": [
+       0.0567,
+       0.4649,
+       1.4021
+      ],
+      "rotation_deg_per_100Nm": [
+       1.5337,
+       2.2517,
+       0.1846
+      ]
+     },
+     "SF_LC1": 3.5,
+     "SF_LC2": 2.03,
      "required": {
-      "LC1": 2.0,
+      "LC1": 1.5,
       "LC2": 1.5
      },
-     "pass": false,
-     "solve_s": 47.4
+     "pass": true,
+     "solve_s": 24.7
     }
    },
-   "mesh_volume_cm3": 219.55,
-   "recommended": "PA-CF build z"
+   "mesh_volume_cm3": 184.34,
+   "load_model": "capped envelope",
+   "recommended": "6061-T6"
   },
   "pelvis": {
    "part": "pelvis",
@@ -1394,9 +482,9 @@
    "voxel_mm": 2.0,
    "note": "torsion box; single-support leg wrench reacted by the torso through the waist interface",
    "materials": {
-    "PA-CF build z": {
-     "elements": 86446,
-     "dof": 345717,
+    "6061-T6": {
+     "elements": 61436,
+     "dof": 273021,
      "supports": [
       {
        "name": "waist actuator (torso)",
@@ -1408,98 +496,1210 @@
        ]
       }
      ],
-     "scenarios": {
-      "all loads": {
-       "load_groups": [
-        {
-         "name": "stance hip yaw housing (leg wrench @ hip centre)",
-         "nodes": 1436,
-         "point_m": [
-          0.0,
-          0.1,
-          0.0
-         ],
-         "LC1": [
-          161.7,
-          161.7,
-          808.3,
-          60.0,
-          120.0,
-          36.0
-         ],
-         "LC2": [
-          53.9,
-          53.9,
-          404.2,
-          33.3,
-          56.9,
-          24.9
-         ]
-        }
-       ],
-       "LC1": {
-        "p99_9": 1.3078848555314113,
-        "p99": 0.9216652348784041,
-        "max": 2.7880607001883724,
-        "max_at_mm": [
-         23.0,
-         43.0,
-         139.0
-        ],
-        "elements_evaluated": 78733,
-        "SF": 0.76
-       },
-       "LC2_fatigue": {
-        "p99_9": 2.0980522054915736,
-        "p99": 1.4800904947862028,
-        "max": 4.505480949438519,
-        "max_at_mm": [
-         23.0,
-         43.0,
-         139.0
-        ],
-        "elements_evaluated": 78733,
-        "SF": 0.48
-       },
-       "interface_compliance_unit": {
-        "translation_mm_per_kN": [
-         3.7369,
-         7.9374,
-         1.0961
-        ],
-        "rotation_deg_per_100Nm": [
-         2.4797,
-         1.1534,
-         0.0547
-        ]
-       },
-       "LC2_interface_motion": {
-        "translation_mm": [
-         1.774,
-         3.353,
-         1.155
-        ],
-        "rotation_deg": [
-         1.417,
-         0.746,
-         0.016
-        ]
-       }
-      }
+     "voxel_volume_error_pct": -0.01,
+     "LC1": {
+      "p99_9": 0.34494040668010995,
+      "p99": 0.25242713332176203,
+      "max": 0.5425434112548828,
+      "max_at_mm": [
+       71.0,
+       133.0,
+       131.0
+      ],
+      "elements_evaluated": 53724,
+      "SF": 2.9
      },
-     "voxel_volume_error_pct": -2.9,
-     "SF_LC1": 0.76,
-     "SF_LC2": 0.48,
+     "LC2_fatigue": {
+      "p99_9": 0.2907302377224032,
+      "p99": 0.2184736642241478,
+      "max": 0.4561820328235626,
+      "max_at_mm": [
+       37.0,
+       103.0,
+       137.0
+      ],
+      "elements_evaluated": 53724,
+      "SF": 3.44
+     },
+     "interface_compliance": {
+      "interface": "leg",
+      "translation_mm_per_kN": [
+       0.5581,
+       1.3261,
+       0.176
+      ],
+      "rotation_deg_per_100Nm": [
+       0.4197,
+       0.175,
+       0.0059
+      ]
+     },
+     "SF_LC1": 2.9,
+     "SF_LC2": 3.44,
+     "required": {
+      "LC1": 1.5,
+      "LC2": 1.5
+     },
+     "pass": true,
+     "solve_s": 130.0
+    }
+   },
+   "mesh_volume_cm3": 491.55,
+   "load_model": "actuator-capped GRF samples + walking time series (leg_loads.py)",
+   "recommended": "6061-T6"
+  },
+  "torso": {
+   "part": "torso",
+   "stl": "JX1_Torso",
+   "voxel_mm": 2.0,
+   "note": "torso frame: waist output -> shoulder housings (one arm at peak at a time)",
+   "materials": {
+    "6061-T6": {
+     "elements": 136604,
+     "dof": 562872,
+     "supports": [
+      {
+       "name": "waist actuator output",
+       "nodes": 370,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": 1.68,
+     "LC1": {
+      "p99_9": 0.22520516120191647,
+      "p99": 0.13498019144759446,
+      "max": 0.3569255435491405,
+      "max_at_mm": [
+       51.0,
+       79.0,
+       5.0
+      ],
+      "elements_evaluated": 130430,
+      "SF": 4.44
+     },
+     "LC2_fatigue": {
+      "p99_9": 0.2786043231363915,
+      "p99": 0.16698580385269418,
+      "max": 0.4415573734628543,
+      "max_at_mm": [
+       51.0,
+       79.0,
+       5.0
+      ],
+      "elements_evaluated": 130430,
+      "SF": 3.59
+     },
+     "interface_compliance": {
+      "interface": "left shoulder-pitch housing (arm wrench @ shoulder centre)",
+      "translation_mm_per_kN": [
+       3.8377,
+       3.3647,
+       1.6193
+      ],
+      "rotation_deg_per_100Nm": [
+       1.0509,
+       0.4469,
+       0.2176
+      ]
+     },
+     "SF_LC1": 4.44,
+     "SF_LC2": 3.59,
+     "required": {
+      "LC1": 1.5,
+      "LC2": 1.5
+     },
+     "pass": true,
+     "solve_s": 265.1
+    },
+    "PA-CF build z": {
+     "elements": 136604,
+     "dof": 562872,
+     "supports": [
+      {
+       "name": "waist actuator output",
+       "nodes": 370,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": 1.68,
+     "LC1": {
+      "p99_9": 1.4344980892322943,
+      "p99": 0.8295641389198771,
+      "max": 2.431478370982902,
+      "max_at_mm": [
+       -11.0,
+       25.0,
+       5.0
+      ],
+      "elements_evaluated": 130430,
+      "SF": 0.7
+     },
+     "LC2_fatigue": {
+      "p99_9": 2.39083014872049,
+      "p99": 1.3826068981997952,
+      "max": 4.0524639516381695,
+      "max_at_mm": [
+       -11.0,
+       25.0,
+       5.0
+      ],
+      "elements_evaluated": 130430,
+      "SF": 0.42
+     },
+     "interface_compliance": {
+      "interface": "left shoulder-pitch housing (arm wrench @ shoulder centre)",
+      "translation_mm_per_kN": [
+       58.007,
+       52.3318,
+       25.8061
+      ],
+      "rotation_deg_per_100Nm": [
+       21.7396,
+       6.5943,
+       4.5641
+      ]
+     },
+     "SF_LC1": 0.7,
+     "SF_LC2": 0.42,
      "required": {
       "LC1": 2.0,
       "LC2": 1.5
      },
      "pass": false,
-     "solve_s": 101.5
+     "solve_s": 296.6
     }
    },
-   "mesh_volume_cm3": 712.21,
-   "recommended": "PA-CF build z"
+   "mesh_volume_cm3": 1074.8,
+   "load_model": "capped envelope",
+   "recommended": "6061-T6"
+  },
+  "shoulder_pitch": {
+   "part": "shoulder_pitch",
+   "stl": "JX1_ShoulderPitchBracket_L",
+   "voxel_mm": 1.0,
+   "note": "U-bracket around the RS02 shoulder-roll actuator",
+   "materials": {
+    "6061-T6": {
+     "elements": 125734,
+     "dof": 461208,
+     "supports": [
+      {
+       "name": "shoulder-pitch output flange",
+       "nodes": 1189,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": 1.12,
+     "LC1": {
+      "p99_9": 0.4612418364810585,
+      "p99": 0.2901969245159137,
+      "max": 1.517272841225937,
+      "max_at_mm": [
+       -45.5,
+       5.5,
+       42.5
+      ],
+      "elements_evaluated": 113484,
+      "SF": 2.17
+     },
+     "LC2_fatigue": {
+      "p99_9": 0.5706084575023405,
+      "p99": 0.3590065045557696,
+      "max": 1.8770385664650766,
+      "max_at_mm": [
+       -45.5,
+       5.5,
+       42.5
+      ],
+      "elements_evaluated": 113484,
+      "SF": 1.75
+     },
+     "interface_compliance": {
+      "interface": "shoulder-roll housing (arm wrench @ roll centre)",
+      "translation_mm_per_kN": [
+       1.0128,
+       1.382,
+       2.1076
+      ],
+      "rotation_deg_per_100Nm": [
+       1.5022,
+       0.622,
+       3.3117
+      ]
+     },
+     "SF_LC1": 2.17,
+     "SF_LC2": 1.75,
+     "required": {
+      "LC1": 1.5,
+      "LC2": 1.5
+     },
+     "pass": true,
+     "solve_s": 96.2
+    },
+    "PA-CF build x": {
+     "elements": 125734,
+     "dof": 461208,
+     "supports": [
+      {
+       "name": "shoulder-pitch output flange",
+       "nodes": 1189,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": 1.12,
+     "LC1": {
+      "p99_9": 4.1088753189349365,
+      "p99": 2.4552857640742225,
+      "max": 12.265439955583794,
+      "max_at_mm": [
+       -45.5,
+       5.5,
+       -42.5
+      ],
+      "elements_evaluated": 113484,
+      "SF": 0.24
+     },
+     "LC2_fatigue": {
+      "p99_9": 6.848125531558227,
+      "p99": 4.092142940123705,
+      "max": 20.44239992597299,
+      "max_at_mm": [
+       -45.5,
+       5.5,
+       -42.5
+      ],
+      "elements_evaluated": 113484,
+      "SF": 0.15
+     },
+     "interface_compliance": {
+      "interface": "shoulder-roll housing (arm wrench @ roll centre)",
+      "translation_mm_per_kN": [
+       39.6177,
+       40.5198,
+       39.8865
+      ],
+      "rotation_deg_per_100Nm": [
+       36.8702,
+       10.7529,
+       126.4262
+      ]
+     },
+     "SF_LC1": 0.24,
+     "SF_LC2": 0.15,
+     "required": {
+      "LC1": 2.0,
+      "LC2": 1.5
+     },
+     "pass": false,
+     "solve_s": 113.0
+    },
+    "PA-CF build y": {
+     "elements": 125734,
+     "dof": 461208,
+     "supports": [
+      {
+       "name": "shoulder-pitch output flange",
+       "nodes": 1189,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": 1.12,
+     "LC1": {
+      "p99_9": 2.4278642844819847,
+      "p99": 1.651163167167011,
+      "max": 7.866507663972468,
+      "max_at_mm": [
+       -45.5,
+       5.5,
+       -42.5
+      ],
+      "elements_evaluated": 113484,
+      "SF": 0.41
+     },
+     "LC2_fatigue": {
+      "p99_9": 4.046440474136641,
+      "p99": 2.751938611945018,
+      "max": 13.11084610662078,
+      "max_at_mm": [
+       -45.5,
+       5.5,
+       -42.5
+      ],
+      "elements_evaluated": 113484,
+      "SF": 0.25
+     },
+     "interface_compliance": {
+      "interface": "shoulder-roll housing (arm wrench @ roll centre)",
+      "translation_mm_per_kN": [
+       13.3086,
+       22.7576,
+       39.9251
+      ],
+      "rotation_deg_per_100Nm": [
+       25.4306,
+       12.0831,
+       45.1669
+      ]
+     },
+     "SF_LC1": 0.41,
+     "SF_LC2": 0.25,
+     "required": {
+      "LC1": 2.0,
+      "LC2": 1.5
+     },
+     "pass": false,
+     "solve_s": 85.3
+    },
+    "PA-CF build z": {
+     "elements": 125734,
+     "dof": 461208,
+     "supports": [
+      {
+       "name": "shoulder-pitch output flange",
+       "nodes": 1189,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": 1.12,
+     "LC1": {
+      "p99_9": 3.0956776944188857,
+      "p99": 1.9590466882224316,
+      "max": 10.062054829638932,
+      "max_at_mm": [
+       -45.5,
+       5.5,
+       42.5
+      ],
+      "elements_evaluated": 113484,
+      "SF": 0.32
+     },
+     "LC2_fatigue": {
+      "p99_9": 5.159462824031477,
+      "p99": 3.265077813704053,
+      "max": 16.770091382731554,
+      "max_at_mm": [
+       -45.5,
+       5.5,
+       42.5
+      ],
+      "elements_evaluated": 113484,
+      "SF": 0.19
+     },
+     "interface_compliance": {
+      "interface": "shoulder-roll housing (arm wrench @ roll centre)",
+      "translation_mm_per_kN": [
+       13.1102,
+       24.8032,
+       70.9408
+      ],
+      "rotation_deg_per_100Nm": [
+       45.81,
+       20.7838,
+       44.7799
+      ]
+     },
+     "SF_LC1": 0.32,
+     "SF_LC2": 0.19,
+     "required": {
+      "LC1": 2.0,
+      "LC2": 1.5
+     },
+     "pass": false,
+     "solve_s": 84.6
+    }
+   },
+   "mesh_volume_cm3": 124.34,
+   "load_model": "capped envelope",
+   "recommended": "6061-T6"
+  },
+  "shoulder_roll": {
+   "part": "shoulder_roll",
+   "stl": "JX1_ShoulderRollBracket_L",
+   "voxel_mm": 1.0,
+   "note": "L-bracket roll output -> RS00 yaw housing",
+   "materials": {
+    "6061-T6": {
+     "elements": 44276,
+     "dof": 162192,
+     "supports": [
+      {
+       "name": "shoulder-roll output flange",
+       "nodes": 1189,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": 0.36,
+     "LC1": {
+      "p99_9": 0.4870236017595398,
+      "p99": 0.3151977934773226,
+      "max": 0.5273922077507502,
+      "max_at_mm": [
+       -33.5,
+       22.5,
+       -13.5
+      ],
+      "elements_evaluated": 36192,
+      "SF": 2.05
+     },
+     "LC2_fatigue": {
+      "p99_9": 0.6025034248571627,
+      "p99": 0.38993541461112075,
+      "max": 0.6524439683514436,
+      "max_at_mm": [
+       -33.5,
+       22.5,
+       -13.5
+      ],
+      "elements_evaluated": 36192,
+      "SF": 1.66
+     },
+     "interface_compliance": {
+      "interface": "shoulder-yaw housing (arm wrench @ roll centre)",
+      "translation_mm_per_kN": [
+       0.1025,
+       0.0541,
+       0.2198
+      ],
+      "rotation_deg_per_100Nm": [
+       0.8622,
+       2.2299,
+       0.0396
+      ]
+     },
+     "SF_LC1": 2.05,
+     "SF_LC2": 1.66,
+     "required": {
+      "LC1": 1.5,
+      "LC2": 1.5
+     },
+     "pass": true,
+     "solve_s": 60.5
+    },
+    "PA-CF build x": {
+     "elements": 44276,
+     "dof": 162192,
+     "supports": [
+      {
+       "name": "shoulder-roll output flange",
+       "nodes": 1189,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": 0.36,
+     "LC1": {
+      "p99_9": 4.400230800978187,
+      "p99": 2.9761308677412104,
+      "max": 5.436882931519242,
+      "max_at_mm": [
+       -33.5,
+       31.5,
+       -13.5
+      ],
+      "elements_evaluated": 36192,
+      "SF": 0.23
+     },
+     "LC2_fatigue": {
+      "p99_9": 7.333718001630313,
+      "p99": 4.960218112902018,
+      "max": 9.061471552532069,
+      "max_at_mm": [
+       -33.5,
+       31.5,
+       -13.5
+      ],
+      "elements_evaluated": 36192,
+      "SF": 0.14
+     },
+     "interface_compliance": {
+      "interface": "shoulder-yaw housing (arm wrench @ roll centre)",
+      "translation_mm_per_kN": [
+       4.3843,
+       2.0934,
+       9.3596
+      ],
+      "rotation_deg_per_100Nm": [
+       34.9447,
+       95.4761,
+       1.4832
+      ]
+     },
+     "SF_LC1": 0.23,
+     "SF_LC2": 0.14,
+     "required": {
+      "LC1": 2.0,
+      "LC2": 1.5
+     },
+     "pass": false,
+     "solve_s": 70.6
+    },
+    "PA-CF build y": {
+     "elements": 44276,
+     "dof": 162192,
+     "supports": [
+      {
+       "name": "shoulder-roll output flange",
+       "nodes": 1189,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": 0.36,
+     "LC1": {
+      "p99_9": 3.521702432651662,
+      "p99": 2.1977833259986475,
+      "max": 3.9605487014834173,
+      "max_at_mm": [
+       -33.5,
+       22.5,
+       -13.5
+      ],
+      "elements_evaluated": 36192,
+      "SF": 0.28
+     },
+     "LC2_fatigue": {
+      "p99_9": 5.869504054419437,
+      "p99": 3.6629722099977453,
+      "max": 6.600914502472362,
+      "max_at_mm": [
+       -33.5,
+       22.5,
+       -13.5
+      ],
+      "elements_evaluated": 36192,
+      "SF": 0.17
+     },
+     "interface_compliance": {
+      "interface": "shoulder-yaw housing (arm wrench @ roll centre)",
+      "translation_mm_per_kN": [
+       1.2359,
+       1.3953,
+       2.6136
+      ],
+      "rotation_deg_per_100Nm": [
+       21.0425,
+       26.7984,
+       0.7434
+      ]
+     },
+     "SF_LC1": 0.28,
+     "SF_LC2": 0.17,
+     "required": {
+      "LC1": 2.0,
+      "LC2": 1.5
+     },
+     "pass": false,
+     "solve_s": 68.3
+    },
+    "PA-CF build z": {
+     "elements": 44276,
+     "dof": 162192,
+     "supports": [
+      {
+       "name": "shoulder-roll output flange",
+       "nodes": 1189,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": 0.36,
+     "LC1": {
+      "p99_9": 2.7925483648976823,
+      "p99": 1.6992722995804859,
+      "max": 3.000080834552251,
+      "max_at_mm": [
+       -33.5,
+       15.5,
+       -18.5
+      ],
+      "elements_evaluated": 36192,
+      "SF": 0.36
+     },
+     "LC2_fatigue": {
+      "p99_9": 4.65424727482947,
+      "p99": 2.8321204993008093,
+      "max": 5.000134724253752,
+      "max_at_mm": [
+       -33.5,
+       15.5,
+       -18.5
+      ],
+      "elements_evaluated": 36192,
+      "SF": 0.21
+     },
+     "interface_compliance": {
+      "interface": "shoulder-yaw housing (arm wrench @ roll centre)",
+      "translation_mm_per_kN": [
+       1.2321,
+       0.733,
+       2.8868
+      ],
+      "rotation_deg_per_100Nm": [
+       11.9821,
+       26.5867,
+       0.4833
+      ]
+     },
+     "SF_LC1": 0.36,
+     "SF_LC2": 0.21,
+     "required": {
+      "LC1": 2.0,
+      "LC2": 1.5
+     },
+     "pass": false,
+     "solve_s": 54.8
+    }
+   },
+   "mesh_volume_cm3": 44.12,
+   "load_model": "capped envelope",
+   "recommended": "6061-T6"
+  },
+  "upper_arm": {
+   "part": "upper_arm",
+   "stl": "JX1_UpperArm_L",
+   "voxel_mm": 1.0,
+   "note": "yaw output -> elbow housing",
+   "materials": {
+    "6061-T6": {
+     "elements": 133148,
+     "dof": 457164,
+     "supports": [
+      {
+       "name": "shoulder-yaw output flange",
+       "nodes": 739,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": 0.53,
+     "LC1": {
+      "p99_9": 0.16703999857309512,
+      "p99": 0.10792432002103083,
+      "max": 0.27038777451401125,
+      "max_at_mm": [
+       23.5,
+       -25.5,
+       -82.5
+      ],
+      "elements_evaluated": 126084,
+      "SF": 5.99
+     },
+     "LC2_fatigue": {
+      "p99_9": 0.20664742091516924,
+      "p99": 0.1335146227064299,
+      "max": 0.33450033960496234,
+      "max_at_mm": [
+       23.5,
+       -25.5,
+       -82.5
+      ],
+      "elements_evaluated": 126084,
+      "SF": 4.84
+     },
+     "interface_compliance": {
+      "interface": "elbow housing (forearm wrench @ elbow)",
+      "translation_mm_per_kN": [
+       0.5382,
+       0.426,
+       0.1656
+      ],
+      "rotation_deg_per_100Nm": [
+       1.0374,
+       0.1109,
+       0.8965
+      ]
+     },
+     "SF_LC1": 5.99,
+     "SF_LC2": 4.84,
+     "required": {
+      "LC1": 1.5,
+      "LC2": 1.5
+     },
+     "pass": true,
+     "solve_s": 83.6
+    },
+    "PA-CF build x": {
+     "elements": 133148,
+     "dof": 457164,
+     "supports": [
+      {
+       "name": "shoulder-yaw output flange",
+       "nodes": 739,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": 0.53,
+     "LC1": {
+      "p99_9": 1.1964590314881256,
+      "p99": 0.7337652154451216,
+      "max": 2.2087165859367452,
+      "max_at_mm": [
+       23.5,
+       -25.5,
+       -82.5
+      ],
+      "elements_evaluated": 126084,
+      "SF": 0.84
+     },
+     "LC2_fatigue": {
+      "p99_9": 1.9940983858135426,
+      "p99": 1.2229420257418695,
+      "max": 3.681194309894575,
+      "max_at_mm": [
+       23.5,
+       -25.5,
+       -82.5
+      ],
+      "elements_evaluated": 126084,
+      "SF": 0.5
+     },
+     "interface_compliance": {
+      "interface": "elbow housing (forearm wrench @ elbow)",
+      "translation_mm_per_kN": [
+       13.3571,
+       5.3869,
+       1.8679
+      ],
+      "rotation_deg_per_100Nm": [
+       11.8576,
+       2.0635,
+       24.7348
+      ]
+     },
+     "SF_LC1": 0.84,
+     "SF_LC2": 0.5,
+     "required": {
+      "LC1": 2.0,
+      "LC2": 1.5
+     },
+     "pass": false,
+     "solve_s": 109.8
+    },
+    "PA-CF build y": {
+     "elements": 133148,
+     "dof": 457164,
+     "supports": [
+      {
+       "name": "shoulder-yaw output flange",
+       "nodes": 739,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": 0.53,
+     "LC1": {
+      "p99_9": 0.8146322197824509,
+      "p99": 0.5629884904011497,
+      "max": 1.4462070583267292,
+      "max_at_mm": [
+       -24.5,
+       -26.5,
+       -84.5
+      ],
+      "elements_evaluated": 126084,
+      "SF": 1.23
+     },
+     "LC2_fatigue": {
+      "p99_9": 1.3577203663040847,
+      "p99": 0.9383141506685829,
+      "max": 2.4103450972112155,
+      "max_at_mm": [
+       -24.5,
+       -26.5,
+       -84.5
+      ],
+      "elements_evaluated": 126084,
+      "SF": 0.74
+     },
+     "interface_compliance": {
+      "interface": "elbow housing (forearm wrench @ elbow)",
+      "translation_mm_per_kN": [
+       9.0424,
+       7.6528,
+       2.0427
+      ],
+      "rotation_deg_per_100Nm": [
+       13.4494,
+       1.7874,
+       13.8884
+      ]
+     },
+     "SF_LC1": 1.23,
+     "SF_LC2": 0.74,
+     "required": {
+      "LC1": 2.0,
+      "LC2": 1.5
+     },
+     "pass": false,
+     "solve_s": 94.9
+    },
+    "PA-CF build z": {
+     "elements": 133148,
+     "dof": 457164,
+     "supports": [
+      {
+       "name": "shoulder-yaw output flange",
+       "nodes": 739,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": 0.53,
+     "LC1": {
+      "p99_9": 1.3768016622252581,
+      "p99": 0.9357097525172552,
+      "max": 2.3446687511035607,
+      "max_at_mm": [
+       23.5,
+       -25.5,
+       -82.5
+      ],
+      "elements_evaluated": 126084,
+      "SF": 0.73
+     },
+     "LC2_fatigue": {
+      "p99_9": 2.294669437042097,
+      "p99": 1.559516254195425,
+      "max": 3.9077812518392676,
+      "max_at_mm": [
+       23.5,
+       -25.5,
+       -82.5
+      ],
+      "elements_evaluated": 126084,
+      "SF": 0.44
+     },
+     "interface_compliance": {
+      "interface": "elbow housing (forearm wrench @ elbow)",
+      "translation_mm_per_kN": [
+       18.2478,
+       16.6658,
+       6.96
+      ],
+      "rotation_deg_per_100Nm": [
+       43.2921,
+       3.8851,
+       35.2182
+      ]
+     },
+     "SF_LC1": 0.73,
+     "SF_LC2": 0.44,
+     "required": {
+      "LC1": 2.0,
+      "LC2": 1.5
+     },
+     "pass": false,
+     "solve_s": 91.4
+    }
+   },
+   "mesh_volume_cm3": 132.44,
+   "load_model": "capped envelope",
+   "recommended": "6061-T6"
+  },
+  "forearm": {
+   "part": "forearm",
+   "stl": "JX1_Forearm_L",
+   "voxel_mm": 1.0,
+   "note": "elbow output -> gripper mount (payload 1 kg x 3 g + gripper; wrist moments from grasp offsets)",
+   "materials": {
+    "6061-T6": {
+     "elements": 73032,
+     "dof": 264378,
+     "supports": [
+      {
+       "name": "elbow output flange",
+       "nodes": 1474,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": -0.8,
+     "LC1": {
+      "p99_9": 0.3053810221458183,
+      "p99": 0.26947915700574643,
+      "max": 0.3721317199878281,
+      "max_at_mm": [
+       -10.5,
+       30.5,
+       -14.5
+      ],
+      "elements_evaluated": 65142,
+      "SF": 3.27
+     },
+     "LC2_fatigue": {
+      "p99_9": 0.3777909552319402,
+      "p99": 0.3333762767081399,
+      "max": 0.4603691381292719,
+      "max_at_mm": [
+       -10.5,
+       30.5,
+       -14.5
+      ],
+      "elements_evaluated": 65142,
+      "SF": 2.65
+     },
+     "interface_compliance": {
+      "interface": "gripper mount (hand wrench @ hand frame)",
+      "translation_mm_per_kN": [
+       1.9761,
+       24.4128,
+       2.2831
+      ],
+      "rotation_deg_per_100Nm": [
+       17.1862,
+       0.9722,
+       10.6951
+      ]
+     },
+     "SF_LC1": 3.27,
+     "SF_LC2": 2.65,
+     "required": {
+      "LC1": 1.5,
+      "LC2": 1.5
+     },
+     "pass": true,
+     "solve_s": 44.7
+    },
+    "PA-CF build x": {
+     "elements": 73032,
+     "dof": 264378,
+     "supports": [
+      {
+       "name": "elbow output flange",
+       "nodes": 1474,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": -0.8,
+     "LC1": {
+      "p99_9": 2.207557705168745,
+      "p99": 1.8485346058666672,
+      "max": 3.0941841022756233,
+      "max_at_mm": [
+       10.5,
+       30.5,
+       -14.5
+      ],
+      "elements_evaluated": 65142,
+      "SF": 0.45
+     },
+     "LC2_fatigue": {
+      "p99_9": 3.679262841947909,
+      "p99": 3.0808910097777784,
+      "max": 5.156973503792705,
+      "max_at_mm": [
+       10.5,
+       30.5,
+       -14.5
+      ],
+      "elements_evaluated": 65142,
+      "SF": 0.27
+     },
+     "interface_compliance": {
+      "interface": "gripper mount (hand wrench @ hand frame)",
+      "translation_mm_per_kN": [
+       61.8208,
+       270.2421,
+       24.8725
+      ],
+      "rotation_deg_per_100Nm": [
+       187.4275,
+       26.6679,
+       397.2612
+      ]
+     },
+     "SF_LC1": 0.45,
+     "SF_LC2": 0.27,
+     "required": {
+      "LC1": 2.0,
+      "LC2": 1.5
+     },
+     "pass": false,
+     "solve_s": 54.2
+    },
+    "PA-CF build y": {
+     "elements": 73032,
+     "dof": 264378,
+     "supports": [
+      {
+       "name": "elbow output flange",
+       "nodes": 1474,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": -0.8,
+     "LC1": {
+      "p99_9": 1.779505496672068,
+      "p99": 1.4277595668557574,
+      "max": 2.496301917756325,
+      "max_at_mm": [
+       -10.5,
+       30.5,
+       -14.5
+      ],
+      "elements_evaluated": 65142,
+      "SF": 0.56
+     },
+     "LC2_fatigue": {
+      "p99_9": 2.9658424944534465,
+      "p99": 2.3795992780929294,
+      "max": 4.160503196260541,
+      "max_at_mm": [
+       -10.5,
+       30.5,
+       -14.5
+      ],
+      "elements_evaluated": 65142,
+      "SF": 0.34
+     },
+     "interface_compliance": {
+      "interface": "gripper mount (hand wrench @ hand frame)",
+      "translation_mm_per_kN": [
+       24.2391,
+       277.1434,
+       29.4973
+      ],
+      "rotation_deg_per_100Nm": [
+       238.7616,
+       28.4951,
+       133.7413
+      ]
+     },
+     "SF_LC1": 0.56,
+     "SF_LC2": 0.34,
+     "required": {
+      "LC1": 2.0,
+      "LC2": 1.5
+     },
+     "pass": false,
+     "solve_s": 50.9
+    },
+    "PA-CF build z": {
+     "elements": 73032,
+     "dof": 264378,
+     "supports": [
+      {
+       "name": "elbow output flange",
+       "nodes": 1474,
+       "dofs": [
+        0,
+        1,
+        2
+       ]
+      }
+     ],
+     "voxel_volume_error_pct": -0.8,
+     "LC1": {
+      "p99_9": 2.806176756564998,
+      "p99": 2.486278923619617,
+      "max": 3.1532195052371246,
+      "max_at_mm": [
+       5.5,
+       25.5,
+       -21.5
+      ],
+      "elements_evaluated": 65142,
+      "SF": 0.36
+     },
+     "LC2_fatigue": {
+      "p99_9": 4.676961260941662,
+      "p99": 4.143798206032695,
+      "max": 5.255365842061874,
+      "max_at_mm": [
+       5.5,
+       25.5,
+       -21.5
+      ],
+      "elements_evaluated": 65142,
+      "SF": 0.21
+     },
+     "interface_compliance": {
+      "interface": "gripper mount (hand wrench @ hand frame)",
+      "translation_mm_per_kN": [
+       81.7477,
+       1033.6731,
+       92.934
+      ],
+      "rotation_deg_per_100Nm": [
+       684.2088,
+       21.5715,
+       447.8886
+      ]
+     },
+     "SF_LC1": 0.36,
+     "SF_LC2": 0.21,
+     "required": {
+      "LC1": 2.0,
+      "LC2": 1.5
+     },
+     "pass": false,
+     "solve_s": 55.7
+    }
+   },
+   "mesh_volume_cm3": 73.62,
+   "load_model": "capped envelope",
+   "recommended": "6061-T6"
   }
  },
  "hand_calcs": {

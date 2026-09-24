@@ -32,7 +32,7 @@ leg geometry, and the final CAD geometry evaluated as PA-CF (upper body; range o
 | Torso frame | 0.70 / 0.42 | 6061-T6: 4.44 / 3.59 |
 | Shoulder-pitch bracket | 0.24–0.41 / 0.15–0.25 | 6061-T6: 2.17 / 1.75 |
 | Shoulder-roll bracket | 0.23–0.36 / 0.14–0.21 | 6061-T6: 2.05 / 1.66 |
-| Upper arm | 0.19–0.20 / 0.12 | 6061-T6, 10/8 mm + gussets: 3.12 / 2.52 (variant study; 6 mm version failed: 1.34 / 1.08) |
+| Upper arm | 0.73–1.23 / 0.44–0.74 | 6061-T6, 10/8 mm + gussets: 5.99 / 4.84 (6 mm version failed: 1.34 / 1.08) |
 | Forearm | 0.36–0.56 / 0.21–0.34 | 6061-T6: 3.27 / 2.65 |
 
 PA-CF (eSUN ePA-CF, 84 MPa in-layer, 6.5 GPa) is stronger and stiffer than PETG, so PETG parts would be worse still; PETG
