@@ -181,7 +181,6 @@ VARIANTS["upper_arm"] = {
     "U1_al_elbow10": ("6061-T6", ARM_EL10),
     "U2_al_elbow10_gussets": ("6061-T6", ARM_EL10 + ARM_GUSSETS),
     "U3_al_elbow10_gussets_yaw8": ("6061-T6", ARM_EL10 + ARM_GUSSETS + ARM_YAW8),
-    "U4_7075_elbow10_gussets": ("7075-T6", ARM_EL10 + ARM_GUSSETS),
 }
 
 
