@@ -48,11 +48,11 @@ TYPE_OF = {**{f"JX1-00{i}": "Joint actuators" for i in range(1, 7)},
            **{k: "3D printing and consumables" for k in ["JX1-047", "JX1-048", "JX1-049", "JX1-050"]}}
 # stage A of the purchase plan: what to buy first to validate the design on the bench (line id -> quantity)
 BENCH_KIT = {"JX1-001": 1, "JX1-002": 1, "JX1-003": 1, "JX1-024": 1, "JX1-027": 1, "JX1-049": 2}
-# actuator load while walking at 0.8 m/s with the learned controller (jx1_walk_rough, CAD model; final spec):
-# (joint, actuator, simulated peak N·m, capability N·m, how compared)
-TORQUE = [("Hip yaw", "RS06", 11.3, 36, "1.5×"), ("Hip roll", "RS03", 31.4, 60, "1.5×"), ("Hip pitch", "RS04", 28.2, 120, "1.5×"),
-          ("Knee", "RS04", 61.5, 120, "1.5×"), ("Ankle pitch", "2 × RS06 via linkage", 32.9, 46, "1.0×"),
-          ("Ankle roll", "2 × RS06 via linkage", 18.2, 51, "1.0×")]
+# actuator load while walking at 0.8 m/s with the default learned controller (jx1_walk_stand_v7, CAD model;
+# docs/final_robot_specification.md): (joint, actuator, simulated peak N·m, capability N·m, how compared)
+TORQUE = [("Hip yaw", "RS06", 8.3, 36, "1.5×"), ("Hip roll", "RS03", 32.2, 60, "1.5×"), ("Hip pitch", "RS04", 22.5, 120, "1.5×"),
+          ("Knee", "RS04", 59.6, 120, "1.5×"), ("Ankle pitch", "2 × RS06 via linkage", 37.7, 46, "1.0×"),
+          ("Ankle roll", "2 × RS06 via linkage", 17.6, 51, "1.0×")]
 # realistic ways to spend less (from the BOM "Alternative" column): (line id, what changes, trade-off)
 SAVINGS = [
     ("ACT", "Buy the same 21 RobStride actuators through a China distributor (CNY list + 5 % agent)",
@@ -250,7 +250,7 @@ def build(rows, s):
             ("Brain", "NVIDIA Jetson Nano 4 GB — runs the learned walking controller 50 times a second"),
             ("Motor control", "2 × Teensy 4.1 hub boards, 6 CAN buses at 1 Mbit/s, 500 Hz control loop"),
             ("Sensors", "BNO085 IMU, IMX219-83 stereo camera, 21 joint encoders, optional foot pressure sensors"),
-            ("Battery", "13S2P Li-ion, 41.6–54.6 V, 468 Wh; ≈ 1.3 h walking, 2.3–4.1 h standing (calculated)"),
+            ("Battery", "13S2P Li-ion, 41.6–54.6 V, 468 Wh; ≈ 1.4 h walking at 0.5 m/s, ≈ 5 h standing (calculated)"),
             ("Structure", "6061-T6 / 7075-T6 aluminium plates, every structural part strength-checked (FEA, SF ≥ 1.5)"),
             ("Walking", "up to 0.8 m/s with the reinforcement-learning controller (simulation of the CAD model)")]
     spec_html = "".join(f"<tr><th>{e(k)}</th><td>{e(v)}</td></tr>" for k, v in spec)
@@ -354,7 +354,9 @@ the prices below are landed costs.</p>
         for j, a, t, c, m in TORQUE], "compact")}
 <p class="note">Simulated on the full CAD model with the trained walking controller (calculated, not yet measured). Hip and knee
 peaks are multiplied by the 1.5 safety margin used throughout the design; ankle values are compared with what the two-motor
-linkage can deliver. The next smaller RobStride size would not be enough at the knee (92 N·m needed, 60 N·m available) or at hip roll (47 N·m needed, 36 N·m available).</p>'''))
+linkage can deliver; the ankle motors are the tightest, and the hub firmware caps every motor at 80 % of its peak torque.
+The next smaller RobStride size would not be enough at the knee ({1.5 * TORQUE[3][2]:.0f} N·m needed, 60 N·m available) or at hip roll
+({1.5 * TORQUE[1][2]:.0f} N·m needed, 36 N·m available).</p>'''))
 
     # 5 — structure
     metal = ids("Machined / laser-cut metal parts")
@@ -414,7 +416,8 @@ and 58 V-rated branch fuses; isolated and step-down supplies feed the computers 
 <div class="two">
   <div><h2>Battery at a glance</h2>{table([("", ""), ("", "r")], [
       ["Configuration", "13S2P, 28 × 21700 cells"], ["Voltage", "41.6–54.6 V"], ["Energy", "468 Wh"],
-      ["BMS limit", "40 A continuous"], ["Walking 0.5 m/s", "≈ 283 W → ≈ 1.3 h"], ["Standing", "92–163 W → 2.3–4.1 h"]], "compact kv")}</div>
+      ["BMS limit", "40 A continuous (peak need 15.9 A)"], ["Standing", "73 W → 5.1 h"], ["Walking 0.5 m/s", "274 W → 1.37 h"],
+      ["Walking 0.8 m/s", "347 W → 1.08 h"]], "compact kv")}</div>
   <div><h2>Safety built in</h2><ul class="notes">
     <li>Emergency stop with two independent paths: it cuts the 48 V motor bus <i>and</i> puts every joint into damping.</li>
     <li>58 V-rated fuses on every branch (car fuses are rated 32 V and are not safe here).</li>

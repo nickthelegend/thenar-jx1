@@ -102,9 +102,9 @@ Every number in this repository carries a label, so you always know how much to 
 | Brain | NVIDIA Jetson Nano 4 GB: runs the walking controller 50 times a second |
 | Motor control | 2 × Teensy 4.1 "hub" boards, 6 CAN buses, 500 updates per second |
 | Sensors | BNO085 IMU (balance) in the pelvis, IMX219-83 stereo camera in the head, encoders in every motor |
-| Battery | 13S2P Li-ion, 48 V nominal, 468 Wh: ≈ 1.3 h walking, 2.3–4.1 h standing (CALCULATED) |
+| Battery | 13S2P Li-ion, 48 V nominal, 468 Wh: ≈ 1.4 h walking at 0.5 m/s (1.1 h at 0.8 m/s), ≈ 5 h standing (CALCULATED) |
 | Structure | 6061-T6 aluminium plates (7075-T6 for the hip-yaw brackets); head and grippers 3D-printed |
-| Walking (simulation) | learned controller: 0.8 m/s forward, turns up to 0.84 rad/s, survives 16–44 N·s shoves; scripted gait: 0.3–0.52 m/s |
+| Walking (simulation) | learned controller: trained up to 0.8 m/s forward, side-steps ±0.39 m/s, turns up to 0.87 rad/s; survives 29–60 N·s shoves while walking, 26–55 N·s standing; stands still at 73 W. Scripted gait: 0.3–0.52 m/s |
 | Cost | ₹7,12,481 in parts (₹8,19,353 with 15 % contingency); the motors are 77 % of it |
 
 Full details: the generated **[FINAL ROBOT SPECIFICATION](docs/final_robot_specification.md)**.
@@ -303,12 +303,12 @@ requirements ─► reference robots (29 humanoids) ─► actuator selection �
 | CAD | 46 native parametric parts, fully constrained sketches, global variables; `JX1_LowerBody`, `JX1_UpperBody`, `JX1_Robot` assemblies with limit-mated joints | `CAD/`, `verification/cad_build_*.json` |
 | Motion verification (SolidWorks vs analytic kinematics) | legs 25/25 poses each at 0.0000 mm / 0.0000°, 24/24 collision-free inside the coupled ankle limits; upper body 36/36 exact and collision-free; whole robot 13/13 exact, 11/11 collision-free inside the controller limits (pre-arm-redesign, OI-25); overhead arm range checked in MuJoCo on the CAD shapes, 49/49 agreement with SolidWorks (OI-16) | `verification/*motion_verification.json`, `verification/mujoco_arm_range.json`, images |
 | Structure (voxel FEA, actuator-capped loads) | every structural part passes in 6061/7075 (SF static 1.77–14.4, fatigue 1.58–24.7); every printed PA-CF variant fails (0.07–1.23) | [structural report](calculations/results/structural/report.md) |
-| Actuator margins (CAD masses) | at 0.8 m/s the learned controller keeps hips and knees within the 1.5× peak-torque policy (ankle pitch at 71 % of its linkage capability); the scripted ZMP gait meets it up to 0.52 m/s, at 0.79 m/s its hip yaw needs 37 N·m vs 36 N·m (OI-2) | [final spec](docs/final_robot_specification.md), `calculations/results/iter2_C_cad_masses/` |
+| Actuator margins (CAD masses) | at 0.8 m/s the learned controller keeps hips and knees within the 1.5× peak-torque policy (knee 89 of 120 N·m, hip roll 48 of 60); the ankle motors are the tightest: ankle pitch at 82 % of the linkage capability, capped at 80 % by the hub firmware (OI-21); the scripted ZMP gait meets it up to 0.52 m/s, at 0.79 m/s its hip yaw needs 37 N·m vs 36 N·m (OI-2) | [final spec](docs/final_robot_specification.md), `calculations/results/iter2_C_cad_masses/` |
 | Simulation | MuJoCo model from the CAD (33.61 kg, CoACD hulls): standing, squat, ZMP walking 4/4 gaits, push recovery; URDF + xacro | `verification/mujoco_*.json`, `verification/xacro_check.json` |
-| Learned walking | `jx1_walk_rough`: 7/7 scenarios upright on flat and rough ground, 109/130 commands tracked with 0 falls, pushes 15.9–44.1 N·s, verified over ROS 2 and through the hub-firmware twin (HIL); Isaac Lab task offline-checked, not run (UNVERIFIED) | [rl/README.md](rl/README.md), `rl/policies/jx1_walk_rough/REPORT.md` |
+| Learned walking | default `jx1_walk_stand_v7`: 8/8 scenarios upright on flat and rough ground (0.8 m/s command → 0.75–0.77 m/s), 118/130 (flat) and 119/130 (rough) commands tracked with 0 falls, pushes 29–60 N·s walking and 26–55 N·s standing, stands still (0 foot lift-offs); verified over ROS 2 and through the hub-firmware twin (HIL: 0.68 m/s at a 0.8 m/s command with the 80 % torque caps). Weak spot: slow forward walking undershoots (84 % of 0.3 m/s through the HIL chain, 93 % of 0.4 m/s over ROS 2). Isaac Lab task offline-checked, not run (UNVERIFIED) | [rl/README.md](rl/README.md), `rl/policies/jx1_walk_stand_v7/REPORT.md` |
 | Manufacturing | 24 STEP files, 14 A3 drawings (PDF), 24 PETG fit-check STLs, 3 print STLs | [manufacturing/index.md](manufacturing/index.md) |
 | Cost (India, landed) | ₹7,12,481; ₹8,19,353 with 15 % contingency; actuators 77 % | [bom/cost_summary.md](bom/cost_summary.md) |
-| Power | 13S2P 468 Wh: ≈ 283 W walking at 0.5 m/s → ≈ 1.3 h; learned-controller standing 163 W → 2.3 h (a static stand needs 92 W → 4.1 h; stand mode in progress, OI-27) | `rl/policies/jx1_walk_rough/power.json`, `calculations/results/iter2_C_cad_masses/power_budget.json` |
+| Power | 13S2P 468 Wh with the learned controller: standing 73 W → 5.1 h; walking 274 W at 0.5 m/s → 1.37 h, 347 W at 0.8 m/s → 1.08 h; peak battery current 15.9 A (BMS limit 40 A) | `rl/policies/jx1_walk_stand_v7/power.json`, `calculations/results/iter2_C_cad_masses/power_budget.json` |
 
 ## Repository map
 
@@ -438,8 +438,9 @@ bearinghouse.in and others. Metal parts go to a laser/CNC job shop (e.g. Robocon
 the STEP + PDF set.
 
 **How fast does it walk? How long does the battery last?**
-In simulation the learned controller walks at up to 0.8 m/s (1.08 m/s at the edge of its range) and turns at up to
-0.84 rad/s. The battery gives about 1.3 hours of walking (CALCULATED). Real-world numbers will come from the first build.
+In simulation the learned controller walks at up to 0.8 m/s (1.09 m/s at the edge of its range) and turns at up to
+0.87 rad/s. The battery gives about 1.4 hours of walking at 0.5 m/s, or about 5 hours of standing (CALCULATED).
+Real-world numbers will come from the first build.
 
 **What is still unknown?**
 Mainly the exact actuator bolt patterns (OI-1), real job-shop prices, and everything only a physical robot can show:
@@ -455,7 +456,8 @@ an item in [open issues](docs/open_issues.md) moves the project forward.
 - **Top open items:** actuator interface dimensions (OI-1); hip-yaw actuator vs top walking speed for the scripted gait
   (OI-2); bolted plate joints: CAD fastener geometry and prototype strain check (OI-17); drawings made under a
   SolidWorks Educational licence carry its "For Instructional Use Only" stamp (OI-19); whole-robot SolidWorks assembly
-  re-check after the arm redesign (OI-25); a quieter stand mode for the learned controller (OI-27). All of them are in
+  re-check after the arm redesign (OI-25); ankle-motor torque headroom at the top walking speed, to be bench-checked
+  (OI-21). All of them are in
   [open issues](docs/open_issues.md).
 - **Safety:** this is a 34 kg machine with 120 N·m joints and a 468 Wh lithium battery. Always use the E-stop, a
   gantry or harness, and current-limited power for bring-up. See [safety architecture](docs/safety_architecture.md).

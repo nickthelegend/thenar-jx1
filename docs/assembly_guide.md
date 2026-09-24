@@ -353,7 +353,7 @@ and [safety architecture](safety_architecture.md).
    zero offsets at the zero pose. Check every joint limit against `simulation/joint_map.yaml` and every motor direction
    against the firmware config (`firmware/hub/jx1_hub/config_hub_{a,b}.h`, generated from the CAD).
 5. **Feet down, still on the harness:** damping mode → PD stand → weight shifts → slow walking. Use the learned
-   policy (`rl/policies/jx1_walk_rough`) through `ros2 launch jx1_hw hardware.launch.py`. It was checked end-to-end
+   policy (`rl/policies/jx1_walk_stand_v7`, the default) through `ros2 launch jx1_hw hardware.launch.py`. It was checked end-to-end
    against an emulated hub first ([rl/README.md](../rl/README.md)).
 
 If anything is unclear or doesn't fit, it goes into [open issues](open_issues.md). That list is how this design gets
