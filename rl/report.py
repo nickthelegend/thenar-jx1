@@ -163,6 +163,11 @@ def main():
         out += ["## Hardware-in-the-loop: policy → `hw_node` → hub protocol → hub-firmware twin → physics", "",
                 f"`{hw['chain']}`. RUN accepted: {hw['run_accepted']}, upright: {hw['upright']}, "
                 f"hub faults at the end: {', '.join(faults) if faults else 'none'}.", "", phases_table(hw), ""]
+        hf = load(pdir / "hw_loop_fast_check.json")
+        if hf and hf.get("phases", {}).get("fast"):
+            f = hf["phases"]["fast"]
+            out += [f"At the top trained speed through the same chain (`hw_loop_check.py --fast`, hub torque caps 80 % of peak): "
+                    f"0.8 m/s commanded -> {f['mean_speed_m_s']:.2f} m/s, max tilt {f['max_tilt_deg']:.1f}°, upright {hf.get('upright')}.", ""]
         hl = load(pdir / "hw_loop_launch_check.json")
         if hl and hl.get("phases"):
             ph = hl["phases"]

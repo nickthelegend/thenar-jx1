@@ -32,6 +32,8 @@ from ros2_check import Probe, clean, spin_until, start_launch, stop  # noqa: E40
 
 REPO = Path(__file__).resolve().parents[1]
 SCRIPT = [("stand", (0.0, 0.0, 0.0), 4.0), ("forward", (0.3, 0.0, 0.0), 10.0), ("turn", (0.0, 0.0, 0.3), 6.0), ("stop", (0.0, 0.0, 0.0), 4.0)]
+# --fast: the top of the trained speed range through the hub torque caps (80 % of peak; the ankle motors reach it at 0.8 m/s)
+SCRIPT_FAST = [("stand", (0.0, 0.0, 0.0), 4.0), ("fast", (0.8, 0.0, 0.0), 8.0), ("stop", (0.0, 0.0, 0.0), 4.0)]
 
 
 def wait_port(port, timeout=30.0):
@@ -49,6 +51,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--policy", default=str(REPO / "rl" / "policies" / "jx1_walk_rough"))
     ap.add_argument("--launch", type=Path, default=None, help="colcon install space: ros2 launch jx1_hw hardware.launch.py hil:=true")
+    ap.add_argument("--fast", action="store_true", help="stand, 0.8 m/s for 8 s, stop -> hw_loop_fast_check.json")
     a = ap.parse_args()
     policy = Path(a.policy).resolve()
     io = policy / "policy_io.yaml"
@@ -88,7 +91,7 @@ def main():
         result["run_accepted"] = bool(fut.result() and fut.result().success)
         spin_until(probe, lambda: all(h.get("mode") == 2 for h in status.get("hubs", {}).values()) and len(status.get("hubs", {})) == 2, 10.0)
         result["hub_modes_after_run"] = {h: v.get("mode") for h, v in status.get("hubs", {}).items()}
-        for name, cmd, dur in SCRIPT:
+        for name, cmd, dur in (SCRIPT_FAST if a.fast else SCRIPT):
             start, i0 = probe.sim_time(), len(probe.log)
             while probe.sim_time() - start < dur:
                 probe.send(cmd)
@@ -111,7 +114,8 @@ def main():
         outs = {tag: stop(p) for p, tag in reversed(list(zip(procs, tags)))}
         for tag in tags:
             result[f"{tag}_log_tail"] = clean(outs[tag].strip().splitlines())[-(25 if a.launch else 12):]
-    (policy / ("hw_loop_launch_check.json" if a.launch else "hw_loop_check.json")).write_text(json.dumps(result, indent=1), encoding="utf-8")
+    out = "hw_loop_fast_check.json" if a.fast else ("hw_loop_launch_check.json" if a.launch else "hw_loop_check.json")
+    (policy / out).write_text(json.dumps(result, indent=1), encoding="utf-8")
     print(json.dumps({k: v for k, v in result.items() if not k.endswith("log_tail")}, indent=1))
     if "error" in result:
         for k, v in result.items():

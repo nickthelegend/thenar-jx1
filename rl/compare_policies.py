@@ -67,6 +67,9 @@ def row_values(b: Path) -> dict:
     if h and h.get("phases"):
         ph = h["phases"]
         out["HIL (hub twin)"] = f"fwd {ph['forward']['mean_speed_m_s'] / 0.3:.0%} of 0.3 m/s, turn {ph['turn']['yaw_change_deg'] / 103.1:.0%} of 0.3 rad/s"
+    hf = load(b / "hw_loop_fast_check.json")
+    if hf and hf.get("phases", {}).get("fast"):
+        out["HIL 0.8 m/s"] = f"{hf['phases']['fast']['mean_speed_m_s']:.2f} m/s, " + ("upright" if hf.get("upright") else "**fell**")
     lat = load(b / "latency.json")
     if lat:
         r0 = next(r for r in lat["rows"] if r["obs_delay_ms"] == 0 and r["act_delay_ms"] == 0)
