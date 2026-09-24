@@ -1,0 +1,2148 @@
+{
+ "model": "simulation/mujoco/jx1.xml",
+ "model_sha256": "13e00221a0d062a2e3a426d2313e3b7f7fff8d5f6aca1dc60a093813af340898",
+ "method": "kinematic posing, fixed base, contacts between robot bodies on the CoACD convex hulls (adjacent pairs excluded by the model); hull overlap depths are not physical penetrations",
+ "grid_deg": {
+  "shoulder_pitch": [
+   -170,
+   -165,
+   -160,
+   -155,
+   -150,
+   -145,
+   -140,
+   -135,
+   -130,
+   -125,
+   -120,
+   -115,
+   -110,
+   -105,
+   -100,
+   -95,
+   -90,
+   -85,
+   -80,
+   -75,
+   -70,
+   -65,
+   -60,
+   -55,
+   -50,
+   -45,
+   -40,
+   -35,
+   -30,
+   -25,
+   -20,
+   -15,
+   -10,
+   -5,
+   0,
+   5,
+   10,
+   15,
+   20,
+   25,
+   30,
+   35,
+   40,
+   45,
+   50,
+   55,
+   60
+  ],
+  "shoulder_roll_abduction": [
+   -10,
+   0,
+   8,
+   20,
+   45,
+   90,
+   150
+  ],
+  "shoulder_yaw": [
+   -90,
+   -45,
+   0,
+   45,
+   90
+  ],
+  "elbow": [
+   -135,
+   -90,
+   -45,
+   0,
+   5
+  ],
+  "other_arm_roll": 8,
+  "legs": "rl/config/jx1_walk.yaml default_joint_pos",
+  "neck_sub_sweep": {
+   "yaw": [
+    -80,
+    -40,
+    0,
+    40,
+    80
+   ],
+   "pitch": [
+    -30,
+    0,
+    45
+   ],
+   "at_shoulder_pitch": [
+    -170,
+    -165,
+    -160,
+    -155,
+    -150,
+    -145,
+    -140,
+    -135,
+    -130,
+    -125,
+    -120,
+    -115
+   ]
+  }
+ },
+ "method_check": {
+  "poses": 49,
+  "agree": 49,
+  "rows": [
+   {
+    "set": "robot",
+    "pose": "zero",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "robot",
+    "pose": "stand_arms_relaxed",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "robot",
+    "pose": "walk_left_stance",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "robot",
+    "pose": "walk_right_stance",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "robot",
+    "pose": "deep_squat_arms_forward",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "robot",
+    "pose": "sit_hands_on_lap",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "robot",
+    "pose": "single_leg_T_pose",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "robot",
+    "pose": "single_leg_overshift",
+    "solidworks_collision_free": false,
+    "solidworks_interferences": [
+     "L_AnkBH|R_AnkBH",
+     "L_AnkBH|R_AnkBO",
+     "L_AnkBH|R_CrankB",
+     "L_AnkBH|R_Shin",
+     "L_AnkBO|R_AnkBH",
+     "L_AnkBO|R_Shin",
+     "L_CrankB|R_AnkBH",
+     "L_CrankB|R_Cross",
+     "L_CrankB|R_Foot",
+     "L_CrankB|R_Shin",
+     "L_Cross|R_Foot",
+     "L_Foot|R_Foot",
+     "L_Shin|R_Foot"
+    ],
+    "mujoco_collision_free": false,
+    "mujoco_contacts": {
+     "left_shin_link|right_shin_link": 27.4,
+     "left_shin_link|right_ankle_cross_link": 7.4,
+     "left_shin_link|right_foot_link": 25.5,
+     "left_ankle_cross_link|right_foot_link": 5.2
+    },
+    "agree": true
+   },
+   {
+    "set": "robot",
+    "pose": "leg_forward_arms_back",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "robot",
+    "pose": "abduction_arms_down",
+    "solidworks_collision_free": false,
+    "solidworks_interferences": [
+     "L_Gripper|L_Thigh"
+    ],
+    "mujoco_collision_free": false,
+    "mujoco_contacts": {
+     "left_forearm_link|left_thigh_link": 28.1
+    },
+    "agree": true
+   },
+   {
+    "set": "robot",
+    "pose": "abduction_arms_relaxed",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "robot",
+    "pose": "waist_turn_carry",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "robot",
+    "pose": "head_scan",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "zero",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "waist_yaw_min",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "waist_yaw_max",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "left_shoulder_pitch_min",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "left_shoulder_pitch_max",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "left_shoulder_roll_min",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "left_shoulder_roll_max",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "left_shoulder_yaw_min",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "left_shoulder_yaw_max",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "left_elbow_min",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "left_elbow_max",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "right_shoulder_pitch_min",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "right_shoulder_pitch_max",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "right_shoulder_roll_min",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "right_shoulder_roll_max",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "right_shoulder_yaw_min",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "right_shoulder_yaw_max",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "right_elbow_min",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "right_elbow_max",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "neck_yaw_min",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "neck_yaw_max",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "neck_pitch_min",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "neck_pitch_max",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "t_pose",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "arms_forward",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "reach_up_cad_max",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "arms_back",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "hands_together_front",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "carry_box",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "elbows_flexed_down",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "arms_adducted",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "walk_swing_front",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "waist_twist_left",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "head_left_down",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "head_right_up",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   },
+   {
+    "set": "upper",
+    "pose": "wave_left",
+    "solidworks_collision_free": true,
+    "solidworks_interferences": [],
+    "mujoco_collision_free": true,
+    "mujoco_contacts": {},
+    "agree": true
+   }
+  ]
+ },
+ "arms": {
+  "left": {
+   "by_pitch": {
+    "-170": {
+     "poses": 175,
+     "clash": 12,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-165": {
+     "poses": 175,
+     "clash": 12,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-160": {
+     "poses": 175,
+     "clash": 14,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-155": {
+     "poses": 175,
+     "clash": 13,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-150": {
+     "poses": 175,
+     "clash": 15,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-145": {
+     "poses": 175,
+     "clash": 14,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-140": {
+     "poses": 175,
+     "clash": 13,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-135": {
+     "poses": 175,
+     "clash": 12,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-130": {
+     "poses": 175,
+     "clash": 12,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-125": {
+     "poses": 175,
+     "clash": 12,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-120": {
+     "poses": 175,
+     "clash": 11,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-115": {
+     "poses": 175,
+     "clash": 11,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-110": {
+     "poses": 175,
+     "clash": 11,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-105": {
+     "poses": 175,
+     "clash": 10,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-100": {
+     "poses": 175,
+     "clash": 9,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-95": {
+     "poses": 175,
+     "clash": 9,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-90": {
+     "poses": 175,
+     "clash": 10,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-85": {
+     "poses": 175,
+     "clash": 10,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-80": {
+     "poses": 175,
+     "clash": 10,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-75": {
+     "poses": 175,
+     "clash": 10,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-70": {
+     "poses": 175,
+     "clash": 9,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-65": {
+     "poses": 175,
+     "clash": 9,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-60": {
+     "poses": 175,
+     "clash": 9,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-55": {
+     "poses": 175,
+     "clash": 8,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-50": {
+     "poses": 175,
+     "clash": 8,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "-45": {
+     "poses": 175,
+     "clash": 12,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "-40": {
+     "poses": 175,
+     "clash": 13,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "-35": {
+     "poses": 175,
+     "clash": 18,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "-30": {
+     "poses": 175,
+     "clash": 18,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "-25": {
+     "poses": 175,
+     "clash": 19,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "-20": {
+     "poses": 175,
+     "clash": 23,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "-15": {
+     "poses": 175,
+     "clash": 26,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_roll_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "-10": {
+     "poses": 175,
+     "clash": 33,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_roll_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|left_thigh_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|right_hip_roll_link",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "-5": {
+     "poses": 175,
+     "clash": 34,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_roll_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|left_thigh_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|right_hip_roll_link",
+      "left_forearm_link|right_hip_yaw_link",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "0": {
+     "poses": 175,
+     "clash": 35,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_roll_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|left_thigh_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|right_hip_roll_link",
+      "left_forearm_link|right_hip_yaw_link",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "5": {
+     "poses": 175,
+     "clash": 37,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_roll_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|left_thigh_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|right_hip_roll_link",
+      "left_forearm_link|right_hip_yaw_link",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "10": {
+     "poses": 175,
+     "clash": 40,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_roll_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|left_thigh_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|right_hip_roll_link",
+      "left_forearm_link|right_hip_yaw_link",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "15": {
+     "poses": 175,
+     "clash": 43,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_roll_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|left_thigh_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|right_hip_roll_link",
+      "left_forearm_link|right_hip_yaw_link",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "20": {
+     "poses": 175,
+     "clash": 44,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_roll_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|left_thigh_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|right_hip_yaw_link",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "25": {
+     "poses": 175,
+     "clash": 42,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_roll_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|left_thigh_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|right_hip_yaw_link",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "30": {
+     "poses": 175,
+     "clash": 30,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_roll_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|left_thigh_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "35": {
+     "poses": 175,
+     "clash": 28,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_roll_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|left_thigh_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "40": {
+     "poses": 175,
+     "clash": 26,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_roll_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "45": {
+     "poses": 175,
+     "clash": 26,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_roll_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|torso_link",
+      "left_upper_arm_link|torso_link"
+     ]
+    },
+    "50": {
+     "poses": 175,
+     "clash": 17,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "55": {
+     "poses": 175,
+     "clash": 15,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|left_thigh_link",
+      "left_forearm_link|neck_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|torso_link"
+     ]
+    },
+    "60": {
+     "poses": 175,
+     "clash": 15,
+     "pairs": [
+      "head_link|left_forearm_link",
+      "left_forearm_link|left_hip_yaw_link",
+      "left_forearm_link|pelvis",
+      "left_forearm_link|torso_link"
+     ]
+    }
+   },
+   "pairs": {
+    "left_forearm_link|torso_link": {
+     "poses": 396,
+     "example": {
+      "pitch": -170,
+      "roll": -10,
+      "yaw": -90,
+      "elbow": -135
+     }
+    },
+    "head_link|left_forearm_link": {
+     "poses": 216,
+     "example": {
+      "pitch": -170,
+      "roll": -10,
+      "yaw": -90,
+      "elbow": -135
+     }
+    },
+    "left_forearm_link|pelvis": {
+     "poses": 171,
+     "example": {
+      "pitch": -170,
+      "roll": 150,
+      "yaw": 90,
+      "elbow": -90
+     }
+    },
+    "left_upper_arm_link|torso_link": {
+     "poses": 170,
+     "example": {
+      "pitch": -45,
+      "roll": -10,
+      "yaw": -45,
+      "elbow": -135
+     }
+    },
+    "left_forearm_link|left_hip_yaw_link": {
+     "poses": 137,
+     "example": {
+      "pitch": -170,
+      "roll": 150,
+      "yaw": 90,
+      "elbow": -90
+     }
+    },
+    "left_forearm_link|left_hip_roll_link": {
+     "poses": 107,
+     "example": {
+      "pitch": -15,
+      "roll": -10,
+      "yaw": 0,
+      "elbow": 5
+     }
+    },
+    "left_forearm_link|left_thigh_link": {
+     "poses": 77,
+     "example": {
+      "pitch": -10,
+      "roll": -10,
+      "yaw": -90,
+      "elbow": 0
+     }
+    },
+    "left_forearm_link|neck_link": {
+     "poses": 66,
+     "example": {
+      "pitch": -170,
+      "roll": 0,
+      "yaw": -90,
+      "elbow": -135
+     }
+    },
+    "left_forearm_link|right_hip_yaw_link": {
+     "poses": 7,
+     "example": {
+      "pitch": -5,
+      "roll": -10,
+      "yaw": -90,
+      "elbow": -45
+     }
+    },
+    "left_forearm_link|right_hip_roll_link": {
+     "poses": 6,
+     "example": {
+      "pitch": -10,
+      "roll": -10,
+      "yaw": -90,
+      "elbow": -45
+     }
+    }
+   },
+   "reach_up_roll8_yaw0_elbow0_clash_at": {},
+   "reach_up_roll8_yaw0_elbow-90_clash_at": {},
+   "overhead_free_postures": {
+    "-170": {
+     "free": 163,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-165": {
+     "free": 163,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-160": {
+     "free": 161,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-155": {
+     "free": 162,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-150": {
+     "free": 160,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-145": {
+     "free": 161,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-140": {
+     "free": 162,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-135": {
+     "free": 163,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-130": {
+     "free": 163,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-125": {
+     "free": 163,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-120": {
+     "free": 164,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-115": {
+     "free": 164,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    }
+   },
+   "overhead_with_neck": {
+    "poses": 1080,
+    "clash": 0,
+    "pairs": []
+   }
+  },
+  "right": {
+   "by_pitch": {
+    "-170": {
+     "poses": 175,
+     "clash": 12,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-165": {
+     "poses": 175,
+     "clash": 12,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-160": {
+     "poses": 175,
+     "clash": 14,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-155": {
+     "poses": 175,
+     "clash": 13,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-150": {
+     "poses": 175,
+     "clash": 15,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-145": {
+     "poses": 175,
+     "clash": 14,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-140": {
+     "poses": 175,
+     "clash": 13,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-135": {
+     "poses": 175,
+     "clash": 12,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-130": {
+     "poses": 175,
+     "clash": 12,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-125": {
+     "poses": 175,
+     "clash": 12,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-120": {
+     "poses": 175,
+     "clash": 11,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-115": {
+     "poses": 175,
+     "clash": 11,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-110": {
+     "poses": 175,
+     "clash": 11,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-105": {
+     "poses": 175,
+     "clash": 10,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-100": {
+     "poses": 175,
+     "clash": 9,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-95": {
+     "poses": 175,
+     "clash": 9,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-90": {
+     "poses": 175,
+     "clash": 10,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-85": {
+     "poses": 175,
+     "clash": 10,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-80": {
+     "poses": 175,
+     "clash": 10,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-75": {
+     "poses": 175,
+     "clash": 10,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-70": {
+     "poses": 175,
+     "clash": 9,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-65": {
+     "poses": 175,
+     "clash": 9,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-60": {
+     "poses": 175,
+     "clash": 9,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-55": {
+     "poses": 175,
+     "clash": 8,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-50": {
+     "poses": 175,
+     "clash": 8,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-45": {
+     "poses": 175,
+     "clash": 8,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "-40": {
+     "poses": 175,
+     "clash": 13,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "-35": {
+     "poses": 175,
+     "clash": 18,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "-30": {
+     "poses": 175,
+     "clash": 18,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "-25": {
+     "poses": 175,
+     "clash": 19,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "-20": {
+     "poses": 175,
+     "clash": 23,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "-15": {
+     "poses": 175,
+     "clash": 26,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_roll_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "-10": {
+     "poses": 175,
+     "clash": 33,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "left_hip_roll_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_roll_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|right_thigh_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "-5": {
+     "poses": 175,
+     "clash": 34,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "left_hip_roll_link|right_forearm_link",
+      "left_hip_yaw_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_roll_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|right_thigh_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "0": {
+     "poses": 175,
+     "clash": 35,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "left_hip_roll_link|right_forearm_link",
+      "left_hip_yaw_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_roll_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|right_thigh_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "5": {
+     "poses": 175,
+     "clash": 37,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "left_hip_roll_link|right_forearm_link",
+      "left_hip_yaw_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_roll_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|right_thigh_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "10": {
+     "poses": 175,
+     "clash": 40,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "left_hip_roll_link|right_forearm_link",
+      "left_hip_yaw_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_roll_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|right_thigh_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "15": {
+     "poses": 175,
+     "clash": 42,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "left_hip_roll_link|right_forearm_link",
+      "left_hip_yaw_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_roll_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|right_thigh_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "20": {
+     "poses": 175,
+     "clash": 43,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "left_hip_yaw_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_roll_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|right_thigh_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "25": {
+     "poses": 175,
+     "clash": 42,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "left_hip_yaw_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_roll_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|right_thigh_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "30": {
+     "poses": 175,
+     "clash": 30,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_roll_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|right_thigh_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "35": {
+     "poses": 175,
+     "clash": 28,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_roll_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|right_thigh_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "40": {
+     "poses": 175,
+     "clash": 26,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_roll_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|torso_link",
+      "right_upper_arm_link|torso_link"
+     ]
+    },
+    "45": {
+     "poses": 175,
+     "clash": 21,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_roll_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "50": {
+     "poses": 175,
+     "clash": 17,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "55": {
+     "poses": 175,
+     "clash": 15,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "neck_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|right_thigh_link",
+      "right_forearm_link|torso_link"
+     ]
+    },
+    "60": {
+     "poses": 175,
+     "clash": 15,
+     "pairs": [
+      "head_link|right_forearm_link",
+      "pelvis|right_forearm_link",
+      "right_forearm_link|right_hip_yaw_link",
+      "right_forearm_link|torso_link"
+     ]
+    }
+   },
+   "pairs": {
+    "right_forearm_link|torso_link": {
+     "poses": 398,
+     "example": {
+      "pitch": -170,
+      "roll": -10,
+      "yaw": -90,
+      "elbow": -135
+     }
+    },
+    "head_link|right_forearm_link": {
+     "poses": 216,
+     "example": {
+      "pitch": -170,
+      "roll": -10,
+      "yaw": -90,
+      "elbow": -135
+     }
+    },
+    "pelvis|right_forearm_link": {
+     "poses": 171,
+     "example": {
+      "pitch": -170,
+      "roll": 150,
+      "yaw": 90,
+      "elbow": -90
+     }
+    },
+    "right_upper_arm_link|torso_link": {
+     "poses": 160,
+     "example": {
+      "pitch": -40,
+      "roll": -10,
+      "yaw": -45,
+      "elbow": -135
+     }
+    },
+    "right_forearm_link|right_hip_yaw_link": {
+     "poses": 136,
+     "example": {
+      "pitch": -170,
+      "roll": 150,
+      "yaw": 90,
+      "elbow": -90
+     }
+    },
+    "right_forearm_link|right_hip_roll_link": {
+     "poses": 107,
+     "example": {
+      "pitch": -15,
+      "roll": -10,
+      "yaw": 0,
+      "elbow": 5
+     }
+    },
+    "neck_link|right_forearm_link": {
+     "poses": 79,
+     "example": {
+      "pitch": -170,
+      "roll": -10,
+      "yaw": -90,
+      "elbow": -135
+     }
+    },
+    "right_forearm_link|right_thigh_link": {
+     "poses": 77,
+     "example": {
+      "pitch": -10,
+      "roll": -10,
+      "yaw": -90,
+      "elbow": 0
+     }
+    },
+    "left_hip_yaw_link|right_forearm_link": {
+     "poses": 7,
+     "example": {
+      "pitch": -5,
+      "roll": -10,
+      "yaw": -90,
+      "elbow": -45
+     }
+    },
+    "left_hip_roll_link|right_forearm_link": {
+     "poses": 6,
+     "example": {
+      "pitch": -10,
+      "roll": -10,
+      "yaw": -90,
+      "elbow": -45
+     }
+    }
+   },
+   "reach_up_roll8_yaw0_elbow0_clash_at": {},
+   "reach_up_roll8_yaw0_elbow-90_clash_at": {},
+   "overhead_free_postures": {
+    "-170": {
+     "free": 163,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-165": {
+     "free": 163,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-160": {
+     "free": 161,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-155": {
+     "free": 162,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-150": {
+     "free": 160,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-145": {
+     "free": 161,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-140": {
+     "free": 162,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-135": {
+     "free": 163,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-130": {
+     "free": 163,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-125": {
+     "free": 163,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-120": {
+     "free": 164,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    },
+    "-115": {
+     "free": 164,
+     "of": 175,
+     "roll_range_free_at_yaw0_elbow0": [
+      -10,
+      0,
+      8,
+      20,
+      45,
+      90,
+      150
+     ]
+    }
+   },
+   "overhead_with_neck": {
+    "poses": 1080,
+    "clash": 0,
+    "pairs": []
+   }
+  }
+ },
+ "summary": {
+  "method_check": "49/49 poses agree with SolidWorks (exact geometry)",
+  "left": {
+   "grid_poses_with_contact": "867/8225",
+   "reach_up_straight_arm_clear_to_-170": true,
+   "reach_up_elbow_-90_clear_to_-170": true,
+   "overhead_straight_arm_clear_at_every_roll": true,
+   "overhead_min_free_postures": "160/175",
+   "overhead_with_neck_moving": "0/1080 with contact",
+   "contact_pairs": {
+    "left_forearm_link|torso_link": 396,
+    "head_link|left_forearm_link": 216,
+    "left_forearm_link|pelvis": 171,
+    "left_upper_arm_link|torso_link": 170,
+    "left_forearm_link|left_hip_yaw_link": 137,
+    "left_forearm_link|left_hip_roll_link": 107,
+    "left_forearm_link|left_thigh_link": 77,
+    "left_forearm_link|neck_link": 66,
+    "left_forearm_link|right_hip_yaw_link": 7,
+    "left_forearm_link|right_hip_roll_link": 6
+   }
+  },
+  "right": {
+   "grid_poses_with_contact": "856/8225",
+   "reach_up_straight_arm_clear_to_-170": true,
+   "reach_up_elbow_-90_clear_to_-170": true,
+   "overhead_straight_arm_clear_at_every_roll": true,
+   "overhead_min_free_postures": "160/175",
+   "overhead_with_neck_moving": "0/1080 with contact",
+   "contact_pairs": {
+    "right_forearm_link|torso_link": 398,
+    "head_link|right_forearm_link": 216,
+    "pelvis|right_forearm_link": 171,
+    "right_upper_arm_link|torso_link": 160,
+    "right_forearm_link|right_hip_yaw_link": 136,
+    "right_forearm_link|right_hip_roll_link": 107,
+    "neck_link|right_forearm_link": 79,
+    "right_forearm_link|right_thigh_link": 77,
+    "left_hip_yaw_link|right_forearm_link": 7,
+    "left_hip_roll_link|right_forearm_link": 6
+   }
+  }
+ }
+}
