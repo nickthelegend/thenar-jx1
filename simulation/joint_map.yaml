@@ -384,6 +384,27 @@ joints:
   actuator_class: servo
   note: ''
   origin_label: ASSUMED (design_point 0.3)
+coupled_limits:
+  ankle_pitch_roll:
+    joints:
+    - ankle_pitch
+    - ankle_roll
+    left_polygon_deg:
+    - [-55, -20]
+    - [5, -20]
+    - [30, 0]
+    - [30, 15]
+    - [20, 20]
+    - [-55, 20]
+    right_polygon_deg:
+    - [-55, 20]
+    - [5, 20]
+    - [30, 0]
+    - [30, -15]
+    - [20, -20]
+    - [-55, -20]
+    enforced_by: high-level controller / RL action clipping on the Jetson (the CAN hubs enforce per-motor crank limits)
+    evidence: SolidWorks interference sweep, 5 deg grid, 162 poses, 92 % of the box collision-free; polygon keeps 2-5 deg to first contact (verification/ankle_workspace_L.json)
 fixed_frames:
 - name: left_hand_fixed
   type: fixed

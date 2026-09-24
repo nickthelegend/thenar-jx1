@@ -14,6 +14,7 @@ Usage: .venv/Scripts/python tools/sim/build_robot_description.py [--no-coacd]
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import sys
@@ -36,10 +37,10 @@ JM = yaml.safe_load((ROOT / "simulation" / "joint_map.yaml").read_text(encoding=
 CAT = yaml.safe_load((ROOT / "actuators" / "actuator_catalog.yaml").read_text(encoding="utf-8"))["classes"]
 
 # densities kg/m^3 — labels: 6061/steel VERIFIED handbook values; printed-part effective density ESTIMATED (4 walls, 40 % gyroid)
-DENSITY = {"PA-CF print": 800.0, "6061-T6": 2700.0, "steel": 7850.0, "rod assembly (M5 rod + rod ends in Ø8/Ø14 envelope)": 3000.0}
+DENSITY = {"PA-CF print": 800.0, "6061-T6": 2700.0, "steel": 7850.0, "rod assembly (Ø8 steel rod + 2x POS5 in Ø8/Ø14 envelope)": 7500.0}
 PART_MATERIAL = {"Pelvis": "PA-CF print", "HipYawBracket": "PA-CF print", "HipRollBracket": "PA-CF print", "Shin": "PA-CF print",
                  "Foot": "PA-CF print", "Thigh": "6061-T6", "AnkleCrank": "6061-T6", "AnkleCross": "steel",
-                 "AnkleRod": "rod assembly (M5 rod + rod ends in Ø8/Ø14 envelope)"}
+                 "AnkleRod": "rod assembly (Ø8 steel rod + 2x POS5 in Ø8/Ø14 envelope)"}
 OUTPUT_MASS_SHARE = 0.15   # ESTIMATED share of actuator mass on the rotating output side
 FASTENER_ALLOWANCE = 0.05  # ESTIMATED +5 % per structural link for screws, inserts, pins, bearings
 LINK_OF = {"YawH": "pelvis", "YawO": "hip_yaw", "HipYawBr": "hip_yaw", "RollH": "hip_yaw", "RollO": "hip_roll", "HipRollBr": "hip_roll",
@@ -50,6 +51,9 @@ URDF_LINK = {"pelvis": "pelvis", "hip_yaw": "{s}_hip_yaw_link", "hip_roll": "{s}
              "shin": "{s}_shin_link", "ankle_cross": "{s}_ankle_cross_link", "foot": "{s}_foot_link"}
 TORSO_PLACEHOLDER = {"mass": 12.0, "com": [0.0, 0.0, 0.15], "box": [0.18, 0.28, 0.40],
                      "note": "phase-2 upper body (torso, battery, Jetson, electronics, arms, head) lumped — ASSUMED from design_point"}
+
+
+HULL_CACHE = {}                 # link name -> {"key": md5 of merged mesh, "hulls": [files]} (meshes/collision/cache.json)
 
 
 def part_stem(key, side):
@@ -119,6 +123,8 @@ def build_links(use_coacd=True):
             groups[name].append((part_stem(rod, s), np.linalg.inv(W["shin"]) @ comp[rod]))
     MESH_DIR.mkdir(parents=True, exist_ok=True)
     (MESH_DIR / "collision").mkdir(exist_ok=True)
+    cache_file = MESH_DIR / "collision" / "cache.json"
+    HULL_CACHE.update(json.loads(cache_file.read_text()) if cache_file.exists() else {})
     for name, comps in groups.items():
         items, meshes = [], []
         for stem, T in comps:
@@ -137,7 +143,11 @@ def build_links(use_coacd=True):
         merged = trimesh.util.concatenate(meshes)
         merged.export(MESH_DIR / f"{name}.stl")
         hulls = []
-        if use_coacd and name.endswith("foot_link") is False:
+        key = hashlib.md5(np.round(merged.vertices, 6).tobytes() + merged.faces.astype(np.int64).tobytes()).hexdigest()
+        cached = HULL_CACHE.get(name)
+        if use_coacd and cached and cached["key"] == key and all((MESH_DIR / h).exists() for h in cached["hulls"]):
+            hulls = list(cached["hulls"])                  # geometry unchanged since the last decomposition
+        elif use_coacd and name.endswith("foot_link") is False:
             try:
                 import coacd
                 cm = coacd.Mesh(merged.vertices, merged.faces)
@@ -147,6 +157,8 @@ def build_links(use_coacd=True):
                     fn = f"collision/{name}_c{k}.stl"
                     h.export(MESH_DIR / fn)
                     hulls.append(fn)
+                HULL_CACHE[name] = {"key": key, "hulls": hulls}
+                (MESH_DIR / "collision" / "cache.json").write_text(json.dumps(HULL_CACHE, indent=1))
             except Exception as e:  # pragma: no cover
                 print("CoACD failed for", name, e)
         if not hulls:
@@ -173,8 +185,11 @@ CLASS_OF = {"hip_yaw": "M", "hip_roll": "L", "hip_pitch": "XL", "knee": "XL", "a
 EFFORT = {"XL": 120.0, "L": 60.0, "M": 36.0, "ANKLE_P": 46.0, "ANKLE_R": 51.0}   # ankle: linkage capability (min over range)
 VELOCITY = {"XL": 20.9, "L": 20.9, "M": 50.3, "ANKLE_P": 30.0, "ANKLE_R": 30.0}
 ARMATURE = {"XL": 0.040, "L": 0.020, "M": 0.010, "ANKLE_P": 0.020, "ANKLE_R": 0.016}   # ESTIMATED reflected rotor inertia
-KP = {"XL": 200.0, "L": 150.0, "M": 80.0, "ANKLE_P": 80.0, "ANKLE_R": 40.0}
-KD = {"XL": 5.0, "L": 4.0, "M": 2.0, "ANKLE_P": 2.0, "ANKLE_R": 1.5}
+# joint-space PD gains of the default position actuators (N m/rad, N m s/rad). Sizing rule: an ankle-held stance is an
+# inverted pendulum that needs sum(kp_ankle) > m g h_com (27.5 kg x 9.81 x 0.59 m = 159 N m/rad); use >= 4x that margin.
+# RobStride MIT-mode Kp range is 0-500 (RS00/RS02) / 0-5000 (RS03/RS04/RS06) — VERIFIED manuals — so these are realisable.
+KP = {"XL": 400.0, "L": 300.0, "M": 150.0, "ANKLE_P": 350.0, "ANKLE_R": 200.0}
+KD = {"XL": 8.0, "L": 6.0, "M": 3.0, "ANKLE_P": 6.0, "ANKLE_R": 4.0}
 
 
 def write_urdf(links):
@@ -286,12 +301,21 @@ def write_mjcf(links):
                 ms.append(f'{ind}  <site name="{side}_sole" pos="0 0 {-DP["geometry"]["sole_to_ankle_m"]["value"]}" size="0.01"/>')
             depth += 1
         ms.append("      " + "</body>" * depth)
-    ms += ['    </body>', '  </worldbody>', '  <actuator>']
+    ms += ['    </body>', '  </worldbody>', '  <contact>']
+    # explicit exclusions for jointed neighbours: MuJoCo's parent filter does not apply when the parent is welded to the
+    # world (fixed-base variants), and the push-rods are rigid shin geometry here (their real clearance to the foot is
+    # verified in CAD: verification/ankle_workspace_L.json), so shin-foot is excluded as well
+    chain = ["pelvis", "{s}_hip_yaw_link", "{s}_hip_roll_link", "{s}_thigh_link", "{s}_shin_link", "{s}_ankle_cross_link", "{s}_foot_link"]
+    for side in ("left", "right"):
+        names = [c.format(s=side) for c in chain]
+        for a_, b_ in list(zip(names[:-1], names[1:])) + [(names[4], names[6])]:
+            ms.append(f'    <exclude body1="{a_}" body2="{b_}"/>')
+    ms += ['  </contact>', '  <actuator>']
     for side in ("left", "right"):
         for jn in LEG_JOINT_ORDER:
             cls = CLASS_OF[jn]
             ms.append(f'    <position name="{side}_{jn}" joint="{side}_{jn}_joint" kp="{KP[cls]}" kv="{KD[cls]}" forcerange="{-EFFORT[cls]} {EFFORT[cls]}"/>')
-    ms.append('    <position name="waist_yaw" joint="waist_yaw_joint" kp="80" kv="2" forcerange="-36 36"/>')
+    ms.append(f'    <position name="waist_yaw" joint="waist_yaw_joint" kp="{KP["M"]}" kv="{KD["M"]}" forcerange="-36 36"/>')
     ms += ['  </actuator>', '  <sensor>', '    <framequat name="imu_quat" objtype="site" objname="imu"/>', '    <gyro name="imu_gyro" site="imu"/>',
            '    <accelerometer name="imu_acc" site="imu"/>', '    <touch name="left_foot_touch" site="left_sole"/>',
            '    <touch name="right_foot_touch" site="right_sole"/>', '  </sensor>', '</mujoco>']

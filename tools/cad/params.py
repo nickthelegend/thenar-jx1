@@ -65,7 +65,18 @@ PKG = {
     "roll_out_x": -0.076,        # hip-roll output mounting face x (faces +X); housing behind it
     "pitch_out_y": 0.036,        # hip-pitch output mounting face y (faces +Y, lateral); housing medial of it
     "knee_rear_y": 0.036,        # knee housing rear face y (lateral, bolted to thigh plate)
-    "plate_t": 0.008,            # structural plate thickness (thigh/brackets)
+    "plate_t": 0.008,            # structural plate thickness (brackets)
+    "thigh_plate_t": 0.010,      # thigh lateral plate, thickened outward (structural design V9: SF 2.35 / 2.81)
+    # structural redesign after FEA (calculations/results/structural): printed PA-CF fails in every primary load path
+    "yaw_back_t": 0.012,         # hip-yaw bracket back plate (7075-T6; design Y13: SF 1.87 / 1.60)
+    "yaw_keel_w": 0.012,         # keel under the yaw top plate above the roll housing, behind the roll-bracket sweep
+    "roll_plate_t": 0.010,       # hip-roll bracket back + medial plates (6061-T6; between R1 8 mm 1.96/2.64 and R2 12 mm 4.42/6.68)
+    "shin_knee_t": 0.014,        # shin knee plate (6061-T6; design S3: SF 3.12 / 4.04)
+    "shin_joggle_z": (-0.110, -0.066),   # knee plate -> web joggle block, deepened (torsion of the offset load path)
+    "foot_sole_t": 0.008,        # 6061 sole plate (F1 10 mm: 4.29 / 2.5; 8 mm estimated 2.7 / 1.6)
+    "pelvis_top_t": 0.006,       # 6061 pelvis box: top plate carries both hip-yaw housings and the waist
+    "pelvis_wall_t": 0.004,
+    "pelvis_bottom_t": 0.004,
     "shin_beam_w": 0.048,        # shin beam width in y (motor pockets pass through it)
     "shin_beam_d": 0.050,        # shin beam depth in x
     "ankle_A_z": -0.118,         # ankle motor A axis below the knee axis (upper motor, output lateral +Y)

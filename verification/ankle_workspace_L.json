@@ -1,0 +1,1962 @@
+{
+  "side": "L",
+  "pitch_grid_deg": [
+    -55.0,
+    -50.0,
+    -45.0,
+    -40.0,
+    -35.0,
+    -30.0,
+    -25.0,
+    -20.0,
+    -15.0,
+    -10.0,
+    -5.0,
+    0.0,
+    5.0,
+    10.0,
+    15.0,
+    20.0,
+    25.0,
+    30.0
+  ],
+  "roll_grid_deg": [
+    -20.0,
+    -15.0,
+    -10.0,
+    -5.0,
+    0.0,
+    5.0,
+    10.0,
+    15.0,
+    20.0
+  ],
+  "collision_volume_mm3": [
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      1.093,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      77.582,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      246.653,
+      42.133,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      462.104,
+      164.457,
+      19.359,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      695.915,
+      330.844,
+      105.007,
+      7.86,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      4.749
+    ]
+  ],
+  "collision_free_fraction": 0.92,
+  "poses": [
+    {
+      "pitch_deg": -55.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -57.69,
+        -28.88
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -55.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        -53.19,
+        -31.73
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -55.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        -49.02,
+        -34.85
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -55.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        -45.1,
+        -38.21
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -55.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        -41.41,
+        -41.8
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -55.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        -37.93,
+        -45.63
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -55.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        -34.66,
+        -49.71
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -55.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        -31.6,
+        -54.06
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -55.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        -28.75,
+        -58.76
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -50.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -55.18,
+        -24.75
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -50.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        -50.5,
+        -27.8
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -50.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        -46.13,
+        -31.11
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -50.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        -42.02,
+        -34.65
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -50.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        -38.14,
+        -38.42
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -50.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        -34.45,
+        -42.42
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -50.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        -30.98,
+        -46.65
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -50.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        -27.7,
+        -51.15
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -50.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        -24.64,
+        -55.98
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -45.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -52.31,
+        -20.57
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -45.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        -47.51,
+        -23.8
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -45.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        -43.01,
+        -27.28
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -45.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        -38.75,
+        -30.99
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -45.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        -34.7,
+        -34.91
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -45.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        -30.84,
+        -39.04
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -45.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        -27.18,
+        -43.39
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -45.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        -23.72,
+        -48.0
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -45.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        -20.47,
+        -52.92
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -40.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -49.15,
+        -16.34
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -40.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        -44.28,
+        -19.74
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -40.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        -39.68,
+        -23.38
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -40.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        -35.3,
+        -27.23
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -40.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        -31.12,
+        -31.28
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -40.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        -27.13,
+        -35.52
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -40.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        -23.31,
+        -39.96
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -40.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        -19.68,
+        -44.64
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -40.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        -16.26,
+        -49.6
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -35.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -45.73,
+        -12.09
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -35.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        -40.84,
+        -15.64
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -35.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        -36.18,
+        -19.42
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -35.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        -31.72,
+        -23.39
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -35.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        -27.44,
+        -27.55
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -35.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        -23.32,
+        -31.88
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -35.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        -19.37,
+        -36.39
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -35.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        -15.6,
+        -41.11
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -35.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        -12.01,
+        -46.09
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -30.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -42.12,
+        -7.82
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -30.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        -37.23,
+        -11.51
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -30.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        -32.54,
+        -15.41
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -30.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        -28.03,
+        -19.49
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -30.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        -23.66,
+        -23.74
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -30.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        -19.45,
+        -28.14
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -30.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        -15.38,
+        -32.7
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -30.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        -11.47,
+        -37.44
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -30.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        -7.75,
+        -42.4
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -25.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -38.35,
+        -3.53
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -25.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        -33.49,
+        -7.36
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -25.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        -28.79,
+        -11.37
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -25.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        -24.24,
+        -15.55
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -25.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        -19.82,
+        -19.86
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -25.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        -15.52,
+        -24.32
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -25.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        -11.35,
+        -28.9
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -25.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        -7.33,
+        -33.64
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -25.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        -3.46,
+        -38.57
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -20.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -34.45,
+        0.75
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -20.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        -29.64,
+        -3.19
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -20.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        -24.95,
+        -7.31
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -20.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        -20.38,
+        -11.56
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -20.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        -15.91,
+        -15.94
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -20.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        -11.55,
+        -20.43
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -20.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        -7.3,
+        -25.03
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -20.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        -3.17,
+        -29.75
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -20.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        0.82,
+        -34.63
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -15.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -30.45,
+        5.03
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -15.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        -25.7,
+        0.97
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -15.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        -21.04,
+        -3.23
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -15.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        -16.46,
+        -7.56
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -15.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        -11.97,
+        -11.98
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -15.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        -7.55,
+        -16.5
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -15.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        -3.22,
+        -21.09
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -15.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        1.0,
+        -25.78
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -15.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        5.1,
+        -30.59
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -10.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -26.37,
+        9.29
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -10.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        -21.69,
+        5.13
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -10.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        -17.07,
+        0.84
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -10.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        -12.5,
+        -3.54
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -10.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        -7.99,
+        -8.0
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -10.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        -3.54,
+        -12.52
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -10.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        0.85,
+        -17.1
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -10.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        5.16,
+        -21.75
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -10.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        9.37,
+        -26.49
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -5.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -22.22,
+        13.53
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -5.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        -17.62,
+        9.27
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -5.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        -13.05,
+        4.91
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -5.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        -8.51,
+        0.48
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -5.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        -4.0,
+        -4.0
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -5.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        0.48,
+        -8.52
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -5.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        4.92,
+        -13.08
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -5.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        9.31,
+        -17.67
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": -5.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        13.62,
+        -22.32
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 0.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -18.03,
+        17.73
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 0.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        -13.51,
+        13.38
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 0.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        -9.01,
+        8.96
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 0.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        -4.5,
+        4.49
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 0.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        0.0,
+        0.0
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 0.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        4.5,
+        -4.51
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 0.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        8.98,
+        -9.02
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 0.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        13.43,
+        -13.55
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 0.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        17.83,
+        -18.11
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 5.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -13.79,
+        21.88
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 5.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        -9.38,
+        17.45
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 5.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        -4.94,
+        12.98
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 5.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        -0.48,
+        8.48
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 5.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        4.0,
+        3.99
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 5.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        8.49,
+        -0.48
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 5.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        13.0,
+        -4.95
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 5.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        17.51,
+        -9.41
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 5.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        21.99,
+        -13.87
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 10.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -9.53,
+        25.96
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": [
+        {
+          "components": [
+            "L_AnkBH",
+            "L_RodB"
+          ],
+          "volume_mm3": 1.093
+        }
+      ]
+    },
+    {
+      "pitch_deg": 10.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        -5.22,
+        21.46
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 10.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        -0.87,
+        16.95
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 10.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        3.53,
+        12.44
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 10.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        7.98,
+        7.97
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 10.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        12.46,
+        3.53
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 10.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        16.99,
+        -0.87
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 10.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        21.54,
+        -5.25
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 10.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        26.1,
+        -9.61
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 15.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -5.25,
+        29.95
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": [
+        {
+          "components": [
+            "L_AnkBH",
+            "L_RodB"
+          ],
+          "volume_mm3": 77.582
+        }
+      ]
+    },
+    {
+      "pitch_deg": 15.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        -1.06,
+        25.39
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 15.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        3.21,
+        20.85
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 15.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        7.54,
+        16.36
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 15.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        11.93,
+        11.91
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 15.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        16.39,
+        7.53
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 15.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        20.92,
+        3.2
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 15.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        25.49,
+        -1.08
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 15.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        30.12,
+        -5.33
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 20.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        -0.97,
+        33.83
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": [
+        {
+          "components": [
+            "L_AnkBH",
+            "L_RodB"
+          ],
+          "volume_mm3": 246.653
+        }
+      ]
+    },
+    {
+      "pitch_deg": 20.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        3.11,
+        29.23
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": [
+        {
+          "components": [
+            "L_AnkBH",
+            "L_RodB"
+          ],
+          "volume_mm3": 42.133
+        }
+      ]
+    },
+    {
+      "pitch_deg": 20.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        7.27,
+        24.68
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 20.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        11.51,
+        20.21
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 20.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        15.85,
+        15.81
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 20.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        20.26,
+        11.5
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 20.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        24.77,
+        7.26
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 20.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        29.37,
+        3.08
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 20.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        34.04,
+        -1.04
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 25.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        3.31,
+        37.56
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": [
+        {
+          "components": [
+            "L_AnkBH",
+            "L_RodB"
+          ],
+          "volume_mm3": 462.104
+        }
+      ]
+    },
+    {
+      "pitch_deg": 25.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        7.26,
+        32.93
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": [
+        {
+          "components": [
+            "L_AnkBH",
+            "L_RodB"
+          ],
+          "volume_mm3": 164.457
+        }
+      ]
+    },
+    {
+      "pitch_deg": 25.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        11.31,
+        28.4
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": [
+        {
+          "components": [
+            "L_AnkBH",
+            "L_RodB"
+          ],
+          "volume_mm3": 19.359
+        }
+      ]
+    },
+    {
+      "pitch_deg": 25.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        15.45,
+        23.97
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 25.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        19.7,
+        19.65
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 25.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        24.06,
+        15.42
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 25.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        28.53,
+        11.29
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 25.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        33.12,
+        7.23
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 25.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        37.83,
+        3.24
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": [
+        {
+          "components": [
+            "L_AnkAH",
+            "L_RodA"
+          ],
+          "volume_mm3": 0.0
+        }
+      ]
+    },
+    {
+      "pitch_deg": 30.0,
+      "roll_deg": -20.0,
+      "crank_deg": [
+        7.59,
+        41.09
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": [
+        {
+          "components": [
+            "L_AnkBH",
+            "L_RodB"
+          ],
+          "volume_mm3": 695.915
+        }
+      ]
+    },
+    {
+      "pitch_deg": 30.0,
+      "roll_deg": -15.0,
+      "crank_deg": [
+        11.4,
+        36.47
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": [
+        {
+          "components": [
+            "L_AnkBH",
+            "L_RodB"
+          ],
+          "volume_mm3": 330.844
+        }
+      ]
+    },
+    {
+      "pitch_deg": 30.0,
+      "roll_deg": -10.0,
+      "crank_deg": [
+        15.31,
+        31.98
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": [
+        {
+          "components": [
+            "L_AnkBH",
+            "L_RodB"
+          ],
+          "volume_mm3": 105.007
+        }
+      ]
+    },
+    {
+      "pitch_deg": 30.0,
+      "roll_deg": -5.0,
+      "crank_deg": [
+        19.34,
+        27.63
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": [
+        {
+          "components": [
+            "L_AnkBH",
+            "L_RodB"
+          ],
+          "volume_mm3": 7.86
+        }
+      ]
+    },
+    {
+      "pitch_deg": 30.0,
+      "roll_deg": 0.0,
+      "crank_deg": [
+        23.49,
+        23.4
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 30.0,
+      "roll_deg": 5.0,
+      "crank_deg": [
+        27.77,
+        19.29
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 30.0,
+      "roll_deg": 10.0,
+      "crank_deg": [
+        32.18,
+        15.28
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 30.0,
+      "roll_deg": 15.0,
+      "crank_deg": [
+        36.73,
+        11.36
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": []
+    },
+    {
+      "pitch_deg": 30.0,
+      "roll_deg": 20.0,
+      "crank_deg": [
+        41.45,
+        7.51
+      ],
+      "kinematic_error_mm": 0.0,
+      "collisions": [
+        {
+          "components": [
+            "L_AnkAH",
+            "L_RodA"
+          ],
+          "volume_mm3": 4.749
+        }
+      ]
+    }
+  ],
+  "note": "other joints at hip_pitch -20, knee 40 (walking crouch); rod-end/stud envelope contacts whitelisted"
+}

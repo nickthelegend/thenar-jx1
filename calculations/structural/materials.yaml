@@ -1,0 +1,72 @@
+# JX1 structural materials and allowables (v0.3, 2026-09-24)
+# Labels: VERIFIED = value read from the cited source on the date given; ASSUMED = engineering assumption to be
+# replaced by coupon tests (docs/open_issues.md OI-4).
+
+al6061_t6:
+  used_for: [JX1_Thigh (8 mm plate), JX1_AnkleCrank (6 mm plate)]
+  E_Pa: 68.9e9                      # VERIFIED ASM/MatWeb 6061-T6 (69 GPa Wikipedia)
+  nu: 0.33                          # VERIFIED ASM/MatWeb
+  density_kg_m3: 2700               # VERIFIED
+  yield_min_Pa: 240.0e6             # VERIFIED specification minimum (Wikipedia 6061: "at least 240 MPa"); typical 276 MPa (MatWeb)
+  uts_min_Pa: 290.0e6               # VERIFIED specification minimum; typical 310 MPa
+  fatigue_limit_Pa: 97.0e6          # VERIFIED 5e8 cycles fully reversed, smooth specimen (Wikipedia, citing ASM)
+  sources:
+    - https://en.wikipedia.org/wiki/6061_aluminium_alloy (read 2026-09-24)
+    - https://asm.matweb.com/search/SpecificMaterial.asp?bassnum=ma6061t6 (search snippet 2026-09-24; page refused connection)
+
+al7075_t6:
+  used_for: [JX1_HipYawBracket (most loaded bracket; strength-limited)]
+  E_Pa: 71.7e9                      # VERIFIED Wikipedia 7075 aluminium alloy
+  nu: 0.33                          # VERIFIED typical
+  density_kg_m3: 2810               # VERIFIED
+  yield_min_Pa: 430.0e6             # VERIFIED lower bound of "at least 430-480 MPa" (T6)
+  uts_min_Pa: 510.0e6               # VERIFIED lower bound of 510-540 MPa (T6)
+  fatigue_limit_Pa: 140.0e6         # VERIFIED ~1e9 cycles unnotched (PMC9920401 via search snippet); ASM quotes 159 MPa at 5e8
+  sources:
+    - https://en.wikipedia.org/wiki/7075_aluminium_alloy (read 2026-09-24)
+    - https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9920401/ (search snippet 2026-09-24)
+
+esun_epa_cf:
+  used_for: [pelvis, hip yaw/roll brackets, shin, foot, torso, arms]
+  product: eSUN ePA-CF 1.75 mm (BOM JX1-048, 3Idea ₹4,799/kg)
+  density_kg_m3: 1240               # VERIFIED eSUN product page (solid; printed parts use 800 kg/m3 effective in the sim, OI-5)
+  tensile_xy_Pa: 84.05e6            # VERIFIED eSUN product page (in-layer)
+  tensile_z_Pa: 50.34e6             # VERIFIED eSUN product page (build direction / interlayer)
+  flexural_xy_Pa: 127.5e6           # VERIFIED
+  flexural_z_Pa: 54.9e6             # VERIFIED
+  flex_modulus_xy_Pa: 6455e6        # VERIFIED
+  flex_modulus_z_Pa: 1657e6         # VERIFIED
+  elongation_xy: 0.0742             # VERIFIED
+  elongation_z: 0.115               # VERIFIED
+  hdt_C: 155                        # VERIFIED (10/10 MPa)
+  nu_p: 0.35                        # ASSUMED
+  G_pz_Pa: 0.60e9                   # ASSUMED (~E_z / 2(1+nu))
+  interlayer_shear_Pa: 30.0e6       # ASSUMED 0.6 x tensile_z
+  knockdown_moisture: 0.65          # ASSUMED conditioned (50 % RH) vs dry TDS values for PA6-based composites
+  knockdown_process: 0.85           # ASSUMED print-to-print variability, voids at wall/infill interfaces
+  fatigue_fraction: 0.30            # ASSUMED fatigue strength at 1e7 cycles as a fraction of static strength
+  print_rule: load-bearing plates <= 10 mm are printed fully solid (walls merge, >= 6 perimeters); 100 % infill
+              within 8 mm of every bolt hole and pin bore; metal washers >= 2.5 d under every bolt head/nut
+  sources:
+    - https://www.esun3d.com/epa-cf-product (read 2026-09-24; test standard and conditioning not stated -> treated as dry)
+
+steel_pin_c45_hard_chrome:
+  used_for: [ankle pitch/roll pins Ø8 (BOM JX1-012)]
+  E_Pa: 205e9                       # VERIFIED typical carbon steel
+  yield_Pa: 355e6                   # ASSUMED C45 normalised minimum (supplier gives no grade certificate)
+
+stainless_304_rod:
+  used_for: [ankle push rods Ø8 with M5 tapped ends]
+  E_Pa: 193e9                       # VERIFIED typical AISI 304
+  yield_Pa: 205e6                   # VERIFIED ASTM A276 annealed minimum
+
+rod_end_phs5:
+  part: IKO PHS5 female rod end M5x0.8 (or equivalent)
+  dynamic_load_N: 3270              # VERIFIED https://www.bearingsrus.com/phs5-iko (IKO catalogue values)
+  static_load_N: 5730               # VERIFIED
+
+design_factors:
+  metal_static_on_min_yield: 1.5
+  printed_static_on_conditioned_strength: 2.0
+  fatigue_on_endurance: 1.5
+  buckling: 3.0

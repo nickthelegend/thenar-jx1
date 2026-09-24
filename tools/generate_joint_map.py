@@ -125,6 +125,15 @@ def main():
         },
         "dof": {"legs": 12, "waist": 1, "arms": 8, "neck": 2, "total_actuated": 23},
         "joints": joints,
+        "coupled_limits": {
+            "ankle_pitch_roll": {
+                "joints": ["ankle_pitch", "ankle_roll"],
+                "left_polygon_deg": DP["ankle_linkage"]["coupled_limit_polygon_deg"]["value"],
+                "right_polygon_deg": [[p_, -r_] for p_, r_ in DP["ankle_linkage"]["coupled_limit_polygon_deg"]["value"]],
+                "enforced_by": "high-level controller / RL action clipping on the Jetson (the CAN hubs enforce per-motor crank limits)",
+                "evidence": DP["ankle_linkage"]["coupled_limit_polygon_deg"]["note"],
+            },
+        },
         "fixed_frames": fixed,
     }
     out = ROOT / "simulation" / "joint_map.yaml"

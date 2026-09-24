@@ -21,3 +21,6 @@ desktop.ini
 .DS_Store
 tools/.sw_instance.json
 CAD/_scratch/
+
+# regenerable caches
+calculations/results/structural/loads.npz

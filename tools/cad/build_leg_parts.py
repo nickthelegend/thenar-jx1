@@ -58,7 +58,8 @@ def finish(p: Part, rgb, role, material_note):
 def pelvis(s):
     p = Part(s, "JX1_Pelvis", CADDIR / "Pelvis" / "JX1_Pelvis.SLDPRT")
     yaw_top = PKG["yaw_out_z"] + M["T_OUT"] + M["L_HOUSING"]          # housing rear face height
-    z0, z1 = yaw_top, yaw_top + T
+    TT, TW, TB = PKG["pelvis_top_t"], PKG["pelvis_wall_t"], PKG["pelvis_bottom_t"]
+    z0, z1 = yaw_top, yaw_top + TT
     W, D = HIP_Y + M["D"] / 2 + 0.011, 0.075                          # half-width (y) clears the yaw housings, half-depth (x)
     p.gv("Hip_spacing", mm(2 * HIP_Y)); p.gv("Pelvis_half_width", mm(W)); p.gv("Pelvis_half_depth", mm(D))
     top_holes = []
@@ -70,15 +71,16 @@ def pelvis(s):
     plate2d(p, "Top_Plate", "z", z0, z1, chamfer_rect(-D, -W, D, W, 0.025), top_holes)
     wall_z0 = PKG["yaw_out_z"] + M["T_OUT"] + 0.004                     # stay above the hip-yaw bracket sweep
     # front/back walls (normal x), side walls (normal y)
-    for tag, x0 in (("Front_Wall", D - T), ("Back_Wall", -D)):
-        plate(p, tag, "x", x0, x0 + T, [(0, -W + 0.02, wall_z0), (0, W - 0.02, wall_z0), (0, W - 0.02, z0), (0, -W + 0.02, z0)])
-    for tag, y0 in (("Left_Wall", W - T), ("Right_Wall", -W)):
-        plate(p, tag, "y", y0, y0 + T, [(-D + 0.02, 0, wall_z0), (D - 0.02, 0, wall_z0), (D - 0.02, 0, z0), (-D + 0.02, 0, z0)])
+    for tag, x0 in (("Front_Wall", D - TW), ("Back_Wall", -D)):
+        plate(p, tag, "x", x0, x0 + TW, [(0, -W + 0.02, wall_z0), (0, W - 0.02, wall_z0), (0, W - 0.02, z0), (0, -W + 0.02, z0)])
+    for tag, y0 in (("Left_Wall", W - TW), ("Right_Wall", -W)):
+        plate(p, tag, "y", y0, y0 + TW, [(-D + 0.02, 0, wall_z0), (D - 0.02, 0, wall_z0), (D - 0.02, 0, z0), (-D + 0.02, 0, z0)])
     # bottom plate with clearance bores around both yaw housings -> closed torsion box
     bot = [(0, sy * HIP_Y, M["D"] + 0.006) for sy in (1, -1)] + [(0.0, 0.0, 0.040)]
-    plate2d(p, "Bottom_Plate", "z", wall_z0, wall_z0 + 0.005, chamfer_rect(-D, -W, D, W, 0.025), bot)
-    return finish(p, PRINT_RGB, "pelvis torsion box; carries both hip-yaw actuators and the waist interface",
-                  "FDM PA-CF (P1S, 4 walls, 40% gyroid) with M3 heat-set inserts; ASSUMED")
+    plate2d(p, "Bottom_Plate", "z", wall_z0, wall_z0 + TB, chamfer_rect(-D, -W, D, W, 0.025), bot)
+    return finish(p, ALU_RGB, "pelvis torsion box; carries both hip-yaw actuators and the waist interface",
+                  "6061-T6 laser-cut plates (top 6 mm, walls/bottom 4 mm) joined with M3 screws into 8x8 mm tapped 6061 corner bars "
+                  "(printed PA-CF fails: FEA SF 0.89/0.74, calculations/results/structural)")
 
 
 # ------------------------------------------------------------------------------------------------ hip yaw bracket
@@ -86,21 +88,28 @@ def hip_yaw_bracket(s):
     p = Part(s, f"JX1_HipYawBracket_{SUF()}", CADDIR / "Hip" / f"JX1_HipYawBracket_{SUF()}.SLDPRT")
     zt = PKG["yaw_out_z"]                     # mounting face (top of plate)
     x_back = PKG["roll_out_x"] - L["T_OUT"] - L["L_HOUSING"]   # roll housing rear face
-    p.gv("Yaw_face_z", mm(zt)); p.gv("Roll_rear_x", mm(x_back))
+    TB, kw = PKG["yaw_back_t"], PKG["yaw_keel_w"]
+    p.gv("Yaw_face_z", mm(zt)); p.gv("Roll_rear_x", mm(x_back)); p.gv("Back_plate_t", mm(TB))
     holes = [(u, v, CLR_M3) for (u, v, _) in bolt_holes((0, 0), M["PCD_OUT"], M["N_OUT"], CLR_M3)]
     holes.append((0, 0, 0.012))
-    top = chamfer_rect(x_back - T, -0.045, 0.036, 0.045, 0.018)
+    top = chamfer_rect(x_back - TB, -0.045, 0.036, 0.045, 0.018)
     plate2d(p, "Top_Plate", "z", zt - 0.010, zt, top, holes)
     circle_cut(p, "Yaw_Pilot_Recess", "z", zt, (0, 0, zt), M["PILOT_D"] + 0.0003, M["PILOT_H"] + 0.0002, into_positive=False)
     # back plate carrying the hip-roll housing rear face
     back_holes = [(u, v, CLR_M4) for (u, v, _) in bolt_holes(uv("x", (0, 0, 0)), L["PCD_REAR"], L["N_REAR"], CLR_M4, 22.5)]
     back_holes.append((*uv("x", (0, 0, 0)), 0.026))
     outline = [(0, -0.050, -0.050), (0, 0.050, -0.050), (0, 0.050, zt), (0, -0.050, zt)]
-    plate(p, "Back_Plate", "x", x_back - T, x_back, outline, [((0, y, z), d) for (y, z, d) in
+    plate(p, "Back_Plate", "x", x_back - TB, x_back, outline, [((0, y, z), d) for (y, z, d) in
           [(v_, -u_, d_) for (u_, v_, d_) in back_holes]])
-    # central rib above the roll housing
-    plate(p, "Rib", "y", -0.004, 0.004, [(x_back - T, 0, 0.052), (-0.030, 0, zt - 0.010), (x_back - T, 0, zt - 0.010)])
-    return finish(p, PRINT_RGB, "hip yaw output -> hip roll housing", "FDM PA-CF, M4/M3 through-bolts; ASSUMED")
+    # central rib above the roll housing + keel (behind the roll-bracket swept cylinder, 4 mm above the roll housing)
+    plate(p, "Rib", "y", -0.004, 0.004, [(x_back - TB, 0, 0.052), (-0.030, 0, zt - 0.010), (x_back - TB, 0, zt - 0.010)])
+    z_keel = L["D"] / 2 + 0.004
+    x_sweep = PKG["roll_out_x"] - L["T_OUT"] - 0.004                 # roll output disc face minus 4 mm
+    plate(p, "Keel", "y", -kw / 2, kw / 2, [(x_back - TB, 0, z_keel), (x_sweep, 0, z_keel), (x_sweep, 0, zt - 0.010),
+                                            (x_back - TB, 0, zt - 0.010)])
+    return finish(p, ALU_RGB, "hip yaw output -> hip roll housing; structural design Y13",
+                  "7075-T6 CNC from 25 mm plate (top 10 mm, back 12 mm, keel 12 mm); 6061 fails (SF 0.70/0.79), "
+                  "calculations/results/structural")
 
 
 # ------------------------------------------------------------------------------------------------ hip roll bracket
@@ -108,46 +117,61 @@ def hip_roll_bracket(s):
     p = Part(s, f"JX1_HipRollBracket_{SUF()}", CADDIR / "Hip" / f"JX1_HipRollBracket_{SUF()}.SLDPRT")
     xf = PKG["roll_out_x"]                      # roll output mounting face (faces +X)
     y_med = PKG["pitch_out_y"] - PC["T_OUT"] - PC["L_HOUSING"]   # pitch housing rear face (medial)
-    p.gv("Roll_face_x", mm(xf)); p.gv("Pitch_rear_y", mm(y_med))
+    TR = PKG["roll_plate_t"]
+    p.gv("Roll_face_x", mm(xf)); p.gv("Pitch_rear_y", mm(y_med)); p.gv("Plate_t", mm(TR))
     bh = [(0, y, z, d) for (y, z, d) in [(v_, -u_, d_) for (u_, v_, d_) in bolt_holes(uv("x", (0, 0, 0)), L["PCD_OUT"], L["N_OUT"], CLR_M4, 22.5)]]
     y_lat = PKG["pitch_out_y"] - 0.002       # stop 2 mm short of the thigh plate plane
-    y_in = min(y_med - T, -L["D_OUT"] / 2 - 0.002)  # cover the whole roll output flange on the medial side
-    plate(p, "Back_Plate", "x", xf, xf + T, [(0, y_in, -0.045), (0, y_lat, -0.045), (0, y_lat, 0.045), (0, y_in, 0.045)],
+    y_in = min(y_med - TR, -L["D_OUT"] / 2 - 0.002)  # cover the whole roll output flange on the medial side
+    plate(p, "Back_Plate", "x", xf, xf + TR, [(0, y_in, -0.045), (0, y_lat, -0.045), (0, y_lat, 0.045), (0, y_in, 0.045)],
           [((0, y, z), d) for (_, y, z, d) in bh] + [((0, 0, 0), 0.012)])
     circle_cut(p, "Roll_Pilot_Recess", "x", xf, (xf, 0, 0), L["PILOT_D"] + 0.0003, L["PILOT_H"] + 0.0002, into_positive=True)
     rm = PC["PCD_REAR"] / 2 + 0.006
     mh = [((x, 0, z), d) for (x, z, d) in [(u_, -v_, d_) for (u_, v_, d_) in bolt_holes((0, 0), PC["PCD_REAR"], PC["N_REAR"], CLR_M5, 22.5)]]
     mh.append(((0, 0, 0), 0.026))
-    x0m = xf + T                              # start behind the back plate: keeps clear of the roll output pilot boss
-    plate(p, "Medial_Plate", "y", y_med - T, y_med, [(x0m, 0, -rm), (0.030, 0, -rm), (rm, 0, -0.030), (rm, 0, 0.030),
-                                                      (0.030, 0, rm), (x0m, 0, rm)], mh)
-    return finish(p, PRINT_RGB, "hip roll output -> hip pitch housing", "FDM PA-CF; ASSUMED")
+    x0m = xf + TR                             # start behind the back plate: keeps clear of the roll output pilot boss
+    plate(p, "Medial_Plate", "y", y_med - TR, y_med, [(x0m, 0, -rm), (0.030, 0, -rm), (rm, 0, -0.030), (rm, 0, 0.030),
+                                                       (0.030, 0, rm), (x0m, 0, rm)], mh)
+    return finish(p, ALU_RGB, "hip roll output -> hip pitch housing",
+                  "6061-T6 10 mm plates: back + medial plate bolted (4x M5 + 2x dowel 5 mm) to a 20x20 corner bar, or CNC one piece; "
+                  "printed PA-CF fails (SF 0.35/0.37), calculations/results/structural")
 
 
 # ------------------------------------------------------------------------------------------------ thigh
 def thigh(s):
+    """Machined 6061 thigh (structural design V5, calculations/structural/thigh_variants.py): 12 mm lateral plate carrying
+    the hip-pitch output and the knee housing on one plane, plus medial flanges that run out toward the hip — 20 mm deep
+    outside the hip-pitch housing clearance circle, 6 mm deep (within the co-rotating output-disc layer) inside it."""
     p = Part(s, f"JX1_Thigh_{SUF()}", CADDIR / "Thigh" / f"JX1_Thigh_{SUF()}.SLDPRT")
     y0 = PKG["pitch_out_y"]
-    p.gv("Thigh_length", mm(THIGH)); p.gv("Thigh_plate_t", mm(T))
+    TT = PKG["thigh_plate_t"]
+    p.gv("Thigh_length", mm(THIGH)); p.gv("Thigh_plate_t", mm(TT))
     Lt = THIGH
     rk = PKG["thigh_knee_r"]                            # knee-end radius (clears ankle motor A up to 120 deg knee)
     knee_arc = [(rk * math.cos(math.radians(a)), 0, -Lt + rk * math.sin(math.radians(a))) for a in (-11.25, -33.75, -56.25, -78.75, -101.25, -123.75, -146.25, -168.75)]
     rt = PC["PCD_OUT"] / 2 + 0.008                      # top boss radius around the hip-pitch output pattern
-    outline = [(-rt * 0.8, 0, rt), (rt * 0.8, 0, rt), (rt + 0.004, 0, 0.0), (0.030, 0, -0.110), (0.048, 0, -Lt + 0.056)] + \
-              knee_arc + [(-0.048, 0, -Lt + 0.056), (-0.030, 0, -0.110), (-rt - 0.004, 0, 0.0)]
+    outline = [(-rt * 0.8, 0, rt), (rt * 0.8, 0, rt), (rt + 0.004, 0, 0.0), (0.030, 0, -0.110), (0.048, 0, -Lt + 0.056)] +               knee_arc + [(-0.048, 0, -Lt + 0.056), (-0.030, 0, -0.110), (-rt - 0.004, 0, 0.0)]
     holes = [((x, 0, z), CLR_M5) for (x, z, _) in [(u_, -v_, d_) for (u_, v_, d_) in bolt_holes((0, 0), PC["PCD_OUT"], PC["N_OUT"], CLR_M5, 22.5)]]
     holes += [((x, 0, z), CLR_M5) for (x, z, _) in [(u_, -v_, d_) for (u_, v_, d_) in bolt_holes((0, Lt), KC["PCD_REAR"], KC["N_REAR"], CLR_M5, 22.5)]]
     holes += [((0, 0, 0), 0.012), ((0, 0, -Lt), 0.026), ((0, 0, -0.085), 0.022), ((0, 0, -0.140), 0.022), ((0, 0, -0.195), 0.020)]
-    plate(p, "Thigh_Plate", "y", y0, y0 + T, outline, holes)
+    plate(p, "Thigh_Plate", "y", y0, y0 + TT, outline, holes)
     circle_cut(p, "Pitch_Pilot_Recess", "y", y0, (0, y0, 0), PC["PILOT_D"] + 0.0003, PC["PILOT_H"] + 0.0002, into_positive=True)
-    # C-channel flanges (medial) between the actuators for bending stiffness; they stop 4 mm above the knee housing
+    # medial flanges with a run-out toward the hip; they stop 4 mm above the knee housing
     zf = -Lt + KC["D"] / 2 + 0.004
-    p.gv("Flange_end_z", mm(zf))
-    for tag, x0 in (("Front_Flange", 0.022), ("Back_Flange", -0.030)):
-        plate(p, tag, "x", x0, x0 + 0.008, [(0, y0 - 0.020, zf), (0, y0, zf), (0, y0, -0.100), (0, y0 - 0.020, -0.100)])
+    y_disc = y0 - PC["T_OUT"]                           # pitch output disc layer [y_disc, y0] co-rotates with the thigh
+    r_clear = PC["D"] / 2 + 0.004                       # hip-pitch housing clearance radius (housing is medial of y_disc)
+    x_in = 0.022                                        # flange inner faces at |x| = 22 mm, 8 mm thick
+    z_deep = -math.sqrt(r_clear ** 2 - x_in ** 2) - 0.001
+    z_shal = -math.sqrt((PC["D_OUT"] / 2 + 0.002) ** 2 - x_in ** 2) - 0.001
+    p.gv("Flange_end_z", mm(zf)); p.gv("Flange_deep_start_z", mm(z_deep)); p.gv("Flange_shallow_start_z", mm(z_shal))
+    y_sh = y_disc + 0.001                               # 1 mm axial clearance to the stationary housing end face
+    prof = [(0, y_sh, z_shal), (0, y0, z_shal), (0, y0, zf), (0, y0 - 0.020, zf), (0, y0 - 0.020, z_deep),
+            (0, y_disc - 0.004, z_deep), (0, y_sh, z_deep + 0.002)]
+    for tag, x0 in (("Front_Flange", x_in), ("Back_Flange", -x_in - 0.008)):
+        plate(p, tag, "x", x0, x0 + 0.008, prof)
     p.ref_axis("Front Plane", "Right Plane", "AX_PitchY")
     p.ref_plane_angle("Front Plane", "AX_PitchY", 40.0, "PL_PitchRef")   # hip-pitch limit reference (window offset 50 deg)
-    return finish(p, ALU_RGB, "thigh: hip pitch output -> knee housing (coplanar faces)", "6061-T6 8 mm plate, CNC/waterjet + flanges; ASSUMED")
+    return finish(p, ALU_RGB, "thigh: hip pitch output -> knee housing (coplanar faces); structural design V5",
+                  "6061-T6 from 12 mm plate + flanges: CNC (5-axis or 2 setups), or 12 mm waterjet plate + 2 bolted/pinned 8 mm flange bars")
 
 
 # ------------------------------------------------------------------------------------------------ shin (frame at knee centre)
@@ -156,18 +180,20 @@ def shin(s):
     y_out = PKG["knee_rear_y"] - KC["L_HOUSING"] - KC["T_OUT"]    # knee output face (medial)
     zA, zB, Ls = PKG["ankle_A_z"], PKG["ankle_B_z"], SHIN
     web = PKG["shin_web_t"] if "shin_web_t" in PKG else 0.010
+    TK = PKG["shin_knee_t"]
+    zj0, zj1 = PKG["shin_joggle_z"]
     p.gv("Shin_length", mm(Ls)); p.gv("AnkleA_z", mm(zA)); p.gv("AnkleB_z", mm(zB))
     # top plate on the knee output (medial face y_out)
     top_holes = [((x, 0, z), CLR_M5) for (x, z, _) in [(u_, -v_, d_) for (u_, v_, d_) in bolt_holes((0, 0), KC["PCD_OUT"], KC["N_OUT"], CLR_M5, 22.5)]]
     top_holes.append(((0, 0, 0), 0.012))
     rk = KC["PCD_OUT"] / 2 + 0.008
-    plate(p, "Knee_Plate", "y", y_out - T, y_out, [(-rk * 0.85, 0, rk), (rk * 0.85, 0, rk), (rk + 0.004, 0, 0.0), (0.036, 0, -0.084),
-                                                    (-0.036, 0, -0.084), (-rk - 0.004, 0, 0.0)], top_holes)
+    plate(p, "Knee_Plate", "y", y_out - TK, y_out, [(-rk * 0.85, 0, rk), (rk * 0.85, 0, rk), (rk + 0.004, 0, 0.0), (0.036, 0, zj0),
+                                                     (-0.036, 0, zj0), (-rk - 0.004, 0, 0.0)], top_holes)
     circle_cut(p, "Knee_Pilot_Recess", "y", y_out, (0, y_out, 0), KC["PILOT_D"] + 0.0003, KC["PILOT_H"] + 0.0002, into_positive=False)
     # joggle block from the knee plate to the central web (outside the knee housing radius)
-    plate(p, "Joggle", "z", -0.084, -0.066, [(-0.034, y_out - T, 0), (0.034, y_out - T, 0), (0.034, web / 2, 0), (-0.034, web / 2, 0)])
+    plate(p, "Joggle", "z", zj0, zj1, [(-0.034, y_out - TK, 0), (0.034, y_out - TK, 0), (0.034, web / 2, 0), (-0.034, web / 2, 0)])
     # central web with both ankle-motor bolt patterns (A upper: housing on +Y side; B lower: housing on -Y side)
-    web_outline = [(-0.034, 0, -0.066), (0.034, 0, -0.066), (0.048, 0, zA + 0.030), (0.048, 0, zB - 0.030), (0.030, 0, -Ls + 0.036),
+    web_outline = [(-0.034, 0, zj1), (0.034, 0, zj1), (0.048, 0, zA + 0.030), (0.048, 0, zB - 0.030), (0.030, 0, -Ls + 0.036),
                    (-0.030, 0, -Ls + 0.036), (-0.048, 0, zB - 0.030), (-0.048, 0, zA + 0.030)]
     AK = ACT[PKG["ankle_class"]]
     wh = [((x, 0, z), CLR_M3) for (x, z, _) in [(u_, -v_, d_) for (u_, v_, d_) in bolt_holes((0, -zA), AK["PCD_REAR"], AK["N_REAR"], CLR_M3)]]
@@ -184,8 +210,9 @@ def shin(s):
     p.ref_axis("PL_AnkleZ", "Right Plane", "AX_AnklePitch")
     p.ref_axis("Front Plane", "Right Plane", "AX_KneeY")
     p.ref_plane_angle("Front Plane", "AX_KneeY", 67.5, "PL_KneeRef")    # knee limit reference (window offset 22.5 deg)
-    return finish(p, PRINT_RGB, "shin: knee output -> ankle fork, carries ankle motors A (upper, +Y) and B (lower, -Y)",
-                  "FDM PA-CF with Al knee plate insert option; ASSUMED")
+    return finish(p, ALU_RGB, "shin: knee output -> ankle fork, carries ankle motors A (upper, +Y) and B (lower, -Y); design S3",
+                  "6061-T6: 10 mm web + 14 mm knee plate (laser-cut) bolted to a machined joggle block; fork tines 9 mm plate; "
+                  "printed PA-CF fails (SF 0.35/0.43), calculations/results/structural")
 
 
 # ------------------------------------------------------------------------------------------------ ankle cross (spider)
@@ -209,19 +236,22 @@ def foot(s):
     p.gv("Foot_length", mm(FOOT_L)); p.gv("Foot_width", mm(FOOT_W)); p.gv("Ankle_height", mm(SOLE_TO_ANKLE))
     outline = [(heel + 0.015, -hw), (toe - 0.028, -hw), (toe, -hw + 0.022), (toe, hw - 0.022), (toe - 0.028, hw), (heel + 0.015, hw),
                (heel, hw - 0.015), (heel, -hw + 0.015)]
-    plate2d(p, "Sole_Plate", "z", zs, zs + 0.010, outline, [(0.070, 0.0, 0.020), (0.030, 0.0, 0.016)])
+    ts = PKG["foot_sole_t"]
+    plate2d(p, "Sole_Plate", "z", zs, zs + ts, outline, [(0.070, 0.0, 0.020), (0.030, 0.0, 0.016)])
     # roll clevis tines (normal X) either side of the cross block
     for tag, x0 in (("Clevis_Front", 0.0175), ("Clevis_Back", -0.0255)):
-        plate(p, tag, "x", x0, x0 + 0.008, [(0, -0.013, zs + 0.010), (0, 0.013, zs + 0.010), (0, 0.013, 0.003), (0, 0.008, 0.010),
+        plate(p, tag, "x", x0, x0 + 0.008, [(0, -0.013, zs + ts), (0, 0.013, zs + ts), (0, 0.013, 0.003), (0, 0.008, 0.010),
                                              (0, -0.008, 0.010), (0, -0.013, 0.003)], [((0, 0, 0), 0.008)])
     # push-rod ball posts behind the ankle (rod ends at ankle-centre height)
     wf = PKG.get("rod_foot_w", 0.045)
     for tag, sy in (("Post_Lat", 1), ("Post_Med", -1)):
-        plate(p, tag, "z", zs + 0.010, -0.004, [(-FOOT_LEVER - 0.007, sy * wf - 0.007, 0), (-FOOT_LEVER + 0.007, sy * wf - 0.007, 0),
+        plate(p, tag, "z", zs + ts, -0.004, [(-FOOT_LEVER - 0.007, sy * wf - 0.007, 0), (-FOOT_LEVER + 0.007, sy * wf - 0.007, 0),
                                                 (-FOOT_LEVER + 0.007, sy * wf + 0.007, 0), (-FOOT_LEVER - 0.007, sy * wf + 0.007, 0)])
     p.ref_axis("Front Plane", "Top Plane", "AX_Roll")
     p.ref_points_sketch("XY", "SK_RodBalls", [(-FOOT_LEVER, my(wf)), (-FOOT_LEVER, my(-wf))])   # [0] lateral (rod A), [1] medial (rod B)
-    return finish(p, ACCENT_RGB, "foot: sole plate, roll clevis, rod-end posts", "FDM PA-CF + 3 mm TPU/rubber sole pad; ASSUMED")
+    return finish(p, ACCENT_RGB, "foot: sole plate, roll clevis, rod-end posts",
+                  "6061-T6 8 mm sole (laser-cut) + bolted clevis tines and rod posts, 4 mm rubber sole pad; printed PA-CF fails "
+                  "(SF 0.74/0.33), calculations/results/structural")
 
 
 # ------------------------------------------------------------------------------------------------ ankle crank & rods
@@ -252,7 +282,8 @@ def ankle_rod(s, tag, length):
         sk.polygon(pts)
     p.revolve("SK_Rod", "Rod_Body")
     p.ref_points_sketch("XZ", "SK_Ends", [(0.0, 0.0), (0.0, length)])
-    return finish(p, STEEL_RGB, f"ankle push rod {tag} with M5 rod-end envelopes", "M5 threaded rod + 2x rod-end bearings; ASSUMED")
+    return finish(p, STEEL_RGB, f"ankle push rod {tag} with M5 rod-end envelopes",
+                  "Ø8 chrome-plated steel rod (Robu 501422), ends tapped M5x12, 2x POS5 male rod ends; buckling SF 17 (calculations/structural)")
 
 
 BUILDERS = {"pelvis": pelvis, "hip_yaw": hip_yaw_bracket, "hip_roll": hip_roll_bracket, "thigh": thigh, "shin": shin,

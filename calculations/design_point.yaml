@@ -65,6 +65,12 @@ ankle_linkage:
   motor_A_height_above_ankle_m: {value: 0.182, label: CALCULATED, note: "upper motor, output lateral; 118 mm below knee axis (clears RS04 knee + thigh disc at 120 deg)"}
   motor_B_height_above_ankle_m: {value: 0.094, label: CALCULATED, note: "lower motor, output medial; 10 mm above the ankle fork"}
   motor_height_above_ankle_m: {value: 0.138, label: CALCULATED, note: "mean, used by the lumped mass model"}
+  # collision-free ankle workspace (left ankle; the right ankle mirrors roll). Vertices (pitch_deg, roll_deg), CCW.
+  # Beyond it rod B touches motor B's housing (plantarflexion + inversion) or rod A touches motor A (+30 / +20).
+  coupled_limit_polygon_deg:
+    value: [[-55, -20], [5, -20], [30, 0], [30, 15], [20, 20], [-55, 20]]
+    label: CALCULATED
+    note: "SolidWorks interference sweep, 5 deg grid, 162 poses, 92 % of the box collision-free; polygon keeps 2-5 deg to first contact (verification/ankle_workspace_L.json)"
 
 # Mass budget per link (structure + mounted actuator housings). COM in the link frame (m).
 # Link frames sit at the joint that drives them; legs hang along -z in the zero pose.
