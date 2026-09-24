@@ -26,17 +26,19 @@ MuJoCo, Isaac Lab and ROS 2. The walking task, its conventions and the deploymen
 | `rl/config/jx1_walk.yaml` | task definition: 12 policy joints, default pose, deployment PD gains, action scale 0.25, 47-D observation, gait clock, commands, rewards, domain randomisation, PPO | source of truth |
 | `rl/jx1_rl/assets.py` | CAD MJCF → training model (capsules/boxes fitted to the CoACD hulls, collision groups, gains, sensors, `home` keyframe) | tested |
 | `rl/jx1_rl/env.py` | batched MuJoCo environment on `mujoco.rollout` (C++ thread pool), rewards, DR, pushes, resets | tested, ~20k policy steps/s on 8–11 threads |
-| `rl/jx1_rl/ppo.py`, `rl/train.py` | PPO (rsl_rl algorithm: asymmetric actor-critic, running normalisers, GAE, adaptive LR), GPU update | tested |
+| `rl/jx1_rl/ppo.py`, `rl/train.py` | PPO (rsl_rl algorithm: asymmetric actor-critic, running normalisers, GAE, adaptive LR), GPU update, left/right mirror loss (`jx1_rl/symmetry.py`) | tested |
 | `rl/export.py` | TorchScript + ONNX (normaliser baked in) + `policy_io.yaml`, checked against the checkpoint | tested |
-| `rl/sim2sim.py` | exported policy on the **full CAD model** (mesh hulls, 500 Hz, no DR), 7 command scenarios | tested |
-| `rl/tests/test_rl.py` | quaternion maths vs MuJoCo, ankle-polygon projection (numpy/ROS/torch), env determinism, training-vs-deployment observation parity, latency, hub ramp, MuJoCo/Isaac `policy_io` parity, hardware protocol/bridge/IMU, rough terrain, GAE/normaliser, ros2_control xacro | 13/13 pass |
+| `rl/sim2sim.py` | exported policy on the **full CAD model** (mesh hulls, 500 Hz, no DR), 7 command scenarios; optional sensing/actuation delay | tested |
+| `rl/envelope.py`, `rl/push_test.py`, `rl/latency_test.py` | command envelope (vx × wz, vx × vy grids), push recovery, latency sensitivity, all on the CAD model | tested |
+| `rl/report.py`, `rl/compare_policies.py`, `rl/play.py` | `REPORT.md` policy card per bundle, side-by-side comparison, keyboard driving in the MuJoCo viewer | tested (viewer: headless path) |
+| `rl/tests/test_rl.py` | quaternion maths vs MuJoCo, ankle-polygon projection (numpy/ROS/torch), env determinism, training-vs-deployment observation parity, latency, hub ramp, MuJoCo/Isaac `policy_io` parity, hardware protocol/bridge/IMU, rough terrain, GAE/normaliser, ros2_control xacro, mirror maps vs MuJoCo physics | 14/14 pass |
 | `simulation/isaac/isaaclab/` | Isaac Lab tasks `Isaac-Velocity-{Flat,Rough}-JX1-v0` (+ `-Play`), same obs/actions/rewards/DR; rsl_rl config, train and export scripts, offline API check, Isaac Sim ROS 2 bridge | offline-checked against Isaac Lab 2.3.2 + rsl_rl 3.1.2 and the bridge and USD import against Isaac Sim 5.1 sources (89/89); **not run in Isaac Sim** |
 | `ros2_ws/src/jx1_policy` | ONNX policy runner (no training code) + ROS 2 node (WAIT → RAMP → WALK, HOLD on stale state) | runner tested; node see below |
 | `ros2_ws/src/jx1_sim` | MuJoCo ROS 2 node: `/clock`, `/jx1/joint_states`, `/jx1/imu`, `/jx1/odom`, TF; applies `/jx1/joint_command` | see below |
 | `ros2_ws/src/jx1_bringup` | `mujoco_sim.launch.py`, `isaac_sim.launch.py`, `ros2_control.launch.py`, controllers | see below |
 | `tools/sim/gen_ros2_control.py` | `jx1.ros2_control.xacro` (mock / topic_based_ros2_control), `jx1_system.urdf.xacro`, `controllers.yaml` | generated |
 | `ros2_ws/src/jx1_hw` | Jetson ↔ CAN-hub bridge (firmware USB protocol, parallel-ankle IK/FK, motor gains), hub-firmware digital twin, `hardware.launch.py` | protocol + bridge tested; HIL run on the emulator |
-| `rl/ros2_check.py`, `rl/hw_loop_check.py` | end-to-end checks over real ROS 2 (sim node / hardware bridge + emulated hubs) | run on this machine (RoboStack Jazzy) |
+| `rl/ros2_check.py`, `rl/hw_loop_check.py`, `rl/ros2_env/build_ws.py` | end-to-end checks over real ROS 2 (sim node / hardware bridge + emulated hubs), from the source tree or with `--launch` from a colcon install (`mujoco_sim.launch.py`, `ros2_control.launch.py`, `hardware.launch.py hil:=true`) | run on this machine (RoboStack Jazzy) |
 
 ## Train in MuJoCo (this machine: Windows, RTX 3050 6 GB, i5-13420H)
 
@@ -219,8 +221,15 @@ ros2 launch jx1_hw hardware.launch.py port_a:=/dev/ttyACM0 port_b:=/dev/ttyACM1 
   the training environment, `sim2sim.py`, the `jx1_sim` node and the Isaac Lab action term;
 - the two ankle motors run independent MIT loops, so the realisable joint-space roll/pitch stiffness ratio is fixed by the
   linkage (1.27): the task's ankle gains are now the realisable pair 51.2 / 64.8 N·m/rad (motor kp 40, kd 1.5);
-- 0–5 ms actuation and 0–5 ms sensing latency are randomised per episode; torques above 85 % of the actuator peak are
-  penalised (the hubs cap at 80 %).
+- torques above 85 % of the actuator peak are penalised (the hubs cap at 80 %);
+- the final flat policy tracked a 0.3 rad/s turn at 62 % through the chain vs 85 % in MuJoCo. `sim2sim.py` with added
+  delay (`rl/latency_test.py`) reproduces that at about 30 ms of sensing plus 10 ms of actuation latency. Two fixes:
+  - `hw_node` sent hub frames on its own 50 Hz timer, which added a random 0–20 ms delay after each policy output. It
+    now forwards every command at once, which alone gave 73 % turn and 95 % forward tracking;
+  - training now randomises 0–15 ms sensing and 0–10 ms actuation latency (was 0–5 ms each);
+- at zero command the free policy drifted −0.03 rad/s in yaw (+0.3 rad/s turns at 85 %, −0.3 at 109 %), although the
+  robot is symmetric to 0.2 mm. PPO now has a left/right mirror loss (`ppo.symmetry_coef`), with the mirror maps
+  checked against MuJoCo physics.
 
 ## Conventions (policy_io.yaml)
 
