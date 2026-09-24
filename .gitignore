@@ -35,3 +35,6 @@ media/assembly-film/assets/*.mp4
 media/assembly-film/renders/
 media/assembly-film/snapshots/
 media/assembly-film/node_modules/
+
+# cost-report build files (HTML, page previews, headless browser profile)
+bom/.report_build/

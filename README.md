@@ -181,6 +181,7 @@ Landed cost in India, including GST and import duty (from [`bom/master_bom.csv`]
 | Head, pelvis, manufacturing | 29,223 | head shell + neck servos, pelvis box, filament and consumables |
 | **Total** | **7,12,481** | + 15 % contingency = **₹8,19,353** |
 
+- **Printable 9-page component list and cost estimate:** [bom/JX1_cost_estimate.pdf](bom/JX1_cost_estimate.pdf) (generated from the BOM by `bom/make_cost_report.py`).
 - **Motors are 77 % of the cost** (₹5,45,998). Buying the same RobStride units through a China distributor would save
   about ₹1.87 lakh ([cost summary](bom/cost_summary.md)).
 - **You can build it in two phases.** Phase 1 is the walking lower body (legs + pelvis + compute + power) for about
