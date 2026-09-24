@@ -57,6 +57,8 @@ class JX1Env:
         mid, half = (self.lower + self.upper) / 2, (self.upper - self.lower) / 2
         self.soft_lower, self.soft_upper = mid - 0.9 * half, mid + 0.9 * half
         self.hip_idx = np.array([i for i, j in enumerate(self.joints) if joint_type(j) in ("hip_roll", "hip_yaw")])
+        self.tau_limit = np.array([m.actuator_forcerange[a, 1] for a in self.act])     # actuator-class peak torque
+        self.soft_torque = cfg["rewards"].get("soft_torque_limit", 0.85)
         self.action_scale = cfg["action_scale"]
         self.ctrl_hold = m.key("home").ctrl.copy()           # non-policy joints hold the default pose
 
@@ -91,7 +93,7 @@ class JX1Env:
         self.completed = {"episodes": 0}
         self.unstable_resets = 0
         self.obs_scales = cfg["observation"]["scales"]
-        self.rw = {k: v for k, v in cfg["rewards"].items() if k != "tracking_sigma"}
+        self.rw = {k: v for k, v in cfg["rewards"].items() if k not in ("tracking_sigma", "soft_torque_limit")}
         self.sigma = cfg["rewards"]["tracking_sigma"]
         g = cfg["gait"]
         self.period, self.offset, self.stance, self.swing_h = g["period_s"], g["offset"], g["stance_fraction"], g["swing_height_m"]
@@ -256,6 +258,7 @@ class JX1Env:
             "orientation": np.sum(grav_b[:, :2] ** 2, axis=1),
             "base_height": (qp[:, 2] - self.base_height_target) ** 2,
             "torques": np.sum(self.tau ** 2, axis=1),
+            "torque_limits": np.sum(np.clip(np.abs(self.tau) - self.soft_torque * self.tau_limit, 0, None), axis=1),
             "dof_vel": np.sum(dq ** 2, axis=1),
             "dof_acc": np.sum(((dq - self.last_dq) / dt) ** 2, axis=1),
             "action_rate": np.sum((self.actions - self.last_actions) ** 2, axis=1),

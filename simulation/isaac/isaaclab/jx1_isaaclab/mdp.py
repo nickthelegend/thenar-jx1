@@ -67,6 +67,14 @@ def stand_still_deviation(env, command_name: str, asset_cfg: SceneEntityCfg) -> 
     return d * (env.command_manager.get_command(command_name).norm(dim=1) < 0.1).float()
 
 
+def torque_limits(env, soft_ratio: float, asset_cfg: SceneEntityCfg) -> torch.Tensor:
+    """Sum of |applied torque| above soft_ratio x effort limit (rl/jx1_rl/env.py 'torque_limits')."""
+    asset: Articulation = env.scene[asset_cfg.name]
+    tau = asset.data.applied_torque[:, asset_cfg.joint_ids].abs()
+    lim = asset.data.joint_effort_limits[:, asset_cfg.joint_ids]
+    return torch.clamp(tau - soft_ratio * lim, min=0.0).sum(dim=1)
+
+
 def ankle_polygon_violation(env, polygons_rad: dict, asset_cfg: SceneEntityCfg) -> torch.Tensor:
     asset: Articulation = env.scene[asset_cfg.name]
     names = asset.joint_names

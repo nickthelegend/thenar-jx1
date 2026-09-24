@@ -64,7 +64,7 @@ def main():
     obs, priv = env.reset()
     obs_t, priv_t = torch.from_numpy(obs).to(dev), torch.from_numpy(priv).to(dev)
     metrics_f = open(out / "metrics.csv", "a", newline="", encoding="utf-8")
-    ep_keys = [f"ep_{k}" for k, w in cfg["rewards"].items() if k != "tracking_sigma" and w != 0.0] + ["ep_length_s"]
+    ep_keys = [f"ep_{k}" for k, w in cfg["rewards"].items() if k not in ("tracking_sigma", "soft_torque_limit") and w != 0.0] + ["ep_length_s"]
     fields = ["iteration", "time_s", "fps", "collect_s", "update_s", "reward_per_step", "value_loss", "surrogate", "entropy", "kl", "lr",
               "std"] + ep_keys + ["unstable_resets"]
     writer = csv.DictWriter(metrics_f, fieldnames=fields, extrasaction="ignore")

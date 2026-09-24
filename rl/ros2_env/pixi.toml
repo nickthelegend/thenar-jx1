@@ -1,0 +1,28 @@
+[workspace]
+name = "jx1-ros2"
+channels = ["robostack-jazzy", "conda-forge"]
+platforms = ["win-64"]
+
+[dependencies]
+python = "3.12.*"
+ros-jazzy-rclpy = "*"
+ros-jazzy-sensor-msgs = "*"
+ros-jazzy-geometry-msgs = "*"
+ros-jazzy-nav-msgs = "*"
+ros-jazzy-std-msgs = "*"
+ros-jazzy-std-srvs = "*"
+ros-jazzy-rosgraph-msgs = "*"
+ros-jazzy-builtin-interfaces = "*"
+ros-jazzy-tf2-ros-py = "*"
+ros-jazzy-robot-state-publisher = "*"
+ros-jazzy-xacro = "*"
+ros-jazzy-ros2cli = "*"
+ros-jazzy-ros2topic = "*"
+ros-jazzy-ros2node = "*"
+ros-jazzy-ament-index-python = "*"
+numpy = "*"
+pyyaml = "*"
+
+[pypi-dependencies]
+mujoco = "==3.14.0"
+onnxruntime = "*"

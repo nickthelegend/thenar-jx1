@@ -94,6 +94,8 @@ class JX1Rewards:
     flat_orientation_l2 = RewTerm(func=mdp.flat_orientation_l2, weight=W["orientation"])
     base_height_l2 = RewTerm(func=mdp.base_height_l2, weight=W["base_height"], params={"target_height": BASE_HEIGHT})
     dof_torques_l2 = RewTerm(func=mdp.joint_torques_l2, weight=W["torques"], params={"asset_cfg": robot(POLICY)})
+    torque_limits = RewTerm(func=jx1.torque_limits, weight=W.get("torque_limits", 0.0),
+                            params={"soft_ratio": W.get("soft_torque_limit", 0.85), "asset_cfg": robot(POLICY)})
     dof_vel_l2 = RewTerm(func=mdp.joint_vel_l2, weight=W["dof_vel"], params={"asset_cfg": robot(POLICY)})
     dof_acc_l2 = RewTerm(func=mdp.joint_acc_l2, weight=W["dof_acc"], params={"asset_cfg": robot(POLICY)})
     action_rate_l2 = RewTerm(func=mdp.action_rate_l2, weight=W["action_rate"])

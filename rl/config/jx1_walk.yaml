@@ -93,6 +93,8 @@ rewards:                                         # weights (per policy step; mul
   orientation: -1.0
   base_height: -10.0
   torques: -1.0e-5
+  torque_limits: -0.01                           # N m above soft_torque_limit x actuator peak (keeps hardware headroom)
+  soft_torque_limit: 0.85
   dof_vel: -1.0e-3
   dof_acc: -2.5e-7
   action_rate: -0.01

@@ -1,0 +1,103 @@
+# JX1 — trainable model (MuJoCo · Isaac Lab · ROS 2)
+
+Phase 3 of JX1: the CAD-derived robot as a **reinforcement-learning-ready model** with one policy format that runs in
+MuJoCo, Isaac Lab and ROS 2. The walking task, its conventions and the deployment gains live in one file,
+[`config/jx1_walk.yaml`](config/jx1_walk.yaml); every other piece reads it.
+
+```text
+ SolidWorks CAD ──► tools/sim/build_robot_description.py ──► simulation/mujoco/jx1.xml   ros2_ws/.../jx1.urdf(.xacro)
+                                                                   │                          │
+            rl/config/jx1_walk.yaml (joints, default pose,         ▼                          ▼
+            PD gains, obs/action layout, rewards, DR, PPO)   rl/ (MuJoCo, CPU-batched)   simulation/isaac/isaaclab (Isaac Lab)
+                                                                   │  train.py → export.py    │  scripts/train.py → export_policy.py
+                                                                   ▼                          ▼
+                                             policy bundle: policy.onnx + policy.pt + policy_io.yaml
+                                                                   │
+                        ┌──────────────────────────────────────────┼───────────────────────────────┐
+                        ▼                                          ▼                               ▼
+              rl/sim2sim.py (full CAD MuJoCo,         ros2_ws: jx1_policy node  ◄──►  jx1_sim (MuJoCo node) / Isaac Sim ROS 2
+              500 Hz, mesh-hull collisions)           /jx1/joint_states /jx1/imu /cmd_vel → /jx1/joint_command (or ros2_control)
+```
+
+## What is where
+
+| Path | Contents | Status |
+|---|---|---|
+| `rl/config/jx1_walk.yaml` | task definition: 12 policy joints, default pose, deployment PD gains, action scale 0.25, 47-D observation, gait clock, commands, rewards, domain randomisation, PPO | source of truth |
+| `rl/jx1_rl/assets.py` | CAD MJCF → training model (capsules/boxes fitted to the CoACD hulls, collision groups, gains, sensors, `home` keyframe) | tested |
+| `rl/jx1_rl/env.py` | batched MuJoCo environment on `mujoco.rollout` (C++ thread pool), rewards, DR, pushes, resets | tested, ~20k policy steps/s on 8–11 threads |
+| `rl/jx1_rl/ppo.py`, `rl/train.py` | PPO (rsl_rl algorithm: asymmetric actor-critic, running normalisers, GAE, adaptive LR), GPU update | tested |
+| `rl/export.py` | TorchScript + ONNX (normaliser baked in) + `policy_io.yaml`, checked against the checkpoint | tested |
+| `rl/sim2sim.py` | exported policy on the **full CAD model** (mesh hulls, 500 Hz, no DR), 7 command scenarios | tested |
+| `rl/tests/test_rl.py` | quaternion maths vs MuJoCo, ankle-polygon projection (numpy/ROS/torch), env determinism, training-vs-deployment observation parity, MuJoCo/Isaac `policy_io` parity, GAE/normaliser, ros2_control xacro | 7/7 pass |
+| `simulation/isaac/isaaclab/` | Isaac Lab task `Isaac-Velocity-Flat-JX1-v0` (same obs/actions/rewards/DR), rsl_rl config, train/export scripts, Isaac Sim ROS 2 bridge | **UNVERIFIED** (no Isaac Sim on the design machine) |
+| `ros2_ws/src/jx1_policy` | ONNX policy runner (no training code) + ROS 2 node (WAIT → RAMP → WALK, HOLD on stale state) | runner tested; node see below |
+| `ros2_ws/src/jx1_sim` | MuJoCo ROS 2 node: `/clock`, `/jx1/joint_states`, `/jx1/imu`, `/jx1/odom`, TF; applies `/jx1/joint_command` | see below |
+| `ros2_ws/src/jx1_bringup` | `mujoco_sim.launch.py`, `isaac_sim.launch.py`, `ros2_control.launch.py`, controllers | see below |
+| `tools/sim/gen_ros2_control.py` | `jx1.ros2_control.xacro` (mock / topic_based_ros2_control), `jx1_system.urdf.xacro`, `controllers.yaml` | generated |
+
+## Train in MuJoCo (this machine: Windows, RTX 3050 6 GB, i5-13420H)
+
+```bash
+py -3.13 -m venv rl/.venv
+rl/.venv/Scripts/python -m pip install torch==2.14.0 --index-url https://download.pytorch.org/whl/cu126
+rl/.venv/Scripts/python -m pip install -r rl/requirements.txt
+rl/.venv/Scripts/python rl/tests/test_rl.py
+rl/.venv/Scripts/python rl/train.py --num-envs 1024 --iterations 3000 --run my_run        # rl/runs/my_run/
+rl/.venv/Scripts/python rl/export.py --checkpoint rl/runs/my_run/model_latest.pt           # rl/policies/jx1_walk_flat/
+rl/.venv/Scripts/python rl/sim2sim.py                                                      # full CAD model check + GIF
+```
+
+Resume or fine-tune on a regenerated CAD model with `--resume rl/runs/<run>/model_latest.pt`.
+
+**Numerical note (MEASURED):** with the Newton solver's line search capped at 10 iterations the model injected energy
+after falls (robots launched to hundreds of metres, 5/6 seeds); `ls_iterations >= 20` fixed it with no speed cost, so
+the task uses 50/50.
+
+## Train in Isaac Lab (UNVERIFIED)
+
+```bash
+cd <IsaacLab> && ./isaaclab.sh -p -m pip install -e <repo>/simulation/isaac/isaaclab
+./isaaclab.sh -p <repo>/simulation/isaac/isaaclab/scripts/train.py --task Isaac-Velocity-Flat-JX1-v0 --headless --num_envs 4096
+./isaaclab.sh -p <repo>/simulation/isaac/isaaclab/scripts/export_policy.py --checkpoint <log>/model_3000.pt --out <repo>/rl/policies/jx1_walk_flat_isaac --headless
+```
+
+Asset: `simulation/isaac/jx1.usd` from `simulation/isaac/import_jx1.py` if present, else the URDF (mesh URIs made
+absolute). The action term clamps to joint limits and projects the ankle targets into the collision-free polygon, as in
+MuJoCo, so exported policies share the `policy_io.yaml` contract.
+
+## Run on ROS 2
+
+```bash
+export JX1_REPO=<repo>
+colcon build --packages-select jx1_description jx1_policy jx1_sim jx1_bringup && source install/setup.bash
+pip install mujoco==3.14.0 onnxruntime
+ros2 launch jx1_bringup mujoco_sim.launch.py viewer:=true         # MuJoCo + policy (direct /jx1/joint_command)
+ros2 run teleop_twist_keyboard teleop_twist_keyboard              # /cmd_vel
+ros2 launch jx1_bringup ros2_control.launch.py                    # same through ros2_control (topic_based_ros2_control)
+ros2 launch jx1_bringup isaac_sim.launch.py                       # with simulation/isaac/isaaclab/scripts/ros2_bridge.py running
+```
+
+**Verified on the design machine (Windows 11, no system ROS):** ROS 2 Jazzy from RoboStack in a pixi environment
+([`ros2_env/pixi.toml`](ros2_env/pixi.toml) + lock file), then the end-to-end check, which starts `jx1_sim` and
+`jx1_policy` as separate ROS 2 processes, drives `/cmd_vel` and measures the walk from `/jx1/odom`:
+
+```bash
+pixi install --manifest-path rl/ros2_env/pixi.toml
+pixi run --manifest-path rl/ros2_env/pixi.toml python rl/ros2_check.py --policy rl/policies/jx1_walk_flat
+```
+
+Topics (sim and hardware alike): `/jx1/joint_states` (JointState, all actuated joints), `/jx1/imu` (pelvis IMU),
+`/cmd_vel` (vx, vy, wz) → `/jx1/joint_command` (JointState position targets). PD gains are applied downstream (MuJoCo
+position actuators, PhysX drives, RobStride MIT mode) from `policy_io.yaml` → `pd_gains`.
+
+## Conventions (policy_io.yaml)
+
+- **Action**: 12 leg joints (left hip yaw, roll, pitch, knee, ankle pitch, roll; then right), `target = clip(default +
+  0.25 * action, limits)`; ankle (pitch, roll) targets projected into the SolidWorks collision-free polygon
+  (`joint_map.yaml` → `coupled_limits`). Waist, arms and neck hold the default walking posture.
+- **Observation (47)**: body angular velocity × 0.25, projected gravity, command × (2, 2, 0.25), joint position −
+  default, joint velocity × 0.05, last action, sin/cos of the 0.8 s gait clock (phase starts when walking starts).
+- **Control**: 50 Hz policy; trained with 200 Hz physics (MuJoCo) — sim-to-sim runs the CAD model at 500 Hz.
+- The parallel ankle is abstracted as serial pitch/roll joints with the linkage's capability limits (46/51 N·m);
+  converting ankle targets to the two ankle motors is done by the hub (`calculations/jx1calc/ankle.py`).

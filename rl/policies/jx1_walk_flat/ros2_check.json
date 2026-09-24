@@ -1,0 +1,53 @@
+{
+ "policy": "D:\\Project\\thenar-jx1\\rl\\policies\\jx1_walk_flat",
+ "ros_distro": "jazzy",
+ "phases": {
+  "forward": {
+   "command": [
+    0.4,
+    0.0,
+    0.0
+   ],
+   "sim_duration_s": 7.39,
+   "distance_m": 3.109,
+   "mean_speed_m_s": 0.421,
+   "yaw_change_deg": -1.6,
+   "min_pelvis_z_m": 0.584,
+   "max_tilt_deg": 7.87
+  },
+  "turn": {
+   "command": [
+    0.0,
+    0.0,
+    0.4
+   ],
+   "sim_duration_s": 6.0,
+   "distance_m": 0.181,
+   "mean_speed_m_s": 0.03,
+   "yaw_change_deg": 136.7,
+   "min_pelvis_z_m": 0.588,
+   "max_tilt_deg": 6.59
+  },
+  "stop": {
+   "command": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "sim_duration_s": 4.0,
+   "distance_m": 0.222,
+   "mean_speed_m_s": 0.056,
+   "yaw_change_deg": 3.6,
+   "min_pelvis_z_m": 0.591,
+   "max_tilt_deg": 5.11
+  }
+ },
+ "reached_walk_state": true,
+ "upright": true,
+ "sim_log_tail": [
+  "[INFO] [1790223346.282206400] [jx1_mujoco]: MuJoCo D:\\Project\\thenar-jx1\\simulation\\mujoco\\jx1.xml: 13 actuated joints, dt 0.002 s"
+ ],
+ "policy_log_tail": [
+  "[INFO] [1790223346.062933100] [jx1_policy]: policy D:\\Project\\thenar-jx1\\rl\\policies\\jx1_walk_flat: 12 joints, 50 Hz"
+ ]
+}
