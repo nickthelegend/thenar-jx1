@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>JX1 assembly</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #05070a; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; color: #f2f4f7; }
+      #footage { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .shade { position: absolute; inset: 0; pointer-events: none;
+        background: linear-gradient(90deg, rgba(3,5,8,0.72) 0%, rgba(3,5,8,0.30) 34%, rgba(3,5,8,0) 55%),
+                    linear-gradient(0deg, rgba(3,5,8,0.70) 0%, rgba(3,5,8,0) 38%); }
+      .clip { position: absolute; inset: 0; }
+      .display { font-family: "League Gothic", sans-serif; font-weight: 400; letter-spacing: 0.01em; line-height: 0.95; }
+      .mono { font-family: "IBM Plex Mono", monospace; font-weight: 400; letter-spacing: 0.02em; }
+      .accent { color: #3cc8ff; }
+      .nw { white-space: nowrap; }
+      .display, .mono { text-shadow: 0 2px 16px rgba(2,4,7,0.6); }
+      .intro-wrap, .explode-wrap, .finale-wrap, .walk-wrap { position: absolute; left: 110px; top: 300px; width: 700px; }
+      .walk-wrap { top: 120px; }
+      .finale-wrap { top: 120px; width: 720px; }
+      .mark { display: flex; align-items: center; gap: 28px; }
+      .mark.center { justify-content: center; }
+      .brand-dot { display: block; width: 46px; height: 46px; background: #f26b1d; border-radius: 6px; }
+      .wordmark { display: inline-block; font-family: "League Gothic", sans-serif; font-size: 260px; line-height: 0.9; opacity: 0; }
+      .lead { font-size: 25px; line-height: 1.45; color: #dfe5ec; margin-top: 18px; opacity: 0; }
+      .small { font-size: 20px; line-height: 1.5; color: #aeb7c4; margin-top: 14px; opacity: 0; }
+      .big { font-size: 136px; opacity: 0; }
+      .huge { font-size: 124px; opacity: 0; }
+      .explode-wrap .big + .big { margin-top: 8px; }
+      .card { position: absolute; left: 96px; bottom: 118px; width: 980px; }
+      .kicker { font-size: 24px; color: #3cc8ff; letter-spacing: 0.08em; opacity: 0; }
+      .title { font-size: 112px; margin-top: 10px; opacity: 0; }
+      .title.long { font-size: 92px; }
+      .spec { font-size: 27px; line-height: 1.45; color: #d2d9e2; margin-top: 12px; opacity: 0; }
+      .walk-wrap .spec { margin-top: 18px; font-size: 24px; }
+      .track { position: absolute; left: 96px; right: 96px; bottom: 64px; height: 6px; background: rgba(255,255,255,0.14);
+        border-radius: 3px; overflow: hidden; }
+      .fill { width: 100%; height: 100%; background: #3cc8ff; transform-origin: 0 50%; }
+      .end-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(8,11,16,0.92) 0%, rgba(3,5,8,0.97) 70%); }
+      .end-wrap { position: absolute; left: 0; right: 0; top: 330px; text-align: center; }
+      .end-wrap .wordmark { opacity: 1; font-size: 220px; }
+      .url { font-size: 40px; color: #3cc8ff; margin-top: 24px; }
+      .end-wrap .small { opacity: 1; font-size: 26px; margin-top: 18px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="95.6" data-width="1920" data-height="1080">
+      <video id="footage" class="clip-media" src="assets/footage.mp4" data-start="0" data-duration="95.6" data-track-index="0" muted playsinline></video>
+      <div class="shade"></div>
+      <section id="intro" class="clip" data-start="0.0" data-duration="5.0" data-track-index="2">
+        <div class="intro-wrap">
+          <div class="mark"><span class="brand-dot"></span><span id="intro-jx1" class="wordmark">JX1</span></div>
+          <p id="intro-l1" class="mono lead">A 1.23 M HUMANOID YOU CAN BUILD IN INDIA</p>
+          <p id="intro-l2" class="mono small"><span class="nw">23 DOF</span> &#183; <span class="nw">33.6 KG</span> &#183; <span class="nw">21 ROBSTRIDE ACTUATORS</span> &#183; <span class="nw">OPEN CAD, FEA, BOM, SIM</span></p>
+        </div>
+      </section>
+      <section id="explode" class="clip" data-start="5.0" data-duration="2.8" data-track-index="2">
+        <div class="explode-wrap">
+          <p id="ex-1" class="display big">87 PARTS.</p>
+          <p id="ex-2" class="display big accent">LET&#8217;S BUILD IT.</p>
+        </div>
+      </section>
+      <section id="step01" class="clip step" data-start="7.8" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step01-k" class="mono kicker">STEP 01 / 22 &#183; LOWER BODY</p>
+          <p id="step01-t" class="display title">Pelvis torsion box</p>
+          <p id="step01-s" class="mono spec"><span class="nw">6061-T6 laser-cut plates</span> &#183; <span class="nw">top 6 mm, walls 4 mm</span> &#183; <span class="nw">FEA SF 2.90</span></p>
+        </div>
+      </section>
+      <section id="step02" class="clip step" data-start="11.2" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step02-k" class="mono kicker">STEP 02 / 22 &#183; LOWER BODY</p>
+          <p id="step02-t" class="display title">Hip-yaw actuators</p>
+          <p id="step02-s" class="mono spec"><span class="nw">2 × RobStride RS06</span> &#183; <span class="nw">36 N·m peak</span> &#183; <span class="nw">vertical axis</span></p>
+        </div>
+      </section>
+      <section id="step03" class="clip step" data-start="14.6" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step03-k" class="mono kicker">STEP 03 / 22 &#183; LOWER BODY</p>
+          <p id="step03-t" class="display title">Hip-yaw brackets</p>
+          <p id="step03-s" class="mono spec"><span class="nw">7075-T6, CNC from 25 mm plate</span> &#183; <span class="nw">FEA SF 1.77</span></p>
+        </div>
+      </section>
+      <section id="step04" class="clip step" data-start="18.0" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step04-k" class="mono kicker">STEP 04 / 22 &#183; LOWER BODY</p>
+          <p id="step04-t" class="display title">Hip-roll actuators</p>
+          <p id="step04-s" class="mono spec"><span class="nw">2 × RobStride RS03</span> &#183; <span class="nw">60 N·m</span> &#183; <span class="nw">axis pointing forward</span></p>
+        </div>
+      </section>
+      <section id="step05" class="clip step" data-start="21.4" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step05-k" class="mono kicker">STEP 05 / 22 &#183; LOWER BODY</p>
+          <p id="step05-t" class="display title">Hip-roll brackets</p>
+          <p id="step05-s" class="mono spec"><span class="nw">6061-T6 8 + 10 mm plates</span> &#183; <span class="nw">FEA SF 2.76</span></p>
+        </div>
+      </section>
+      <section id="step06" class="clip step" data-start="24.8" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step06-k" class="mono kicker">STEP 06 / 22 &#183; LOWER BODY</p>
+          <p id="step06-t" class="display title">Hip-pitch actuators</p>
+          <p id="step06-s" class="mono spec"><span class="nw">2 × RobStride RS04</span> &#183; <span class="nw">120 N·m</span></p>
+        </div>
+      </section>
+      <section id="step07" class="clip step" data-start="28.2" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step07-k" class="mono kicker">STEP 07 / 22 &#183; LOWER BODY</p>
+          <p id="step07-t" class="display title">Thighs</p>
+          <p id="step07-s" class="mono spec"><span class="nw">6061-T6 10 mm plate with run-out flanges</span> &#183; <span class="nw">0.27 m</span></p>
+        </div>
+      </section>
+      <section id="step08" class="clip step" data-start="31.6" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step08-k" class="mono kicker">STEP 08 / 22 &#183; LOWER BODY</p>
+          <p id="step08-t" class="display title">Knee actuators</p>
+          <p id="step08-s" class="mono spec"><span class="nw">2 × RobStride RS04</span> &#183; <span class="nw">120 N·m</span> &#183; <span class="nw">0–120° knee</span></p>
+        </div>
+      </section>
+      <section id="step09" class="clip step" data-start="35.0" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step09-k" class="mono kicker">STEP 09 / 22 &#183; LOWER BODY</p>
+          <p id="step09-t" class="display title">Shins</p>
+          <p id="step09-s" class="mono spec"><span class="nw">6061-T6 14 mm knee plate + web</span> &#183; <span class="nw">0.30 m</span></p>
+        </div>
+      </section>
+      <section id="step10" class="clip step" data-start="38.4" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step10-k" class="mono kicker">STEP 10 / 22 &#183; LOWER BODY</p>
+          <p id="step10-t" class="display title">Ankle motors + cranks</p>
+          <p id="step10-s" class="mono spec"><span class="nw">4 × RobStride RS06</span> &#183; <span class="nw">50 mm cranks</span> &#183; <span class="nw">parallel ankle</span></p>
+        </div>
+      </section>
+      <section id="step11" class="clip step" data-start="41.8" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step11-k" class="mono kicker">STEP 11 / 22 &#183; LOWER BODY</p>
+          <p id="step11-t" class="display title">Ankle cross + feet</p>
+          <p id="step11-s" class="mono spec"><span class="nw">steel U-joint on needle bearings</span> &#183; <span class="nw">6061-T6 feet, 210 × 95 mm</span></p>
+        </div>
+      </section>
+      <section id="step12" class="clip step" data-start="45.2" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step12-k" class="mono kicker">STEP 12 / 22 &#183; LOWER BODY</p>
+          <p id="step12-t" class="display title">Push-rods</p>
+          <p id="step12-s" class="mono spec"><span class="nw">Ø8 steel rods + M5 rod ends</span> &#183; <span class="nw">pitch −55…+30°, roll ±20°</span></p>
+        </div>
+      </section>
+      <section id="step13" class="clip step" data-start="48.6" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step13-k" class="mono kicker">STEP 13 / 22 &#183; TORSO + POWER</p>
+          <p id="step13-t" class="display title">Waist actuator</p>
+          <p id="step13-s" class="mono spec"><span class="nw">RobStride RS06</span> &#183; <span class="nw">waist yaw</span></p>
+        </div>
+      </section>
+      <section id="step14" class="clip step" data-start="52.0" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step14-k" class="mono kicker">STEP 14 / 22 &#183; TORSO + POWER</p>
+          <p id="step14-t" class="display title">Torso frame</p>
+          <p id="step14-s" class="mono spec"><span class="nw">6061-T6 plates + 4 × 2020 extrusion</span> &#183; <span class="nw">FEA SF 4.44</span></p>
+        </div>
+      </section>
+      <section id="step15" class="clip step" data-start="55.4" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step15-k" class="mono kicker">STEP 15 / 22 &#183; TORSO + POWER</p>
+          <p id="step15-t" class="display title">Battery + electronics</p>
+          <p id="step15-s" class="mono spec"><span class="nw">13S2P 468 Wh</span> &#183; <span class="nw">Jetson Nano</span> &#183; <span class="nw">2 × Teensy 4.1 CAN hubs</span> &#183; <span class="nw">DC-DC</span> &#183; <span class="nw">E-stop</span></p>
+        </div>
+      </section>
+      <section id="step16" class="clip step" data-start="58.8" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step16-k" class="mono kicker">STEP 16 / 22 &#183; ARMS</p>
+          <p id="step16-t" class="display title">Shoulder-pitch actuators</p>
+          <p id="step16-s" class="mono spec"><span class="nw">2 × RobStride RS02</span> &#183; <span class="nw">17 N·m</span></p>
+        </div>
+      </section>
+      <section id="step17" class="clip step" data-start="62.2" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step17-k" class="mono kicker">STEP 17 / 22 &#183; ARMS</p>
+          <p id="step17-t" class="display title long">Shoulder brackets + roll actuators</p>
+          <p id="step17-s" class="mono spec"><span class="nw">6061-T6 U-brackets</span> &#183; <span class="nw">2 × RobStride RS02</span></p>
+        </div>
+      </section>
+      <section id="step18" class="clip step" data-start="65.6" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step18-k" class="mono kicker">STEP 18 / 22 &#183; ARMS</p>
+          <p id="step18-t" class="display title">Shoulder-yaw actuators</p>
+          <p id="step18-s" class="mono spec"><span class="nw">6061-T6 L-brackets</span> &#183; <span class="nw">2 × RobStride RS00</span> &#183; <span class="nw">14 N·m</span></p>
+        </div>
+      </section>
+      <section id="step19" class="clip step" data-start="69.0" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step19-k" class="mono kicker">STEP 19 / 22 &#183; ARMS</p>
+          <p id="step19-t" class="display title">Upper arms + elbows</p>
+          <p id="step19-s" class="mono spec"><span class="nw">6061-T6 10 / 8 mm plates + gussets</span> &#183; <span class="nw">2 × RobStride RS00</span></p>
+        </div>
+      </section>
+      <section id="step20" class="clip step" data-start="72.4" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step20-k" class="mono kicker">STEP 20 / 22 &#183; ARMS</p>
+          <p id="step20-t" class="display title">Forearms + grippers</p>
+          <p id="step20-s" class="mono spec"><span class="nw">6061-T6 6 mm</span> &#183; <span class="nw">PA-CF grippers</span></p>
+        </div>
+      </section>
+      <section id="step21" class="clip step" data-start="75.8" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step21-k" class="mono kicker">STEP 21 / 22 &#183; HEAD</p>
+          <p id="step21-t" class="display title">Neck</p>
+          <p id="step21-s" class="mono spec"><span class="nw">2 × Waveshare ST3215 bus servos</span> &#183; <span class="nw">yaw + pitch</span></p>
+        </div>
+      </section>
+      <section id="step22" class="clip step" data-start="79.2" data-duration="3.4" data-track-index="3">
+        <div class="card">
+          <p id="step22-k" class="mono kicker">STEP 22 / 22 &#183; HEAD</p>
+          <p id="step22-t" class="display title">Head + stereo camera</p>
+          <p id="step22-s" class="mono spec"><span class="nw">PETG-CF shell</span> &#183; <span class="nw">IMX219-83 stereo camera</span></p>
+        </div>
+      </section>
+      <section id="progress" class="clip" data-start="7.8" data-duration="74.8" data-track-index="4">
+        <div class="track"><div id="fill" class="fill"></div></div>
+      </section>
+      <section id="finale" class="clip" data-start="82.6" data-duration="4.0" data-track-index="2">
+        <div class="finale-wrap">
+          <p id="fi-1" class="display huge">JX1 &#8212; ASSEMBLED</p>
+          <p id="fi-2" class="mono lead"><span class="nw">1.23 m tall</span> &#183; <span class="nw">33.6 kg</span> &#183; <span class="nw">23 degrees of freedom</span></p>
+          <p id="fi-3" class="mono lead"><span class="nw">12-DOF legs</span> &#183; <span class="nw">2-motor parallel ankles</span> &#183; <span class="nw">48 V CAN actuators</span></p>
+          <p id="fi-4" class="mono lead"><span class="nw">Aluminium structure</span> &#183; <span class="nw">every part FEA-checked</span></p>
+        </div>
+      </section>
+      <section id="walk" class="clip" data-start="86.6" data-duration="6.6" data-track-index="2">
+        <div class="walk-wrap">
+          <p id="wa-1" class="display big accent">AND IT WALKS.</p>
+          <p id="wa-2" class="mono spec"><span class="nw">MuJoCo simulation of the CAD model</span> &#183; <span class="nw">ZMP gait</span> &#183; <span class="nw">0.52 m/s</span></p>
+        </div>
+      </section>
+      <section id="endcard" class="clip" data-start="93.2" data-duration="2.4" data-track-index="5">
+        <div id="end-bg" class="end-bg"></div>
+        <div class="end-wrap">
+          <div class="mark center"><span class="brand-dot"></span><span id="end-jx1" class="wordmark">JX1</span></div>
+          <p id="end-url" class="mono url">github.com/nickthelegend/thenar-jx1</p>
+          <p id="end-sub" class="mono small">CAD &#183; FEA &#183; BOM &#183; SIMULATION &#183; RL &#8212; all open. Build one.</p>
+        </div>
+      </section>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      // intro — waterfall-entry (anchor wordmark, then two mono lines), fade out before the explode
+      tl.set("#intro-jx1", { opacity: 1, y: 80 }, 0.35);
+      tl.to("#intro-jx1", { y: 0, duration: 0.2, ease: "power4.out" }, 0.35);
+      tl.set("#intro-l1", { opacity: 1, y: 45 }, 0.55 + 2 / 60);
+      tl.to("#intro-l1", { y: 0, duration: 0.15, ease: "power4.out" }, 0.55 + 2 / 60);
+      tl.set("#intro-l2", { opacity: 1, y: 40 }, 0.70);
+      tl.to("#intro-l2", { y: 0, duration: 0.14, ease: "power4.out" }, 0.70);
+      tl.to("#intro .intro-wrap", { opacity: 0, duration: 0.35, ease: "power2.in" }, 4.55);
+      // explode beat — waterfall-entry, second line one beat later
+      tl.set("#ex-1", { opacity: 1, y: 70 }, 5.25);
+      tl.to("#ex-1", { y: 0, duration: 0.18, ease: "power4.out" }, 5.25);
+      tl.set("#ex-2", { opacity: 1, y: 70 }, 6.05);
+      tl.to("#ex-2", { y: 0, duration: 0.18, ease: "power4.out" }, 6.05);
+      tl.to("#explode .explode-wrap", { opacity: 0, duration: 0.3, ease: "power2.in" }, 7.45);
+      // step 1 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step01-k", { opacity: 1, y: 30 }, 7.95);
+      tl.to("#step01-k", { y: 0, duration: 0.12, ease: "power4.out" }, 7.95);
+      tl.set("#step01-t", { opacity: 1, y: 70 }, 8.05);
+      tl.to("#step01-t", { y: 0, duration: 0.19, ease: "power4.out" }, 8.05);
+      tl.set("#step01-s", { opacity: 1, y: 40 }, 8.25);
+      tl.to("#step01-s", { y: 0, duration: 0.14, ease: "power4.out" }, 8.25);
+      tl.to("#step01 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 10.92);
+      // step 2 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step02-k", { opacity: 1, y: 30 }, 11.35);
+      tl.to("#step02-k", { y: 0, duration: 0.12, ease: "power4.out" }, 11.35);
+      tl.set("#step02-t", { opacity: 1, y: 70 }, 11.45);
+      tl.to("#step02-t", { y: 0, duration: 0.19, ease: "power4.out" }, 11.45);
+      tl.set("#step02-s", { opacity: 1, y: 40 }, 11.649999999999999);
+      tl.to("#step02-s", { y: 0, duration: 0.14, ease: "power4.out" }, 11.649999999999999);
+      tl.to("#step02 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 14.32);
+      // step 3 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step03-k", { opacity: 1, y: 30 }, 14.75);
+      tl.to("#step03-k", { y: 0, duration: 0.12, ease: "power4.out" }, 14.75);
+      tl.set("#step03-t", { opacity: 1, y: 70 }, 14.85);
+      tl.to("#step03-t", { y: 0, duration: 0.19, ease: "power4.out" }, 14.85);
+      tl.set("#step03-s", { opacity: 1, y: 40 }, 15.049999999999999);
+      tl.to("#step03-s", { y: 0, duration: 0.14, ease: "power4.out" }, 15.049999999999999);
+      tl.to("#step03 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 17.72);
+      // step 4 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step04-k", { opacity: 1, y: 30 }, 18.15);
+      tl.to("#step04-k", { y: 0, duration: 0.12, ease: "power4.out" }, 18.15);
+      tl.set("#step04-t", { opacity: 1, y: 70 }, 18.25);
+      tl.to("#step04-t", { y: 0, duration: 0.19, ease: "power4.out" }, 18.25);
+      tl.set("#step04-s", { opacity: 1, y: 40 }, 18.45);
+      tl.to("#step04-s", { y: 0, duration: 0.14, ease: "power4.out" }, 18.45);
+      tl.to("#step04 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 21.12);
+      // step 5 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step05-k", { opacity: 1, y: 30 }, 21.549999999999997);
+      tl.to("#step05-k", { y: 0, duration: 0.12, ease: "power4.out" }, 21.549999999999997);
+      tl.set("#step05-t", { opacity: 1, y: 70 }, 21.65);
+      tl.to("#step05-t", { y: 0, duration: 0.19, ease: "power4.out" }, 21.65);
+      tl.set("#step05-s", { opacity: 1, y: 40 }, 21.849999999999998);
+      tl.to("#step05-s", { y: 0, duration: 0.14, ease: "power4.out" }, 21.849999999999998);
+      tl.to("#step05 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 24.52);
+      // step 6 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step06-k", { opacity: 1, y: 30 }, 24.95);
+      tl.to("#step06-k", { y: 0, duration: 0.12, ease: "power4.out" }, 24.95);
+      tl.set("#step06-t", { opacity: 1, y: 70 }, 25.05);
+      tl.to("#step06-t", { y: 0, duration: 0.19, ease: "power4.out" }, 25.05);
+      tl.set("#step06-s", { opacity: 1, y: 40 }, 25.25);
+      tl.to("#step06-s", { y: 0, duration: 0.14, ease: "power4.out" }, 25.25);
+      tl.to("#step06 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 27.92);
+      // step 7 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step07-k", { opacity: 1, y: 30 }, 28.349999999999998);
+      tl.to("#step07-k", { y: 0, duration: 0.12, ease: "power4.out" }, 28.349999999999998);
+      tl.set("#step07-t", { opacity: 1, y: 70 }, 28.45);
+      tl.to("#step07-t", { y: 0, duration: 0.19, ease: "power4.out" }, 28.45);
+      tl.set("#step07-s", { opacity: 1, y: 40 }, 28.65);
+      tl.to("#step07-s", { y: 0, duration: 0.14, ease: "power4.out" }, 28.65);
+      tl.to("#step07 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 31.32);
+      // step 8 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step08-k", { opacity: 1, y: 30 }, 31.75);
+      tl.to("#step08-k", { y: 0, duration: 0.12, ease: "power4.out" }, 31.75);
+      tl.set("#step08-t", { opacity: 1, y: 70 }, 31.85);
+      tl.to("#step08-t", { y: 0, duration: 0.19, ease: "power4.out" }, 31.85);
+      tl.set("#step08-s", { opacity: 1, y: 40 }, 32.050000000000004);
+      tl.to("#step08-s", { y: 0, duration: 0.14, ease: "power4.out" }, 32.050000000000004);
+      tl.to("#step08 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 34.72);
+      // step 9 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step09-k", { opacity: 1, y: 30 }, 35.15);
+      tl.to("#step09-k", { y: 0, duration: 0.12, ease: "power4.out" }, 35.15);
+      tl.set("#step09-t", { opacity: 1, y: 70 }, 35.25);
+      tl.to("#step09-t", { y: 0, duration: 0.19, ease: "power4.out" }, 35.25);
+      tl.set("#step09-s", { opacity: 1, y: 40 }, 35.45);
+      tl.to("#step09-s", { y: 0, duration: 0.14, ease: "power4.out" }, 35.45);
+      tl.to("#step09 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 38.12);
+      // step 10 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step10-k", { opacity: 1, y: 30 }, 38.55);
+      tl.to("#step10-k", { y: 0, duration: 0.12, ease: "power4.out" }, 38.55);
+      tl.set("#step10-t", { opacity: 1, y: 70 }, 38.65);
+      tl.to("#step10-t", { y: 0, duration: 0.19, ease: "power4.out" }, 38.65);
+      tl.set("#step10-s", { opacity: 1, y: 40 }, 38.85);
+      tl.to("#step10-s", { y: 0, duration: 0.14, ease: "power4.out" }, 38.85);
+      tl.to("#step10 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 41.52);
+      // step 11 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step11-k", { opacity: 1, y: 30 }, 41.949999999999996);
+      tl.to("#step11-k", { y: 0, duration: 0.12, ease: "power4.out" }, 41.949999999999996);
+      tl.set("#step11-t", { opacity: 1, y: 70 }, 42.05);
+      tl.to("#step11-t", { y: 0, duration: 0.19, ease: "power4.out" }, 42.05);
+      tl.set("#step11-s", { opacity: 1, y: 40 }, 42.25);
+      tl.to("#step11-s", { y: 0, duration: 0.14, ease: "power4.out" }, 42.25);
+      tl.to("#step11 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 44.92);
+      // step 12 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step12-k", { opacity: 1, y: 30 }, 45.35);
+      tl.to("#step12-k", { y: 0, duration: 0.12, ease: "power4.out" }, 45.35);
+      tl.set("#step12-t", { opacity: 1, y: 70 }, 45.45);
+      tl.to("#step12-t", { y: 0, duration: 0.19, ease: "power4.out" }, 45.45);
+      tl.set("#step12-s", { opacity: 1, y: 40 }, 45.650000000000006);
+      tl.to("#step12-s", { y: 0, duration: 0.14, ease: "power4.out" }, 45.650000000000006);
+      tl.to("#step12 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 48.32);
+      // step 13 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step13-k", { opacity: 1, y: 30 }, 48.75);
+      tl.to("#step13-k", { y: 0, duration: 0.12, ease: "power4.out" }, 48.75);
+      tl.set("#step13-t", { opacity: 1, y: 70 }, 48.85);
+      tl.to("#step13-t", { y: 0, duration: 0.19, ease: "power4.out" }, 48.85);
+      tl.set("#step13-s", { opacity: 1, y: 40 }, 49.050000000000004);
+      tl.to("#step13-s", { y: 0, duration: 0.14, ease: "power4.out" }, 49.050000000000004);
+      tl.to("#step13 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 51.72);
+      // step 14 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step14-k", { opacity: 1, y: 30 }, 52.15);
+      tl.to("#step14-k", { y: 0, duration: 0.12, ease: "power4.out" }, 52.15);
+      tl.set("#step14-t", { opacity: 1, y: 70 }, 52.25);
+      tl.to("#step14-t", { y: 0, duration: 0.19, ease: "power4.out" }, 52.25);
+      tl.set("#step14-s", { opacity: 1, y: 40 }, 52.45);
+      tl.to("#step14-s", { y: 0, duration: 0.14, ease: "power4.out" }, 52.45);
+      tl.to("#step14 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 55.12);
+      // step 15 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step15-k", { opacity: 1, y: 30 }, 55.55);
+      tl.to("#step15-k", { y: 0, duration: 0.12, ease: "power4.out" }, 55.55);
+      tl.set("#step15-t", { opacity: 1, y: 70 }, 55.65);
+      tl.to("#step15-t", { y: 0, duration: 0.19, ease: "power4.out" }, 55.65);
+      tl.set("#step15-s", { opacity: 1, y: 40 }, 55.85);
+      tl.to("#step15-s", { y: 0, duration: 0.14, ease: "power4.out" }, 55.85);
+      tl.to("#step15 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 58.52);
+      // step 16 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step16-k", { opacity: 1, y: 30 }, 58.949999999999996);
+      tl.to("#step16-k", { y: 0, duration: 0.12, ease: "power4.out" }, 58.949999999999996);
+      tl.set("#step16-t", { opacity: 1, y: 70 }, 59.05);
+      tl.to("#step16-t", { y: 0, duration: 0.19, ease: "power4.out" }, 59.05);
+      tl.set("#step16-s", { opacity: 1, y: 40 }, 59.25);
+      tl.to("#step16-s", { y: 0, duration: 0.14, ease: "power4.out" }, 59.25);
+      tl.to("#step16 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 61.92);
+      // step 17 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step17-k", { opacity: 1, y: 30 }, 62.35);
+      tl.to("#step17-k", { y: 0, duration: 0.12, ease: "power4.out" }, 62.35);
+      tl.set("#step17-t", { opacity: 1, y: 70 }, 62.45);
+      tl.to("#step17-t", { y: 0, duration: 0.19, ease: "power4.out" }, 62.45);
+      tl.set("#step17-s", { opacity: 1, y: 40 }, 62.650000000000006);
+      tl.to("#step17-s", { y: 0, duration: 0.14, ease: "power4.out" }, 62.650000000000006);
+      tl.to("#step17 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 65.32);
+      // step 18 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step18-k", { opacity: 1, y: 30 }, 65.75);
+      tl.to("#step18-k", { y: 0, duration: 0.12, ease: "power4.out" }, 65.75);
+      tl.set("#step18-t", { opacity: 1, y: 70 }, 65.85);
+      tl.to("#step18-t", { y: 0, duration: 0.19, ease: "power4.out" }, 65.85);
+      tl.set("#step18-s", { opacity: 1, y: 40 }, 66.05);
+      tl.to("#step18-s", { y: 0, duration: 0.14, ease: "power4.out" }, 66.05);
+      tl.to("#step18 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 68.72);
+      // step 19 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step19-k", { opacity: 1, y: 30 }, 69.15);
+      tl.to("#step19-k", { y: 0, duration: 0.12, ease: "power4.out" }, 69.15);
+      tl.set("#step19-t", { opacity: 1, y: 70 }, 69.25);
+      tl.to("#step19-t", { y: 0, duration: 0.19, ease: "power4.out" }, 69.25);
+      tl.set("#step19-s", { opacity: 1, y: 40 }, 69.45);
+      tl.to("#step19-s", { y: 0, duration: 0.14, ease: "power4.out" }, 69.45);
+      tl.to("#step19 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 72.12);
+      // step 20 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step20-k", { opacity: 1, y: 30 }, 72.55000000000001);
+      tl.to("#step20-k", { y: 0, duration: 0.12, ease: "power4.out" }, 72.55000000000001);
+      tl.set("#step20-t", { opacity: 1, y: 70 }, 72.65);
+      tl.to("#step20-t", { y: 0, duration: 0.19, ease: "power4.out" }, 72.65);
+      tl.set("#step20-s", { opacity: 1, y: 40 }, 72.85000000000001);
+      tl.to("#step20-s", { y: 0, duration: 0.14, ease: "power4.out" }, 72.85000000000001);
+      tl.to("#step20 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 75.52);
+      // step 21 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step21-k", { opacity: 1, y: 30 }, 75.95);
+      tl.to("#step21-k", { y: 0, duration: 0.12, ease: "power4.out" }, 75.95);
+      tl.set("#step21-t", { opacity: 1, y: 70 }, 76.05);
+      tl.to("#step21-t", { y: 0, duration: 0.19, ease: "power4.out" }, 76.05);
+      tl.set("#step21-s", { opacity: 1, y: 40 }, 76.25);
+      tl.to("#step21-s", { y: 0, duration: 0.14, ease: "power4.out" }, 76.25);
+      tl.to("#step21 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 78.92);
+      // step 22 — lower-third, waterfall-entry (kicker, title anchor, spec), hold, fade
+      tl.set("#step22-k", { opacity: 1, y: 30 }, 79.35000000000001);
+      tl.to("#step22-k", { y: 0, duration: 0.12, ease: "power4.out" }, 79.35000000000001);
+      tl.set("#step22-t", { opacity: 1, y: 70 }, 79.45);
+      tl.to("#step22-t", { y: 0, duration: 0.19, ease: "power4.out" }, 79.45);
+      tl.set("#step22-s", { opacity: 1, y: 40 }, 79.65);
+      tl.to("#step22-s", { y: 0, duration: 0.14, ease: "power4.out" }, 79.65);
+      tl.to("#step22 .card", { opacity: 0, duration: 0.22, ease: "power2.in" }, 82.32);
+      // build progress — stat-bars-and-fills progress fill (scaleX from the left), one notch per step
+      tl.fromTo("#fill", { scaleX: 0 }, { scaleX: 1 / 22, duration: 0.6, ease: "power2.out" }, 9.0);
+      tl.to("#fill", { scaleX: 2 / 22, duration: 0.6, ease: "power2.out" }, 12.399999999999999);
+      tl.to("#fill", { scaleX: 3 / 22, duration: 0.6, ease: "power2.out" }, 15.799999999999999);
+      tl.to("#fill", { scaleX: 4 / 22, duration: 0.6, ease: "power2.out" }, 19.2);
+      tl.to("#fill", { scaleX: 5 / 22, duration: 0.6, ease: "power2.out" }, 22.599999999999998);
+      tl.to("#fill", { scaleX: 6 / 22, duration: 0.6, ease: "power2.out" }, 26.0);
+      tl.to("#fill", { scaleX: 7 / 22, duration: 0.6, ease: "power2.out" }, 29.4);
+      tl.to("#fill", { scaleX: 8 / 22, duration: 0.6, ease: "power2.out" }, 32.800000000000004);
+      tl.to("#fill", { scaleX: 9 / 22, duration: 0.6, ease: "power2.out" }, 36.2);
+      tl.to("#fill", { scaleX: 10 / 22, duration: 0.6, ease: "power2.out" }, 39.6);
+      tl.to("#fill", { scaleX: 11 / 22, duration: 0.6, ease: "power2.out" }, 43.0);
+      tl.to("#fill", { scaleX: 12 / 22, duration: 0.6, ease: "power2.out" }, 46.400000000000006);
+      tl.to("#fill", { scaleX: 13 / 22, duration: 0.6, ease: "power2.out" }, 49.800000000000004);
+      tl.to("#fill", { scaleX: 14 / 22, duration: 0.6, ease: "power2.out" }, 53.2);
+      tl.to("#fill", { scaleX: 15 / 22, duration: 0.6, ease: "power2.out" }, 56.6);
+      tl.to("#fill", { scaleX: 16 / 22, duration: 0.6, ease: "power2.out" }, 60.0);
+      tl.to("#fill", { scaleX: 17 / 22, duration: 0.6, ease: "power2.out" }, 63.400000000000006);
+      tl.to("#fill", { scaleX: 18 / 22, duration: 0.6, ease: "power2.out" }, 66.8);
+      tl.to("#fill", { scaleX: 19 / 22, duration: 0.6, ease: "power2.out" }, 70.2);
+      tl.to("#fill", { scaleX: 20 / 22, duration: 0.6, ease: "power2.out" }, 73.60000000000001);
+      tl.to("#fill", { scaleX: 21 / 22, duration: 0.6, ease: "power2.out" }, 77.0);
+      tl.to("#fill", { scaleX: 22 / 22, duration: 0.6, ease: "power2.out" }, 80.4);
+      // finale — waterfall-entry, fade before the walk
+      tl.set("#fi-1", { opacity: 1, y: 80 }, 83.8);
+      tl.to("#fi-1", { y: 0, duration: 0.2, ease: "power4.out" }, 83.8);
+      tl.set("#fi-2", { opacity: 1, y: 45 }, 84.02);
+      tl.to("#fi-2", { y: 0, duration: 0.15, ease: "power4.out" }, 84.02);
+      tl.set("#fi-3", { opacity: 1, y: 45 }, 84.14999999999999);
+      tl.to("#fi-3", { y: 0, duration: 0.15, ease: "power4.out" }, 84.14999999999999);
+      tl.set("#fi-4", { opacity: 1, y: 45 }, 84.28);
+      tl.to("#fi-4", { y: 0, duration: 0.15, ease: "power4.out" }, 84.28);
+      tl.to("#finale .finale-wrap", { opacity: 0, duration: 0.3, ease: "power2.in" }, 86.25);
+      // walk title — waterfall-entry
+      tl.set("#wa-1", { opacity: 1, y: 70 }, 87.6);
+      tl.to("#wa-1", { y: 0, duration: 0.18, ease: "power4.out" }, 87.6);
+      tl.set("#wa-2", { opacity: 1, y: 40 }, 87.8);
+      tl.to("#wa-2", { y: 0, duration: 0.14, ease: "power4.out" }, 87.8);
+      // end card — titlecard-reveal: one restrained move (slide-up crossfade), then a still hold
+      tl.fromTo("#end-bg", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power2.out" }, 93.2);
+      tl.fromTo("#endcard .end-wrap", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 93.4);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

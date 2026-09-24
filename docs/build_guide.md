@@ -1,6 +1,8 @@
 # JX1 build guide — what to buy, machine and print, and in what order (v0.4, 2026-09-24)
 
-Nothing has been built yet. This guide turns the verified design into a build sequence. Labels as everywhere in the repo:
+Nothing has been built yet. This guide turns the verified design into a build sequence. The mechanical assembly itself
+(22 steps with pictures) is in the **[assembly guide](assembly_guide.md)**; the animated version is
+[media/jx1_assembly.mp4](../media/jx1_assembly.mp4). Labels as everywhere in the repo:
 VERIFIED / MEASURED / CALCULATED / ESTIMATED / ASSUMED / UNVERIFIED.
 
 ## 1. The short version
@@ -99,4 +101,5 @@ SolidWorks Educational licence and carry its "For Instructional Use Only" stamp 
 6. **Both legs + pelvis on a lifting gantry with a chest harness** (`docs/safety_architecture.md` §6): damping mode →
    PD stand (gains from `tools/sim/build_robot_description.py`, KP/KD tables) → weight shifts → slow walking with the
    gait validated in MuJoCo (`simulation/mujoco/walk_jx1.py`).
-7. **Phase 2 upper body**: torso frame, battery, Jetson and hub board, arms (all 6061 plate), head and camera.
+7. **Phase 2 upper body**: torso frame, battery, Jetson and hub board, arms (all 6061 plate), head and camera
+   ([assembly guide](assembly_guide.md) steps 13–22).

@@ -27,3 +27,11 @@ calculations/results/structural/loads.npz
 
 # MuJoCo instability warnings (large-impulse push trials)
 MUJOCO_LOG.TXT
+
+# assembly film: large regenerable video (tools/media/assembly_film.py -> footage, npx hyperframes render -> master);
+# the web copy media/jx1_assembly.mp4 is committed
+media/assembly/footage*.mp4
+media/assembly-film/assets/*.mp4
+media/assembly-film/renders/
+media/assembly-film/snapshots/
+media/assembly-film/node_modules/

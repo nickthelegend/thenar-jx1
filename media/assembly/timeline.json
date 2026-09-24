@@ -1,0 +1,254 @@
+{
+ "fps": 30,
+ "duration": 95.6,
+ "segments": [
+  {
+   "kind": "intro",
+   "start": 0.0,
+   "end": 5.0,
+   "title": "JX1",
+   "subtitle": "a 1.23 m humanoid you can build in India"
+  },
+  {
+   "kind": "explode",
+   "start": 5.0,
+   "end": 7.8,
+   "title": "87 parts",
+   "subtitle": "let's put it together"
+  },
+  {
+   "kind": "step",
+   "step": 1,
+   "of": 22,
+   "start": 7.8,
+   "end": 11.2,
+   "title": "Pelvis torsion box",
+   "subtitle": "6061-T6 laser-cut plates \u00b7 top 6 mm, walls 4 mm \u00b7 FEA SF 2.90",
+   "parts": 1
+  },
+  {
+   "kind": "step",
+   "step": 2,
+   "of": 22,
+   "start": 11.2,
+   "end": 14.6,
+   "title": "Hip-yaw actuators",
+   "subtitle": "2 \u00d7 RobStride RS06 \u00b7 36 N\u00b7m peak \u00b7 vertical axis",
+   "parts": 4
+  },
+  {
+   "kind": "step",
+   "step": 3,
+   "of": 22,
+   "start": 14.6,
+   "end": 18.0,
+   "title": "Hip-yaw brackets",
+   "subtitle": "7075-T6, CNC from 25 mm plate \u00b7 FEA SF 1.77",
+   "parts": 2
+  },
+  {
+   "kind": "step",
+   "step": 4,
+   "of": 22,
+   "start": 18.0,
+   "end": 21.4,
+   "title": "Hip-roll actuators",
+   "subtitle": "2 \u00d7 RobStride RS03 \u00b7 60 N\u00b7m \u00b7 axis pointing forward",
+   "parts": 4
+  },
+  {
+   "kind": "step",
+   "step": 5,
+   "of": 22,
+   "start": 21.4,
+   "end": 24.8,
+   "title": "Hip-roll brackets",
+   "subtitle": "6061-T6 8 + 10 mm plates \u00b7 FEA SF 2.76",
+   "parts": 2
+  },
+  {
+   "kind": "step",
+   "step": 6,
+   "of": 22,
+   "start": 24.8,
+   "end": 28.2,
+   "title": "Hip-pitch actuators",
+   "subtitle": "2 \u00d7 RobStride RS04 \u00b7 120 N\u00b7m",
+   "parts": 4
+  },
+  {
+   "kind": "step",
+   "step": 7,
+   "of": 22,
+   "start": 28.2,
+   "end": 31.6,
+   "title": "Thighs",
+   "subtitle": "6061-T6 10 mm plate with run-out flanges \u00b7 0.27 m",
+   "parts": 2
+  },
+  {
+   "kind": "step",
+   "step": 8,
+   "of": 22,
+   "start": 31.6,
+   "end": 35.0,
+   "title": "Knee actuators",
+   "subtitle": "2 \u00d7 RobStride RS04 \u00b7 120 N\u00b7m \u00b7 0\u2013120\u00b0 knee",
+   "parts": 4
+  },
+  {
+   "kind": "step",
+   "step": 9,
+   "of": 22,
+   "start": 35.0,
+   "end": 38.4,
+   "title": "Shins",
+   "subtitle": "6061-T6 14 mm knee plate + web \u00b7 0.30 m",
+   "parts": 2
+  },
+  {
+   "kind": "step",
+   "step": 10,
+   "of": 22,
+   "start": 38.4,
+   "end": 41.8,
+   "title": "Ankle motors + cranks",
+   "subtitle": "4 \u00d7 RobStride RS06 \u00b7 50 mm cranks \u00b7 parallel ankle",
+   "parts": 12
+  },
+  {
+   "kind": "step",
+   "step": 11,
+   "of": 22,
+   "start": 41.8,
+   "end": 45.2,
+   "title": "Ankle cross + feet",
+   "subtitle": "steel U-joint on needle bearings \u00b7 6061-T6 feet, 210 \u00d7 95 mm",
+   "parts": 4
+  },
+  {
+   "kind": "step",
+   "step": 12,
+   "of": 22,
+   "start": 45.2,
+   "end": 48.6,
+   "title": "Push-rods",
+   "subtitle": "\u00d88 steel rods + M5 rod ends \u00b7 pitch \u221255\u2026+30\u00b0, roll \u00b120\u00b0",
+   "parts": 4
+  },
+  {
+   "kind": "step",
+   "step": 13,
+   "of": 22,
+   "start": 48.6,
+   "end": 52.0,
+   "title": "Waist actuator",
+   "subtitle": "RobStride RS06 \u00b7 waist yaw",
+   "parts": 2
+  },
+  {
+   "kind": "step",
+   "step": 14,
+   "of": 22,
+   "start": 52.0,
+   "end": 55.4,
+   "title": "Torso frame",
+   "subtitle": "6061-T6 plates + 4 \u00d7 2020 extrusion \u00b7 FEA SF 4.44",
+   "parts": 1
+  },
+  {
+   "kind": "step",
+   "step": 15,
+   "of": 22,
+   "start": 55.4,
+   "end": 58.8,
+   "title": "Battery + electronics",
+   "subtitle": "13S2P 468 Wh \u00b7 Jetson Nano \u00b7 2 \u00d7 Teensy 4.1 CAN hubs \u00b7 DC-DC \u00b7 E-stop",
+   "parts": 6
+  },
+  {
+   "kind": "step",
+   "step": 16,
+   "of": 22,
+   "start": 58.8,
+   "end": 62.2,
+   "title": "Shoulder-pitch actuators",
+   "subtitle": "2 \u00d7 RobStride RS02 \u00b7 17 N\u00b7m",
+   "parts": 4
+  },
+  {
+   "kind": "step",
+   "step": 17,
+   "of": 22,
+   "start": 62.2,
+   "end": 65.6,
+   "title": "Shoulder brackets + roll actuators",
+   "subtitle": "6061-T6 U-brackets \u00b7 2 \u00d7 RobStride RS02",
+   "parts": 6
+  },
+  {
+   "kind": "step",
+   "step": 18,
+   "of": 22,
+   "start": 65.6,
+   "end": 69.0,
+   "title": "Shoulder-yaw actuators",
+   "subtitle": "6061-T6 L-brackets \u00b7 2 \u00d7 RobStride RS00 \u00b7 14 N\u00b7m",
+   "parts": 6
+  },
+  {
+   "kind": "step",
+   "step": 19,
+   "of": 22,
+   "start": 69.0,
+   "end": 72.4,
+   "title": "Upper arms + elbows",
+   "subtitle": "6061-T6 10 / 8 mm plates + gussets \u00b7 2 \u00d7 RobStride RS00",
+   "parts": 6
+  },
+  {
+   "kind": "step",
+   "step": 20,
+   "of": 22,
+   "start": 72.4,
+   "end": 75.8,
+   "title": "Forearms + grippers",
+   "subtitle": "6061-T6 6 mm \u00b7 PA-CF grippers",
+   "parts": 4
+  },
+  {
+   "kind": "step",
+   "step": 21,
+   "of": 22,
+   "start": 75.8,
+   "end": 79.2,
+   "title": "Neck",
+   "subtitle": "2 \u00d7 Waveshare ST3215 bus servos \u00b7 yaw + pitch",
+   "parts": 5
+  },
+  {
+   "kind": "step",
+   "step": 22,
+   "of": 22,
+   "start": 79.2,
+   "end": 82.6,
+   "title": "Head + stereo camera",
+   "subtitle": "PETG-CF shell \u00b7 IMX219-83 stereo camera",
+   "parts": 2
+  },
+  {
+   "kind": "finale",
+   "start": 82.6,
+   "end": 86.6,
+   "title": "JX1 assembled",
+   "subtitle": "1.23 m \u00b7 33.6 kg \u00b7 23 DOF"
+  },
+  {
+   "kind": "walk",
+   "start": 86.6,
+   "end": 95.6,
+   "title": "and it walks",
+   "subtitle": "MuJoCo simulation of the CAD model \u00b7 0.52 m/s"
+  }
+ ]
+}
