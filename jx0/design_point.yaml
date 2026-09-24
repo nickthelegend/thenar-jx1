@@ -1,4 +1,4 @@
-# JX0 design point — the small (~46 cm, ~1.8 kg) 3D-printed MVP humanoid. Same schema as calculations/design_point.yaml
+# JX0 design point — the small (~50 cm, ~2.0 kg) 3D-printed MVP humanoid. Same schema as calculations/design_point.yaml
 # (JX1), so the JX1 analysis pipeline (jx1calc: parametric model, ZMP preview-control gait, whole-body IK, inverse
 # dynamics) sizes it unchanged. Every value carries an evidence label: VERIFIED / MEASURED / CALCULATED / ESTIMATED /
 # ASSUMED / UNVERIFIED. Masses are ASSUMED until the CAD mass properties replace them.
@@ -42,8 +42,8 @@ joint_ranges_deg:
   ankle_pitch: {min: -60,  max: 45,  label: ASSUMED, note: "- = dorsiflexion (toes up)"}
   ankle_roll:  {min: -25,  max: 25,  label: ASSUMED}
 
-# One actuator class for every leg joint: the serial bus servo (Waveshare ST3215 / Feetech STS3215, 7.4 V).
-# Body 45.2 x 24.7 x 35 mm, 55 g (ASSUMED, to be confirmed from the datasheet); the cylinder model below only feeds the
+# One actuator class for every leg joint: the serial bus servo (Feetech ST3215-C018 / Waveshare ST3215, 12 V).
+# Case 45.2 x 24.7 x 32 mm, 89 g (Waveshare drawing and product page); the cylinder model below only feeds the
 # inertia estimate. Reflected rotor inertia ASSUMED: ~0.4 g·cm² rotor x (1:345 gearbox)^2 ≈ 0.005 kg·m² — hobby servos are
 # NOT back-drivable, so this is large relative to the links; the sizing report shows its effect.
 actuator_classes:
@@ -89,7 +89,7 @@ layout:
 # Mass budget per link (printed structure + mounted servos, via `carries`). COM in the link frame (m).
 mass_budget:
   pelvis:
-    structure_kg: {value: 0.033, label: ESTIMATED, note: "CAD JX0_Pelvis printed 23.3 g + screws"}
+    structure_kg: {value: 0.033, label: ESTIMATED, note: "CAD JX0_Pelvis printed 21.2 g + screws and inserts"}
     carries: [hip_yaw, hip_yaw]
     com_m: [0.0, 0.0, 0.025]
   upper_body:

@@ -230,8 +230,8 @@ class Robot:
         return f"walked {steps} steps {direction}"
 
     def turn(self, degrees: int) -> str:
-        """Repeat the 2-step turn block until the IMU yaw says we are there. A block is planned as 20 deg but the feet
-        slip: it turns ~10 deg in the simulation, so the loop closes on the measured yaw (gyro-integrated on the robot)."""
+        """Repeat the 2-step turn block (~10 deg: the first step of a block only shifts weight) until the IMU yaw says we
+        are there. Closing the loop on the measured yaw (gyro-integrated on the robot) also absorbs foot slip."""
         g = "turn_left_2" if degrees > 0 else "turn_right_2"
         yaw0 = self.io.attitude()[2]
         turned = 0.0
