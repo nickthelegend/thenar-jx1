@@ -89,6 +89,8 @@ class JX1Env:
         rr = cfg["randomization"]
         self.act_delay_range = rr.get("action_delay_substeps", [0, 0]) if randomize else [0, 0]
         self.obs_delay_range = rr.get("obs_delay_substeps", [0, 0]) if randomize else [0, 0]
+        if max(self.act_delay_range[1], self.obs_delay_range[1]) >= self.decimation:
+            raise ValueError(f"latency randomisation is limited to decimation - 1 = {self.decimation - 1} substeps")
         self.hub_interp = bool(cfg["model"].get("hub_interpolation", False))
         self.act_delay = np.zeros(N, dtype=np.int64)          # physics substeps before new targets reach the motors
         self.obs_delay = np.zeros(N, dtype=np.int64)          # substeps by which the actor's sensor data is old

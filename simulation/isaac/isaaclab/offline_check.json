@@ -212,7 +212,7 @@
    "task": "Isaac-Velocity-Flat-JX1-v0",
    "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, hub ramp, delay, reset)",
    "ok": true,
-   "detail": "max |diff| 1.35e-07 rad over 4 steps x 4 substeps"
+   "detail": "max |diff| 1.37e-07 rad over 4 steps x 4 substeps"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-v0",
@@ -428,7 +428,7 @@
    "task": "Isaac-Velocity-Rough-JX1-v0",
    "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, hub ramp, delay, reset)",
    "ok": true,
-   "detail": "max |diff| 1.37e-07 rad over 4 steps x 4 substeps"
+   "detail": "max |diff| 1.35e-07 rad over 4 steps x 4 substeps"
   },
   {
    "task": "Isaac-Velocity-Rough-JX1-v0",
@@ -488,13 +488,13 @@
    "task": "export",
    "check": "export_offline ONNX == rsl_rl 3 ActorCritic.act_inference (normaliser in the policy)",
    "ok": true,
-   "detail": "max |diff| 9.69e-08; rsl_rl>=3 (policy normaliser)"
+   "detail": "max |diff| 8.94e-08; rsl_rl>=3 (policy normaliser)"
   },
   {
    "task": "export",
    "check": "export_offline ONNX == hand-computed rsl_rl 2.x actor (runner normaliser)",
    "ok": true,
-   "detail": "max |diff| 3.52e-06"
+   "detail": "max |diff| 4.29e-06"
   },
   {
    "task": "export",

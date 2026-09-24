@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections import deque
 from pathlib import Path
 
 import mujoco
@@ -79,12 +80,14 @@ def load_cad_model(io, terrain_cfg=None):
 class CadSim:
     """The full CAD model driven by an exported policy exactly as on the robot: 50 Hz targets, hub ramp, PD in the drives."""
 
-    def __init__(self, policy_dir: Path, terrain=None, hub_interp=True):
+    def __init__(self, policy_dir: Path, terrain=None, hub_interp=True, obs_delay_s=0.0, act_delay_s=0.0):
         self.rn = Runner(policy_dir)
         self.io = self.rn.io
         self.m, self.act_of = load_cad_model(self.io, terrain)
         m = self.m
         self.hub_interp = hub_interp
+        # latency sensitivity: the policy sees the state obs_delay_s old; each drive target lands act_delay_s late
+        self.n_obs, self.n_act = int(round(obs_delay_s / m.opt.timestep)), int(round(act_delay_s / m.opt.timestep))
         self.dt_pol = self.io["control"]["policy_dt_s"]
         self.dec = int(round(self.dt_pol / m.opt.timestep))
         jid = {j: mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, j) for j in self.act_of}
@@ -117,13 +120,20 @@ class CadSim:
         vel_err, tilt_max, peak = [], 0.0, np.zeros(m.nu)
         vmax = np.zeros(len(rn.joints))
         slip, fell = [], False
+        snap = lambda: (d.qpos[3:7].copy(), d.qvel[3:6].copy(), d.qpos[self.pol_q].copy(), d.qvel[self.pol_d].copy())  # noqa: E731
+        obs_hist = deque([snap()] * (self.n_obs + 1), maxlen=self.n_obs + 1)
+        ctrl_hist = deque([d.ctrl[self.pol_a].copy()] * (self.n_act + 1), maxlen=self.n_act + 1)
+        last_tgt = d.ctrl[self.pol_a].copy()
         for k in range(int(T / self.dt_pol)):
-            tgt = rn.targets(d.qpos[3:7].copy(), d.qvel[3:6].copy(), d.qpos[self.pol_q], d.qvel[self.pol_d], cmd, d.time)
-            prev = d.ctrl[self.pol_a].copy()
+            quat, gyro, q, dq = obs_hist[0]
+            tgt = rn.targets(quat, gyro, q, dq, cmd, d.time)
+            prev, last_tgt = last_tgt, tgt
             for i in range(dec):
                 # CAN-hub first-order hold: the new target is reached at the end of the policy period (firmware alpha ramp)
-                d.ctrl[self.pol_a] = prev + (i + 1) / dec * (tgt - prev) if self.hub_interp else tgt
+                ctrl_hist.append(prev + (i + 1) / dec * (tgt - prev) if self.hub_interp else tgt)
+                d.ctrl[self.pol_a] = ctrl_hist[0]
                 mujoco.mj_step(m, d)
+                obs_hist.append(snap())
                 peak = np.maximum(peak, np.abs(d.actuator_force))
                 vmax = np.maximum(vmax, np.abs(d.qvel[self.pol_d]))
             v_b = policy_io.quat_rotate_inverse(d.qpos[3:7], d.qvel[0:3])

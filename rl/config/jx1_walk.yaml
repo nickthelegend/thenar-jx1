@@ -125,8 +125,11 @@ randomization:
   push_velocity_m_s: 0.5
   init_joint_noise: 0.1
   init_base_vel: 0.2
-  action_delay_substeps: [0, 1]                   # 0-5 ms transport latency (host -> hub -> CAN) on top of the hub ramp
-  obs_delay_substeps: [0, 1]                      # 0-5 ms sensing latency (IMU / joint feedback)
+  # latency (substeps of 5 ms, at most decimation - 1). The hardware-in-the-loop chain (policy -> hw_node -> hub
+  # protocol -> hub twin) tracked 0.3 rad/s turns at 62 % vs 85 % in pure MuJoCo; sim2sim.py with added delays
+  # reproduces that at ~30 ms obs + 10 ms actuation, so training now covers 0-15 ms sensing and 0-10 ms actuation
+  action_delay_substeps: [0, 2]                   # 0-10 ms transport latency (host -> hub -> CAN) on top of the hub ramp
+  obs_delay_substeps: [0, 3]                      # 0-15 ms sensing latency (IMU / joint feedback / ROS hops)
 
 ppo:
   num_envs: 1024
