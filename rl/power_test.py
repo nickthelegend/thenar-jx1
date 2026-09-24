@@ -87,6 +87,7 @@ def main():
         moving = name != "stand"
         total = legs + standby_w + non_act_w + pb.UPPER_BODY_W["walk" if moving else "stand"]
         out["scenarios"][name] = {"command": list(cmd), "fell": r["fell"], "achieved": r["mean_velocity_b"],
+                                  "foot_liftoffs_per_s": r["foot_liftoffs_per_s"],
                                   "legs_mean_W": round(float(legs.mean()), 1), "mean_W": round(float(total.mean()), 1),
                                   "peak_W": round(float(total.max()), 1), "mean_current_A_at_nominal": round(float(total.mean() / pb.V_NOM), 2),
                                   "peak_current_A_at_min_V": round(float(total.max() / pb.V_MIN), 1)}

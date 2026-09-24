@@ -30,12 +30,14 @@ def vec(v, nd=2):
 
 
 def sim2sim_table(s):
-    rows = ["| scenario | command (vx, vy, wz) | result | mean velocity | RMSE | max tilt | peak torque / limit | peak speed / limit |",
-            "|---|---|---|---|---|---|---|---|"]
+    rows = ["| scenario | command (vx, vy, wz) | result | mean velocity | RMSE | max tilt | peak torque / limit | peak speed / limit | "
+            "foot lift-offs |", "|---|---|---|---|---|---|---|---|---|"]
     for name, r in s["scenarios"].items():
+        lift = f"{r['foot_liftoffs_per_s']:.2f}/s" if "foot_liftoffs_per_s" in r else "-"
         rows.append(f"| {name} | {vec(r['command'], 1)} | {'**fell** at ' + str(r['time_survived_s']) + ' s' if r['fell'] else 'upright'} | "
                     f"{vec(r['mean_velocity_b'])} | {vec(r['velocity_rmse'])} | {r['max_tilt_deg']:.1f}° | "
-                    f"{pct(r['peak_torque_fraction'])} {r['peak_torque_joint']} | {pct(r.get('peak_speed_fraction'))} {r.get('peak_speed_joint', '')} |")
+                    f"{pct(r['peak_torque_fraction'])} {r['peak_torque_joint']} | {pct(r.get('peak_speed_fraction'))} {r.get('peak_speed_joint', '')} | "
+                    f"{lift} |")
     return "\n".join(rows)
 
 
@@ -105,6 +107,21 @@ def main():
                 "| direction | largest survived impulse | CoM velocity change |", "|---|---|---|"]
         out += [f"| {d} | {v:.1f} N·s | {push['equivalent_com_velocity_change_m_s'][d]:.2f} m/s |" for d, v in push["max_survived_impulse_Ns"].items()]
         out += [""]
+        push_st = load(pdir / "push_test_stand.json")
+        if push_st:
+            out += ["Standing (zero command), largest survived impulse: " + ", ".join(
+                f"{d} {v:.1f} N·s" for d, v in push_st["max_survived_impulse_Ns"].items()) + ".", ""]
+    pw = load(pdir / "power.json")
+    if pw:
+        out += ["## Power (CAD model; electrical model of calculations/run_power_budget.py, no regeneration)", "",
+                "| scenario | command | mean | peak | mean current (nominal V) | runtime, 13S2P 50S (80 %) | foot lift-offs |",
+                "|---|---|---|---|---|---|---|"]
+        for name, r in pw["scenarios"].items():
+            lift = f"{r['foot_liftoffs_per_s']:.2f}/s" if "foot_liftoffs_per_s" in r else "-"
+            out.append(f"| {name} | {vec(r['command'], 1)} | {r['mean_W']:.0f} W | {r['peak_W']:.0f} W | {r['mean_current_A_at_nominal']:.1f} A | "
+                       f"{pw['pack_13S2P_50S']['runtime_h'][name]:.2f} h | {lift} |")
+        out += ["", "Worst actuator RMS current vs rated: " + ", ".join(
+            f"{j} {t['utilisation']:.0%} ({t['scenario']})" for j, t in pw["thermal"].items()), ""]
     paths = [(f, load(pdir / f)) for f in ("ros2_check.json", "ros2_launch_check.json", "ros2_control_check.json")]
     paths = [(f, r) for f, r in paths if r and r.get("phases")]
     if paths:

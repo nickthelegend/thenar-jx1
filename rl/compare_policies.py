@@ -39,11 +39,23 @@ def row_values(b: Path) -> dict:
             g = lambda k: f"{sm[k]['achieved']:+.2f}" if sm.get(k) else "-"  # noqa: E731
             out[key] = (f"{sm['tracked']}/{sm['commands']} tracked, {sm['falls']} falls; fwd {g('forward')}, back {g('backward')}, "
                         f"yaw {g('yaw_left')}/{g('yaw_right')}")
+    st = (load(b / "sim2sim.json") or {}).get("scenarios", {}).get("stand", {})
+    pw = (load(b / "power.json") or {}).get("scenarios", {})
+    if "foot_liftoffs_per_s" in st or pw:
+        out["stand (zero command)"] = ", ".join(x for x in (
+            f"{st['foot_liftoffs_per_s']:.2f} foot lift-offs/s, drift {st['base_travel_m']:.2f} m" if "foot_liftoffs_per_s" in st else "",
+            f"{pw['stand']['mean_W']:.0f} W" if "stand" in pw else "") if x)
+    if pw.get("walk_0.8"):
+        out["power 0.5 / 0.8 m/s"] = f"{pw['walk_0.5']['mean_W']:.0f} W / {pw['walk_0.8']['mean_W']:.0f} W"
     p = load(b / "push_test.json")
     if p:
         v = p["max_survived_impulse_Ns"]
         out["push (N s)"] = f"{min(v.values()):.1f}-{max(v.values()):.1f} (fwd {v['forward']:.1f}, back {v['backward']:.1f}, " \
                             f"left {v['left']:.1f}, right {v['right']:.1f})"
+    ps = load(b / "push_test_stand.json")
+    if ps:
+        v = ps["max_survived_impulse_Ns"]
+        out["push standing (N s)"] = f"{min(v.values()):.1f}-{max(v.values()):.1f}"
     h = load(b / "hw_loop_check.json")
     if h and h.get("phases"):
         ph = h["phases"]
