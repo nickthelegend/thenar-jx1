@@ -10,9 +10,9 @@
     "sw_volume_m3": 2.0851710188248874e-05,
     "mesh_volume_m3": 2.0865386498219267e-05,
     "sw_com_m": [
-      -0.01327243814900541,
-      6.148799968358213e-19,
-      0.0031852305955482013
+      -0.013272438149005411,
+      6.143197466100161e-19,
+      0.003185230595548201
     ],
     "mesh_bounds_mm": [
       [
@@ -30,17 +30,17 @@
   "JX1_Thigh_L": {
     "cad": "CAD/Thigh/JX1_Thigh_L.SLDPRT",
     "stl": "simulation/meshes/source_mm/JX1_Thigh_L.STL",
-    "triangles": 2870,
+    "triangles": 2894,
     "tessellation": [
       "display"
     ],
     "watertight": true,
-    "sw_volume_m3": 0.00025125229153957903,
-    "mesh_volume_m3": 0.0002514722338236349,
+    "sw_volume_m3": 0.00032118428625552386,
+    "mesh_volume_m3": 0.0003214520150388501,
     "sw_com_m": [
-      -8.889024017284856e-19,
-      0.038157534479491634,
-      -0.152949736432611
+      0.0,
+      0.03883402888493247,
+      -0.14896412939151807
     ],
     "mesh_bounds_mm": [
       [
@@ -50,7 +50,7 @@
       ],
       [
         54.924,
-        44.0,
+        46.0,
         40.0
       ]
     ]
@@ -66,7 +66,7 @@
     "sw_volume_m3": 0.00044287218687396956,
     "mesh_volume_m3": 0.00044184231430615745,
     "sw_com_m": [
-      -1.2423679861740831e-18,
+      -1.2426306879609688e-18,
       0.0004682163525861912,
       -0.025185684654954084
     ],
@@ -94,7 +94,7 @@
     "sw_volume_m3": 2.442060500600261e-05,
     "mesh_volume_m3": 2.436484767906451e-05,
     "sw_com_m": [
-      9.203163905604968e-19,
+      9.314866212207646e-19,
       -4.234030096458021e-20,
       0.0034981140619452173
     ],
@@ -122,7 +122,7 @@
     "sw_volume_m3": 0.00026916418183527715,
     "mesh_volume_m3": 0.0002685267302724506,
     "sw_com_m": [
-      7.557253210996361e-19,
+      7.549570348004405e-19,
       0.000538754199554231,
       -0.022235223984588152
     ],
@@ -150,8 +150,8 @@
     "sw_volume_m3": 1.3983621600209867e-05,
     "mesh_volume_m3": 1.3950420332532864e-05,
     "sw_com_m": [
-      8.632718625813341e-19,
-      -5.915353233962032e-20,
+      8.614233146957209e-19,
+      -5.175934079716778e-20,
       0.0029544918419500688
     ],
     "mesh_bounds_mm": [
@@ -178,7 +178,7 @@
     "sw_volume_m3": 0.00019679896240938895,
     "mesh_volume_m3": 0.0001963341800646503,
     "sw_com_m": [
-      -1.5169261027371419e-18,
+      -1.5190276905768996e-18,
       0.00046033779289721436,
       -0.020477910443188984
     ],
@@ -206,8 +206,8 @@
     "sw_volume_m3": 1.1083931580946489e-05,
     "mesh_volume_m3": 1.1057771225511208e-05,
     "sw_com_m": [
-      -2.775258833444456e-19,
-      -6.063590728534106e-20,
+      -2.7985803362465104e-19,
+      -6.00392998133293e-20,
       0.0029464127546501326
     ],
     "mesh_bounds_mm": [
@@ -234,7 +234,7 @@
     "sw_volume_m3": 0.0005673376683923221,
     "mesh_volume_m3": 0.0005660256390379434,
     "sw_com_m": [
-      -1.7332752027370007e-19,
+      -1.7204447671851118e-19,
       0.000495096099405174,
       -0.025154223738495567
     ],
@@ -262,8 +262,8 @@
     "sw_volume_m3": 3.193215304073579e-05,
     "mesh_volume_m3": 3.185984865721456e-05,
     "sw_com_m": [
-      3.7561259545255295e-19,
-      3.120520404903974e-20,
+      3.7178695978125117e-19,
+      2.5904316927762273e-20,
       0.003491916822768271
     ],
     "mesh_bounds_mm": [
@@ -290,7 +290,7 @@
     "sw_volume_m3": 0.00011805500711677496,
     "mesh_volume_m3": 0.00011775053576965625,
     "sw_com_m": [
-      2.865756216502869e-20,
+      2.8026955662619746e-20,
       0.00044020157441179367,
       -0.023351216490743756
     ],
@@ -315,12 +315,12 @@
       "display"
     ],
     "watertight": true,
-    "sw_volume_m3": 7.040701835776425e-06,
+    "sw_volume_m3": 7.040701835776426e-06,
     "mesh_volume_m3": 7.024562631973313e-06,
     "sw_com_m": [
-      -9.61912806882989e-19,
-      -4.917997712318752e-20,
-      0.0029497741089854423
+      -9.76598498591126e-19,
+      -4.40570751244117e-20,
+      0.0029497741089854427
     ],
     "mesh_bounds_mm": [
       [
@@ -343,12 +343,12 @@
       "display"
     ],
     "watertight": true,
-    "sw_volume_m3": 2.4530083353485773e-05,
+    "sw_volume_m3": 2.453008335348577e-05,
     "mesh_volume_m3": 2.4548078122760932e-05,
     "sw_com_m": [
-      8.742109798341615e-10,
-      9.297028882644272e-10,
-      1.8915544698683602e-21
+      8.742109798004406e-10,
+      9.297028883150089e-10,
+      2.4310915603107277e-21
     ],
     "mesh_bounds_mm": [
       [
@@ -427,12 +427,12 @@
       "display"
     ],
     "watertight": true,
-    "sw_volume_m3": 0.0002194855403287937,
-    "mesh_volume_m3": 0.00021955261053568042,
+    "sw_volume_m3": 0.00018391398271917124,
+    "mesh_volume_m3": 0.0001839694700996698,
     "sw_com_m": [
-      0.02061039311225949,
-      8.441943689516512e-19,
-      -0.04097745018658303
+      0.01889302033229417,
+      1.4392478054327768e-18,
+      -0.04097308873469563
     ],
     "mesh_bounds_mm": [
       [
@@ -455,12 +455,12 @@
       "display"
     ],
     "watertight": true,
-    "sw_volume_m3": 0.0002194855403287938,
-    "mesh_volume_m3": 0.00021955261053568042,
+    "sw_volume_m3": 0.00018391398271917135,
+    "mesh_volume_m3": 0.0001839694700996698,
     "sw_com_m": [
-      0.020610393112259495,
-      1.6883887379033017e-18,
-      -0.04097745018658304
+      0.01889302033229418,
+      1.6371443786797827e-18,
+      -0.04097308873469563
     ],
     "mesh_bounds_mm": [
       [
@@ -478,17 +478,17 @@
   "JX1_HipRollBracket_L": {
     "cad": "CAD/Hip/JX1_HipRollBracket_L.SLDPRT",
     "stl": "simulation/meshes/source_mm/JX1_HipRollBracket_L.STL",
-    "triangles": 2312,
+    "triangles": 2300,
     "tessellation": [
       "display"
     ],
     "watertight": true,
-    "sw_volume_m3": 0.00014526325603046768,
-    "mesh_volume_m3": 0.00014536962020648644,
+    "sw_volume_m3": 0.00016744526500246995,
+    "mesh_volume_m3": 0.00016756811765668533,
     "sw_com_m": [
-      -0.028759002573246536,
-      -0.016856794541343853,
-      3.5276531965462845e-18
+      -0.025122699173267222,
+      -0.018933656448592465,
+      0.0007106799944342697
     ],
     "mesh_bounds_mm": [
       [
@@ -506,17 +506,17 @@
   "JX1_HipRollBracket_R": {
     "cad": "CAD/Hip/JX1_HipRollBracket_R.SLDPRT",
     "stl": "simulation/meshes/source_mm/JX1_HipRollBracket_R.STL",
-    "triangles": 2312,
+    "triangles": 2300,
     "tessellation": [
       "display"
     ],
     "watertight": true,
-    "sw_volume_m3": 0.00014526325603046757,
-    "mesh_volume_m3": 0.0001453696202064864,
+    "sw_volume_m3": 0.00016744526500246993,
+    "mesh_volume_m3": 0.0001675681176566853,
     "sw_com_m": [
-      -0.02875900257324658,
-      0.016856794541343863,
-      -2.8669331672775685e-19
+      -0.025122699173267236,
+      0.018933656448592462,
+      0.0007106799944342738
     ],
     "mesh_bounds_mm": [
       [
@@ -534,21 +534,21 @@
   "JX1_HipYawBracket_L": {
     "cad": "CAD/Hip/JX1_HipYawBracket_L.SLDPRT",
     "stl": "simulation/meshes/source_mm/JX1_HipYawBracket_L.STL",
-    "triangles": 2094,
+    "triangles": 2120,
     "tessellation": [
       "display"
     ],
     "watertight": true,
-    "sw_volume_m3": 0.0002514014959963066,
-    "mesh_volume_m3": 0.00025149911548405176,
+    "sw_volume_m3": 0.0003053140502840176,
+    "mesh_volume_m3": 0.0003054415551280257,
     "sw_com_m": [
-      -0.08597074030580816,
-      3.741045186487712e-18,
-      0.05262569564968376
+      -0.09548250299347881,
+      1.2305215161396756e-18,
+      0.04690989994456693
     ],
     "mesh_bounds_mm": [
       [
-        -140.0,
+        -144.0,
         -50.0,
         -50.0
       ],
@@ -562,21 +562,21 @@
   "JX1_HipYawBracket_R": {
     "cad": "CAD/Hip/JX1_HipYawBracket_R.SLDPRT",
     "stl": "simulation/meshes/source_mm/JX1_HipYawBracket_R.STL",
-    "triangles": 2088,
+    "triangles": 2114,
     "tessellation": [
       "display"
     ],
     "watertight": true,
-    "sw_volume_m3": 0.00025140149599630685,
-    "mesh_volume_m3": 0.00025149911548405176,
+    "sw_volume_m3": 0.00030531405028401767,
+    "mesh_volume_m3": 0.00030544155512802535,
     "sw_com_m": [
-      -0.08597074030580822,
-      -4.0766534617926734e-18,
-      0.052625695649683696
+      -0.09548250299347878,
+      -3.932733979220258e-18,
+      0.04690989994456691
     ],
     "mesh_bounds_mm": [
       [
-        -140.0,
+        -144.0,
         -50.0,
         -50.0
       ],
@@ -590,17 +590,17 @@
   "JX1_Pelvis": {
     "cad": "CAD/Pelvis/JX1_Pelvis.SLDPRT",
     "stl": "simulation/meshes/source_mm/JX1_Pelvis.STL",
-    "triangles": 3196,
+    "triangles": 3184,
     "tessellation": [
       "display"
     ],
     "watertight": true,
-    "sw_volume_m3": 0.0007116685315259725,
-    "mesh_volume_m3": 0.0007122080503607266,
+    "sw_volume_m3": 0.0004911288502932303,
+    "mesh_volume_m3": 0.0004915538907565198,
     "sw_com_m": [
-      -1.2732114846400593e-17,
-      -3.57062133450559e-18,
-      0.11976177547824084
+      5.822616919120939e-18,
+      -1.5521988823782567e-17,
+      0.11923269753497374
     ],
     "mesh_bounds_mm": [
       [
@@ -611,29 +611,29 @@
       [
         75.0,
         155.0,
-        139.0
+        137.0
       ]
     ]
   },
   "JX1_Shin_L": {
     "cad": "CAD/Shin/JX1_Shin_L.SLDPRT",
     "stl": "simulation/meshes/source_mm/JX1_Shin_L.STL",
-    "triangles": 3382,
+    "triangles": 3082,
     "tessellation": [
       "display"
     ],
     "watertight": true,
-    "sw_volume_m3": 0.0003170922663868029,
-    "mesh_volume_m3": 0.00031727911852357204,
+    "sw_volume_m3": 0.0004304461937663788,
+    "mesh_volume_m3": 0.00043063865131634657,
     "sw_com_m": [
-      -1.481709387882044e-18,
-      -0.006223993062136145,
-      -0.14684341431566988
+      -1.6142127044144746e-18,
+      -0.01130262432323826,
+      -0.12357852166660936
     ],
     "mesh_bounds_mm": [
       [
         -48.0,
-        -28.0,
+        -34.0,
         -318.0
       ],
       [
@@ -646,17 +646,17 @@
   "JX1_Shin_R": {
     "cad": "CAD/Shin/JX1_Shin_R.SLDPRT",
     "stl": "simulation/meshes/source_mm/JX1_Shin_R.STL",
-    "triangles": 3384,
+    "triangles": 3104,
     "tessellation": [
       "display"
     ],
     "watertight": true,
-    "sw_volume_m3": 0.000317092266386803,
-    "mesh_volume_m3": 0.000317278396338567,
+    "sw_volume_m3": 0.00043044619376637894,
+    "mesh_volume_m3": 0.0004306379287297619,
     "sw_com_m": [
-      2.05703001330644e-18,
-      0.006223993062136142,
-      -0.14684341431566986
+      5.073239928159775e-19,
+      0.011302624323238255,
+      -0.12357852166660938
     ],
     "mesh_bounds_mm": [
       [
@@ -666,7 +666,7 @@
       ],
       [
         48.0,
-        28.0,
+        34.0,
         40.0
       ]
     ]
@@ -674,28 +674,616 @@
   "JX1_Thigh_R": {
     "cad": "CAD/Thigh/JX1_Thigh_R.SLDPRT",
     "stl": "simulation/meshes/source_mm/JX1_Thigh_R.STL",
-    "triangles": 2870,
+    "triangles": 2894,
     "tessellation": [
       "display"
     ],
     "watertight": true,
-    "sw_volume_m3": 0.000251252291539579,
-    "mesh_volume_m3": 0.0002514722337477759,
+    "sw_volume_m3": 0.00032118428625552386,
+    "mesh_volume_m3": 0.00032145201506697394,
     "sw_com_m": [
-      8.428111660833051e-19,
-      -0.03815753447949164,
-      -0.152949736432611
+      3.2965223685492986e-19,
+      -0.03883402888493247,
+      -0.14896412939151807
     ],
     "mesh_bounds_mm": [
       [
         -54.924,
-        -44.0,
+        -46.0,
         -324.924
       ],
       [
         54.924,
         -16.0,
         40.0
+      ]
+    ]
+  },
+  "JX1_Forearm_L": {
+    "cad": "CAD/Arms/JX1_Forearm_L.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_Forearm_L.STL",
+    "triangles": 1108,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 7.360420038837844e-05,
+    "mesh_volume_m3": 7.362057411013563e-05,
+    "sw_com_m": [
+      -1.4377062957523112e-18,
+      0.023617443853429163,
+      -0.09974054120091184
+    ],
+    "mesh_bounds_mm": [
+      [
+        -24.0,
+        -22.0,
+        -186.0
+      ],
+      [
+        24.0,
+        31.5,
+        28.0
+      ]
+    ]
+  },
+  "JX1_Forearm_R": {
+    "cad": "CAD/Arms/JX1_Forearm_R.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_Forearm_R.STL",
+    "triangles": 1108,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 7.360420038837844e-05,
+    "mesh_volume_m3": 7.362057411013563e-05,
+    "sw_com_m": [
+      -2.3881229500493575e-18,
+      -0.023617443853429156,
+      -0.09974054120091186
+    ],
+    "mesh_bounds_mm": [
+      [
+        -24.0,
+        -31.5,
+        -186.0
+      ],
+      [
+        24.0,
+        22.0,
+        28.0
+      ]
+    ]
+  },
+  "JX1_Gripper": {
+    "cad": "CAD/Arms/JX1_Gripper.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_Gripper.STL",
+    "triangles": 60,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 0.00017568,
+    "mesh_volume_m3": 0.0001756799959310888,
+    "sw_com_m": [
+      1.9775492786445335e-18,
+      -2.2600563184508955e-19,
+      -0.04300819672131148
+    ],
+    "mesh_bounds_mm": [
+      [
+        -30.0,
+        -22.0,
+        -120.0
+      ],
+      [
+        30.0,
+        22.0,
+        -6.0
+      ]
+    ]
+  },
+  "JX1_ShoulderPitchBracket_L": {
+    "cad": "CAD/Arms/JX1_ShoulderPitchBracket_L.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_ShoulderPitchBracket_L.STL",
+    "triangles": 1892,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 0.0001243043060593336,
+    "mesh_volume_m3": 0.00012433832198986073,
+    "sw_com_m": [
+      -0.057240177401165916,
+      0.026968022365333418,
+      1.213777289884507e-17
+    ],
+    "mesh_bounds_mm": [
+      [
+        -90.5,
+        0.0,
+        -46.75
+      ],
+      [
+        30.0,
+        86.75,
+        46.75
+      ]
+    ]
+  },
+  "JX1_ShoulderPitchBracket_R": {
+    "cad": "CAD/Arms/JX1_ShoulderPitchBracket_R.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_ShoulderPitchBracket_R.STL",
+    "triangles": 1888,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 0.0001243043060593336,
+    "mesh_volume_m3": 0.00012433871836482082,
+    "sw_com_m": [
+      -0.057240177401165916,
+      -0.026968022365333418,
+      3.620037531234495e-18
+    ],
+    "mesh_bounds_mm": [
+      [
+        -90.5,
+        -86.75,
+        -46.75
+      ],
+      [
+        30.0,
+        0.0,
+        46.75
+      ]
+    ]
+  },
+  "JX1_ShoulderRollBracket_L": {
+    "cad": "CAD/Arms/JX1_ShoulderRollBracket_L.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_ShoulderRollBracket_L.STL",
+    "triangles": 1534,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 4.4087023343211526e-05,
+    "mesh_volume_m3": 4.4117104202353985e-05,
+    "sw_com_m": [
+      -0.01720203866921099,
+      6.308874128463544e-19,
+      -0.008824758895941467
+    ],
+    "mesh_bounds_mm": [
+      [
+        -40.0,
+        -33.26,
+        -33.26
+      ],
+      [
+        32.0,
+        33.26,
+        33.26
+      ]
+    ]
+  },
+  "JX1_ShoulderRollBracket_R": {
+    "cad": "CAD/Arms/JX1_ShoulderRollBracket_R.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_ShoulderRollBracket_R.STL",
+    "triangles": 1526,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 4.4087023343211526e-05,
+    "mesh_volume_m3": 4.411710423048478e-05,
+    "sw_com_m": [
+      -0.017202038669210995,
+      6.332327192138128e-20,
+      -0.008824758895941464
+    ],
+    "mesh_bounds_mm": [
+      [
+        -40.0,
+        -33.26,
+        -33.26
+      ],
+      [
+        32.0,
+        33.26,
+        33.26
+      ]
+    ]
+  },
+  "JX1_UpperArm_L": {
+    "cad": "CAD/Arms/JX1_UpperArm_L.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_UpperArm_L.STL",
+    "triangles": 1538,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 6.971031728506384e-05,
+    "mesh_volume_m3": 6.973775610689836e-05,
+    "sw_com_m": [
+      5.932985566329216e-21,
+      -0.022989336196939585,
+      -0.06456842227236209
+    ],
+    "mesh_bounds_mm": [
+      [
+        -30.0,
+        -31.5,
+        -160.0
+      ],
+      [
+        30.0,
+        25.0,
+        0.0
+      ]
+    ]
+  },
+  "JX1_UpperArm_R": {
+    "cad": "CAD/Arms/JX1_UpperArm_R.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_UpperArm_R.STL",
+    "triangles": 1540,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 6.971031728506383e-05,
+    "mesh_volume_m3": 6.973775610689838e-05,
+    "sw_com_m": [
+      3.252759336739993e-18,
+      0.022989336196939582,
+      -0.06456842227236209
+    ],
+    "mesh_bounds_mm": [
+      [
+        -30.0,
+        -25.0,
+        -160.0
+      ],
+      [
+        30.0,
+        31.5,
+        0.0
+      ]
+    ]
+  },
+  "JX1_BatteryPack": {
+    "cad": "CAD/Electronics/JX1_BatteryPack.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_BatteryPack.STL",
+    "triangles": 12,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 0.0010843679999999996,
+    "mesh_volume_m3": 0.0010843679761975392,
+    "sw_com_m": [
+      1.805973778322436e-18,
+      -4.749273603892912e-19,
+      0.049
+    ],
+    "mesh_bounds_mm": [
+      [
+        -43.5,
+        -76.0,
+        8.0
+      ],
+      [
+        43.5,
+        76.0,
+        90.0
+      ]
+    ]
+  },
+  "JX1_DCDC5V": {
+    "cad": "CAD/Electronics/JX1_DCDC5V.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_DCDC5V.STL",
+    "triangles": 12,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 0.00016665599999999997,
+    "mesh_volume_m3": 0.00016665601146864905,
+    "sw_com_m": [
+      -0.038,
+      0.062,
+      0.14650000000000002
+    ],
+    "mesh_bounds_mm": [
+      [
+        -66.0,
+        46.0,
+        100.0
+      ],
+      [
+        -10.0,
+        78.0,
+        193.0
+      ]
+    ]
+  },
+  "JX1_EStop": {
+    "cad": "CAD/Electronics/JX1_EStop.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_EStop.STL",
+    "triangles": 92,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 7.328763393673005e-05,
+    "mesh_volume_m3": 7.328761916876265e-05,
+    "sw_com_m": [
+      -0.06371969697517783,
+      1.1568938473287588e-19,
+      0.235
+    ],
+    "mesh_bounds_mm": [
+      [
+        -94.0,
+        -20.0,
+        215.0
+      ],
+      [
+        -25.0,
+        20.0,
+        255.0
+      ]
+    ]
+  },
+  "JX1_HubBoard": {
+    "cad": "CAD/Electronics/JX1_HubBoard.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_HubBoard.STL",
+    "triangles": 12,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 0.00014,
+    "mesh_volume_m3": 0.00013999998986720995,
+    "sw_com_m": [
+      0.039,
+      0.0,
+      0.15
+    ],
+    "mesh_bounds_mm": [
+      [
+        32.0,
+        -50.0,
+        100.0
+      ],
+      [
+        46.0,
+        50.0,
+        200.0
+      ]
+    ]
+  },
+  "JX1_JetsonNano": {
+    "cad": "CAD/Electronics/JX1_JetsonNano.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_JetsonNano.STL",
+    "triangles": 12,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 0.00030720000000000004,
+    "mesh_volume_m3": 0.0003072000008583064,
+    "sw_com_m": [
+      -0.020000000000000004,
+      0.0,
+      0.11800000000000001
+    ],
+    "mesh_bounds_mm": [
+      [
+        -68.0,
+        -40.0,
+        98.0
+      ],
+      [
+        28.0,
+        40.0,
+        138.0
+      ]
+    ]
+  },
+  "JX1_PowerSwitch": {
+    "cad": "CAD/Electronics/JX1_PowerSwitch.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_PowerSwitch.STL",
+    "triangles": 12,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 3.176799999999998e-05,
+    "mesh_volume_m3": 3.176800106729933e-05,
+    "sw_com_m": [
+      -0.024,
+      -0.061,
+      0.1095
+    ],
+    "mesh_bounds_mm": [
+      [
+        -46.0,
+        -80.0,
+        100.0
+      ],
+      [
+        -2.0,
+        -42.0,
+        119.0
+      ]
+    ]
+  },
+  "JX1_Head": {
+    "cad": "CAD/Head/JX1_Head.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_Head.STL",
+    "triangles": 356,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 0.00029694315050436844,
+    "mesh_volume_m3": 0.00029695119598337314,
+    "sw_com_m": [
+      0.009415617064574696,
+      0.0025239478512021816,
+      0.07089354792555493
+    ],
+    "mesh_bounds_mm": [
+      [
+        -55.0,
+        -70.0,
+        -15.0
+      ],
+      [
+        70.0,
+        70.0,
+        130.0
+      ]
+    ]
+  },
+  "JX1_NeckBracket": {
+    "cad": "CAD/Head/JX1_NeckBracket.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_NeckBracket.STL",
+    "triangles": 120,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 1.9836134517542566e-05,
+    "mesh_volume_m3": 1.9836708499803545e-05,
+    "sw_com_m": [
+      0.010025340361758985,
+      -0.013570930352480273,
+      0.02093364633217641
+    ],
+    "mesh_bounds_mm": [
+      [
+        -20.0,
+        -21.5,
+        3.0
+      ],
+      [
+        40.0,
+        12.0,
+        56.36
+      ]
+    ]
+  },
+  "JX1_Servo_ST3215_Body": {
+    "cad": "CAD/Head/JX1_Servo_ST3215_Body.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_Servo_ST3215_Body.STL",
+    "triangles": 12,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 3.9124343999999994e-05,
+    "mesh_volume_m3": 3.912434410312277e-05,
+    "sw_com_m": [
+      0.01011,
+      0.0,
+      -0.0175
+    ],
+    "mesh_bounds_mm": [
+      [
+        -12.5,
+        -12.36,
+        -35.0
+      ],
+      [
+        32.72,
+        12.36,
+        0.0
+      ]
+    ]
+  },
+  "JX1_Servo_ST3215_Horn": {
+    "cad": "CAD/Head/JX1_Servo_ST3215_Horn.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_Servo_ST3215_Horn.STL",
+    "triangles": 216,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 9.42477796076938e-07,
+    "mesh_volume_m3": 9.403029190737316e-07,
+    "sw_com_m": [
+      -5.319322929190151e-19,
+      0.0,
+      0.0015
+    ],
+    "mesh_bounds_mm": [
+      [
+        -10.0,
+        -9.996,
+        0.0
+      ],
+      [
+        10.0,
+        9.996,
+        3.0
+      ]
+    ]
+  },
+  "JX1_StereoCamera": {
+    "cad": "CAD/Head/JX1_StereoCamera.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_StereoCamera.STL",
+    "triangles": 12,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 2.448e-05,
+    "mesh_volume_m3": 2.4480006382763793e-05,
+    "sw_com_m": [
+      0.061000000000000006,
+      0.0,
+      0.041999999999999996
+    ],
+    "mesh_bounds_mm": [
+      [
+        55.0,
+        -42.5,
+        30.0
+      ],
+      [
+        67.0,
+        42.5,
+        54.0
+      ]
+    ]
+  },
+  "JX1_Torso": {
+    "cad": "CAD/Torso/JX1_Torso.SLDPRT",
+    "stl": "simulation/meshes/source_mm/JX1_Torso.STL",
+    "triangles": 3770,
+    "tessellation": [
+      "display"
+    ],
+    "watertight": true,
+    "sw_volume_m3": 0.0010746878555082519,
+    "mesh_volume_m3": 0.0010748000715781936,
+    "sw_com_m": [
+      -0.009989076855040514,
+      -1.7670213685841823e-17,
+      0.12232459525552622
+    ],
+    "mesh_bounds_mm": [
+      [
+        -74.0,
+        -104.5,
+        0.0
+      ],
+      [
+        70.0,
+        104.5,
+        262.0
       ]
     ]
   }

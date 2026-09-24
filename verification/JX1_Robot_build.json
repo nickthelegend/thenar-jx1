@@ -1,0 +1,530 @@
+{
+  "assembly": "D:\\Project\\thenar-jx1\\CAD\\Assemblies\\JX1_Robot.SLDASM",
+  "components": 87,
+  "mates": 140,
+  "mate_errors_initial": [],
+  "limit_calibration": {
+    "L_hip_yaw_LIMIT": {
+      "zero_deg": 90.0,
+      "sign": -1,
+      "sw_limits_deg": [
+        44.5,
+        130.5
+      ],
+      "robot_limits_deg": [
+        -40,
+        45
+      ],
+      "measured_sin_for_+0.1rad": 0.09983341664682809,
+      "sign_check_pass": true
+    },
+    "L_hip_roll_LIMIT": {
+      "zero_deg": 90.0,
+      "sign": 1,
+      "sw_limits_deg": [
+        64.5,
+        135.5
+      ],
+      "robot_limits_deg": [
+        -25,
+        45
+      ],
+      "measured_sin_for_+0.1rad": 0.0998334166468282,
+      "sign_check_pass": true
+    },
+    "L_hip_pitch_LIMIT": {
+      "zero_deg": 135.0,
+      "sign": 1,
+      "sw_limits_deg": [
+        19.5,
+        170.5
+      ],
+      "robot_limits_deg": [
+        -115,
+        35
+      ],
+      "measured_sin_for_+0.1rad": 0.09983341664682785,
+      "sign_check_pass": true
+    },
+    "L_knee_LIMIT": {
+      "zero_deg": 135.0,
+      "sign": -1,
+      "sw_limits_deg": [
+        14.5,
+        135.5
+      ],
+      "robot_limits_deg": [
+        0,
+        120
+      ],
+      "measured_sin_for_+0.1rad": 0.0998334166468281,
+      "sign_check_pass": true
+    },
+    "L_ankle_motorA_LIMIT": {
+      "zero_deg": 90.0,
+      "sign": 1,
+      "sw_limits_deg": [
+        14.5,
+        165.5
+      ],
+      "robot_limits_deg": [
+        -75.0,
+        75.0
+      ],
+      "measured_sin_for_+0.1rad": 0.09983341664682788,
+      "sign_check_pass": true
+    },
+    "L_ankle_motorB_LIMIT": {
+      "zero_deg": 90.0,
+      "sign": -1,
+      "sw_limits_deg": [
+        14.5,
+        165.5
+      ],
+      "robot_limits_deg": [
+        -75.0,
+        75.0
+      ],
+      "measured_sin_for_+0.1rad": 0.09983341664682813,
+      "sign_check_pass": true
+    },
+    "R_hip_yaw_LIMIT": {
+      "zero_deg": 90.0,
+      "sign": -1,
+      "sw_limits_deg": [
+        49.5,
+        135.5
+      ],
+      "robot_limits_deg": [
+        -45,
+        40
+      ],
+      "measured_sin_for_+0.1rad": 0.09983341664682809,
+      "sign_check_pass": true
+    },
+    "R_hip_roll_LIMIT": {
+      "zero_deg": 90.0,
+      "sign": 1,
+      "sw_limits_deg": [
+        44.5,
+        115.5
+      ],
+      "robot_limits_deg": [
+        -45,
+        25
+      ],
+      "measured_sin_for_+0.1rad": 0.0998334166468282,
+      "sign_check_pass": true
+    },
+    "R_hip_pitch_LIMIT": {
+      "zero_deg": 45.0,
+      "sign": -1,
+      "sw_limits_deg": [
+        9.5,
+        160.5
+      ],
+      "robot_limits_deg": [
+        -115,
+        35
+      ],
+      "measured_sin_for_+0.1rad": 0.0998334166468278,
+      "sign_check_pass": true
+    },
+    "R_knee_LIMIT": {
+      "zero_deg": 45.0,
+      "sign": 1,
+      "sw_limits_deg": [
+        44.5,
+        165.5
+      ],
+      "robot_limits_deg": [
+        0,
+        120
+      ],
+      "measured_sin_for_+0.1rad": 0.0998334166468283,
+      "sign_check_pass": true
+    },
+    "R_ankle_motorA_LIMIT": {
+      "zero_deg": 90.0,
+      "sign": -1,
+      "sw_limits_deg": [
+        14.5,
+        165.5
+      ],
+      "robot_limits_deg": [
+        -75.0,
+        75.0
+      ],
+      "measured_sin_for_+0.1rad": 0.09983341664682793,
+      "sign_check_pass": true
+    },
+    "R_ankle_motorB_LIMIT": {
+      "zero_deg": 90.0,
+      "sign": 1,
+      "sw_limits_deg": [
+        14.5,
+        165.5
+      ],
+      "robot_limits_deg": [
+        -75.0,
+        75.0
+      ],
+      "measured_sin_for_+0.1rad": 0.09983341664682815,
+      "sign_check_pass": true
+    },
+    "waist_yaw_LIMIT": {
+      "joint": "waist_yaw",
+      "housing": "WaistH",
+      "output": "WaistO",
+      "axis_parent": [
+        0,
+        0,
+        1
+      ],
+      "zero_deg": 90.0,
+      "sign": 1,
+      "sw_limits_deg": [
+        1.5,
+        178.5
+      ],
+      "cad_limits_deg": [
+        -88.0,
+        88.0
+      ],
+      "parent_link": "pelvis",
+      "probe_rad": 0.1,
+      "measured_sin_for_probe": 0.0998334166468282,
+      "sign_check_pass": true
+    },
+    "left_shoulder_pitch_LIMIT": {
+      "joint": "left_shoulder_pitch",
+      "housing": "L_SPH",
+      "output": "L_SPO",
+      "axis_parent": [
+        0,
+        1,
+        0
+      ],
+      "zero_deg": 117.5,
+      "sign": 1,
+      "sw_limits_deg": [
+        2.0,
+        178.0
+      ],
+      "cad_limits_deg": [
+        -115.0,
+        60
+      ],
+      "parent_link": "torso",
+      "probe_rad": 0.1,
+      "measured_sin_for_probe": 0.09983341664682797,
+      "sign_check_pass": true
+    },
+    "left_shoulder_roll_LIMIT": {
+      "joint": "left_shoulder_roll",
+      "housing": "L_SRH",
+      "output": "L_SRO",
+      "axis_parent": [
+        1,
+        0,
+        0
+      ],
+      "zero_deg": 20.0,
+      "sign": 1,
+      "sw_limits_deg": [
+        9.5,
+        170.5
+      ],
+      "cad_limits_deg": [
+        -10,
+        150
+      ],
+      "parent_link": "L_shoulder_pitch",
+      "probe_rad": 0.1,
+      "measured_sin_for_probe": 0.0998334166468283,
+      "sign_check_pass": true
+    },
+    "left_shoulder_yaw_LIMIT": {
+      "joint": "left_shoulder_yaw",
+      "housing": "L_SYH",
+      "output": "L_SYO",
+      "axis_parent": [
+        0,
+        0,
+        1
+      ],
+      "zero_deg": 90.0,
+      "sign": -1,
+      "sw_limits_deg": [
+        1.5,
+        178.5
+      ],
+      "cad_limits_deg": [
+        -88.0,
+        88.0
+      ],
+      "parent_link": "L_shoulder_roll",
+      "probe_rad": 0.1,
+      "measured_sin_for_probe": 0.0998334166468281,
+      "sign_check_pass": true
+    },
+    "left_elbow_LIMIT": {
+      "joint": "left_elbow",
+      "housing": "L_ElH",
+      "output": "L_ElO",
+      "axis_parent": [
+        0,
+        1,
+        0
+      ],
+      "zero_deg": 155.0,
+      "sign": 1,
+      "sw_limits_deg": [
+        19.5,
+        160.5
+      ],
+      "cad_limits_deg": [
+        -135,
+        5
+      ],
+      "parent_link": "L_upper_arm",
+      "probe_rad": -0.1,
+      "measured_sin_for_probe": -0.09983341664682824,
+      "sign_check_pass": true
+    },
+    "right_shoulder_pitch_LIMIT": {
+      "joint": "right_shoulder_pitch",
+      "housing": "R_SPH",
+      "output": "R_SPO",
+      "axis_parent": [
+        0,
+        1,
+        0
+      ],
+      "zero_deg": 62.5,
+      "sign": -1,
+      "sw_limits_deg": [
+        2.0,
+        178.0
+      ],
+      "cad_limits_deg": [
+        -115.0,
+        60
+      ],
+      "parent_link": "torso",
+      "probe_rad": 0.1,
+      "measured_sin_for_probe": 0.0998334166468281,
+      "sign_check_pass": true
+    },
+    "right_shoulder_roll_LIMIT": {
+      "joint": "right_shoulder_roll",
+      "housing": "R_SRH",
+      "output": "R_SRO",
+      "axis_parent": [
+        1,
+        0,
+        0
+      ],
+      "zero_deg": 160.0,
+      "sign": 1,
+      "sw_limits_deg": [
+        9.5,
+        170.5
+      ],
+      "cad_limits_deg": [
+        -150,
+        10
+      ],
+      "parent_link": "R_shoulder_pitch",
+      "probe_rad": 0.1,
+      "measured_sin_for_probe": 0.09983341664682877,
+      "sign_check_pass": true
+    },
+    "right_shoulder_yaw_LIMIT": {
+      "joint": "right_shoulder_yaw",
+      "housing": "R_SYH",
+      "output": "R_SYO",
+      "axis_parent": [
+        0,
+        0,
+        1
+      ],
+      "zero_deg": 90.0,
+      "sign": -1,
+      "sw_limits_deg": [
+        1.5,
+        178.5
+      ],
+      "cad_limits_deg": [
+        -88.0,
+        88.0
+      ],
+      "parent_link": "R_shoulder_roll",
+      "probe_rad": 0.1,
+      "measured_sin_for_probe": 0.09983341664682809,
+      "sign_check_pass": true
+    },
+    "right_elbow_LIMIT": {
+      "joint": "right_elbow",
+      "housing": "R_ElH",
+      "output": "R_ElO",
+      "axis_parent": [
+        0,
+        1,
+        0
+      ],
+      "zero_deg": 25.0,
+      "sign": -1,
+      "sw_limits_deg": [
+        19.5,
+        160.5
+      ],
+      "cad_limits_deg": [
+        -135,
+        5
+      ],
+      "parent_link": "R_upper_arm",
+      "probe_rad": -0.1,
+      "measured_sin_for_probe": -0.09983341664682825,
+      "sign_check_pass": true
+    },
+    "neck_yaw_LIMIT": {
+      "joint": "neck_yaw",
+      "housing": "NeckYawS",
+      "output": "NeckYawH",
+      "axis_parent": [
+        0,
+        0,
+        1
+      ],
+      "zero_deg": 90.0,
+      "sign": 1,
+      "sw_limits_deg": [
+        9.5,
+        170.5
+      ],
+      "cad_limits_deg": [
+        -80,
+        80
+      ],
+      "parent_link": "torso",
+      "probe_rad": 0.1,
+      "measured_sin_for_probe": 0.0998334166468282,
+      "sign_check_pass": true
+    },
+    "neck_pitch_LIMIT": {
+      "joint": "neck_pitch",
+      "housing": "NeckPitchS",
+      "output": "NeckPitchH",
+      "axis_parent": [
+        0,
+        1,
+        0
+      ],
+      "zero_deg": 82.5,
+      "sign": 1,
+      "sw_limits_deg": [
+        52.0,
+        128.0
+      ],
+      "cad_limits_deg": [
+        -30,
+        45
+      ],
+      "parent_link": "neck",
+      "probe_rad": 0.1,
+      "measured_sin_for_probe": 0.09983341664682804,
+      "sign_check_pass": true
+    }
+  },
+  "mate_errors_final": [],
+  "names": {
+    "Pelvis": "JX1_Pelvis-1",
+    "L_YawH": "JX1_ACT_M_Housing-1",
+    "L_YawO": "JX1_ACT_M_Output-1",
+    "L_HipYawBr": "JX1_HipYawBracket_L-1",
+    "L_RollH": "JX1_ACT_L_Housing-1",
+    "L_RollO": "JX1_ACT_L_Output-1",
+    "L_HipRollBr": "JX1_HipRollBracket_L-1",
+    "L_PitchH": "JX1_ACT_XL_Housing-1",
+    "L_PitchO": "JX1_ACT_XL_Output-1",
+    "L_Thigh": "JX1_Thigh_L-1",
+    "L_KneeH": "JX1_ACT_XL_Housing-2",
+    "L_KneeO": "JX1_ACT_XL_Output-2",
+    "L_Shin": "JX1_Shin_L-1",
+    "L_AnkAH": "JX1_ACT_M_Housing-2",
+    "L_AnkBH": "JX1_ACT_M_Housing-3",
+    "L_AnkAO": "JX1_ACT_M_Output-2",
+    "L_AnkBO": "JX1_ACT_M_Output-3",
+    "L_CrankA": "JX1_AnkleCrank-1",
+    "L_CrankB": "JX1_AnkleCrank-2",
+    "L_Cross": "JX1_AnkleCross-1",
+    "L_Foot": "JX1_Foot_L-1",
+    "L_RodA": "JX1_AnkleRod_A-1",
+    "L_RodB": "JX1_AnkleRod_B-1",
+    "R_YawH": "JX1_ACT_M_Housing-4",
+    "R_YawO": "JX1_ACT_M_Output-4",
+    "R_HipYawBr": "JX1_HipYawBracket_R-1",
+    "R_RollH": "JX1_ACT_L_Housing-2",
+    "R_RollO": "JX1_ACT_L_Output-2",
+    "R_HipRollBr": "JX1_HipRollBracket_R-1",
+    "R_PitchH": "JX1_ACT_XL_Housing-3",
+    "R_PitchO": "JX1_ACT_XL_Output-3",
+    "R_Thigh": "JX1_Thigh_R-1",
+    "R_KneeH": "JX1_ACT_XL_Housing-4",
+    "R_KneeO": "JX1_ACT_XL_Output-4",
+    "R_Shin": "JX1_Shin_R-1",
+    "R_AnkAH": "JX1_ACT_M_Housing-5",
+    "R_AnkBH": "JX1_ACT_M_Housing-6",
+    "R_AnkAO": "JX1_ACT_M_Output-5",
+    "R_AnkBO": "JX1_ACT_M_Output-6",
+    "R_CrankA": "JX1_AnkleCrank-3",
+    "R_CrankB": "JX1_AnkleCrank-4",
+    "R_Cross": "JX1_AnkleCross-2",
+    "R_Foot": "JX1_Foot_R-1",
+    "R_RodA": "JX1_AnkleRod_A-2",
+    "R_RodB": "JX1_AnkleRod_B-2",
+    "WaistH": "JX1_ACT_M_Housing-7",
+    "WaistO": "JX1_ACT_M_Output-7",
+    "Torso": "JX1_Torso-1",
+    "BatteryPack": "JX1_BatteryPack-1",
+    "JetsonNano": "JX1_JetsonNano-1",
+    "HubBoard": "JX1_HubBoard-1",
+    "DCDC5V": "JX1_DCDC5V-1",
+    "EStop": "JX1_EStop-1",
+    "PowerSwitch": "JX1_PowerSwitch-1",
+    "L_SPH": "JX1_ACT_S_Housing-1",
+    "L_SPO": "JX1_ACT_S_Output-1",
+    "L_ShPitchBr": "JX1_ShoulderPitchBracket_L-1",
+    "L_SRH": "JX1_ACT_S_Housing-2",
+    "L_SRO": "JX1_ACT_S_Output-2",
+    "L_ShRollBr": "JX1_ShoulderRollBracket_L-1",
+    "L_SYH": "JX1_ACT_XS_Housing-1",
+    "L_SYO": "JX1_ACT_XS_Output-1",
+    "L_UpperArm": "JX1_UpperArm_L-1",
+    "L_ElH": "JX1_ACT_XS_Housing-2",
+    "L_ElO": "JX1_ACT_XS_Output-2",
+    "L_Forearm": "JX1_Forearm_L-1",
+    "L_Gripper": "JX1_Gripper-1",
+    "R_SPH": "JX1_ACT_S_Housing-3",
+    "R_SPO": "JX1_ACT_S_Output-3",
+    "R_ShPitchBr": "JX1_ShoulderPitchBracket_R-1",
+    "R_SRH": "JX1_ACT_S_Housing-4",
+    "R_SRO": "JX1_ACT_S_Output-4",
+    "R_ShRollBr": "JX1_ShoulderRollBracket_R-1",
+    "R_SYH": "JX1_ACT_XS_Housing-3",
+    "R_SYO": "JX1_ACT_XS_Output-3",
+    "R_UpperArm": "JX1_UpperArm_R-1",
+    "R_ElH": "JX1_ACT_XS_Housing-4",
+    "R_ElO": "JX1_ACT_XS_Output-4",
+    "R_Forearm": "JX1_Forearm_R-1",
+    "R_Gripper": "JX1_Gripper-2",
+    "NeckYawS": "JX1_Servo_ST3215_Body-1",
+    "NeckYawH": "JX1_Servo_ST3215_Horn-1",
+    "NeckBr": "JX1_NeckBracket-1",
+    "NeckPitchS": "JX1_Servo_ST3215_Body-2",
+    "NeckPitchH": "JX1_Servo_ST3215_Horn-2",
+    "Head": "JX1_Head-1",
+    "Camera": "JX1_StereoCamera-1"
+  }
+}
