@@ -42,7 +42,9 @@
     "sketch_status": {
       "SK_Yaw_Plate": 3,
       "SK_Yaw_Pilot_Recess": 3,
-      "SK_Elbow_Plate": 3
+      "SK_Elbow_Plate": 3,
+      "SK_Gusset_Front": 3,
+      "SK_Gusset_Back": 3
     }
   },
   "JX1_Forearm_L": {
@@ -116,7 +118,9 @@
     "sketch_status": {
       "SK_Yaw_Plate": 3,
       "SK_Yaw_Pilot_Recess": 3,
-      "SK_Elbow_Plate": 3
+      "SK_Elbow_Plate": 3,
+      "SK_Gusset_Front": 3,
+      "SK_Gusset_Back": 3
     }
   },
   "JX1_Forearm_R": {

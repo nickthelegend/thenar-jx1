@@ -24,3 +24,6 @@ CAD/_scratch/
 
 # regenerable caches
 calculations/results/structural/loads.npz
+
+# MuJoCo instability warnings (large-impulse push trials)
+MUJOCO_LOG.TXT
