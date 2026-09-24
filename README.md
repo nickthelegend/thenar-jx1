@@ -21,6 +21,28 @@
 
 ---
 
+## New: JX0, the under-₹50,000 version you can build now
+
+<p align="center">
+  <a href="jx0/README.md"><img src="jx0/docs/images/jx0_cover.png" alt="JX0: SolidWorks front and back views, and the simulated robot holding out its gripper hand" width="800"></a>
+</p>
+
+JX1's parts cost about ₹7 lakh. **[JX0](jx0/README.md)** is the minimum viable humanoid: 52 cm tall, 3D-printed in
+PETG, with hobby servos and a Raspberry Pi. It **walks, talks (Claude), shows a face on a round screen and uses two
+gripper hands**, for **₹47,106** in parts. It uses the same design pipeline as JX1: the SolidWorks CAD is built by
+script, the servo sizing passes, 14 of 14 walking gaits pass in simulation, and the robot's own program runs on the
+simulated robot.
+
+<p align="center">
+  <a href="jx0/README.md"><b>JX0 overview</b></a> ·
+  <a href="jx0/results/images/jx0_demo.mp4"><b>Demo film</b></a> ·
+  <a href="jx0/bom/JX0_cost_estimate.pdf"><b>Cost estimate (PDF)</b></a> ·
+  <a href="jx0/docs/build_guide.md"><b>Build guide</b></a> ·
+  <a href="media/jx0_cad_timelapse.mp4"><b>SolidWorks timelapse</b></a>
+</p>
+
+---
+
 ## Watch it go together
 
 <p align="center">

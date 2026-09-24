@@ -43,7 +43,7 @@ def main():
 
     def act(name, args):
         if face:
-            face.set_mood("busy")
+            face.set_mood("happy" if name == "wave" else "busy")
         try:
             return robot.act(name, args)
         finally:

@@ -26,6 +26,7 @@ from jx0bot.robot import ARM_JOINTS, LEG_JOINTS, REST_ARMS, Robot, load_config  
 
 OUT = ROOT / "jx0" / "results" / "images"
 W, H, FPS = 1280, 720, 30
+STILLS = {"wave": 3.0, "take": 10.6}               # clean frames (no caption) saved as jx0_demo_<name>.png
 
 
 class StepIO:
@@ -48,6 +49,7 @@ class StepIO:
         self.cam.azimuth, self.cam.elevation, self.cam.distance = 155.0, -6.0, 0.95
         self.lookat, self.focus, self.caption = None, "pelvis", ""
         self.sink, self.next_frame, self.n_frames = sink, 0.0, 0
+        self.max_tilt = 0.0                               # deg, over the whole film
         try:
             self.font = ImageFont.truetype("arial.ttf", 38)
         except OSError:
@@ -96,6 +98,8 @@ class StepIO:
                 sv = self.leg if n in LEG_JOINTS else self.arm
                 self.d.ctrl[self.act[n]] = sv.torque(g, self.d.qpos[qa], self.d.qvel[da])
             mujoco.mj_step(self.m, self.d)
+            r, p, _, _ = self.attitude()
+            self.max_tilt = max(self.max_tilt, math.degrees(max(abs(r), abs(p))))
             if self.d.time >= self.next_frame:
                 self.frame()
                 self.next_frame += 1.0 / FPS
@@ -112,6 +116,9 @@ class StepIO:
         self.cam.distance += 0.06 * (dist - self.cam.distance)
         self.renderer.update_scene(self.d, camera=self.cam)
         img = Image.fromarray(self.renderer.render())
+        for name, t in STILLS.items():
+            if abs(self.d.time - t) <= 0.5 / FPS:
+                img.save(OUT / f"jx0_demo_{name}.png")
         if self.caption:
             dr = ImageDraw.Draw(img)
             tw = dr.textlength(self.caption, font=self.font)
@@ -161,7 +168,7 @@ def main():
     webp = OUT / "jx0_demo.webp"
     preview[0].save(webp, save_all=True, append_images=preview[1:], duration=int(3000 / FPS), loop=0, quality=65, method=6)
     print(f"{mp4.relative_to(ROOT)}: {io.n_frames} frames ({io.n_frames / FPS:.1f} s); preview {webp.relative_to(ROOT)} "
-          f"({webp.stat().st_size / 1e6:.1f} MB)")
+          f"({webp.stat().st_size / 1e6:.1f} MB); max tilt over the film {io.max_tilt:.1f} deg")
 
 
 if __name__ == "__main__":
