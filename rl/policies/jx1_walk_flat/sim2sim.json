@@ -1,4 +1,5 @@
 {
+ "hub_interpolation": true,
  "policy": "rl/policies/jx1_walk_flat",
  "model": "simulation/mujoco/jx1.xml",
  "physics_dt_s": 0.002,
@@ -14,19 +15,21 @@
    "fell": false,
    "time_survived_s": 6.0,
    "mean_velocity_b": [
-    -0.054,
-    -0.007,
-    0.01
+    -0.052,
+    -0.017,
+    0.012
    ],
    "velocity_rmse": [
-    0.056,
     0.055,
+    0.057,
     0.027
    ],
-   "max_tilt_deg": 5.2,
-   "stance_foot_slip_m_s_p95": 0.039,
-   "peak_torque_fraction": 0.534,
-   "peak_torque_joint": "left_hip_roll"
+   "max_tilt_deg": 5.26,
+   "stance_foot_slip_m_s_p95": 0.043,
+   "peak_torque_fraction": 0.538,
+   "peak_torque_joint": "left_hip_roll",
+   "peak_speed_fraction": 0.164,
+   "peak_speed_joint": "left_ankle_pitch_joint"
   },
   "forward_0.5": {
    "command": [
@@ -38,19 +41,21 @@
    "fell": false,
    "time_survived_s": 10.0,
    "mean_velocity_b": [
-    0.523,
-    -0.004,
-    0.015
+    0.514,
+    -0.014,
+    0.006
    ],
    "velocity_rmse": [
-    0.034,
-    0.036,
-    0.078
+    0.031,
+    0.049,
+    0.077
    ],
    "max_tilt_deg": 7.82,
-   "stance_foot_slip_m_s_p95": 0.011,
-   "peak_torque_fraction": 0.917,
-   "peak_torque_joint": "left_ankle_pitch"
+   "stance_foot_slip_m_s_p95": 0.004,
+   "peak_torque_fraction": 0.992,
+   "peak_torque_joint": "right_ankle_pitch",
+   "peak_speed_fraction": 0.225,
+   "peak_speed_joint": "right_knee_joint"
   },
   "forward_0.8": {
    "command": [
@@ -62,19 +67,21 @@
    "fell": false,
    "time_survived_s": 10.0,
    "mean_velocity_b": [
-    0.787,
-    0.007,
-    0.014
+    0.786,
+    -0.014,
+    0.007
    ],
    "velocity_rmse": [
-    0.04,
-    0.034,
-    0.086
+    0.043,
+    0.046,
+    0.118
    ],
-   "max_tilt_deg": 7.23,
-   "stance_foot_slip_m_s_p95": 0.021,
+   "max_tilt_deg": 6.93,
+   "stance_foot_slip_m_s_p95": 0.004,
    "peak_torque_fraction": 1.0,
-   "peak_torque_joint": "left_ankle_pitch"
+   "peak_torque_joint": "left_ankle_pitch",
+   "peak_speed_fraction": 0.273,
+   "peak_speed_joint": "right_ankle_roll_joint"
   },
   "backward_0.3": {
    "command": [
@@ -86,19 +93,21 @@
    "fell": false,
    "time_survived_s": 8.0,
    "mean_velocity_b": [
-    -0.311,
-    -0.013,
-    -0.01
+    -0.306,
+    -0.004,
+    -0.005
    ],
    "velocity_rmse": [
     0.026,
-    0.029,
-    0.063
+    0.035,
+    0.069
    ],
-   "max_tilt_deg": 8.38,
-   "stance_foot_slip_m_s_p95": 0.013,
-   "peak_torque_fraction": 0.559,
-   "peak_torque_joint": "left_hip_roll"
+   "max_tilt_deg": 8.7,
+   "stance_foot_slip_m_s_p95": 0.003,
+   "peak_torque_fraction": 0.576,
+   "peak_torque_joint": "left_hip_roll",
+   "peak_speed_fraction": 0.268,
+   "peak_speed_joint": "left_ankle_roll_joint"
   },
   "sidestep_0.2": {
    "command": [
@@ -110,19 +119,21 @@
    "fell": false,
    "time_survived_s": 8.0,
    "mean_velocity_b": [
-    -0.037,
-    0.181,
-    0.022
+    -0.038,
+    0.188,
+    0.02
    ],
    "velocity_rmse": [
-    0.043,
-    0.046,
-    0.057
+    0.045,
+    0.039,
+    0.068
    ],
-   "max_tilt_deg": 5.69,
-   "stance_foot_slip_m_s_p95": 0.03,
-   "peak_torque_fraction": 0.673,
-   "peak_torque_joint": "right_hip_roll"
+   "max_tilt_deg": 5.97,
+   "stance_foot_slip_m_s_p95": 0.012,
+   "peak_torque_fraction": 0.693,
+   "peak_torque_joint": "right_hip_roll",
+   "peak_speed_fraction": 0.212,
+   "peak_speed_joint": "left_ankle_roll_joint"
   },
   "turn_0.5": {
    "command": [
@@ -134,19 +145,21 @@
    "fell": false,
    "time_survived_s": 8.0,
    "mean_velocity_b": [
-    -0.038,
-    0.026,
-    0.502
+    -0.043,
+    0.041,
+    0.493
    ],
    "velocity_rmse": [
-    0.043,
     0.048,
-    0.072
+    0.056,
+    0.08
    ],
-   "max_tilt_deg": 5.47,
-   "stance_foot_slip_m_s_p95": 0.051,
-   "peak_torque_fraction": 0.587,
-   "peak_torque_joint": "right_hip_roll"
+   "max_tilt_deg": 5.73,
+   "stance_foot_slip_m_s_p95": 0.029,
+   "peak_torque_fraction": 0.634,
+   "peak_torque_joint": "right_hip_roll",
+   "peak_speed_fraction": 0.205,
+   "peak_speed_joint": "left_ankle_roll_joint"
   },
   "walk_turn": {
    "command": [
@@ -158,19 +171,21 @@
    "fell": false,
    "time_survived_s": 10.0,
    "mean_velocity_b": [
-    0.423,
-    0.013,
-    0.278
+    0.418,
+    0.014,
+    0.273
    ],
    "velocity_rmse": [
-    0.031,
-    0.036,
-    0.084
+    0.029,
+    0.045,
+    0.098
    ],
-   "max_tilt_deg": 8.42,
-   "stance_foot_slip_m_s_p95": 0.002,
-   "peak_torque_fraction": 0.867,
-   "peak_torque_joint": "left_ankle_pitch"
+   "max_tilt_deg": 8.67,
+   "stance_foot_slip_m_s_p95": 0.003,
+   "peak_torque_fraction": 0.93,
+   "peak_torque_joint": "right_ankle_pitch",
+   "peak_speed_fraction": 0.232,
+   "peak_speed_joint": "right_knee_joint"
   }
  },
  "all_upright": true

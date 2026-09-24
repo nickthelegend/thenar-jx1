@@ -40,6 +40,16 @@ class DeployPolicy(torch.nn.Module):
 # peak torque (N m) by joint_map actuator_class when a joint is not in the exported MJCF (ankle = linkage capability)
 CLASS_EFFORT = {"XL": 120.0, "L": 60.0, "M": 36.0, "S": 17.0, "XS": 14.0, "servo": 1.9}
 ANKLE_EFFORT = {"ankle_pitch": 46.0, "ankle_roll": 51.0}
+# max joint speed (rad/s) by class (RobStride datasheets; ankle = linkage, as tools/sim/build_robot_description.py VELOCITY)
+CLASS_VELOCITY = {"XL": 20.9, "L": 20.9, "M": 50.3, "S": 44.0, "XS": 33.0, "servo": 4.7}
+ANKLE_VELOCITY = 30.0
+
+
+def velocity_limit(cfg, joint):
+    if config.joint_type(joint) in ANKLE_EFFORT:
+        return ANKLE_VELOCITY
+    cls = next(j["actuator_class"] for j in cfg.joint_map["joints"] if j["name"] == joint)
+    return CLASS_VELOCITY[cls.split()[0]]
 
 
 def class_effort(cfg, joint):
@@ -71,6 +81,7 @@ def policy_io(cfg, meta):
         "action_scale": cfg["action_scale"],
         "pd_gains": {j: list(cfg.gains[j]) for j in present},
         "effort_limits_Nm": {j: effort[j] for j in present},
+        "velocity_limits_rad_s": {j: velocity_limit(cfg, j) for j in present},
         "joint_limits_rad": {j: list(cfg.limits[j]) for j in present},
         "ankle_polygons_rad": {s: np.round(p, 6).tolist() for s, p in cfg.ankle_polygons.items()},
         "observation": {"size": cfg.num_obs, "layout": OBS_LAYOUT, "scales": cfg["observation"]["scales"], "clip": cfg["observation"]["clip"]},

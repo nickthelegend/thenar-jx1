@@ -96,6 +96,7 @@ def run(policy_dir: Path, render=True, hub_interp=True):
         mujoco.mj_forward(m, d)
         rn.last_action[:] = 0.0
         vel_err, tilt_max, peak = [], 0.0, np.zeros(m.nu)
+        vmax = np.zeros(len(rn.joints))
         slip, fell = [], False
         cam = mujoco.MjvCamera()
         cam.distance, cam.azimuth, cam.elevation = 2.4, 130, -12
@@ -109,6 +110,7 @@ def run(policy_dir: Path, render=True, hub_interp=True):
                 d.ctrl[pol_a] = prev + (i + 1) / dec * (tgt - prev) if hub_interp else tgt
                 mujoco.mj_step(m, d)
                 peak = np.maximum(peak, np.abs(d.actuator_force))
+                vmax = np.maximum(vmax, np.abs(d.qvel[pol_d]))
             v_b = policy_io.quat_rotate_inverse(d.qpos[3:7], d.qvel[0:3])
             if k * dt_pol > 2.0:                                   # after the start transient
                 vel_err.append([v_b[0] - cmd[0], v_b[1] - cmd[1], d.qvel[5] - cmd[2]])
@@ -136,6 +138,11 @@ def run(policy_dir: Path, render=True, hub_interp=True):
                          "max_tilt_deg": round(tilt_max, 2), "stance_foot_slip_m_s_p95": round(float(np.percentile(slip, 95)), 3) if slip else None,
                          "peak_torque_fraction": round(float(peak[worst] / lim[worst]), 3),
                          "peak_torque_joint": mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_ACTUATOR, worst)}
+        vlim = io.get("velocity_limits_rad_s")
+        if vlim:
+            frac = vmax / np.array([vlim[j] for j in rn.joints])
+            results[name]["peak_speed_fraction"] = round(float(frac.max()), 3)
+            results[name]["peak_speed_joint"] = rn.joints[int(np.argmax(frac))]
         r = results[name]
         print(f"{name:13s} cmd {cmd} -> {'FELL' if fell else 'ok  '} v_mean {r['mean_velocity_b']} rmse {r['velocity_rmse']} "
               f"tilt {r['max_tilt_deg']:5.1f} deg peak {r['peak_torque_joint']} {r['peak_torque_fraction']:.0%}", flush=True)

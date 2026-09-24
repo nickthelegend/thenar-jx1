@@ -155,6 +155,30 @@ effort_limits_Nm:
   right_elbow_joint: 14.0
   neck_yaw_joint: 1.9
   neck_pitch_joint: 1.9
+velocity_limits_rad_s:
+  left_hip_yaw_joint: 50.3
+  left_hip_roll_joint: 20.9
+  left_hip_pitch_joint: 20.9
+  left_knee_joint: 20.9
+  left_ankle_pitch_joint: 30.0
+  left_ankle_roll_joint: 30.0
+  right_hip_yaw_joint: 50.3
+  right_hip_roll_joint: 20.9
+  right_hip_pitch_joint: 20.9
+  right_knee_joint: 20.9
+  right_ankle_pitch_joint: 30.0
+  right_ankle_roll_joint: 30.0
+  waist_yaw_joint: 50.3
+  left_shoulder_pitch_joint: 44.0
+  left_shoulder_roll_joint: 44.0
+  left_shoulder_yaw_joint: 33.0
+  left_elbow_joint: 33.0
+  right_shoulder_pitch_joint: 44.0
+  right_shoulder_roll_joint: 44.0
+  right_shoulder_yaw_joint: 33.0
+  right_elbow_joint: 33.0
+  neck_yaw_joint: 4.7
+  neck_pitch_joint: 4.7
 joint_limits_rad:
   left_hip_yaw_joint:
   - -0.698132

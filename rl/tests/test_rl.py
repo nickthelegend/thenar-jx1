@@ -180,6 +180,8 @@ def test_isaac_policy_io_schema_matches_mujoco_export():
     assert a["policy"]["num_obs"] == b["policy"]["num_obs"]
     for j, e in a["effort_limits_Nm"].items():                       # MJCF forcerange == URDF <limit effort>
         assert abs(b["effort_limits_Nm"][j] - e) < 1e-9, j
+    for j, v in a["velocity_limits_rad_s"].items():                   # class table == URDF <limit velocity>
+        assert abs(b["velocity_limits_rad_s"][j] - v) < 1e-9, (j, v, b["velocity_limits_rad_s"][j])
     for s in a["ankle_polygons_rad"]:
         assert np.allclose(a["ankle_polygons_rad"][s], b["ankle_polygons_rad"][s], atol=1e-6)
     assert abs(tc_mod.load()["base_height"] - JX1Env(CFG, 2, nthread=1, randomize=False).base_height_target) < 0.01

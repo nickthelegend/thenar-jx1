@@ -89,6 +89,7 @@ def policy_io(tc: dict, meta: dict) -> dict:
     raw = tc["raw"]
     present = tc["joints"]                                   # whole robot (joint_map), like rl/export.py
     class_effort = {"XL": 120.0, "L": 60.0, "M": 36.0, "S": 17.0, "XS": 14.0, "servo": 1.9}
+    class_velocity = {"XL": 20.9, "L": 20.9, "M": 50.3, "S": 44.0, "XS": 33.0, "servo": 4.7}
     effort = {j: tc["effort"].get(j, 46.0 if "ankle_pitch" in j else 51.0 if "ankle_roll" in j else class_effort[tc["classes"][j]])
               for j in present}
     n = len(tc["policy_joints"])
@@ -102,6 +103,7 @@ def policy_io(tc: dict, meta: dict) -> dict:
         "action_scale": raw["action_scale"],
         "pd_gains": {j: list(tc["gains"][j]) for j in present},
         "effort_limits_Nm": effort,
+        "velocity_limits_rad_s": {j: 30.0 if "ankle" in j else tc["velocity"].get(j, class_velocity[tc["classes"][j]]) for j in present},
         "joint_limits_rad": {j: list(tc["limits"][j]) for j in present},
         "ankle_polygons_rad": {s: [[round(math.radians(a), 6), round(math.radians(b), 6)] for a, b in p] for s, p in tc["polygons_deg"].items()},
         "observation": {"size": 9 + 3 * n + 2, "layout": OBS_LAYOUT, "scales": raw["observation"]["scales"], "clip": raw["observation"]["clip"]},
