@@ -385,8 +385,19 @@ def write_mjcf(links, placeholder):
     for j in JM["joints"]:
         if j["parent"] in present and j["child"] in present:
             ms.append(f'    <exclude body1="{j["parent"]}" body2="{j["child"]}"/>')
+    # nested links around one joint centre (hip: yaw/roll/pitch intersect; shoulder: pitch/roll/yaw) overlap as convex hulls
+    # although the real parts clear each other (verified by SolidWorks interference detection over the full ranges), so
+    # grandparent pairs inside those clusters are excluded too; legs vs legs, arms vs legs/torso stay enabled
+    extra = [("{s}_shin_link", "{s}_foot_link"), ("pelvis", "{s}_hip_roll_link"), ("pelvis", "{s}_thigh_link"),
+             ("{s}_hip_yaw_link", "{s}_thigh_link"), ("{s}_thigh_link", "{s}_ankle_cross_link"),
+             ("torso_link", "{s}_shoulder_roll_link"), ("{s}_shoulder_pitch_link", "{s}_upper_arm_link")]
     for side in ("left", "right"):
-        ms.append(f'    <exclude body1="{side}_shin_link" body2="{side}_foot_link"/>')
+        for a_, b_ in extra:
+            a_, b_ = a_.format(s=side), b_.format(s=side)
+            if a_ in present and b_ in present:
+                ms.append(f'    <exclude body1="{a_}" body2="{b_}"/>')
+    if "torso_link" in present and "head_link" in present:
+        ms.append('    <exclude body1="torso_link" body2="head_link"/>')
     ms += ['  </contact>', '  <actuator>']
     for j in JM["joints"]:
         if j["child"] not in present:

@@ -291,8 +291,92 @@ def crank_def():
     }
 
 
+# ---------------------------------------------------------------------------------------------------- upper body (envelope loads)
+# The shoulder is a 3-axis joint (pitch/roll RS02 17 N m, yaw RS00 14 N m): moments at the shoulder are actuator-capped;
+# forces = 3 g on arm (~1.5 kg) + 1 kg payload ~ 75 N in any direction. LC2 (walking arm swing) = half.
+def _ub():
+    import sys as _s
+    _s.path.insert(0, str(ROOT / "tools"))
+    from cad.upper_kinematics import SH_O, SR_OFF, SY_OFF, EL_OFF, HAND_OFF, UPK, S as _S, XS as _XS
+    return SH_O, SR_OFF, SY_OFF, EL_OFF, HAND_OFF, UPK, _S, _XS
+
+
+ARM_LC1 = [75.0, 75.0, 75.0, 17.0, 17.0, 14.0]
+ARM_LC2 = [x / 2 for x in ARM_LC1]
+ELBOW_LC1 = [75.0, 75.0, 75.0, 14.0, 14.0, 14.0]
+ELBOW_LC2 = [x / 2 for x in ELBOW_LC1]
+
+
+def torso_def():
+    SH_O, SR_OFF, SY_OFF, EL_OFF, HAND_OFF, UPK, S_, XS_ = _ub()
+    Mh = M_
+    sy = 0.1045
+
+    def shoulder(side):
+        yc = side * sy
+        return [(f"{'left' if side > 0 else 'right'} shoulder-pitch housing (arm wrench @ shoulder centre)",
+                 lambda m: m.face_annulus(1, yc, (0, yc, SH_O[2]), 0.010, S_["PCD_REAR"] / 2 + 0.005), (0, side * SH_O[1], SH_O[2]), ARM_LC1, ARM_LC2)]
+    return {
+        "stl": "JX1_Torso", "h": 0.002, "materials": {"6061-T6": al()},
+        "supports": [("waist actuator output", lambda m: m.face_annulus(2, 0.0, (0, 0, 0), Mh["PILOT_D"] / 2 + 0.0004, Mh["D_OUT"] / 2), (0, 1, 2))],
+        "scenarios": {"left arm": shoulder(1), "right arm": shoulder(-1)},
+        "note": "torso frame: waist output -> shoulder housings (one arm at peak at a time)",
+    }
+
+
+def shoulder_pitch_def():
+    SH_O, SR_OFF, SY_OFF, EL_OFF, HAND_OFF, UPK, S_, XS_ = _ub()
+    xr = UPK["roll_out_x"] - S_["T_OUT"] - S_["L_HOUSING"]
+    return {
+        "stl": "JX1_ShoulderPitchBracket_L", "h": 0.001, "materials": {"6061-T6": al()},
+        "supports": [("shoulder-pitch output flange", lambda m: m.face_annulus(1, 0.0, (0, 0, 0), S_["PILOT_D"] / 2 + 0.0004, S_["D_OUT"] / 2), (0, 1, 2))],
+        "loads": [("shoulder-roll housing (arm wrench @ roll centre)", lambda m: m.face_annulus(0, xr, (xr, SR_OFF[1], 0), 0.008, S_["PCD_REAR"] / 2 + 0.005),
+                   (0, SR_OFF[1], 0), ARM_LC1, ARM_LC2)],
+        "note": "U-bracket around the RS02 shoulder-roll actuator",
+    }
+
+
+def shoulder_roll_def():
+    SH_O, SR_OFF, SY_OFF, EL_OFF, HAND_OFF, UPK, S_, XS_ = _ub()
+    xf = UPK["roll_out_x"]
+    zr = SY_OFF[2] + XS_["T_OUT"] + XS_["L_HOUSING"]
+    return {
+        "stl": "JX1_ShoulderRollBracket_L", "h": 0.001, "materials": {"6061-T6": al()},
+        "supports": [("shoulder-roll output flange", lambda m: m.face_annulus(0, xf, (xf, 0, 0), S_["PILOT_D"] / 2 + 0.0004, S_["D_OUT"] / 2), (0, 1, 2))],
+        "loads": [("shoulder-yaw housing (arm wrench @ roll centre)", lambda m: m.face_annulus(2, zr, (0, 0, zr), 0.008, XS_["PCD_REAR"] / 2 + 0.005),
+                   (0, 0, 0), ARM_LC1, ARM_LC2)],
+        "note": "L-bracket roll output -> RS00 yaw housing",
+    }
+
+
+def upper_arm_def():
+    SH_O, SR_OFF, SY_OFF, EL_OFF, HAND_OFF, UPK, S_, XS_ = _ub()
+    yb = -UPK["elbow_face_y"]
+    return {
+        "stl": "JX1_UpperArm_L", "h": 0.001, "materials": {"6061-T6": al()},
+        "supports": [("shoulder-yaw output flange", lambda m: m.face_annulus(2, 0.0, (0, 0, 0), XS_["PILOT_D"] / 2 + 0.0004, XS_["D_OUT"] / 2), (0, 1, 2))],
+        "loads": [("elbow housing (forearm wrench @ elbow)", lambda m: m.face_annulus(1, yb, (0, yb, EL_OFF[2]), 0.008, XS_["PCD_REAR"] / 2 + 0.005),
+                   (0, 0, EL_OFF[2]), ELBOW_LC1, ELBOW_LC2)],
+        "note": "yaw output -> elbow housing",
+    }
+
+
+def forearm_def():
+    SH_O, SR_OFF, SY_OFF, EL_OFF, HAND_OFF, UPK, S_, XS_ = _ub()
+    yo = UPK["elbow_face_y"]
+    zh = HAND_OFF[2]
+    return {
+        "stl": "JX1_Forearm_L", "h": 0.001, "materials": {"6061-T6": al()},
+        "supports": [("elbow output flange", lambda m: m.face_annulus(1, yo, (0, yo, 0), XS_["PILOT_D"] / 2 + 0.0004, XS_["D_OUT"] / 2), (0, 1, 2))],
+        "loads": [("gripper mount (hand wrench @ hand frame)", lambda m: m.select(lambda X: np.abs(X[:, 2] - (zh - 0.006)) <= 0.75 * m.h),
+                   (0, 0, zh), [60.0, 60.0, 60.0, 6.0, 6.0, 6.0], [30.0, 30.0, 30.0, 3.0, 3.0, 3.0])],
+        "note": "elbow output -> gripper mount (payload 1 kg x 3 g + gripper; wrist moments from grasp offsets)",
+    }
+
+
 PARTS = {"thigh": thigh_def, "hip_roll": hip_roll_def, "hip_yaw": hip_yaw_def, "shin": shin_def, "foot": foot_def,
-         "pelvis": pelvis_def, "crank": crank_def}
+         "pelvis": pelvis_def, "crank": crank_def, "torso": torso_def, "shoulder_pitch": shoulder_pitch_def,
+         "shoulder_roll": shoulder_roll_def, "upper_arm": upper_arm_def, "forearm": forearm_def}
 
 
 # ---------------------------------------------------------------------------------------------------- analysis
