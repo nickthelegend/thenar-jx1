@@ -13,7 +13,7 @@ def robot_description(xacro_file="jx1.urdf.xacro", **mappings):
 
 
 def default_policy_dir():
-    return str(Path(get_package_share_directory("jx1_policy")) / "policies" / "jx1_walk_rough")
+    return str(Path(get_package_share_directory("jx1_policy")) / "policies" / "jx1_walk_stand_v7")
 
 
 def repo_root():

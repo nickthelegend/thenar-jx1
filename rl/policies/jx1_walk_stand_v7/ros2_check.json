@@ -1,0 +1,55 @@
+{
+ "policy": "rl/policies/jx1_walk_stand_v7",
+ "ros_distro": "jazzy",
+ "started_by": "python -m (source tree)",
+ "phases": {
+  "forward": {
+   "command": [
+    0.4,
+    0.0,
+    0.0
+   ],
+   "sim_duration_s": 7.22,
+   "distance_m": 2.688,
+   "mean_speed_m_s": 0.372,
+   "yaw_change_deg": 4.7,
+   "min_pelvis_z_m": 0.565,
+   "max_tilt_deg": 4.39
+  },
+  "turn": {
+   "command": [
+    0.0,
+    0.0,
+    0.4
+   ],
+   "sim_duration_s": 6.0,
+   "distance_m": 0.1,
+   "mean_speed_m_s": 0.017,
+   "yaw_change_deg": 136.5,
+   "min_pelvis_z_m": 0.561,
+   "max_tilt_deg": 5.06
+  },
+  "stop": {
+   "command": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "sim_duration_s": 4.0,
+   "distance_m": 0.026,
+   "mean_speed_m_s": 0.007,
+   "yaw_change_deg": -2.0,
+   "min_pelvis_z_m": 0.561,
+   "max_tilt_deg": 2.95
+  }
+ },
+ "reached_walk_state": true,
+ "upright": true,
+ "sim_log_tail": [
+  "[INFO] [1790248055.477128800] [jx1_mujoco]: MuJoCo D:\\Project\\thenar-jx1\\simulation\\mujoco\\jx1.xml: 23 actuated joints, dt 0.002 s",
+  "[INFO] [1790248057.436196000] [jx1_mujoco]: policy walking: gantry released"
+ ],
+ "policy_log_tail": [
+  "[INFO] [1790248055.072727000] [jx1_policy]: policy D:\\Project\\thenar-jx1\\rl\\policies\\jx1_walk_stand_v7: 12 joints, 50 Hz"
+ ]
+}

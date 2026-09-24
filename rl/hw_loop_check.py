@@ -49,7 +49,7 @@ def wait_port(port, timeout=30.0):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--policy", default=str(REPO / "rl" / "policies" / "jx1_walk_rough"))
+    ap.add_argument("--policy", default=str(REPO / "rl" / "policies" / "jx1_walk_stand_v7"))
     ap.add_argument("--launch", type=Path, default=None, help="colcon install space: ros2 launch jx1_hw hardware.launch.py hil:=true")
     ap.add_argument("--fast", action="store_true", help="stand, 0.8 m/s for 8 s, stop -> hw_loop_fast_check.json")
     a = ap.parse_args()

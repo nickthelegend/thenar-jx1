@@ -19,7 +19,7 @@ from launch_ros.actions import Node
 def setup(context):
     def get(k):
         return LaunchConfiguration(k).perform(context)
-    policy_dir = get("policy_dir") or str(Path(get_package_share_directory("jx1_policy")) / "policies" / "jx1_walk_rough")
+    policy_dir = get("policy_dir") or str(Path(get_package_share_directory("jx1_policy")) / "policies" / "jx1_walk_stand_v7")
     hw_cfg = str(Path(get_package_share_directory("jx1_hw")) / "config" / "hw.yaml")
     io = str(Path(policy_dir) / "policy_io.yaml")
     urdf = xacro.process_file(str(Path(get_package_share_directory("jx1_description")) / "urdf" / "jx1.urdf.xacro"),

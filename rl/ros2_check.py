@@ -100,7 +100,7 @@ def stop(p):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--policy", default=str(REPO / "rl" / "policies" / "jx1_walk_rough"))
+    ap.add_argument("--policy", default=str(REPO / "rl" / "policies" / "jx1_walk_stand_v7"))
     ap.add_argument("--launch", type=Path, default=None,
                     help="colcon install space: start the stack with `ros2 launch jx1_bringup mujoco_sim.launch.py` from it "
                          "instead of running the two nodes from the source tree (writes ros2_launch_check.json)")
