@@ -39,18 +39,18 @@ PARTS = [
     ("Ankle/JX1_AnkleCross", "turn + cross-drill Ø8 H7 bores", "EN8/EN24", 2, True),
     ("Ankle/JX1_AnkleRod_A", "cut Ø8 rod to length, tap M5x12 both ends", "chrome-plated steel", 2, True),
     ("Ankle/JX1_AnkleRod_B", "cut Ø8 rod to length, tap M5x12 both ends", "chrome-plated steel", 2, False),
-    ("Torso/JX1_Torso", "laser 5/4 mm plates + 4x 2020 extrusion posts", "6061-T6 + 2020", 1, True),
-    ("Arms/JX1_ShoulderPitchBracket_L", "laser 5 mm plates, bolted U-bracket", "6061-T6", 1, True),
+    ("Torso/JX1_Torso", "laser 5/4 mm plates + 4x 2020 extrusion posts - ON HOLD until the upper-body FEA", "6061-T6 + 2020", 1, True),
+    ("Arms/JX1_ShoulderPitchBracket_L", "laser 5 mm plates, bolted U-bracket - ON HOLD until the upper-body FEA", "6061-T6", 1, True),
     ("Arms/JX1_ShoulderPitchBracket_R", "as L, mirrored", "6061-T6", 1, False),
-    ("Arms/JX1_ShoulderRollBracket_L", "laser 6 mm plates, bolted L-bracket", "6061-T6", 1, True),
+    ("Arms/JX1_ShoulderRollBracket_L", "laser 6 mm plates, bolted L-bracket - ON HOLD until the upper-body FEA", "6061-T6", 1, True),
     ("Arms/JX1_ShoulderRollBracket_R", "as L, mirrored", "6061-T6", 1, False),
-    ("Arms/JX1_UpperArm_L", "laser 6 mm plates, bolted", "6061-T6", 1, True),
+    ("Arms/JX1_UpperArm_L", "laser 6 mm plates, bolted - ON HOLD until the upper-body FEA", "6061-T6", 1, True),
     ("Arms/JX1_UpperArm_R", "as L, mirrored", "6061-T6", 1, False),
-    ("Arms/JX1_Forearm_L", "laser 6 mm plates, bolted", "6061-T6", 1, True),
+    ("Arms/JX1_Forearm_L", "laser 6 mm plates, bolted - ON HOLD until the upper-body FEA", "6061-T6", 1, True),
     ("Arms/JX1_Forearm_R", "as L, mirrored", "6061-T6", 1, False),
 ]
-PRINTED = [("Head/JX1_Head", "PETG-CF, 3 walls, 25 % gyroid"), ("Head/JX1_NeckBracket", "PA-CF, solid"),
-           ("Arms/JX1_Gripper", "PA-CF body + TPU pads")]
+PRINTED = [("Head/JX1_Head", "PETG-CF, 3 walls, 25 % gyroid", 1), ("Head/JX1_NeckBracket", "PA-CF, solid", 1),
+           ("Arms/JX1_Gripper", "PA-CF body + TPU pads", 2)]
 
 
 def drawing(s, part_path, stem, note, out_dir):
@@ -118,14 +118,14 @@ def main():
         rows.append((stem, material, process, qty, step.relative_to(ROOT).as_posix(), pdf))
         print(f"{stem:32s} STEP {'ok' if ok else 'FAILED'}  drawing {pdf or '-'}", flush=True)
         s.close(doc)
-    for rel, material in PRINTED:
+    for rel, material, qty in PRINTED:
         stem = Path(rel).name
         src = ROOT / "simulation" / "meshes" / "source_mm" / f"{stem}.STL"
         if src.exists():
             shutil.copy2(src, OUT / "print" / f"{stem}.stl")
-        rows.append((stem, material, "FDM print (P1S)", 1, f"manufacturing/print/{stem}.stl", ""))
+        rows.append((stem, material, "FDM print (P1S)", qty, f"manufacturing/print/{stem}.stl", ""))
     # full-size PETG mock-ups of the metal parts: check actuator bolt patterns (ASSUMED, OI-1), clearances and cable routes on the
-    # real actuators before ordering metal. NOT structural (printed leg parts failed the FEA with SF 0.08-0.76 vs 2.0 required).
+    # real actuators before ordering metal. NOT structural (printed leg/pelvis parts failed the FEA with SF 0.08-0.90 vs 2.0 required).
     fit = []
     (OUT / "fit_check").mkdir(parents=True, exist_ok=True)
     for rel, *_ in PARTS:
@@ -143,7 +143,7 @@ def main():
     lines += ["", "## Fit-check prints (PETG) — NOT structural", "",
               "Full-size copies of the metal parts (`fit_check/*_FITCHECK.stl`, part frame, mm) for checking actuator bolt patterns,",
               "pilots, clearances and cable routes on the real actuators before ordering metal. Plain PETG, 3 walls, 15 % infill is enough.",
-              "**Never load them or stand the robot on them**: the printed leg/pelvis parts failed the FEA (SF 0.08-0.76 vs 2.0 required,",
+              "**Never load them or stand the robot on them**: the printed leg/pelvis parts failed the FEA (SF 0.08-0.90 vs 2.0 required,",
               "`calculations/results/structural/`).", "", "| Part | STL |", "|---|---|"]
     lines += [f"| {stem} | [{stem}_FITCHECK.stl](fit_check/{stem}_FITCHECK.stl) |" for stem in fit]
     (OUT / "index.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
