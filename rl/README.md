@@ -28,10 +28,10 @@ MuJoCo, Isaac Lab and ROS 2. The walking task, its conventions and the deploymen
 | `rl/jx1_rl/env.py` | batched MuJoCo environment on `mujoco.rollout` (C++ thread pool), rewards, DR, pushes, resets | tested, ~20k policy steps/s on 8–11 threads |
 | `rl/jx1_rl/ppo.py`, `rl/train.py` | PPO (rsl_rl algorithm: asymmetric actor-critic, running normalisers, GAE, adaptive LR), GPU update, left/right mirror loss (`jx1_rl/symmetry.py`) | tested |
 | `rl/export.py` | TorchScript + ONNX (normaliser baked in) + `policy_io.yaml`, checked against the checkpoint | tested |
-| `rl/sim2sim.py` | exported policy on the **full CAD model** (mesh hulls, 500 Hz, no DR), 7 command scenarios; optional sensing/actuation delay | tested |
-| `rl/envelope.py`, `rl/push_test.py`, `rl/latency_test.py` | command envelope (vx × wz, vx × vy grids), push recovery, latency sensitivity, all on the CAD model | tested |
+| `rl/sim2sim.py` | exported policy on the **full CAD model** (mesh hulls, 500 Hz, no DR), 7 command scenarios; optional sensing/actuation delay; per scenario: tracking, torque/speed margins, foot lift-offs, self-contact between robot bodies | tested |
+| `rl/envelope.py`, `rl/push_test.py`, `rl/latency_test.py`, `rl/power_test.py` | command envelope (vx × wz, vx × vy grids, incl. self-contact), push recovery (walking and standing), latency sensitivity, electrical power / battery current / actuator thermal load, all on the CAD model | tested |
 | `rl/report.py`, `rl/compare_policies.py`, `rl/play.py` | `REPORT.md` policy card per bundle, side-by-side comparison, keyboard driving in the MuJoCo viewer | tested (viewer: headless path) |
-| `rl/tests/test_rl.py` | quaternion maths vs MuJoCo, ankle-polygon projection (numpy/ROS/torch), env determinism, training-vs-deployment observation parity, latency, hub ramp, MuJoCo/Isaac `policy_io` parity, hardware protocol/bridge/IMU, rough terrain, GAE/normaliser, ros2_control xacro, mirror maps vs MuJoCo physics | 14/14 pass |
+| `rl/tests/test_rl.py` | quaternion maths vs MuJoCo, ankle-polygon projection (numpy/ROS/torch), env determinism, training-vs-deployment observation parity, latency, hub ramp, MuJoCo/Isaac `policy_io` parity, hardware protocol/bridge/IMU, rough terrain, GAE/normaliser, ros2_control xacro, mirror maps vs MuJoCo physics, stand-mode clock gating | 15/15 pass |
 | `simulation/isaac/isaaclab/` | Isaac Lab tasks `Isaac-Velocity-{Flat,Rough}-JX1-v0` (+ `-Play`), same obs/actions/rewards/DR; rsl_rl config, train and export scripts, offline API check, Isaac Sim ROS 2 bridge | offline-checked against Isaac Lab 2.3.2 + rsl_rl 3.1.2 and the bridge and USD import against Isaac Sim 5.1 sources (89/89); **not run in Isaac Sim** |
 | `ros2_ws/src/jx1_policy` | ONNX policy runner (no training code) + ROS 2 node (WAIT → RAMP → WALK, HOLD on stale state) | runner tested; node see below |
 | `ros2_ws/src/jx1_sim` | MuJoCo ROS 2 node: `/clock`, `/jx1/joint_states`, `/jx1/imu`, `/jx1/odom`, TF; applies `/jx1/joint_command` | see below |
@@ -115,8 +115,14 @@ rl/.venv/Scripts/python rl/sim2sim.py --policy rl/policies/jx1_walk_rough --terr
 - `rl/envelope.py`: constant-command walks over a vx × wz and a vx × vy grid, from inside the training ranges to beyond
   them. For each command it records falls, tracking and torque margin, and writes `envelope.json` and `envelope.png`. The
   whole grid takes about a minute on 4 processes.
-- `rl/report.py`: gathers every check of a bundle (training curves, sim-to-sim, envelope, pushes, ROS 2, HIL) into the
-  bundle's `REPORT.md`.
+- `rl/power_test.py`: battery power, current and actuator RMS current vs rated for standing and walking, with the
+  electrical model of `calculations/run_power_budget.py` (ankle motors through the linkage), plus foot lift-offs.
+- Stand and self-contact metrics (every `sim2sim.py` / `envelope.py` rollout): foot lift-offs per second, swing fraction
+  and base travel (stepping in place, OI-27), and every contact between two robot bodies on the CAD hulls (leg-leg OI-7,
+  hip-yaw brackets OI-24, arm-thigh OI-18). The detector reports the hip-yaw bracket contact at 22° toe-out per hip, as
+  the OI-24 sweep found.
+- `rl/report.py`: gathers every check of a bundle (training curves, sim-to-sim, envelope, pushes, power, ROS 2, HIL)
+  into the bundle's `REPORT.md`.
 
 ## Train in Isaac Lab (offline-checked, not yet run in Isaac Sim)
 
@@ -259,10 +265,13 @@ ros2 launch jx1_hw hardware.launch.py port_a:=/dev/ttyACM0 port_b:=/dev/ttyACM1 
   delay (`rl/latency_test.py`) reproduces that at about 30 ms of sensing plus 10 ms of actuation latency. Two fixes:
   - `hw_node` sent hub frames on its own 50 Hz timer, which added a random 0–20 ms delay after each policy output. It
     now forwards every command at once, which alone gave 73 % turn and 95 % forward tracking;
-  - training now randomises 0–15 ms sensing and 0–10 ms actuation latency (was 0–5 ms each);
+  - `walk_v4` then trained with 0–15 ms sensing and 0–10 ms actuation latency and came out worse
+    (`jx1_walk_sym_latency`), while `jx1_walk_rough`, trained with 0–5 ms each, still tracks 0.3 rad/s turns at 89 % under
+    40 ms + 20 ms added delay, so the task randomises 0–5 ms each;
 - at zero command the free policy drifted −0.03 rad/s in yaw (+0.3 rad/s turns at 85 %, −0.3 at 109 %), although the
-  robot is symmetric to 0.2 mm. PPO now has a left/right mirror loss (`ppo.symmetry_coef`), with the mirror maps
-  checked against MuJoCo physics.
+  robot is symmetric to 0.2 mm. PPO has a left/right mirror loss (`ppo.symmetry_coef`, mirror maps checked against
+  MuJoCo physics); it is off by default because the rough fine-tune had already removed the drift and the mirrored
+  `walk_v4` was worse.
 
 ## Conventions (policy_io.yaml)
 
@@ -271,6 +280,9 @@ ros2 launch jx1_hw hardware.launch.py port_a:=/dev/ttyACM0 port_b:=/dev/ttyACM1 
   (`joint_map.yaml` → `coupled_limits`). Waist, arms and neck hold the default walking posture.
 - **Observation (47)**: body angular velocity × 0.25, projected gravity, command × (2, 2, 0.25), joint position −
   default, joint velocity × 0.05, last action, sin/cos of the 0.8 s gait clock (phase starts when walking starts).
+  **Stand mode** (`gait.stand_command_threshold`, 0.1): below that command norm the clock features are 0, and in
+  training the contact reward wants both feet down with no swing-height target (OI-27). Every runner (training env,
+  `sim2sim.py`, the ROS 2 runner, Isaac Lab) applies the same rule; bundles without the key run the clock always.
 - **Control**: 50 Hz policy; trained with 200 Hz physics (MuJoCo) — sim-to-sim runs the CAD model at 500 Hz.
 - The parallel ankle is abstracted as serial pitch/roll joints with the linkage's capability limits (46/51 N·m);
   converting ankle targets to the two ankle motors is done by the hub (`calculations/jx1calc/ankle.py`).
