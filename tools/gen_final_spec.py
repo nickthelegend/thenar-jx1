@@ -110,6 +110,22 @@ def main():
         s_ = mj.get("standing", {})
         L.append(f"MuJoCo                : standing {'held' if not s_.get('fell') else 'FELL'} (max tilt {s_.get('max_tilt_deg')} deg), "
                  f"squat {'ok' if not mj.get('squat', {}).get('fell') else 'fell'}")
+    wk = load_json("verification/mujoco_walking.json")
+    if wk and "gaits" in wk:
+        gs = wk["gaits"]
+        runs = ", ".join(f"{n} {r['speed_m_s']:.2f} m/s {'ok' if r['pass'] else 'FAIL'}" for n, r in gs.items())
+        worst = max(((j, f, n) for n, r in gs.items() for j, f in r["peak_torque_fraction_of_limit"].items()), key=lambda x: x[1])
+        L.append(f"Walking (MuJoCo, CAD) : {runs}; max tilt {max(r['max_tilt_deg'] for r in gs.values()):.1f} deg; "
+                 f"highest torque {worst[0]} {worst[1]:.0%} of peak ({worst[2]})  [CALCULATED, MuJoCo]")
+    pu = load_json("verification/mujoco_push.json")
+    if pu:
+        imp = pu["max_survived_impulse_Ns"]
+        L.append(f"Push recovery         : walking {pu['gait']}, 0.1 s torso pushes of {min(imp.values()):.1f}-{max(imp.values()):.1f} N s survived, "
+                 f"by direction (fixed footsteps, ankle + hip strategy)  [CALCULATED, MuJoCo]")
+    xc = load_json("verification/xacro_check.json")
+    if xc:
+        L.append(f"Robot description     : URDF + xacro ({xc['links']} links, {xc['revolute']} revolute joints; xacro expansion "
+                 f"{'matches' if xc['pass'] else 'DIFFERS FROM'} the URDF), MuJoCo MJCF, Isaac Sim import script")
     # cost
     rows = list(csv.DictReader(open(ROOT / "bom" / "master_bom.csv", encoding="utf-8")))
     total = sum(float(r["Total INR"]) for r in rows if r["Status"] != "DEFERRED")
