@@ -8,6 +8,8 @@ control law) -> MuJoCo CAD model -> hub state frames -> bridge (ankle FK) -> pol
 Procedure like a bring-up: gantry holds the robot, hubs in DAMPING -> policy reaches WALK -> /jx1/hw/run -> gantry release
 -> /cmd_vel scenario (stand, forward 0.3 m/s, turn 0.3 rad/s, stop). Writes <policy>/hw_loop_check.json.
 Run in the ROS 2 environment:  pixi run python rl/hw_loop_check.py --policy rl/policies/jx1_walk_flat
+With --launch <colcon install space> the chain is started as on the robot, `ros2 launch jx1_hw hardware.launch.py hil:=true`
+(writes hw_loop_launch_check.json).
 """
 from __future__ import annotations
 
@@ -26,7 +28,7 @@ from std_msgs.msg import String
 from std_srvs.srv import Trigger
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from ros2_check import Probe, spin_until  # noqa: E402
+from ros2_check import Probe, clean, spin_until, start_launch, stop  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[1]
 SCRIPT = [("stand", (0.0, 0.0, 0.0), 4.0), ("forward", (0.3, 0.0, 0.0), 10.0), ("turn", (0.0, 0.0, 0.3), 6.0), ("stop", (0.0, 0.0, 0.0), 4.0)]
@@ -46,6 +48,7 @@ def wait_port(port, timeout=30.0):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--policy", default=str(REPO / "rl" / "policies" / "jx1_walk_flat"))
+    ap.add_argument("--launch", type=Path, default=None, help="colcon install space: ros2 launch jx1_hw hardware.launch.py hil:=true")
     a = ap.parse_args()
     policy = Path(a.policy).resolve()
     io = policy / "policy_io.yaml"
@@ -53,10 +56,16 @@ def main():
     env = dict(os.environ)
     env["PYTHONPATH"] = os.pathsep.join(str(REPO / "ros2_ws" / "src" / p) for p in ("jx1_hw", "jx1_policy")) + os.pathsep + env.get("PYTHONPATH", "")
     run = lambda *args: subprocess.Popen([sys.executable, "-m", *args], env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)  # noqa: E731
-    hubs = run("jx1_hw.fake_hub", "--ros-args", "-p", f"model_path:={REPO / 'simulation' / 'mujoco' / 'jx1.xml'}", "-p", f"hw_config:={hw}",
-               "-p", f"policy_io:={io}", "-p", "port_a:=5555", "-p", "port_b:=5556")
-    procs = [hubs]
-    result = {"policy": str(policy), "chain": "jx1_policy -> jx1_hw hw_node -> hub protocol over TCP -> fake_hub (firmware law) -> MuJoCo",
+    if a.launch:
+        procs = [start_launch(a.launch.resolve(), policy, "hardware.launch.py", package="jx1_hw", extra=["hil:=true"])]
+        tags = ("launch",)
+    else:
+        procs = [run("jx1_hw.fake_hub", "--ros-args", "-p", f"model_path:={REPO / 'simulation' / 'mujoco' / 'jx1.xml'}", "-p",
+                     f"hw_config:={hw}", "-p", f"policy_io:={io}", "-p", "port_a:=5555", "-p", "port_b:=5556")]
+        tags = ("fake_hub", "hw_node", "policy")
+    result = {"policy": policy.relative_to(REPO).as_posix() if policy.is_relative_to(REPO) else policy.name,
+              "chain": "jx1_policy -> jx1_hw hw_node -> hub protocol over TCP -> fake_hub (firmware law) -> MuJoCo",
+              "started_by": "ros2 launch jx1_hw hardware.launch.py hil:=true (colcon install)" if a.launch else "python -m (source tree)",
               "phases": {}}
     rclpy.init()
     probe = Probe()
@@ -65,9 +74,10 @@ def main():
     try:
         if not (wait_port(5555) and wait_port(5556)):
             raise RuntimeError("hub emulator did not open its ports")
-        procs.append(run("jx1_hw.hw_node", "--ros-args", "-p", "port_a:=socket://127.0.0.1:5555", "-p", "port_b:=socket://127.0.0.1:5556",
-                         "-p", f"policy_io:={io}", "-p", f"hw_config:={hw}"))
-        procs.append(run("jx1_policy.policy_node", "--ros-args", "-p", f"policy_dir:={policy}", "-p", "use_sim_time:=true"))
+        if not a.launch:
+            procs.append(run("jx1_hw.hw_node", "--ros-args", "-p", "port_a:=socket://127.0.0.1:5555", "-p",
+                             "port_b:=socket://127.0.0.1:5556", "-p", f"policy_io:={io}", "-p", f"hw_config:={hw}"))
+            procs.append(run("jx1_policy.policy_node", "--ros-args", "-p", f"policy_dir:={policy}", "-p", "use_sim_time:=true"))
         result["reached_walk_state"] = spin_until(probe, lambda: probe.state == "WALK", 120.0)
         if not result["reached_walk_state"]:
             raise RuntimeError(f"policy never reached WALK (state {probe.state})")
@@ -98,16 +108,10 @@ def main():
     finally:
         probe.destroy_node()
         rclpy.try_shutdown()
-        for p in reversed(procs):
-            p.terminate()
-        for p, tag in zip(procs, ("fake_hub", "hw_node", "policy")):
-            try:
-                out = p.communicate(timeout=10)[0]
-            except subprocess.TimeoutExpired:
-                p.kill()
-                out = p.communicate()[0]
-            result[f"{tag}_log_tail"] = out.strip().splitlines()[-12:]
-    (policy / "hw_loop_check.json").write_text(json.dumps(result, indent=1), encoding="utf-8")
+        outs = {tag: stop(p) for p, tag in reversed(list(zip(procs, tags)))}
+        for tag in tags:
+            result[f"{tag}_log_tail"] = clean(outs[tag].strip().splitlines())[-(25 if a.launch else 12):]
+    (policy / ("hw_loop_launch_check.json" if a.launch else "hw_loop_check.json")).write_text(json.dumps(result, indent=1), encoding="utf-8")
     print(json.dumps({k: v for k, v in result.items() if not k.endswith("log_tail")}, indent=1))
     if "error" in result:
         for k, v in result.items():

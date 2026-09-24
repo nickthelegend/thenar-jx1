@@ -118,6 +118,12 @@ def main():
         out += ["## Hardware-in-the-loop: policy → `hw_node` → hub protocol → hub-firmware twin → physics", "",
                 f"`{hw['chain']}`. RUN accepted: {hw['run_accepted']}, upright: {hw['upright']}, "
                 f"hub faults at the end: {', '.join(faults) if faults else 'none'}.", "", phases_table(hw), ""]
+        hl = load(pdir / "hw_loop_launch_check.json")
+        if hl and hl.get("phases"):
+            ph = hl["phases"]
+            out += [f"Started as on the robot, `{hl.get('started_by')}`: forward {ph['forward']['mean_speed_m_s']:.2f} m/s at 0.3, "
+                    f"turn {ph['turn']['yaw_change_deg']:.0f}° of 103° commanded, upright {hl.get('upright')}, "
+                    f"RUN accepted {hl.get('run_accepted')}.", ""]
     limits = []
     for tag in ("", "_rough"):
         s = load(pdir / f"sim2sim{tag}.json")

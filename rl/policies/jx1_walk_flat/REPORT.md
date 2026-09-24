@@ -89,6 +89,8 @@ Same script on every path: forward 0.4 m/s for 10 s, turn 0.4 rad/s for 6 s (137
 | turn | (+0.0, +0.0, +0.3) | 0.28 m | 0.05 m/s | +64.0° | 0.588 m | 5.4° |
 | stop | (+0.0, +0.0, +0.0) | 0.21 m | 0.05 m/s | -8.2° | 0.588 m | 4.7° |
 
+Started as on the robot, `ros2 launch jx1_hw hardware.launch.py hil:=true (colcon install)`: forward 0.27 m/s at 0.3, turn 71° of 103° commanded, upright True, RUN accepted True.
+
 ## Watch items
 
 - forward_0.8_rough: left_ankle_pitch reaches 95% of its effort limit

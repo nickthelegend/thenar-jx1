@@ -65,9 +65,9 @@ def spin_until(node, cond, timeout_s):
     return False
 
 
-def start_launch(install: Path, policy: Path, launch_file: str):
-    """`ros2 launch jx1_bringup <launch_file>` from a colcon install space (rl/ros2_env/build_ws.py)."""
-    args = ["ros2", "launch", "jx1_bringup", launch_file, f"repo:={REPO}", f"policy_dir:={policy}"]
+def start_launch(install: Path, policy: Path, launch_file: str, package: str = "jx1_bringup", extra=()):
+    """`ros2 launch <package> <launch_file>` from a colcon install space (rl/ros2_env/build_ws.py)."""
+    args = ["ros2", "launch", package, launch_file, f"repo:={REPO}", f"policy_dir:={policy}", *extra]
     if launch_file == "ros2_control.launch.py":
         args += ["hardware:=topic", "sim:=mujoco"]
     if sys.platform == "win32":
