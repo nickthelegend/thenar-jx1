@@ -1,0 +1,120 @@
+{
+ "mass_kg": 33.61,
+ "LC1": {
+  "samples": 2160,
+  "scaled_to_actuator_peaks": 2114
+ },
+ "LC2": "fast walk 0.79 m/s, nominal walk 0.52 m/s, 15 deg/step turning (calculations/results/iter1_B_*)",
+ "joints": {
+  "hip_roll_corner": {
+   "section_point_m": [
+    -0.068,
+    -0.025,
+    0.0025
+   ],
+   "LC1": {
+    "max_abs_F_N": [
+     297.0,
+     200.0,
+     1032.0
+    ],
+    "max_abs_M_Nm": [
+     79.8,
+     185.5,
+     45.0
+    ],
+    "worst_moment_sample": {
+     "F_N": [
+      280.0,
+      0.0,
+      932.0
+     ],
+     "M_Nm": [
+      60.1,
+      -184.1,
+      -32.2
+     ]
+    }
+   },
+   "LC2": {
+    "max_abs_F_N": [
+     187.0,
+     65.0,
+     309.0
+    ],
+    "max_abs_M_Nm": [
+     25.8,
+     75.8,
+     16.9
+    ],
+    "worst_moment_sample": {
+     "F_N": [
+      -42.0,
+      58.0,
+      -280.0
+     ],
+     "M_Nm": [
+      22.3,
+      75.8,
+      -14.1
+     ]
+    }
+   }
+  },
+  "shin_joggle": {
+   "section_point_m": [
+    0.0,
+    -0.0145,
+    -0.088
+   ],
+   "LC1": {
+    "max_abs_F_N": [
+     547.0,
+     200.0,
+     1032.0
+    ],
+    "max_abs_M_Nm": [
+     65.9,
+     99.6,
+     37.9
+    ],
+    "worst_moment_sample": {
+     "F_N": [
+      -310.0,
+      121.0,
+      260.0
+     ],
+     "M_Nm": [
+      62.6,
+      92.7,
+      21.1
+     ]
+    }
+   },
+   "LC2": {
+    "max_abs_F_N": [
+     168.0,
+     65.0,
+     287.0
+    ],
+    "max_abs_M_Nm": [
+     14.0,
+     33.2,
+     23.6
+    ],
+    "worst_moment_sample": {
+     "F_N": [
+      158.0,
+      36.0,
+      -151.0
+     ],
+     "M_Nm": [
+      7.5,
+      -33.2,
+      7.4
+     ]
+    }
+   }
+  }
+ }
+}
