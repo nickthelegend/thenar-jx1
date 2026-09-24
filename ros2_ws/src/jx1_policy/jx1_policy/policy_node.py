@@ -30,7 +30,7 @@ class PolicyNode(Node):
         pdir = self.get_parameter("policy_dir").value
         if not pdir:
             from ament_index_python.packages import get_package_share_directory
-            pdir = f"{get_package_share_directory('jx1_policy')}/policies/jx1_walk_flat"
+            pdir = f"{get_package_share_directory('jx1_policy')}/policies/jx1_walk_rough"
         self.runner = PolicyRunner(pdir)
         self.get_logger().info(f"policy {pdir}: {len(self.runner.policy_joints)} joints, {1 / self.runner.dt:.0f} Hz")
         self.joint_pos, self.joint_vel, self.stamp_js = {}, {}, None

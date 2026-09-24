@@ -3,8 +3,8 @@
 
 Run inside a ROS 2 (Jazzy) Python environment that also has mujoco==3.14.0 and onnxruntime, e.g. the RoboStack/pixi
 environment used on the design machine:
-  <pixi> run python rl/ros2_check.py --policy rl/policies/jx1_walk_flat
-  <pixi> run python rl/ros2_check.py --policy rl/policies/jx1_walk_flat --launch <ws>/install    # packaged: colcon + ros2 launch
+  <pixi> run python rl/ros2_check.py --policy rl/policies/jx1_walk_rough
+  <pixi> run python rl/ros2_check.py --policy rl/policies/jx1_walk_rough --launch <ws>/install    # packaged: colcon + ros2 launch
 Scenario: stand (ramp) -> 0.4 m/s forward 10 s -> turn 0.4 rad/s 6 s -> stop 4 s. Writes <policy>/ros2_check.json
 (ros2_launch_check.json with --launch; the install space comes from rl/ros2_env/build_ws.py).
 """
@@ -100,7 +100,7 @@ def stop(p):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--policy", default=str(REPO / "rl" / "policies" / "jx1_walk_flat"))
+    ap.add_argument("--policy", default=str(REPO / "rl" / "policies" / "jx1_walk_rough"))
     ap.add_argument("--launch", type=Path, default=None,
                     help="colcon install space: start the stack with `ros2 launch jx1_bringup mujoco_sim.launch.py` from it "
                          "instead of running the two nodes from the source tree (writes ros2_launch_check.json)")

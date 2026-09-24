@@ -6,7 +6,7 @@ The policy walks at 0.5 m/s (or stands with --stand); after 4 s a horizontal 0.1
 found by bisection for pushes forward, backward, left and right. Deployment path: rl/sim2sim.Runner (ONNX +
 policy_io.yaml), hub-style target ramp.
 Output: <policy>/push_test.json
-Usage: rl/.venv/Scripts/python rl/push_test.py [--policy rl/policies/jx1_walk_flat] [--stand]
+Usage: rl/.venv/Scripts/python rl/push_test.py [--policy rl/policies/jx1_walk_rough] [--stand]
 """
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ import mujoco
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from jx1_rl import RL_DIR, policy_io  # noqa: E402
+from jx1_rl import DEFAULT_POLICY, RL_DIR, policy_io  # noqa: E402
 from sim2sim import Runner, load_cad_model  # noqa: E402
 
 DUR, T_PUSH, T_AFTER = 0.10, 4.0, 4.0
@@ -62,7 +62,7 @@ def trial(rn, m, act_of, cmd, direction, impulse):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--policy", default=str(RL_DIR / "policies" / "jx1_walk_flat"))
+    ap.add_argument("--policy", default=str(DEFAULT_POLICY))
     ap.add_argument("--stand", action="store_true")
     a = ap.parse_args()
     pdir = Path(a.policy)

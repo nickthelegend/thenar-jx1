@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from jx1_rl import RL_DIR  # noqa: E402
+from jx1_rl import DEFAULT_POLICY, RL_DIR  # noqa: E402
 from sim2sim import CadSim  # noqa: E402
 
 DELAYS_MS = [(0, 0), (10, 0), (20, 0), (0, 10), (10, 10), (20, 10), (30, 10), (40, 20)]
@@ -23,7 +23,7 @@ SCENARIOS = [("turn_0.3", (0.0, 0.0, 0.3), 2), ("forward_0.3", (0.3, 0.0, 0.0), 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--policy", default=str(RL_DIR / "policies" / "jx1_walk_flat"))
+    ap.add_argument("--policy", default=str(DEFAULT_POLICY))
     a = ap.parse_args()
     policy = Path(a.policy)
     rows = []

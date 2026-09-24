@@ -7,7 +7,7 @@ control law) -> MuJoCo CAD model -> hub state frames -> bridge (ankle FK) -> pol
   jx1_policy        : the ONNX walking policy
 Procedure like a bring-up: gantry holds the robot, hubs in DAMPING -> policy reaches WALK -> /jx1/hw/run -> gantry release
 -> /cmd_vel scenario (stand, forward 0.3 m/s, turn 0.3 rad/s, stop). Writes <policy>/hw_loop_check.json.
-Run in the ROS 2 environment:  pixi run python rl/hw_loop_check.py --policy rl/policies/jx1_walk_flat
+Run in the ROS 2 environment:  pixi run python rl/hw_loop_check.py --policy rl/policies/jx1_walk_rough
 With --launch <colcon install space> the chain is started as on the robot, `ros2 launch jx1_hw hardware.launch.py hil:=true`
 (writes hw_loop_launch_check.json).
 """
@@ -47,7 +47,7 @@ def wait_port(port, timeout=30.0):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--policy", default=str(REPO / "rl" / "policies" / "jx1_walk_flat"))
+    ap.add_argument("--policy", default=str(REPO / "rl" / "policies" / "jx1_walk_rough"))
     ap.add_argument("--launch", type=Path, default=None, help="colcon install space: ros2 launch jx1_hw hardware.launch.py hil:=true")
     a = ap.parse_args()
     policy = Path(a.policy).resolve()

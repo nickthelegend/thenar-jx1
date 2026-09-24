@@ -19,7 +19,7 @@ import mujoco.viewer
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from jx1_rl import RL_DIR  # noqa: E402
+from jx1_rl import DEFAULT_POLICY, RL_DIR  # noqa: E402
 from sim2sim import CadSim  # noqa: E402
 
 KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE, KEY_BACKSPACE = 265, 264, 263, 262, 32, 259
@@ -79,7 +79,7 @@ def run(policy: Path, terrain=None, steps=None):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--policy", default=str(RL_DIR / "policies" / "jx1_walk_flat"))
+    ap.add_argument("--policy", default=str(DEFAULT_POLICY))
     ap.add_argument("--terrain", default=None)
     ap.add_argument("--headless-steps", type=int, default=None, help="run N policy steps without a window (smoke test)")
     a = ap.parse_args()

@@ -2,7 +2,7 @@
 
 Reads what is present next to policy.onnx: policy_io.yaml, training.png, sim2sim*.json, envelope*.json/png,
 push_test.json, ros2_check.json, hw_loop_check.json. Nothing is recomputed.
-Usage: rl/.venv/Scripts/python rl/report.py [--policy rl/policies/jx1_walk_flat]
+Usage: rl/.venv/Scripts/python rl/report.py [--policy rl/policies/jx1_walk_rough]
 """
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from pathlib import Path
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from jx1_rl import RL_DIR  # noqa: E402
+from jx1_rl import DEFAULT_POLICY, RL_DIR  # noqa: E402
 
 
 def load(p: Path):
@@ -49,7 +49,7 @@ def phases_table(p):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--policy", default=str(RL_DIR / "policies" / "jx1_walk_flat"))
+    ap.add_argument("--policy", default=str(DEFAULT_POLICY))
     a = ap.parse_args()
     pdir = Path(a.policy)
     io = yaml.safe_load((pdir / "policy_io.yaml").read_text(encoding="utf-8"))

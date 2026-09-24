@@ -17,7 +17,7 @@ from isaacsim import SimulationApp
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--headless", action="store_true")
-parser.add_argument("--policy", default=str(Path(__file__).resolve().parents[4] / "rl" / "policies" / "jx1_walk_flat"))
+parser.add_argument("--policy", default=str(Path(__file__).resolve().parents[4] / "rl" / "policies" / "jx1_walk_rough"))
 args, _ = parser.parse_known_args()
 app = SimulationApp({"headless": args.headless})
 

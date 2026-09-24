@@ -5,7 +5,7 @@ generated (simulation/mujoco/jx1.xml: CoACD mesh-hull collisions, 500 Hz physics
 artefacts — the same inputs the ROS 2 node gets. Scenarios: stand, walk forward/backward, side-step, turn, and a
 velocity sweep; each reports fall, mean velocity tracking error, max tilt, peak torque vs effort limit and foot slip.
 Outputs <policy>/sim2sim.json and <policy>/sim2sim_walk.gif.
-Usage: rl/.venv/Scripts/python rl/sim2sim.py [--policy rl/policies/jx1_walk_flat] [--no-render]
+Usage: rl/.venv/Scripts/python rl/sim2sim.py [--policy rl/policies/jx1_walk_rough] [--no-render]
 """
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ import onnxruntime as ort
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from jx1_rl import REPO, RL_DIR, policy_io  # noqa: E402
+from jx1_rl import REPO, DEFAULT_POLICY, RL_DIR, policy_io  # noqa: E402
 
 SCENARIOS = [("stand", (0.0, 0.0, 0.0), 6.0), ("forward_0.5", (0.5, 0.0, 0.0), 10.0), ("forward_0.8", (0.8, 0.0, 0.0), 10.0),
              ("backward_0.3", (-0.3, 0.0, 0.0), 8.0), ("sidestep_0.2", (0.0, 0.2, 0.0), 8.0), ("turn_0.5", (0.0, 0.0, 0.5), 8.0),
@@ -207,7 +207,7 @@ def run(policy_dir: Path, render=True, hub_interp=True, terrain=None):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--policy", default=str(RL_DIR / "policies" / "jx1_walk_flat"))
+    ap.add_argument("--policy", default=str(DEFAULT_POLICY))
     ap.add_argument("--no-render", action="store_true")
     ap.add_argument("--no-hub-interp", action="store_true", help="apply targets immediately instead of the hubs' 20 ms ramp")
     ap.add_argument("--terrain", default=None, help="task YAML with a terrain section (e.g. rl/config/jx1_walk_rough.yaml)")

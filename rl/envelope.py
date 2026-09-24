@@ -6,7 +6,7 @@ for --duration seconds with tracking measured after 2 s:
 A command counts as tracked when the robot stays up and each mean velocity is within max(0.1, 20 %) of the command
 (0.15 rad/s for wz). Outputs <policy>/envelope.json and <policy>/envelope.png.
 
-Usage: rl/.venv/Scripts/python rl/envelope.py [--policy rl/policies/jx1_walk_flat] [--workers 4] [--duration 6]
+Usage: rl/.venv/Scripts/python rl/envelope.py [--policy rl/policies/jx1_walk_rough] [--workers 4] [--duration 6]
 """
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from jx1_rl import RL_DIR  # noqa: E402
+from jx1_rl import DEFAULT_POLICY, RL_DIR  # noqa: E402
 
 VX = [-0.6, -0.4, -0.2, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2]
 WZ = [-0.9, -0.6, -0.3, 0.0, 0.3, 0.6, 0.9]
@@ -50,7 +50,7 @@ def tracked(cmd, r):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--policy", default=str(RL_DIR / "policies" / "jx1_walk_flat"))
+    ap.add_argument("--policy", default=str(DEFAULT_POLICY))
     ap.add_argument("--terrain", default=None)
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--duration", type=float, default=6.0)
