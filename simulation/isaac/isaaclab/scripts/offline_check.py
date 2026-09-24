@@ -841,6 +841,32 @@ def check_isaacsim_bridge(rep, root: Path):
             "; ".join(api_problems) or f"{calls} calls against {len(sigs)} signatures; SingleArticulation.dof_names present")
     rep.add("isaacsim", "ROS 2 bridge extension present", (ext / "isaacsim.ros2.bridge").is_dir(), "isaacsim.ros2.bridge")
 
+    # simulation/isaac/import_jx1.py (URDF -> USD): import-config fields and command names against the URDF importer
+    imp = ext / "isaacsim.asset.importer.urdf"
+    src = PKG.parent / "import_jx1.py"
+    if imp.is_dir() and src.exists():
+        import re
+        fields = set(re.findall(r'"([a-z_]+)"', next(imp.rglob("IsaacsimAssetImporterUrdfBindings.cpp")).read_text(encoding="utf-8")))
+        cmds = ast.parse((imp / "python" / "impl" / "commands.py").read_text(encoding="utf-8"))
+        classes = {n.name: n for n in cmds.body if isinstance(n, ast.ClassDef)}
+        t = ast.parse(src.read_text(encoding="utf-8"))
+        bad = []
+        for n in ast.walk(t):
+            if isinstance(n, ast.Assign) and isinstance(n.targets[0], ast.Attribute) and isinstance(n.targets[0].value, ast.Name) \
+                    and n.targets[0].value.id == "cfg" and n.targets[0].attr not in fields:
+                bad.append(f"ImportConfig.{n.targets[0].attr}")
+            if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr == "execute" and n.args \
+                    and isinstance(n.args[0], ast.Constant) and n.args[0].value.startswith("URDF"):
+                c = classes.get(n.args[0].value)
+                if c is None:
+                    bad.append(f"command {n.args[0].value}")
+                    continue
+                init = next((f for f in c.body if isinstance(f, ast.FunctionDef) and f.name == "__init__"), None)
+                params = [x.arg for x in init.args.args] if init else []
+                bad += [f"{n.args[0].value}({k.arg}=)" for k in n.keywords if k.arg not in params]
+        rep.add("isaacsim", "import_jx1.py (URDF -> USD) against the URDF importer: config fields, commands, arguments", not bad,
+                "; ".join(bad) or "ok")
+
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])

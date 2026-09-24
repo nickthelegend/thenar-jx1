@@ -1,6 +1,6 @@
 {
  "isaaclab_source": "IsaacLab v2.3.2 (git tag), isaaclab extension 0.54.2",
- "isaacsim_source": "IsaacSim v5.1.0 (git tag, sparse: ros2.bridge, core.nodes, core.api, core.prims, core.utils, sensors.physics, simulation_app)",
+ "isaacsim_source": "IsaacSim v5.1.0 (git tag, sparse: ros2.bridge, core.nodes, core.api, core.prims, core.utils, sensors.physics, simulation_app, asset.importer.urdf)",
  "mocked_modules": [
   "carb",
   "cuda",
@@ -213,7 +213,7 @@
    "task": "Isaac-Velocity-Flat-JX1-v0",
    "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, hub ramp, delay, reset)",
    "ok": true,
-   "detail": "max |diff| 1.37e-07 rad over 4 steps x 4 substeps"
+   "detail": "max |diff| 1.35e-07 rad over 4 steps x 4 substeps"
   },
   {
    "task": "Isaac-Velocity-Flat-JX1-v0",
@@ -489,7 +489,7 @@
    "task": "export",
    "check": "export_offline ONNX == rsl_rl 3 ActorCritic.act_inference (normaliser in the policy)",
    "ok": true,
-   "detail": "max |diff| 1.04e-07; rsl_rl>=3 (policy normaliser)"
+   "detail": "max |diff| 1.19e-07; rsl_rl>=3 (policy normaliser)"
   },
   {
    "task": "export",
@@ -520,6 +520,12 @@
    "check": "ROS 2 bridge extension present",
    "ok": true,
    "detail": "isaacsim.ros2.bridge"
+  },
+  {
+   "task": "isaacsim",
+   "check": "import_jx1.py (URDF -> USD) against the URDF importer: config fields, commands, arguments",
+   "ok": true,
+   "detail": "ok"
   }
  ],
  "rsl_rl": "rsl-rl-lib 3.1.2"

@@ -30,7 +30,7 @@ MuJoCo, Isaac Lab and ROS 2. The walking task, its conventions and the deploymen
 | `rl/export.py` | TorchScript + ONNX (normaliser baked in) + `policy_io.yaml`, checked against the checkpoint | tested |
 | `rl/sim2sim.py` | exported policy on the **full CAD model** (mesh hulls, 500 Hz, no DR), 7 command scenarios | tested |
 | `rl/tests/test_rl.py` | quaternion maths vs MuJoCo, ankle-polygon projection (numpy/ROS/torch), env determinism, training-vs-deployment observation parity, latency, hub ramp, MuJoCo/Isaac `policy_io` parity, hardware protocol/bridge/IMU, rough terrain, GAE/normaliser, ros2_control xacro | 13/13 pass |
-| `simulation/isaac/isaaclab/` | Isaac Lab tasks `Isaac-Velocity-{Flat,Rough}-JX1-v0` (+ `-Play`), same obs/actions/rewards/DR; rsl_rl config, train and export scripts, offline API check, Isaac Sim ROS 2 bridge | offline-checked against Isaac Lab 2.3.2 + rsl_rl 3.1.2 and the bridge against Isaac Sim 5.1 sources (80/80); **not run in Isaac Sim** |
+| `simulation/isaac/isaaclab/` | Isaac Lab tasks `Isaac-Velocity-{Flat,Rough}-JX1-v0` (+ `-Play`), same obs/actions/rewards/DR; rsl_rl config, train and export scripts, offline API check, Isaac Sim ROS 2 bridge | offline-checked against Isaac Lab 2.3.2 + rsl_rl 3.1.2 and the bridge and USD import against Isaac Sim 5.1 sources (81/81); **not run in Isaac Sim** |
 | `ros2_ws/src/jx1_policy` | ONNX policy runner (no training code) + ROS 2 node (WAIT → RAMP → WALK, HOLD on stale state) | runner tested; node see below |
 | `ros2_ws/src/jx1_sim` | MuJoCo ROS 2 node: `/clock`, `/jx1/joint_states`, `/jx1/imu`, `/jx1/odom`, TF; applies `/jx1/joint_command` | see below |
 | `ros2_ws/src/jx1_bringup` | `mujoco_sim.launch.py`, `isaac_sim.launch.py`, `ros2_control.launch.py`, controllers | see below |
@@ -104,7 +104,7 @@ rl/.venv/Scripts/python simulation/isaac/isaaclab/scripts/offline_check.py --isa
 ```
 
 `offline_check.py` mocks the Omniverse modules (as Isaac Lab's own docs build does) and imports the real Isaac Lab code.
-It checks all four tasks (80/80 pass, report in
+It checks all four tasks (81/81 pass, report in
 [`offline_check.json`](../simulation/isaac/isaaclab/offline_check.json)):
 - Every env and runner config instantiates, and `validate()` passes.
 - Every manager term resolves as Isaac Lab resolves it at start-up (signature, scene entities against the robot the URDF
@@ -119,7 +119,8 @@ It checks all four tasks (80/80 pass, report in
 - With `--isaacsim <sparse clone of isaac-sim/IsaacSim v5.1.0>`, it checks the Isaac Sim ROS 2 bridge
   (`scripts/ros2_bridge.py`). Every OmniGraph node type must exist as an `.ogn` definition, every connected or set
   attribute must exist with matching types, "target" inputs must be set as path lists, and every Isaac Sim Python call
-  must match its source signature.
+  must match its source signature. `simulation/isaac/import_jx1.py` (URDF → USD) is checked the same way against the URDF
+  importer: its import-config fields, command names and arguments.
 
 What the check found and what was fixed:
 - **Deployment bug:** under rsl_rl ≥ 3 (Isaac Lab ≥ 2.3) the observation normaliser moved into the policy. The export
