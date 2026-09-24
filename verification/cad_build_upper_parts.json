@@ -1,0 +1,175 @@
+{
+  "JX1_Torso": {
+    "bodies": 6,
+    "errors": [],
+    "sketch_status": {
+      "SK_Bottom_Plate": 3,
+      "SK_Waist_Pilot_Recess": 3,
+      "SK_Side_Left": 3,
+      "SK_Side_Right": 3,
+      "SK_Deck": 3,
+      "SK_Tray": 3,
+      "SK_Back_Plate": 3,
+      "SK_Post_0": 3,
+      "SK_Post_1": 3,
+      "SK_Post_2": 3,
+      "SK_Post_3": 3
+    }
+  },
+  "JX1_ShoulderPitchBracket_L": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Output_Plate": 3,
+      "SK_Pitch_Pilot_Recess": 3,
+      "SK_Rear_Plate": 3,
+      "SK_Top_Plate": 3,
+      "SK_Bottom_Plate": 3
+    }
+  },
+  "JX1_ShoulderRollBracket_L": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Roll_Plate": 3,
+      "SK_Yaw_Plate": 3,
+      "SK_Roll_Pilot_Recess": 3
+    }
+  },
+  "JX1_UpperArm_L": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Yaw_Plate": 3,
+      "SK_Yaw_Pilot_Recess": 3,
+      "SK_Elbow_Plate": 3
+    }
+  },
+  "JX1_Forearm_L": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Forearm_Plate": 3,
+      "SK_Elbow_Pilot_Recess": 3,
+      "SK_Hand_Plate": 3
+    }
+  },
+  "JX1_Gripper": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Body": 3,
+      "SK_Finger_A": 3,
+      "SK_Finger_B": 3
+    }
+  },
+  "JX1_Servo_ST3215_Body": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Body": 3
+    }
+  },
+  "JX1_NeckBracket": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Horn_Plate": 3,
+      "SK_Servo_Plate": 3
+    }
+  },
+  "JX1_Head": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Front": 3,
+      "SK_Back": 3,
+      "SK_Top": 3,
+      "SK_Side_L": 3,
+      "SK_Side_R": 3,
+      "SK_Horn_Plate": 3
+    }
+  },
+  "JX1_ShoulderPitchBracket_R": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Output_Plate": 3,
+      "SK_Pitch_Pilot_Recess": 3,
+      "SK_Rear_Plate": 3,
+      "SK_Top_Plate": 3,
+      "SK_Bottom_Plate": 3
+    }
+  },
+  "JX1_ShoulderRollBracket_R": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Roll_Plate": 3,
+      "SK_Yaw_Plate": 3,
+      "SK_Roll_Pilot_Recess": 3
+    }
+  },
+  "JX1_UpperArm_R": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Yaw_Plate": 3,
+      "SK_Yaw_Pilot_Recess": 3,
+      "SK_Elbow_Plate": 3
+    }
+  },
+  "JX1_Forearm_R": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Forearm_Plate": 3,
+      "SK_Elbow_Pilot_Recess": 3,
+      "SK_Hand_Plate": 3
+    }
+  },
+  "JX1_BatteryPack": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Box_0": 3
+    }
+  },
+  "JX1_JetsonNano": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Box_0": 3
+    }
+  },
+  "JX1_HubBoard": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Box_0": 3
+    }
+  },
+  "JX1_DCDC5V": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Box_0": 3
+    }
+  },
+  "JX1_PowerSwitch": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Box_0": 3
+    }
+  },
+  "JX1_EStop": {
+    "bodies": 1,
+    "errors": [],
+    "sketch_status": {
+      "SK_Head": 3,
+      "SK_Bushing": 3,
+      "SK_Contact_Block": 3
+    }
+  }
+}

@@ -1,0 +1,502 @@
+[
+ {
+  "pose": "zero",
+  "joints_deg": {},
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_SYO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "waist_yaw_min",
+  "joints_deg": {
+   "waist_yaw": -88.0
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_Gripper",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "waist_yaw_max",
+  "joints_deg": {
+   "waist_yaw": 88.0
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_Gripper",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "left_shoulder_pitch_min",
+  "joints_deg": {
+   "left_shoulder_pitch": -115.0
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_UpperArm",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "left_shoulder_pitch_max",
+  "joints_deg": {
+   "left_shoulder_pitch": 60
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_Gripper",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "left_shoulder_roll_min",
+  "joints_deg": {
+   "left_shoulder_roll": -10
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_Gripper",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "left_shoulder_roll_max",
+  "joints_deg": {
+   "left_shoulder_roll": 150
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_Gripper",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "left_shoulder_yaw_min",
+  "joints_deg": {
+   "left_shoulder_yaw": -88.0
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "left_shoulder_yaw_max",
+  "joints_deg": {
+   "left_shoulder_yaw": 88.0
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_Gripper",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "left_elbow_min",
+  "joints_deg": {
+   "left_elbow": -135
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_UpperArm",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "left_elbow_max",
+  "joints_deg": {
+   "left_elbow": 5
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_Gripper",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "right_shoulder_pitch_min",
+  "joints_deg": {
+   "right_shoulder_pitch": -115.0
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "right_shoulder_pitch_max",
+  "joints_deg": {
+   "right_shoulder_pitch": 60
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "right_shoulder_roll_min",
+  "joints_deg": {
+   "right_shoulder_roll": -150
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "right_shoulder_roll_max",
+  "joints_deg": {
+   "right_shoulder_roll": 10
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "right_shoulder_yaw_min",
+  "joints_deg": {
+   "right_shoulder_yaw": -88.0
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "right_shoulder_yaw_max",
+  "joints_deg": {
+   "right_shoulder_yaw": 88.0
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "right_elbow_min",
+  "joints_deg": {
+   "right_elbow": -135
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "right_elbow_max",
+  "joints_deg": {
+   "right_elbow": 5
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "neck_yaw_min",
+  "joints_deg": {
+   "neck_yaw": -80
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "R_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "neck_yaw_max",
+  "joints_deg": {
+   "neck_yaw": 80
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "R_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "neck_pitch_min",
+  "joints_deg": {
+   "neck_pitch": -30
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "R_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "neck_pitch_max",
+  "joints_deg": {
+   "neck_pitch": 45
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "R_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "t_pose",
+  "joints_deg": {
+   "left_shoulder_roll": 90,
+   "right_shoulder_roll": -90
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "R_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "arms_forward",
+  "joints_deg": {
+   "left_shoulder_pitch": -90,
+   "right_shoulder_pitch": -90
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "R_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "reach_up_cad_max",
+  "joints_deg": {
+   "left_shoulder_pitch": -115,
+   "left_elbow": 0,
+   "right_shoulder_pitch": -115,
+   "right_elbow": 0
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_Gripper",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "arms_back",
+  "joints_deg": {
+   "left_shoulder_pitch": 60,
+   "left_elbow": -20,
+   "right_shoulder_pitch": 60,
+   "right_elbow": -20
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_Gripper",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "hands_together_front",
+  "joints_deg": {
+   "left_shoulder_pitch": -60,
+   "left_shoulder_roll": 10,
+   "left_shoulder_yaw": -30,
+   "left_elbow": -90,
+   "right_shoulder_pitch": -60,
+   "right_shoulder_roll": -10,
+   "right_shoulder_yaw": 30,
+   "right_elbow": -90
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "R_Gripper",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "carry_box",
+  "joints_deg": {
+   "left_shoulder_pitch": -30,
+   "left_shoulder_roll": 15,
+   "left_elbow": -90,
+   "right_shoulder_pitch": -30,
+   "right_shoulder_roll": -15,
+   "right_elbow": -90
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "R_Gripper",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "elbows_flexed_down",
+  "joints_deg": {
+   "left_elbow": -135,
+   "right_elbow": -135
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "R_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "arms_adducted",
+  "joints_deg": {
+   "left_shoulder_roll": -10,
+   "right_shoulder_roll": 10
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "R_ElO",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "walk_swing_front",
+  "joints_deg": {
+   "left_shoulder_roll": 8,
+   "right_shoulder_roll": -8,
+   "left_shoulder_pitch": -30,
+   "right_shoulder_pitch": 30,
+   "left_elbow": -30,
+   "right_elbow": -30
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_Gripper",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "waist_twist_left",
+  "joints_deg": {
+   "waist_yaw": 60,
+   "left_shoulder_roll": 8,
+   "right_shoulder_roll": -8
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_Gripper",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "head_left_down",
+  "joints_deg": {
+   "neck_yaw": 70,
+   "neck_pitch": 45
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "R_ShRollBr",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "head_right_up",
+  "joints_deg": {
+   "neck_yaw": -70,
+   "neck_pitch": -30
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "R_ShRollBr",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ },
+ {
+  "pose": "wave_left",
+  "joints_deg": {
+   "left_shoulder_pitch": -20,
+   "left_shoulder_roll": 140,
+   "left_elbow": -90,
+   "right_shoulder_roll": -8
+  },
+  "max_pos_err_mm": 0.0,
+  "max_rot_err_deg": 0.0,
+  "worst_component": "L_Gripper",
+  "mate_errors": [],
+  "interferences": [],
+  "kinematics_pass": true,
+  "collision_free": true
+ }
+]
