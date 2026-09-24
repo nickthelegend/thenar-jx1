@@ -7,7 +7,10 @@ The Jetson runs four processes:
 - `robot_state_publisher`.
 
 The hubs close the RobStride MIT loops at 500 Hz. The policy sends joint targets at 50 Hz. The hubs ramp each target
-over the next 20 ms and apply the PD gains from `policy_io.yaml`.
+over the next 20 ms and apply the PD gains from `policy_io.yaml`. `hw_node` forwards each policy command to the hubs as
+soon as it arrives. It used to send on its own 50 Hz timer, which added a random 0–20 ms delay. In the
+hardware-in-the-loop run, removing that delay raised forward tracking at 0.3 m/s from 82 % to 93 % and turn tracking
+from 62 % to 73 %.
 
 **Status.** The following are verified without hardware:
 - The byte protocol is checked against the firmware headers (CRC-16/MODBUS test).

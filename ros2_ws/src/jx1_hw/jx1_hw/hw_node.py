@@ -8,7 +8,10 @@ Fall guard  /jx1/imu tilt above fall_tilt_deg (50) latches DAMPING until the nex
 Parameters  port_a / port_b: serial devices (e.g. /dev/ttyACM0) or pyserial URLs (socket://localhost:5555 for the emulator)
             policy_io: policy_io.yaml (PD gains, default pose); hw_config: config/hw.yaml; rate_hz: command rate (50)
 The hubs interpolate between host commands at 500 Hz, apply soft limits, temperature derating and watchdogs; this node
-only converts spaces and keeps the stream going. Starts in DAMPING; RUN must be requested explicitly.
+only converts spaces and keeps the stream going. Each /jx1/joint_command is forwarded at once, so the hub ramp starts on
+the policy's clock; a timer only keeps the stream alive (hub watchdog 50 ms) while no command arrives. A free-running
+50 Hz send timer added a random 0-20 ms phase delay (hardware-in-the-loop measurement). Starts in DAMPING; RUN must be
+requested explicitly.
 """
 from __future__ import annotations
 
@@ -59,6 +62,7 @@ class HwNode(Node):
         self.fall_latched = False
         self.create_service(Trigger, "/jx1/hw/run", self.on_run)
         self.create_service(Trigger, "/jx1/hw/damp", self.on_damp)
+        self.last_send = -1.0
         self.create_timer(1.0 / self.get_parameter("rate_hz").value, self.tick)
         self.running = True
         self.readers = [threading.Thread(target=self.read_loop, args=(h,), daemon=True) for h in self.ports]
@@ -80,6 +84,7 @@ class HwNode(Node):
     def on_cmd(self, msg: JointState):
         with self.lock:
             self.targets.update(dict(zip(msg.name, msg.position)))
+        self.send()
 
     def on_imu(self, msg: Imu):
         q = msg.orientation
@@ -99,12 +104,17 @@ class HwNode(Node):
         res.success, res.message = True, "DAMPING"
         return res
 
-    def tick(self):
+    def send(self):
         with self.lock:
             rows = self.bridge.commands(self.targets)
         self.seq += 1
         for h, port in self.ports.items():
             port.write(P.pack_command(self.seq, self.mode, rows[h]))
+        self.last_send = time.monotonic()
+
+    def tick(self):
+        if time.monotonic() - self.last_send > 1.5 / self.get_parameter("rate_hz").value:
+            self.send()                                  # keepalive: no policy command in the last period
         st = {h: {"mode": s.mode, "estop": s.estop, "fault": s.fault, "stale": [n for n, x in zip(self.bridge.hubs[h], s.stale) if x]}
               for h, s in self.states.items()}
         self.pub_status.publish(String(data=json.dumps({"requested": self.mode, "fall_latched": self.fall_latched, "hubs": st})))
