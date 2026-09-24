@@ -743,10 +743,112 @@ def check_exporter(rep, mods):
     rep.add("export", "exported policy_io.yaml: jx1-policy-io/1, whole robot", ok, f"{len(io['default_joint_pos'])} joints")
 
 
+ISAACSIM_API = {   # call name in ros2_bridge.py -> (extension source file, class or None, function)
+    "SimulationApp": ("isaacsim.simulation_app/isaacsim/simulation_app/simulation_app.py", "SimulationApp", "__init__"),
+    "World": ("isaacsim.core.api/python/impl/world/world.py", "World", "__init__"),
+    "add_default_ground_plane": ("isaacsim.core.api/python/impl/scenes/scene.py", "Scene", "add_default_ground_plane"),
+    "add_reference_to_stage": ("isaacsim.core.utils/python/impl/stage.py", None, "add_reference_to_stage"),
+    "enable_extension": ("isaacsim.core.utils/python/impl/extensions.py", None, "enable_extension"),
+    "SingleArticulation": ("isaacsim.core.prims/python/impl/single_articulation.py", "SingleArticulation", "__init__"),
+    "set_joints_default_state": ("isaacsim.core.prims/python/impl/single_articulation.py", "SingleArticulation", "set_joints_default_state"),
+    "set_joint_positions": ("isaacsim.core.prims/python/impl/single_articulation.py", "SingleArticulation", "set_joint_positions"),
+    "get_articulation_controller": ("isaacsim.core.prims/python/impl/single_articulation.py", "SingleArticulation", "get_articulation_controller"),
+    "set_gains": ("isaacsim.core.api/python/impl/controllers/articulation_controller.py", "ArticulationController", "set_gains"),
+    "IMUSensor": ("isaacsim.sensors.physics/python/impl/imu_sensor.py", "IMUSensor", "__init__"),
+}
+
+
+def check_isaacsim_bridge(rep, root: Path):
+    """scripts/ros2_bridge.py against Isaac Sim sources (git clone of isaac-sim/IsaacSim, sparse: the extensions below):
+    OmniGraph node types exist (.ogn), every connected/set attribute exists with compatible types, "target" inputs are
+    set with a list of paths, and every Isaac Sim Python call uses parameters its signature has."""
+    import ast
+    ext = root / "source" / "extensions"
+    tree = ast.parse((PKG / "scripts" / "ros2_bridge.py").read_text(encoding="utf-8"))
+    spec = {}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "edit" and len(node.args) == 2:
+            for k, v in zip(node.args[1].keys, node.args[1].values):
+                spec[k.attr] = v.elts
+    nodes = {t.elts[0].value: t.elts[1].value for t in spec.get("CREATE_NODES", [])}
+    ogn, problems, unchecked = {}, [], []
+    for name, typ in nodes.items():
+        extname, nodename = typ.rsplit(".", 1)
+        hits = list((ext / extname).rglob(f"Ogn{nodename}.ogn")) if (ext / extname).is_dir() else []
+        if not hits:
+            if typ.startswith("omni.graph."):                                       # Kit core nodes are not in the Isaac Sim repo
+                unchecked.append(typ)
+                continue
+            problems.append(f"node type {typ} not found")
+            continue
+        (key, body), = json.loads(hits[0].read_text(encoding="utf-8")).items()
+        ogn[name] = body
+
+    def attr(ref, kind):
+        name, _, a = ref.partition(f".{kind}:")
+        if name not in ogn:
+            return None if name in nodes else "missing-node"
+        return ogn[name].get(kind, {}).get(a, {}).get("type", "missing")
+
+    for t in spec.get("CONNECT", []):
+        src, dst = t.elts[0].value, t.elts[1].value
+        ts, td = attr(src, "outputs"), attr(dst, "inputs")
+        if "missing" in (ts, td) or "missing-node" in (ts, td):
+            problems.append(f"{src} -> {dst}: {'source' if ts in ('missing', 'missing-node') else 'target'} attribute not found")
+        elif ts and td and ts != td:
+            problems.append(f"{src} ({ts}) -> {dst} ({td}): type mismatch")
+    for t in spec.get("SET_VALUES", []):
+        ref, val = t.elts[0].value, t.elts[1]
+        ty = attr(ref, "inputs")
+        if ty in ("missing", "missing-node"):
+            problems.append(f"{ref}: attribute not found")
+        elif ty == "target" and not isinstance(val, ast.List):
+            problems.append(f"{ref}: 'target' input must be set with a list of paths")
+    rep.add("isaacsim", "ros2_bridge.py OmniGraph: node types, attributes, types, target inputs", not problems,
+            "; ".join(problems) or f"{len(ogn)} node types from .ogn, {len(spec.get('CONNECT', []))} connections, "
+            f"{len(spec.get('SET_VALUES', []))} values; not in the repo (Kit): {unchecked}")
+
+    sigs, missing = {}, []
+    for call, (f, cls, fn) in ISAACSIM_API.items():
+        path = ext / f
+        if not path.exists():
+            missing.append(f)
+            continue
+        mod = ast.parse(path.read_text(encoding="utf-8"))
+        scope = mod.body if cls is None else next((n.body for n in mod.body if isinstance(n, ast.ClassDef) and n.name == cls), [])
+        d = next((n for n in scope if isinstance(n, ast.FunctionDef) and n.name == fn), None)
+        if d is None:
+            missing.append(f"{cls + '.' if cls else ''}{fn}")
+            continue
+        a = d.args
+        sigs[call] = ([x.arg for x in a.posonlyargs + a.args if x.arg != "self"], [x.arg for x in a.kwonlyargs], a.kwarg is not None)
+    api_problems = [f"{m} not found" for m in missing]
+    calls = 0
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        name = node.func.id if isinstance(node.func, ast.Name) else node.func.attr if isinstance(node.func, ast.Attribute) else None
+        if name not in sigs:
+            continue
+        calls += 1
+        pos, kwonly, varkw = sigs[name]
+        if len(node.args) > len(pos):
+            api_problems.append(f"{name}: {len(node.args)} positional arguments, signature has {len(pos)}")
+        if not varkw:
+            api_problems += [f"{name}({k.arg}=...) not in the signature" for k in node.keywords if k.arg and k.arg not in pos + kwonly]
+    has_dof_names = "dof_names" in (ext / ISAACSIM_API["SingleArticulation"][0]).read_text(encoding="utf-8") if not missing else False
+    rep.add("isaacsim", "ros2_bridge.py Isaac Sim Python calls match the source signatures", not api_problems and has_dof_names,
+            "; ".join(api_problems) or f"{calls} calls against {len(sigs)} signatures; SingleArticulation.dof_names present")
+    rep.add("isaacsim", "ROS 2 bridge extension present", (ext / "isaacsim.ros2.bridge").is_dir(), "isaacsim.ros2.bridge")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--isaaclab", type=Path, required=True, help="Isaac Lab source checkout (git clone, any 2.x tag)")
     ap.add_argument("--rsl-rl", type=Path, default=None, help="rsl_rl sources (folder containing the rsl_rl package)")
+    ap.add_argument("--isaacsim", type=Path, default=None,
+                    help="Isaac Sim source checkout (git clone --sparse of isaac-sim/IsaacSim with the extensions in ISAACSIM_API "
+                         "plus isaacsim.ros2.bridge, isaacsim.core.nodes, isaacsim.sensors.physics): checks scripts/ros2_bridge.py")
     ap.add_argument("--json", type=Path, default=None)
     args = ap.parse_args()
 
@@ -793,7 +895,10 @@ def main():
             check_agent(task_id, reg, rep, mods)
         except Exception as e:                                        # noqa: BLE001
             rep.add(task_id, "task check ran", False, f"{type(e).__name__}: {e}\n{traceback.format_exc()}")
-    for name, fn in (("scripts", check_scripts), ("export", check_exporter)):
+    checks = [("scripts", check_scripts), ("export", check_exporter)]
+    if args.isaacsim:
+        checks.append(("isaacsim", lambda r, m: check_isaacsim_bridge(r, args.isaacsim)))
+    for name, fn in checks:
         print(f"\n== {name}")
         try:
             fn(rep, mods)
@@ -802,6 +907,7 @@ def main():
     print(f"\n{len(rep.items) - len(rep.failed)}/{len(rep.items)} checks passed over {len(GYM_REGISTRY)} tasks")
     if args.json:
         args.json.write_text(json.dumps({"isaaclab_version": version, "isaaclab_source": args.isaaclab.as_posix(),
+                                         "isaacsim_source": args.isaacsim.as_posix() if args.isaacsim else None,
                                          "rsl_rl_checked": mods["rsl_rl"] is not None, "mocked_modules": sorted(finder.mocked),
                                          "tasks": sorted(GYM_REGISTRY), "checks": rep.items}, indent=1), encoding="utf-8")
     return 1 if rep.failed else 0
