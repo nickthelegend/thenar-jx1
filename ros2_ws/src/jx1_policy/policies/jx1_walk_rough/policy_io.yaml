@@ -276,6 +276,7 @@ ankle_polygons_rad:
     - -0.349066
   - - -0.959931
     - -0.349066
+hip_yaw_toe_out_max_rad: 0.698132
 observation:
   size: 47
   layout:
@@ -312,7 +313,8 @@ commands:
   ang_vel_yaw:
   - -0.6
   - 0.6
-targets: q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad
+targets: q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad; left_hip_yaw
+  - right_hip_yaw <= hip_yaw_toe_out_max_rad (excess taken off both hips equally)
 trained:
   checkpoint: model_latest.pt
   run: walk_v3_rough
@@ -321,5 +323,5 @@ trained:
   source_mjcf: simulation/mujoco/jx1.xml
   source_mjcf_sha256: 13e00221a0d062a2e3a426d2313e3b7f7fff8d5f6aca1dc60a093813af340898
   export_check:
-    onnx_max_abs_diff: 2.5033950805664062e-06
+    onnx_max_abs_diff: 1.9073486328125e-06
     torchscript_max_abs_diff: 0.0

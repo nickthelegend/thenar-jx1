@@ -1,0 +1,24 @@
+{
+ "policy": "rl/policies/jx1_walk_sym_latency",
+ "command": [
+  0.5,
+  0.0,
+  0.0
+ ],
+ "push_duration_s": 0.1,
+ "push_time_s": 4.0,
+ "max_survived_impulse_Ns": {
+  "forward": 39.84,
+  "backward": 26.72,
+  "left": 11.72,
+  "right": 28.12
+ },
+ "baseline_upright": true,
+ "robot_mass_kg": 33.61,
+ "equivalent_com_velocity_change_m_s": {
+  "forward": 1.185,
+  "backward": 0.795,
+  "left": 0.349,
+  "right": 0.837
+ }
+}

@@ -1,0 +1,117 @@
+{
+ "policy": "jx1_walk_sym_latency",
+ "rows": [
+  {
+   "obs_delay_ms": 0,
+   "act_delay_ms": 0,
+   "turn_0.3": {
+    "fell": false,
+    "achieved": 0.251,
+    "fraction": 0.837
+   },
+   "forward_0.3": {
+    "fell": false,
+    "achieved": 0.316,
+    "fraction": 1.053
+   }
+  },
+  {
+   "obs_delay_ms": 10,
+   "act_delay_ms": 0,
+   "turn_0.3": {
+    "fell": false,
+    "achieved": 0.238,
+    "fraction": 0.793
+   },
+   "forward_0.3": {
+    "fell": false,
+    "achieved": 0.298,
+    "fraction": 0.993
+   }
+  },
+  {
+   "obs_delay_ms": 20,
+   "act_delay_ms": 0,
+   "turn_0.3": {
+    "fell": false,
+    "achieved": 0.232,
+    "fraction": 0.773
+   },
+   "forward_0.3": {
+    "fell": false,
+    "achieved": 0.288,
+    "fraction": 0.96
+   }
+  },
+  {
+   "obs_delay_ms": 0,
+   "act_delay_ms": 10,
+   "turn_0.3": {
+    "fell": false,
+    "achieved": 0.24,
+    "fraction": 0.8
+   },
+   "forward_0.3": {
+    "fell": false,
+    "achieved": 0.299,
+    "fraction": 0.997
+   }
+  },
+  {
+   "obs_delay_ms": 10,
+   "act_delay_ms": 10,
+   "turn_0.3": {
+    "fell": false,
+    "achieved": 0.23,
+    "fraction": 0.767
+   },
+   "forward_0.3": {
+    "fell": false,
+    "achieved": 0.288,
+    "fraction": 0.96
+   }
+  },
+  {
+   "obs_delay_ms": 20,
+   "act_delay_ms": 10,
+   "turn_0.3": {
+    "fell": false,
+    "achieved": 0.221,
+    "fraction": 0.737
+   },
+   "forward_0.3": {
+    "fell": false,
+    "achieved": 0.273,
+    "fraction": 0.91
+   }
+  },
+  {
+   "obs_delay_ms": 30,
+   "act_delay_ms": 10,
+   "turn_0.3": {
+    "fell": false,
+    "achieved": 0.21,
+    "fraction": 0.7
+   },
+   "forward_0.3": {
+    "fell": false,
+    "achieved": 0.259,
+    "fraction": 0.863
+   }
+  },
+  {
+   "obs_delay_ms": 40,
+   "act_delay_ms": 20,
+   "turn_0.3": {
+    "fell": false,
+    "achieved": 0.202,
+    "fraction": 0.673
+   },
+   "forward_0.3": {
+    "fell": false,
+    "achieved": 0.236,
+    "fraction": 0.787
+   }
+  }
+ ]
+}

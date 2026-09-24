@@ -276,6 +276,7 @@ ankle_polygons_rad:
     - -0.349066
   - - -0.959931
     - -0.349066
+hip_yaw_toe_out_max_rad: 0.698132
 observation:
   size: 47
   layout:
@@ -312,7 +313,8 @@ commands:
   ang_vel_yaw:
   - -0.6
   - 0.6
-targets: q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad
+targets: q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad; left_hip_yaw
+  - right_hip_yaw <= hip_yaw_toe_out_max_rad (excess taken off both hips equally)
 trained:
   checkpoint: model_latest.pt
   run: walk_v2_final

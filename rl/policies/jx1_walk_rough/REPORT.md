@@ -7,7 +7,7 @@
 | task config | run snapshot (config.yaml next to the checkpoint) |
 | robot model | `simulation/mujoco/jx1.xml` (sha256 13e00221a0d0…), 33.61 kg |
 | interface | 47 observations → 12 leg joint targets at 50 Hz; 11 joints held at the default pose |
-| export check | ONNX max abs diff 2.5e-06 |
+| export check | ONNX max abs diff 1.9e-06 |
 
 ## Training
 
