@@ -77,8 +77,8 @@ firmware for the motor-control boards, a physics simulation, and the trained wal
 
 ## Honest status
 
-**Current release: [v1.0-alpha](docs/releases/v1.0-alpha.md) (2026-09-24), the complete design package.** JX1 has not
-been built yet. It is complete **on the computer**:
+**Current version: [v1.0-alpha](docs/releases/v1.0-alpha.md) (2026-09-24): design complete, buy list still being
+decided.** JX1 has not been built yet. It is complete **on the computer**:
 
 | Done (on the computer) | Not done yet (needs a real robot) |
 |---|---|
