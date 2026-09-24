@@ -240,7 +240,9 @@ def foot(s):
     outline = [(heel + 0.015, -hw), (toe - 0.028, -hw), (toe, -hw + 0.022), (toe, hw - 0.022), (toe - 0.028, hw), (heel + 0.015, hw),
                (heel, hw - 0.015), (heel, -hw + 0.015)]
     ts = PKG["foot_sole_t"]
-    plate2d(p, "Sole_Plate", "z", zs, zs + ts, outline, [(0.070, 0.0, 0.020), (0.030, 0.0, 0.016)])
+    # lightening / sensor-wire holes: the second one sat 1.5 mm in front of the front clevis tine (x 30 mm, D16) and notched its
+    # load path into the sole (fatigue SF 1.48 < 1.5 at (27, 9, -43) mm, run_structural 2026-09-24); now x 45 mm, D14
+    plate2d(p, "Sole_Plate", "z", zs, zs + ts, outline, [(0.070, 0.0, 0.020), (0.045, 0.0, 0.014)])
     # roll clevis tines (normal X) either side of the cross block
     for tag, x0 in (("Clevis_Front", 0.0175), ("Clevis_Back", -0.0255)):
         plate(p, tag, "x", x0, x0 + 0.008, [(0, -0.013, zs + ts), (0, 0.013, zs + ts), (0, 0.013, 0.003), (0, 0.008, 0.010),

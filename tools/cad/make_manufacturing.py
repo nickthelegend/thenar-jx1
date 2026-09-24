@@ -1,9 +1,11 @@
 """Manufacturing package for the JX1 custom parts (open issue OI-11).
 
-For every machined / laser-cut part: a SolidWorks drawing (A3, third-angle front/top/right views + isometric, model
-dimensions imported from the parametric sketches, process/material note) saved as SLDDRW and exported to PDF, plus a
+For every machined / laser-cut part: a SolidWorks drawing (A3, third-angle front/top/right views + isometric; note with
+material, process, quantity, tolerances, envelope, mass and cylindrical features) saved as SLDDRW and exported to PDF, plus a
 STEP file for CNC/laser quotes. Printed parts get their STL (part frame, mm). Right-hand parts are drawn as the left part
 (mirror note) but exported to STEP separately. Default export options are used — no SolidWorks system options change.
+Each exported part gets its SolidWorks library material and linked MATERIAL / WEIGHT / Description properties (saved in the
+part, open issue OI-5).
 Outputs: manufacturing/{drawings,step,print}/ and manufacturing/index.md
 Usage: .venv/Scripts/python tools/cad/make_manufacturing.py [--no-drawings]
 """
@@ -15,7 +17,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from swlib.core import C, Session, typed  # noqa: E402
+from swlib.core import C, Session, typed, var_array, save_as  # noqa: E402
 from cad.params import ROOT  # noqa: E402
 
 CAD = ROOT / "CAD"
@@ -51,10 +53,59 @@ PARTS = [
 ]
 PRINTED = [("Head/JX1_Head", "PETG-CF, 3 walls, 25 % gyroid", 1), ("Head/JX1_NeckBracket", "PA-CF, solid", 1),
            ("Arms/JX1_Gripper", "PA-CF body + TPU pads", 2)]
+# SolidWorks library materials (drawing title block MATERIAL / WEIGHT, SolidWorks mass properties; open issue OI-5)
+SW_LIBRARY = "SOLIDWORKS Materials"
+SW_MATERIAL = {"6061-T6": "6061-T6 (SS)", "6061-T6 + 2020": "6061-T6 (SS)", "7075-T6": "7075-T6 (SN)",
+               "EN8/EN24": "AISI 1045 Steel, cold drawn", "chrome-plated steel": "AISI 1045 Steel, cold drawn"}
+
+
+def assign_material(doc, material, stem, process):
+    """SolidWorks library material + linked title-block properties (MATERIAL / WEIGHT fields) on the part; returns the name set."""
+    pd = typed(doc, "IPartDoc")
+    name = SW_MATERIAL.get(material)
+    if name:
+        pd.SetMaterialPropertyName2("", SW_LIBRARY, name)
+    cpm = typed(typed(doc.Extension, "IModelDocExtension").CustomPropertyManager(""), "ICustomPropertyManager")
+    for k, v in (("Material", f'"SW-Material@{stem}.SLDPRT"'), ("Weight", f'"SW-Mass@{stem}.SLDPRT"'), ("Description", process),
+                 ("PartNo", stem)):
+        cpm.Add3(k, C.swCustomInfoText, v, C.swCustomPropertyReplaceValue)
+    got = pd.GetMaterialPropertyName2("", "")
+    return got[0] if isinstance(got, tuple) else got
+
+
+def part_summary(part):
+    """Envelope (mm), SolidWorks mass (g) and the cylindrical features (holes, bores, bosses) grouped by diameter (unique axes)."""
+    import numpy as np
+    pd = typed(part, "IPartDoc")
+    b = pd.GetPartBox(True)
+    env = sorted([round((b[3 + i] - b[i]) * 1000, 1) for i in range(3)], reverse=True)
+    holes = {}
+    for body in pd.GetBodies2(C.swSolidBody, False) or []:
+        for f in typed(body, "IBody2").GetFaces() or []:
+            face = typed(f, "IFace2")
+            srf = typed(face.GetSurface(), "ISurface")
+            if not srf.IsCylinder():
+                continue
+            p = np.array(srf.CylinderParams)                            # origin(3), axis(3), radius
+            o, a, r = p[:3], p[3:6] / np.linalg.norm(p[3:6]), p[6]
+            a = a if a[np.argmax(np.abs(a))] > 0 else -a
+            foot = o - np.dot(o, a) * a                                 # axis point closest to the part origin
+            key = (round(2 * r * 1000, 2), tuple(np.round(foot * 1000, 1)), tuple(np.round(a, 3)))
+            holes[key] = True
+    by_d = {}
+    for d, *_ in holes:
+        by_d[d] = by_d.get(d, 0) + 1
+    mass_g = None
+    try:
+        mp = typed(typed(part.Extension, "IModelDocExtension").CreateMassProperty(), "IMassProperty")
+        mass_g = round(mp.Mass * 1000, 1)
+    except Exception:
+        pass
+    return env, mass_g, dict(sorted(by_d.items()))
 
 
 def drawing(s, part_path, stem, note, out_dir):
-    """A3 third-angle drawing with isometric and imported model dimensions; returns (slddrw, pdf)."""
+    """A3 third-angle drawing (front/top/right + isometric) with a material/process/envelope/hole note; returns (slddrw, pdf)."""
     doc = s.new_doc("drawing")
     drw = typed(doc, "IDrawingDoc")
     part = s.open_doc(part_path)
@@ -67,12 +118,38 @@ def drawing(s, part_path, stem, note, out_dir):
         pass
     scale2 = 1 if size < 0.12 else (2 if size < 0.24 else (3 if size < 0.36 else 5))
     drw.SetupSheet5("Sheet1", C.swDwgPaperA3size, C.swDwgTemplateCustom, 1, scale2, False, str(SHEET), 0.42, 0.297, "Default", True)
+    # the title block WEIGHT field reads a drawing-level "Weight" before the part's; an empty one avoids "ERROR!:Weight"
+    typed(typed(doc.Extension, "IModelDocExtension").CustomPropertyManager(""), "ICustomPropertyManager").Add3(
+        "Weight", C.swCustomInfoText, " ", C.swCustomPropertyReplaceValue)
     drw.Create3rdAngleViews2(str(part_path))
     drw.CreateDrawViewFromModelView3(str(part_path), "*Isometric", 0.33, 0.20, 0)
-    try:
-        drw.InsertModelAnnotations3(C.swImportModelItemsFromEntireModel, C.swInsertDimensionsMarkedForDrawing, True, False, False, True)
-    except Exception as e:  # pragma: no cover
-        print("  model annotations skipped:", e)
+    # spread the views over the sheet (third angle: top above front, right to the right)
+    layout = {"*Front": (0.100, 0.135), "*Top": (0.100, 0.232), "*Right": (0.232, 0.135), "*Isometric": (0.335, 0.225)}
+    views = []
+    v = typed(drw.GetFirstView(), "IView").GetNextView()     # first view after the sheet itself
+    while v is not None:
+        vv = typed(v, "IView")
+        views.append(vv)
+        v = vv.GetNextView()
+    front = next((w for w in views if w.GetOrientationName() == "*Front"), None)
+    fx, fy = front.Position if front is not None else (None, None)
+    for vv in views:
+        name = vv.GetOrientationName()
+        if name in layout:
+            vv.Position = var_array(list(layout[name]))
+        elif vv.Type == C.swDrawingProjectedView and front is not None:
+            x, y = vv.Position                              # projected views stay aligned with the front view
+            if abs(x - fx) < 1e-3:
+                vv.Position = var_array([layout["*Front"][0], layout["*Top"][1]])
+            elif abs(y - fy) < 1e-3:
+                vv.Position = var_array([layout["*Right"][0], layout["*Front"][1]])
+    # no imported sketch dimensions: 100-200 of them per part made the sheets unreadable (tested 2026-09-24); the STEP file is
+    # the dimensional master and the note lists the envelope, mass and every hole/bore diameter with its count for checking
+    env, mass_g, holes = part_summary(part)
+    note = "\n".join([note, f"ENVELOPE: {env[0]:g} x {env[1]:g} x {env[2]:g} mm" + (f"   MASS: {mass_g:g} g" if mass_g else ""),
+                      "CYLINDRICAL FEATURES (holes / bores / bosses): " + (", ".join(f"D{d:g} x{n}" for d, n in holes.items()) or "none"),
+                      "DIMENSIONS: from the STEP model (master geometry).",
+                      "This sheet: material, process, quantity, inspection."])
     n = doc.InsertNote(note)
     if n is not None:
         try:
@@ -102,6 +179,8 @@ def main():
         path = (CAD / f"{rel}.SLDPRT").resolve()
         stem = path.stem
         doc = s.open_doc(path)
+        sw_mat = assign_material(doc, material, stem, process)
+        save_as(doc, path)                                   # persist material + title-block properties in the part
         step = (OUT / "step" / f"{stem}.STEP").resolve()
         ok = typed(doc.Extension, "IModelDocExtension").SaveAs3(str(step), 0, 1, None, None, 0, 0)
         pdf = ""
@@ -116,7 +195,7 @@ def main():
             except Exception as e:
                 print("  drawing failed:", stem, e)
         rows.append((stem, material, process, qty, step.relative_to(ROOT).as_posix(), pdf))
-        print(f"{stem:32s} STEP {'ok' if ok else 'FAILED'}  drawing {pdf or '-'}", flush=True)
+        print(f"{stem:32s} STEP {'ok' if ok else 'FAILED'}  material {sw_mat!s:28s} drawing {pdf or '-'}", flush=True)
         s.close(doc)
     for rel, material, qty in PRINTED:
         stem = Path(rel).name
