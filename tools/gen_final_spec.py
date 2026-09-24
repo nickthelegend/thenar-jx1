@@ -38,6 +38,83 @@ def latest_requirements():
     return None, None
 
 
+def default_policy():
+    """The recommended RL policy bundle (rl/jx1_rl/__init__.py DEFAULT_POLICY), read without importing the RL stack."""
+    import re
+    m = re.search(r'DEFAULT_POLICY = RL_DIR / "policies" / "([^"]+)"', (ROOT / "rl" / "jx1_rl" / "__init__.py").read_text(encoding="utf-8"))
+    return f"rl/policies/{m.group(1)}" if m else None
+
+
+def rl_policy_lines(cat, req):
+    """Learned walking controller: CAD sim-to-sim, command envelope, actuator loads, pushes, ROS 2 / HIL, Isaac status."""
+    pol = default_policy()
+    if not pol or not (ROOT / pol / "sim2sim.json").exists():
+        return []
+    io = load_yaml(f"{pol}/policy_io.yaml")
+    tr = io.get("trained", {})
+    out = ["", f"Learned walking controller ({pol.split('/')[-1]}: {io['observation']['size']} obs -> {io['policy']['num_actions']} leg targets at "
+               f"{1 / io['control']['policy_dt_s']:.0f} Hz, PPO in MuJoCo, {tr.get('run', '?')} iteration {tr.get('iteration', '?')})  [CALCULATED, MuJoCo]"]
+    for tag, name in (("", "flat floor"), ("_rough", "rough heightfield")):
+        s = load_json(f"{pol}/sim2sim{tag}.json")
+        if s:
+            sc = s["scenarios"]
+            f8 = sc.get("forward_0.8", {})
+            out.append(f"  CAD sim-to-sim, {name:17s}: {sum(not r['fell'] for r in sc.values())}/{len(sc)} scenarios upright; "
+                       f"0.8 m/s cmd -> {f8.get('mean_velocity_b', [0])[0]:.2f} m/s, turn 0.5 rad/s -> "
+                       f"{sc['turn_0.5']['mean_velocity_b'][2]:.2f} rad/s, peak torque {max(r['peak_torque_fraction'] for r in sc.values()):.0%} of limit")
+    for tag, name in (("", "flat"), ("_rough", "rough")):
+        e = load_json(f"{pol}/envelope{tag}.json")
+        if e:
+            sm = e["summary"]
+            g = lambda k: f"{sm[k]['achieved']:+.2f}" if sm.get(k) else "-"  # noqa: E731
+            out.append(f"  command envelope, {name + ' floor' if name == 'flat' else 'rough ground':12s}: {sm['tracked']}/{sm['commands']} commands tracked, {sm['falls']} falls; forward {g('forward')} m/s, "
+                       f"backward {g('backward')}, lateral {g('left')}/{g('right')} m/s, yaw {g('yaw_left')}/{g('yaw_right')} rad/s")
+    s = load_json(f"{pol}/sim2sim.json")
+    f8 = s["scenarios"].get("forward_0.8", {}) if s else {}
+    if f8.get("joint_torque_peak_Nm") and req:
+        f_dyn = req["policy"]["dynamic_peak_factor"]
+        cls = {"hip_yaw": "M", "hip_roll": "L", "hip_pitch": "XL", "knee": "XL"}
+        out.append(f"  actuator load walking 0.8 m/s (left leg; {f_dyn} x peak vs actuator peak, RMS vs rated):")
+        for j, c in cls.items():
+            pk, rms = f8["joint_torque_peak_Nm"][f"left_{j}_joint"], f8["joint_torque_rms_Nm"][f"left_{j}_joint"]
+            cap, rated = v(cat[c]["peak_torque_Nm"]), v(cat[c]["rated_torque_Nm"])
+            out.append(f"    {j:10s}: peak {pk:5.1f} N m x {f_dyn} = {f_dyn * pk:5.1f} {'<=' if f_dyn * pk <= cap else '>'} {cap} N m; "
+                       f"RMS {rms:4.1f} {'<=' if rms <= rated else '>'} {rated} N m rated")
+        for j in ("ankle_pitch", "ankle_roll"):
+            pk, rms = f8["joint_torque_peak_Nm"][f"left_{j}_joint"], f8["joint_torque_rms_Nm"][f"left_{j}_joint"]
+            lim = io["effort_limits_Nm"][f"left_{j}_joint"]
+            out.append(f"    {j:10s}: peak {pk:5.1f} N m = {pk / lim:.0%} of the {lim:g} N m linkage capability; RMS {rms:4.1f} N m")
+    p = load_json(f"{pol}/push_test.json")
+    if p:
+        imp = p["max_survived_impulse_Ns"]
+        out.append(f"  push recovery (0.5 m/s, 0.1 s torso pulse): {min(imp.values()):.1f}-{max(imp.values()):.1f} N s survived "
+                   f"(forward {imp['forward']:.1f}, backward {imp['backward']:.1f}, left {imp['left']:.1f}, right {imp['right']:.1f})")
+    lat = load_json(f"{pol}/latency.json")
+    if lat:
+        r = {(x["obs_delay_ms"], x["act_delay_ms"]): x for x in lat["rows"]}
+        a, b = r.get((0, 0)), r.get((40, 20))
+        if a and b:
+            out.append(f"  latency: 0.3 rad/s turn tracked {a['turn_0.3']['fraction']:.0%} without delay, {b['turn_0.3']['fraction']:.0%} "
+                       "with 40 ms sensing + 20 ms actuation delay")
+    paths = [(f, load_json(f"{pol}/{f}")) for f in ("ros2_check.json", "ros2_launch_check.json", "ros2_control_check.json")]
+    ok = [r for _, r in paths if r and r.get("phases")]
+    if ok:
+        out.append(f"  ROS 2 {ok[0].get('ros_distro', '')} (separate node processes, /cmd_vel -> walk): {len(ok)} start paths "
+                   f"(python -m, ros2 launch, ros2_control), all upright {all(r.get('upright') for r in ok)}; "
+                   f"forward {min(r['phases']['forward']['mean_speed_m_s'] for r in ok):.2f}-{max(r['phases']['forward']['mean_speed_m_s'] for r in ok):.2f} m/s at 0.4")
+    hw = load_json(f"{pol}/hw_loop_check.json")
+    if hw and hw.get("phases"):
+        ph = hw["phases"]
+        out.append(f"  hardware-in-the-loop (hw_node + hub protocol + hub-firmware twin): forward {ph['forward']['mean_speed_m_s'] / 0.3:.0%} and "
+                   f"turn {ph['turn']['yaw_change_deg'] / 103.13:.0%} of the 0.3 command, upright {hw.get('upright')}  [CALCULATED, emulated hubs]")
+    oc = load_json("simulation/isaac/isaaclab/offline_check.json")
+    if oc:
+        n = sum(c["ok"] for c in oc["checks"])
+        out.append(f"  Isaac Lab / Isaac Sim: {n}/{len(oc['checks'])} offline checks against the Isaac Lab 2.3.2 / Isaac Sim 5.1 sources; "
+                   "not run in Isaac Sim  [UNVERIFIED runtime]")
+    return out
+
+
 def main():
     dp = load_yaml("calculations/design_point.yaml")
     jm = load_yaml("simulation/joint_map.yaml")
@@ -142,6 +219,7 @@ def main():
         imp = pu["max_survived_impulse_Ns"]
         L.append(f"Push recovery         : walking {pu['gait']}, 0.1 s torso pushes of {min(imp.values()):.1f}-{max(imp.values()):.1f} N s survived, "
                  f"by direction (fixed footsteps, ankle + hip strategy)  [CALCULATED, MuJoCo]")
+    L += rl_policy_lines(cat, req)
     xc = load_json("verification/xacro_check.json")
     if xc:
         L.append(f"Robot description     : URDF + xacro ({xc['links']} links, {xc['revolute']} revolute joints; xacro expansion "

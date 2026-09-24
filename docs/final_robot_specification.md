@@ -50,6 +50,24 @@ Ankle workspace       : 92 % of the pitch x roll box collision-free; coupled lim
 MuJoCo                : standing held (max tilt 5.242 deg), squat ok
 Walking (MuJoCo, CAD) : slow 0.30 m/s ok, nominal 0.52 m/s ok, fast 0.79 m/s ok, turn 0.18 m/s ok; max tilt 1.2 deg; highest torque left_hip_yaw 100% of peak (fast)  [CALCULATED, MuJoCo]
 Push recovery         : walking nominal, 0.1 s torso pushes of 5.3-7.8 N s survived, by direction (fixed footsteps, ankle + hip strategy)  [CALCULATED, MuJoCo]
+
+Learned walking controller (jx1_walk_rough: 47 obs -> 12 leg targets at 50 Hz, PPO in MuJoCo, walk_v3_rough iteration 4000)  [CALCULATED, MuJoCo]
+  CAD sim-to-sim, flat floor       : 7/7 scenarios upright; 0.8 m/s cmd -> 0.79 m/s, turn 0.5 rad/s -> 0.49 rad/s, peak torque 71% of limit
+  CAD sim-to-sim, rough heightfield: 7/7 scenarios upright; 0.8 m/s cmd -> 0.80 m/s, turn 0.5 rad/s -> 0.49 rad/s, peak torque 73% of limit
+  command envelope, flat floor  : 109/130 commands tracked, 0 falls; forward +1.08 m/s, backward -0.57, lateral +0.36/-0.23 m/s, yaw +0.84/-0.86 rad/s
+  command envelope, rough ground: 108/130 commands tracked, 0 falls; forward +1.09 m/s, backward -0.56, lateral +0.36/-0.23 m/s, yaw +0.84/-0.86 rad/s
+  actuator load walking 0.8 m/s (left leg; 1.5 x peak vs actuator peak, RMS vs rated):
+    hip_yaw   : peak  11.3 N m x 1.5 =  16.9 <= 36 N m; RMS  3.9 <= 11 N m rated
+    hip_roll  : peak  31.4 N m x 1.5 =  47.0 <= 60 N m; RMS 14.2 <= 20 N m rated
+    hip_pitch : peak  28.2 N m x 1.5 =  42.3 <= 120 N m; RMS 14.5 <= 40 N m rated
+    knee      : peak  61.5 N m x 1.5 =  92.2 <= 120 N m; RMS 24.6 <= 40 N m rated
+    ankle_pitch: peak  32.9 N m = 71% of the 46 N m linkage capability; RMS  9.8 N m
+    ankle_roll: peak  18.2 N m = 36% of the 51 N m linkage capability; RMS  5.5 N m
+  push recovery (0.5 m/s, 0.1 s torso pulse): 15.9-44.1 N s survived (forward 32.8, backward 35.6, left 15.9, right 44.1)
+  latency: 0.3 rad/s turn tracked 101% without delay, 89% with 40 ms sensing + 20 ms actuation delay
+  ROS 2 jazzy (separate node processes, /cmd_vel -> walk): 3 start paths (python -m, ros2 launch, ros2_control), all upright True; forward 0.37-0.41 m/s at 0.4
+  hardware-in-the-loop (hw_node + hub protocol + hub-firmware twin): forward 95% and turn 88% of the 0.3 command, upright True  [CALCULATED, emulated hubs]
+  Isaac Lab / Isaac Sim: 89/89 offline checks against the Isaac Lab 2.3.2 / Isaac Sim 5.1 sources; not run in Isaac Sim  [UNVERIFIED runtime]
 Robot description     : URDF + xacro (29 links, 23 revolute joints; xacro expansion matches the URDF), MuJoCo MJCF, Isaac Sim import script
 Cost (India, landed)  : Rs 712,481 (+15 % contingency = Rs 819,353); actuators 77 %  [ESTIMATED/VERIFIED mix, bom/master_bom.csv]
 ```

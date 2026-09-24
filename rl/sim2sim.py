@@ -96,8 +96,8 @@ class CadSim:
         self.pol_d = np.array([m.jnt_dofadr[jid[j]] for j in self.rn.joints])
         self.pol_a = np.array([self.act_of[j] for j in self.rn.joints])
         self.sole = [mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_SITE, f"{s}_sole") for s in ("left", "right")]
-        self.effort = np.array([self.io["effort_limits_Nm"].get(mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, m.actuator_trnid[a, 0]),
-                                                                np.inf) for a in range(m.nu)])
+        self.jname = [mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, m.actuator_trnid[a, 0]) for a in range(m.nu)]
+        self.effort = np.array([self.io["effort_limits_Nm"].get(self.jname[a], np.inf) for a in range(m.nu)])
         vlim = self.io.get("velocity_limits_rad_s")
         self.vlim = np.array([vlim[j] for j in self.rn.joints]) if vlim else None
 
@@ -118,6 +118,7 @@ class CadSim:
         m, rn, dec = self.m, self.rn, self.dec
         d = self.reset()
         vel_err, tilt_max, peak = [], 0.0, np.zeros(m.nu)
+        sq, nsq = np.zeros(m.nu), 0                                   # RMS torque after the settle time (thermal load)
         vmax = np.zeros(len(rn.joints))
         slip, fell = [], False
         snap = lambda: (d.qpos[3:7].copy(), d.qvel[3:6].copy(), d.qpos[self.pol_q].copy(), d.qvel[self.pol_d].copy())  # noqa: E731
@@ -136,6 +137,9 @@ class CadSim:
                 obs_hist.append(snap())
                 peak = np.maximum(peak, np.abs(d.actuator_force))
                 vmax = np.maximum(vmax, np.abs(d.qvel[self.pol_d]))
+                if k * self.dt_pol > settle_s:
+                    sq += d.actuator_force ** 2
+                    nsq += 1
             v_b = policy_io.quat_rotate_inverse(d.qpos[3:7], d.qvel[0:3])
             if k * self.dt_pol > settle_s:                           # after the start transient
                 vel_err.append([v_b[0] - cmd[0], v_b[1] - cmd[1], d.qvel[5] - cmd[2]])
@@ -158,7 +162,9 @@ class CadSim:
              "velocity_rmse": np.round(np.sqrt((e ** 2).mean(axis=0)), 3).tolist(),
              "max_tilt_deg": round(tilt_max, 2), "stance_foot_slip_m_s_p95": round(float(np.percentile(slip, 95)), 3) if slip else None,
              "peak_torque_fraction": round(float(peak[worst] / self.effort[worst]), 3),
-             "peak_torque_joint": mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_ACTUATOR, worst)}
+             "peak_torque_joint": mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_ACTUATOR, worst),
+             "joint_torque_peak_Nm": {self.jname[a]: round(float(peak[a]), 2) for a in range(m.nu)},
+             "joint_torque_rms_Nm": {self.jname[a]: round(float(np.sqrt(sq[a] / max(nsq, 1))), 2) for a in range(m.nu)}}
         if self.vlim is not None:
             frac = vmax / self.vlim
             r["peak_speed_fraction"] = round(float(frac.max()), 3)
