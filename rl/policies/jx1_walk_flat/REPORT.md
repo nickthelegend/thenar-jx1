@@ -53,6 +53,19 @@
 
 ![command envelope](envelope.png)
 
+## Latency sensitivity (CAD model, added sensing / actuation delay)
+
+| sensing delay | actuation delay | turn 0.3 rad/s tracked | forward 0.3 m/s tracked |
+|---|---|---|---|
+| 0 ms | 0 ms | 85% | 106% |
+| 10 ms | 0 ms | 80% | 103% |
+| 20 ms | 0 ms | 76% | 97% |
+| 0 ms | 10 ms | 80% | 102% |
+| 10 ms | 10 ms | 75% | 97% |
+| 20 ms | 10 ms | 70% | 91% |
+| 30 ms | 10 ms | 67% | 85% |
+| 40 ms | 20 ms | 60% | 76% |
+
 ## Push recovery (0.1 s torso pulse while walking at 0.5 m/s, CAD model)
 
 | direction | largest survived impulse | CoM velocity change |

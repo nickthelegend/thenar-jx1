@@ -92,6 +92,14 @@ def main():
                     f"- left {best('left', 'm/s')}, right {best('right', 'm/s')}",
                     f"- yaw left {best('yaw_left', 'rad/s')}, yaw right {best('yaw_right', 'rad/s')}", "",
                     f"![command envelope](envelope{tag}.png)", ""]
+    lat = load(pdir / "latency.json")
+    if lat:
+        out += ["## Latency sensitivity (CAD model, added sensing / actuation delay)", "",
+                "| sensing delay | actuation delay | turn 0.3 rad/s tracked | forward 0.3 m/s tracked |", "|---|---|---|---|"]
+        for r in lat["rows"]:
+            cell = lambda s: "**fell**" if s["fell"] else f"{s['fraction']:.0%}"  # noqa: E731
+            out.append(f"| {r['obs_delay_ms']} ms | {r['act_delay_ms']} ms | {cell(r['turn_0.3'])} | {cell(r['forward_0.3'])} |")
+        out += [""]
     if push:
         out += ["## Push recovery (0.1 s torso pulse while walking at 0.5 m/s, CAD model)", "",
                 "| direction | largest survived impulse | CoM velocity change |", "|---|---|---|"]
