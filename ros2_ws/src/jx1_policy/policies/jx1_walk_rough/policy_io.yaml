@@ -1,0 +1,325 @@
+format: jx1-policy-io/1
+policy:
+  onnx: policy.onnx
+  torchscript: policy.pt
+  input: obs
+  output: actions
+  num_obs: 47
+  num_actions: 12
+control:
+  policy_dt_s: 0.02
+  trained_physics_dt_s: 0.005
+  trained_decimation: 4
+joints:
+  policy:
+  - left_hip_yaw_joint
+  - left_hip_roll_joint
+  - left_hip_pitch_joint
+  - left_knee_joint
+  - left_ankle_pitch_joint
+  - left_ankle_roll_joint
+  - right_hip_yaw_joint
+  - right_hip_roll_joint
+  - right_hip_pitch_joint
+  - right_knee_joint
+  - right_ankle_pitch_joint
+  - right_ankle_roll_joint
+  held:
+  - waist_yaw_joint
+  - left_shoulder_pitch_joint
+  - left_shoulder_roll_joint
+  - left_shoulder_yaw_joint
+  - left_elbow_joint
+  - right_shoulder_pitch_joint
+  - right_shoulder_roll_joint
+  - right_shoulder_yaw_joint
+  - right_elbow_joint
+  - neck_yaw_joint
+  - neck_pitch_joint
+default_joint_pos:
+  left_hip_yaw_joint: 0.0
+  left_hip_roll_joint: 0.0
+  left_hip_pitch_joint: -0.35
+  left_knee_joint: 0.7
+  left_ankle_pitch_joint: -0.35
+  left_ankle_roll_joint: 0.0
+  right_hip_yaw_joint: 0.0
+  right_hip_roll_joint: 0.0
+  right_hip_pitch_joint: -0.35
+  right_knee_joint: 0.7
+  right_ankle_pitch_joint: -0.35
+  right_ankle_roll_joint: 0.0
+  waist_yaw_joint: 0.0
+  left_shoulder_pitch_joint: 0.0
+  left_shoulder_roll_joint: 0.14
+  left_shoulder_yaw_joint: 0.0
+  left_elbow_joint: -0.35
+  right_shoulder_pitch_joint: 0.0
+  right_shoulder_roll_joint: -0.14
+  right_shoulder_yaw_joint: 0.0
+  right_elbow_joint: -0.35
+  neck_yaw_joint: 0.0
+  neck_pitch_joint: 0.0
+action_scale: 0.25
+pd_gains:
+  left_hip_yaw_joint:
+  - 100.0
+  - 2.5
+  left_hip_roll_joint:
+  - 150.0
+  - 3.0
+  left_hip_pitch_joint:
+  - 200.0
+  - 5.0
+  left_knee_joint:
+  - 200.0
+  - 5.0
+  left_ankle_pitch_joint:
+  - 51.2
+  - 1.92
+  left_ankle_roll_joint:
+  - 64.8
+  - 2.43
+  right_hip_yaw_joint:
+  - 100.0
+  - 2.5
+  right_hip_roll_joint:
+  - 150.0
+  - 3.0
+  right_hip_pitch_joint:
+  - 200.0
+  - 5.0
+  right_knee_joint:
+  - 200.0
+  - 5.0
+  right_ankle_pitch_joint:
+  - 51.2
+  - 1.92
+  right_ankle_roll_joint:
+  - 64.8
+  - 2.43
+  waist_yaw_joint:
+  - 150.0
+  - 4.0
+  left_shoulder_pitch_joint:
+  - 40.0
+  - 1.0
+  left_shoulder_roll_joint:
+  - 40.0
+  - 1.0
+  left_shoulder_yaw_joint:
+  - 20.0
+  - 0.5
+  left_elbow_joint:
+  - 20.0
+  - 0.5
+  right_shoulder_pitch_joint:
+  - 40.0
+  - 1.0
+  right_shoulder_roll_joint:
+  - 40.0
+  - 1.0
+  right_shoulder_yaw_joint:
+  - 20.0
+  - 0.5
+  right_elbow_joint:
+  - 20.0
+  - 0.5
+  neck_yaw_joint:
+  - 5.0
+  - 0.1
+  neck_pitch_joint:
+  - 5.0
+  - 0.1
+effort_limits_Nm:
+  left_hip_yaw_joint: 36.0
+  left_hip_roll_joint: 60.0
+  left_hip_pitch_joint: 120.0
+  left_knee_joint: 120.0
+  left_ankle_pitch_joint: 46.0
+  left_ankle_roll_joint: 51.0
+  right_hip_yaw_joint: 36.0
+  right_hip_roll_joint: 60.0
+  right_hip_pitch_joint: 120.0
+  right_knee_joint: 120.0
+  right_ankle_pitch_joint: 46.0
+  right_ankle_roll_joint: 51.0
+  waist_yaw_joint: 36.0
+  left_shoulder_pitch_joint: 17.0
+  left_shoulder_roll_joint: 17.0
+  left_shoulder_yaw_joint: 14.0
+  left_elbow_joint: 14.0
+  right_shoulder_pitch_joint: 17.0
+  right_shoulder_roll_joint: 17.0
+  right_shoulder_yaw_joint: 14.0
+  right_elbow_joint: 14.0
+  neck_yaw_joint: 1.9
+  neck_pitch_joint: 1.9
+velocity_limits_rad_s:
+  left_hip_yaw_joint: 50.3
+  left_hip_roll_joint: 20.9
+  left_hip_pitch_joint: 20.9
+  left_knee_joint: 20.9
+  left_ankle_pitch_joint: 30.0
+  left_ankle_roll_joint: 30.0
+  right_hip_yaw_joint: 50.3
+  right_hip_roll_joint: 20.9
+  right_hip_pitch_joint: 20.9
+  right_knee_joint: 20.9
+  right_ankle_pitch_joint: 30.0
+  right_ankle_roll_joint: 30.0
+  waist_yaw_joint: 50.3
+  left_shoulder_pitch_joint: 44.0
+  left_shoulder_roll_joint: 44.0
+  left_shoulder_yaw_joint: 33.0
+  left_elbow_joint: 33.0
+  right_shoulder_pitch_joint: 44.0
+  right_shoulder_roll_joint: 44.0
+  right_shoulder_yaw_joint: 33.0
+  right_elbow_joint: 33.0
+  neck_yaw_joint: 4.7
+  neck_pitch_joint: 4.7
+joint_limits_rad:
+  left_hip_yaw_joint:
+  - -0.698132
+  - 0.785398
+  left_hip_roll_joint:
+  - -0.436332
+  - 0.785398
+  left_hip_pitch_joint:
+  - -2.007129
+  - 0.610865
+  left_knee_joint:
+  - 0.0
+  - 2.094395
+  left_ankle_pitch_joint:
+  - -0.959931
+  - 0.523599
+  left_ankle_roll_joint:
+  - -0.349066
+  - 0.349066
+  right_hip_yaw_joint:
+  - -0.785398
+  - 0.698132
+  right_hip_roll_joint:
+  - -0.785398
+  - 0.436332
+  right_hip_pitch_joint:
+  - -2.007129
+  - 0.610865
+  right_knee_joint:
+  - 0.0
+  - 2.094395
+  right_ankle_pitch_joint:
+  - -0.959931
+  - 0.523599
+  right_ankle_roll_joint:
+  - -0.349066
+  - 0.349066
+  waist_yaw_joint:
+  - -1.570796
+  - 1.570796
+  left_shoulder_pitch_joint:
+  - -2.96706
+  - 1.047198
+  left_shoulder_roll_joint:
+  - -0.174533
+  - 2.617994
+  left_shoulder_yaw_joint:
+  - -1.570796
+  - 1.570796
+  left_elbow_joint:
+  - -2.356194
+  - 0.087266
+  right_shoulder_pitch_joint:
+  - -2.96706
+  - 1.047198
+  right_shoulder_roll_joint:
+  - -2.617994
+  - 0.174533
+  right_shoulder_yaw_joint:
+  - -1.570796
+  - 1.570796
+  right_elbow_joint:
+  - -2.356194
+  - 0.087266
+  neck_yaw_joint:
+  - -1.396263
+  - 1.396263
+  neck_pitch_joint:
+  - -0.523599
+  - 0.785398
+ankle_polygons_rad:
+  left:
+  - - -0.959931
+    - -0.349066
+  - - 0.087266
+    - -0.349066
+  - - 0.523599
+    - 0.0
+  - - 0.523599
+    - 0.261799
+  - - 0.349066
+    - 0.349066
+  - - -0.959931
+    - 0.349066
+  right:
+  - - -0.959931
+    - 0.349066
+  - - 0.087266
+    - 0.349066
+  - - 0.523599
+    - 0.0
+  - - 0.523599
+    - -0.261799
+  - - 0.349066
+    - -0.349066
+  - - -0.959931
+    - -0.349066
+observation:
+  size: 47
+  layout:
+  - base_ang_vel_body x3 (rad/s) * scales.ang_vel
+  - projected_gravity_body x3
+  - command (vx m/s, vy m/s, wz rad/s) * scales.commands
+  - joint_pos - default (policy joints) * scales.dof_pos
+  - joint_vel (policy joints) * scales.dof_vel
+  - last_action (raw policy output)
+  - sin(2 pi phase)
+  - cos(2 pi phase)
+  scales:
+    ang_vel: 0.25
+    dof_pos: 1.0
+    dof_vel: 0.05
+    lin_vel: 2.0
+    commands:
+    - 2.0
+    - 2.0
+    - 0.25
+  clip: 100.0
+gait:
+  period_s: 0.8
+  offset: 0.5
+  stance_fraction: 0.55
+  swing_height_m: 0.08
+commands:
+  lin_vel_x:
+  - -0.4
+  - 0.8
+  lin_vel_y:
+  - -0.3
+  - 0.3
+  ang_vel_yaw:
+  - -0.6
+  - 0.6
+targets: q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad
+trained:
+  checkpoint: model_latest.pt
+  run: walk_v3_rough
+  iteration: 4000
+  task_config: run snapshot (config.yaml next to the checkpoint)
+  source_mjcf: simulation/mujoco/jx1.xml
+  source_mjcf_sha256: 13e00221a0d062a2e3a426d2313e3b7f7fff8d5f6aca1dc60a093813af340898
+  export_check:
+    onnx_max_abs_diff: 2.5033950805664062e-06
+    torchscript_max_abs_diff: 0.0
