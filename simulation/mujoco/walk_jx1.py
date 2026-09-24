@@ -7,10 +7,10 @@ of the same model along the plan gives the feedforward torques of all 23 joints.
 hulls, contacts, friction) tracks it with joint PD (the actuator-class gains of the MJCF) + feedforward, torques clipped to the
 actuator-class peak torques, plus a torso-tilt stabiliser on the stance ankle(s) and hips (ankle + hip strategy).
 
-Pass: no fall (pelvis above 0.35 m, tilt < 25 deg), forward progress within 25 % of the plan, lateral drift < 0.10 m,
-no actuator above its peak torque (by construction) and < 5 % of samples saturated.
-Outputs verification/mujoco_walking.json, verification/images/mujoco/walk_*.png and walk.gif.
-Usage: .venv/Scripts/python simulation/mujoco/walk_jx1.py [--gait slow|nominal] [--no-render] [--no-stabiliser]
+Pass (per gait): no fall (pelvis above 0.35 m, tilt < 25 deg), final pelvis position within 0.10 m + 5 % of the planned
+distance, heading within 10 deg, torques clipped at the peak torque (by construction) with < 5 % of samples saturated.
+Outputs verification/mujoco_walking.json, verification/images/mujoco/walk_*.png and walk.gif (nominal gait).
+Usage: .venv/Scripts/python simulation/mujoco/walk_jx1.py [--gait all|slow|nominal|fast|turn] [--no-render] [--no-stabiliser]
 """
 from __future__ import annotations
 
@@ -33,8 +33,11 @@ from validate_jx1 import XML, load, act_index, self_contacts  # noqa: E402
 OUT = ROOT / "verification"
 IMG = OUT / "images" / "mujoco"
 DESIGN_C = ROOT / "calculations" / "results" / "variant_C_cad_masses.yaml"
-GAITS = {"slow": dict(step_length=0.15, step_time=0.50, step_height=0.04, n_steps=8),
-         "nominal": dict(step_length=0.22, step_time=0.42, step_height=0.05, n_steps=10)}
+# the dynamic scenarios of calculations/run_leg_analysis.py
+GAITS = {"slow": dict(step_length=0.15, step_time=0.50, step_height=0.04, n_steps=8, hip_height=0.54),
+         "nominal": dict(step_length=0.22, step_time=0.42, step_height=0.05, n_steps=10, hip_height=0.54),
+         "fast": dict(step_length=0.30, step_time=0.38, step_height=0.06, n_steps=10, hip_height=0.52),
+         "turn": dict(step_length=0.08, step_time=0.45, step_height=0.05, n_steps=8, hip_height=0.54, turn_per_step_deg=15.0)}
 ARM_POSTURE = {"left_shoulder_roll": np.radians(8), "right_shoulder_roll": np.radians(-8),
                "left_elbow": np.radians(-20), "right_elbow": np.radians(-20)}
 # stabiliser gains (rad of joint correction per rad of torso tilt error, and per rad/s of tilt rate) — tuned in simulation
@@ -78,7 +81,7 @@ def plan(gait: str):
 
     gait_mod.WholeBody.set_state = set_state
     try:
-        g = GaitParams(f"walk_{gait}", hip_height=0.54, **GAITS[gait])
+        g = GaitParams(f"walk_{gait}", **GAITS[gait])
         res = synthesize(ma, design, g)
     finally:
         gait_mod.WholeBody.set_state = orig
@@ -92,16 +95,10 @@ def plan(gait: str):
     return g, res, cols
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--gait", default="slow", choices=list(GAITS))
-    ap.add_argument("--no-render", action="store_true")
-    ap.add_argument("--no-stabiliser", action="store_true")
-    a = ap.parse_args()
-    g, res, cols = plan(a.gait)
+def run(gait, stabiliser=True, render=False):
+    g, res, cols = plan(gait)
     t_ref, q_ref, qd_ref, tau_ff = res["t"], res["qpos"], res["qvel"], res["idr"]["tau"]
     contact = res["plan"].contact
-
     m = load()
     d = mujoco.MjData(m)
     ai = act_index(m)
@@ -116,7 +113,6 @@ def main():
     for n in ai:
         jid = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, n + "_joint")
         jadr[n] = (m.jnt_qposadr[jid], m.jnt_dofadr[jid])
-
     # initial state = first plan frame
     mujoco.mj_resetData(m, d)
     d.qpos[:7] = q_ref[0, :7]
@@ -128,31 +124,29 @@ def main():
 
     dt = m.opt.timestep
     T = float(t_ref[-1])
-    n_steps = int(T / dt)
     frames, peak, sat, samples = [], {n: 0.0 for n in ai}, {n: 0 for n in ai}, 0
     hist, contacts_seen, track_err = [], set(), []
     renderer = None
-    if not a.no_render:
+    if render:
         try:
             renderer = mujoco.Renderer(m, 240, 320)
             cam = mujoco.MjvCamera()
             cam.distance, cam.azimuth, cam.elevation = 2.2, 120, -12
         except Exception as e:  # pragma: no cover
             print("render disabled:", e)
-            renderer = None
     sole = {side: mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_SITE, f"{side}_sole") for side in ("left", "right")}
     stance0, slip, landing = {}, {"left": [], "right": []}, {"left": [], "right": []}
     fell = False
-    for k in range(n_steps):
+    for k in range(int(T / dt)):
         t = k * dt
         i = min(int(t / g.dt), len(t_ref) - 2)
         s = (t - t_ref[i]) / g.dt
         interp = lambda arr, c: (1 - s) * arr[i, c] + s * arr[i + 1, c]  # noqa: E731
-        roll, pitch, _ = rpy(d.qpos[3:7])
+        roll, pitch, yaw = rpy(d.qpos[3:7])
         wx, wy = d.qvel[3], d.qvel[4]
         st = contact[i]                                    # [left, right] stance flags
         corr = {}
-        if not a.no_stabiliser:
+        if stabiliser:
             for side, on in (("left", st[0]), ("right", st[1])):
                 if on:
                     corr[f"{side}_ankle_pitch"] = K_ANKLE * pitch + D_ANKLE * wy
@@ -184,8 +178,8 @@ def main():
                 slip[side].append(float(np.linalg.norm(ps - stance0.pop(side))))
         if k % 10 == 0:
             tilt = float(np.degrees(np.hypot(roll, pitch)))
-            base_ref = q_ref[i, :3]
-            hist.append((float(t), *[float(x) for x in d.qpos[:3]], *[float(x) for x in base_ref], tilt))
+            yaw_ref = rpy(q_ref[i, 3:7])[2]
+            hist.append((float(t), *[float(x) for x in d.qpos[:3]], *[float(x) for x in q_ref[i, :3]], tilt, float(yaw), float(yaw_ref)))
             for p in self_contacts(m, d):
                 contacts_seen.add(tuple(sorted(p[:2])))
             if d.qpos[2] < 0.35 or tilt > 25:
@@ -196,17 +190,20 @@ def main():
             renderer.update_scene(d, cam)
             frames.append(renderer.render().copy())
     h = np.array(hist)
-    x_plan = float(q_ref[-1, 0] - q_ref[0, 0])
-    x_sim = float(h[-1, 1] - h[0, 1])
-    out = {"gait": a.gait, "gait_params": {k: v for k, v in vars(g).items() if isinstance(v, (int, float, str))},
+    dist_plan = float(np.linalg.norm(q_ref[-1, :2] - q_ref[0, :2]))
+    dist_sim = float(np.linalg.norm(h[-1, 1:3] - h[0, 1:3]))
+    pos_err = float(np.linalg.norm(h[-1, 1:3] - h[-1, 4:6]))
+    head_err = float(np.degrees((h[-1, 8] - h[-1, 9] + np.pi) % (2 * np.pi) - np.pi))
+    out = {"gait": gait, "gait_params": {k: v for k, v in vars(g).items() if isinstance(v, (int, float, str))},
+           "speed_m_s": round(g.step_length / g.step_time, 3),
            "planning_model": "simulation/mujoco/jx1.xml (CAD masses/inertias); geometry from "
                              + (DESIGN_C.relative_to(ROOT).as_posix() if DESIGN_C.exists() else "calculations/design_point.yaml"),
            "zmp_error_history_m": [round(x, 4) for x in res["zmp_error_history_m"]],
-           "stabiliser": None if a.no_stabiliser else {"k_ankle": K_ANKLE, "d_ankle": D_ANKLE, "k_hip": K_HIP},
+           "stabiliser": {"k_ankle": K_ANKLE, "d_ankle": D_ANKLE, "k_hip": K_HIP} if stabiliser else None,
            "duration_s": round(float(h[-1, 0]), 3), "planned_duration_s": round(T, 3), "fell": fell,
-           "forward_progress_m": {"plan": round(x_plan, 3), "sim": round(x_sim, 3), "ratio": round(x_sim / x_plan, 3) if x_plan else None},
-           "lateral_drift_m": round(float(h[-1, 2] - h[-1, 5]), 3), "pelvis_height_final_m": round(float(h[-1, 3]), 3),
-           "max_tilt_deg": round(float(h[:, 7].max()), 2),
+           "distance_m": {"plan": round(dist_plan, 3), "sim": round(dist_sim, 3), "ratio": round(dist_sim / dist_plan, 3) if dist_plan else None},
+           "final_position_error_m": round(pos_err, 3), "final_heading_error_deg": round(head_err, 2),
+           "pelvis_height_final_m": round(float(h[-1, 3]), 3), "max_tilt_deg": round(float(h[:, 7].max()), 2),
            "joint_tracking_error_deg": {"rms": round(float(np.degrees(np.sqrt(np.mean(np.square(track_err))))), 2),
                                         "max": round(float(np.degrees(np.max(track_err))), 2)},
            "peak_torque_Nm": {n: round(v, 1) for n, v in peak.items()},
@@ -216,18 +213,38 @@ def main():
            "landing_error_mm": {sd: {"max": round(1000 * max(v), 1), "mean": round(1000 * float(np.mean(v)), 1)} for sd, v in landing.items() if v},
            "self_contact_pairs": sorted(contacts_seen)}
     worst_sat = max(out["saturated_sample_fraction"].values(), default=0.0)
-    out["pass"] = (not fell and x_plan > 0 and 0.75 <= x_sim / x_plan <= 1.25 and abs(out["lateral_drift_m"]) < 0.10
-                   and worst_sat < 0.05)
-    (OUT / "mujoco_walking.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
-    if frames:
-        import PIL.Image
-        IMG.mkdir(parents=True, exist_ok=True)
-        ims = [PIL.Image.fromarray(f) for f in frames]
-        ims[0].save(IMG / "walk.gif", save_all=True, append_images=ims[1:], duration=80, loop=0, optimize=True)
-        for tag, f in (("start", frames[0]), ("mid", frames[len(frames) // 2]), ("end", frames[-1])):
-            PIL.Image.fromarray(f).save(IMG / f"walk_{tag}.png")
-    print(json.dumps({k: out[k] for k in ("fell", "forward_progress_m", "lateral_drift_m", "max_tilt_deg", "joint_tracking_error_deg",
-                                          "saturated_sample_fraction", "stance_slip_mm", "landing_error_mm", "pass")}, indent=1))
+    out["pass"] = bool(not fell and pos_err <= 0.10 + 0.05 * dist_plan and abs(head_err) < 10.0 and worst_sat < 0.05)
+    return out, frames
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--gait", default="all", choices=["all"] + list(GAITS))
+    ap.add_argument("--no-render", action="store_true")
+    ap.add_argument("--no-stabiliser", action="store_true")
+    a = ap.parse_args()
+    names = list(GAITS) if a.gait == "all" else [a.gait]
+    results = {}
+    for name in names:
+        render = not a.no_render and name in ("nominal", "turn")
+        out, frames = run(name, stabiliser=not a.no_stabiliser, render=render)
+        results[name] = out
+        if frames:
+            import PIL.Image
+            IMG.mkdir(parents=True, exist_ok=True)
+            if name == "nominal":
+                ims = [PIL.Image.fromarray(f) for f in frames]
+                ims[0].save(IMG / "walk.gif", save_all=True, append_images=ims[1:], duration=80, loop=0, optimize=True)
+            for tag, f in (("start", frames[0]), ("mid", frames[len(frames) // 2]), ("end", frames[-1])):
+                PIL.Image.fromarray(f).save(IMG / f"walk_{name}_{tag}.png")
+        worst = max(out["peak_torque_fraction_of_limit"].items(), key=lambda kv: kv[1])
+        print(f"{name:8s} {out['speed_m_s']:.2f} m/s  fell {out['fell']!s:5s} distance {out['distance_m']['sim']:.3f}/{out['distance_m']['plan']:.3f} m  "
+              f"pos err {out['final_position_error_m']:.3f} m  heading err {out['final_heading_error_deg']:+.1f} deg  tilt {out['max_tilt_deg']:.2f} deg  "
+              f"track rms {out['joint_tracking_error_deg']['rms']:.2f} deg  peak torque {worst[0]} {worst[1]:.0%}  "
+              f"-> {'PASS' if out['pass'] else 'FAIL'}", flush=True)
+    summary = {"generated_by": "simulation/mujoco/walk_jx1.py", "gaits": results, "pass": all(r["pass"] for r in results.values())}
+    (OUT / "mujoco_walking.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
+    print("walking:", "PASS" if summary["pass"] else "FAIL", f"({sum(r['pass'] for r in results.values())}/{len(results)} gaits)")
 
 
 if __name__ == "__main__":
