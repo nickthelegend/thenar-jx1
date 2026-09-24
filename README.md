@@ -25,7 +25,7 @@
 
 <p align="center">
   <a href="media/jx1_assembly.mp4"><img src="docs/images/jx1_assembly.webp" alt="Animated assembly of JX1: all 87 parts fly into place in build order, then the robot walks" width="800"></a><br>
-  <sub>Time-lapse of the assembly film. <b><a href="media/jx1_assembly.mp4">Watch the full 96-second film with step titles (MP4)</a></b>:
+  <sub>Time-lapse of the assembly film. <b><a href="https://github.com/nickthelegend/thenar-jx1/raw/main/media/jx1_assembly.mp4">Download the full 96-second film with step titles (MP4, 13 MB)</a></b>:
   all 87 CAD parts come together in 22 steps, then the robot walks (MuJoCo simulation of the same CAD).</sub>
 </p>
 
