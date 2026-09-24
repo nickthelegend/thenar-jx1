@@ -34,7 +34,11 @@ def sim2sim_table(s):
             "foot lift-offs |", "|---|---|---|---|---|---|---|---|---|"]
     for name, r in s["scenarios"].items():
         lift = f"{r['foot_liftoffs_per_s']:.2f}/s" if "foot_liftoffs_per_s" in r else "-"
-        rows.append(f"| {name} | {vec(r['command'], 1)} | {'**fell** at ' + str(r['time_survived_s']) + ' s' if r['fell'] else 'upright'} | "
+        cmd = r["command"]
+        cmd_txt = vec(cmd, 1) if isinstance(cmd[0], (int, float)) else " → ".join(f"{vec(c, 1)} at {t0:g} s" for t0, c in cmd)
+        if "foot_liftoffs_last_2s_per_s" in r and not isinstance(cmd[0], (int, float)):
+            lift += f" (last 2 s: {r['foot_liftoffs_last_2s_per_s']:.2f}/s)"
+        rows.append(f"| {name} | {cmd_txt} | {'**fell** at ' + str(r['time_survived_s']) + ' s' if r['fell'] else 'upright'} | "
                     f"{vec(r['mean_velocity_b'])} | {vec(r['velocity_rmse'])} | {r['max_tilt_deg']:.1f}° | "
                     f"{pct(r['peak_torque_fraction'])} {r['peak_torque_joint']} | {pct(r.get('peak_speed_fraction'))} {r.get('peak_speed_joint', '')} | "
                     f"{lift} |")

@@ -45,6 +45,9 @@ def row_values(b: Path) -> dict:
                         f"yaw {g('yaw_left')}/{g('yaw_right')}")
     st = (load(b / "sim2sim.json") or {}).get("scenarios", {}).get("stand", {})
     pw = (load(b / "power.json") or {}).get("scenarios", {})
+    sws = (load(b / "sim2sim.json") or {}).get("scenarios", {}).get("stand_walk_stand")
+    if sws:
+        out["stand -> walk 0.5 -> stand"] = ("**fell**" if sws["fell"] else "upright") +             f", {sws['foot_liftoffs_last_2s_per_s']:.2f} foot lift-offs/s in the last 2 s"
     if "foot_liftoffs_per_s" in st or pw:
         out["stand (zero command)"] = ", ".join(x for x in (
             f"{st['foot_liftoffs_per_s']:.2f} foot lift-offs/s, drift {st['base_travel_m']:.2f} m" if "foot_liftoffs_per_s" in st else "",

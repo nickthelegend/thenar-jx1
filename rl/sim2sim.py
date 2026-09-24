@@ -25,7 +25,9 @@ from jx1_rl import REPO, DEFAULT_POLICY, RL_DIR, policy_io  # noqa: E402
 
 SCENARIOS = [("stand", (0.0, 0.0, 0.0), 6.0), ("forward_0.5", (0.5, 0.0, 0.0), 10.0), ("forward_0.8", (0.8, 0.0, 0.0), 10.0),
              ("backward_0.3", (-0.3, 0.0, 0.0), 8.0), ("sidestep_0.2", (0.0, 0.2, 0.0), 8.0), ("turn_0.5", (0.0, 0.0, 0.5), 8.0),
-             ("walk_turn", (0.4, 0.0, 0.3), 10.0)]
+             ("walk_turn", (0.4, 0.0, 0.3), 10.0),
+             # stand mode (OI-27): stand, walk 0.5 m/s from 3 s, stand again from 7 s; lift-offs of the last 2 s show whether it settles
+             ("stand_walk_stand", ((0.0, (0.0, 0.0, 0.0)), (3.0, (0.5, 0.0, 0.0)), (7.0, (0.0, 0.0, 0.0))), 11.0)]
 
 
 class Runner:
@@ -134,8 +136,11 @@ class CadSim:
         return pairs
 
     def rollout(self, cmd, T, frame_cb=None, settle_s=2.0, step_cb=None):
-        """Walk with a constant command for T seconds; tracking error is measured after settle_s. frame_cb(k, d) runs every
+        """Walk with a constant command (vx, vy, wz), or a schedule ((t0, cmd0), (t1, cmd1), ...) switching at t0 < t1 < ...,
+        for T seconds; tracking error is measured after settle_s against the current command. frame_cb(k, d) runs every
         policy step, step_cb(d, settled) every physics step (e.g. torque / speed traces for the power model)."""
+        sched = [(0.0, tuple(cmd))] if np.isscalar(cmd[0]) else [(float(t0), tuple(c)) for t0, c in cmd]
+        cmd_at = lambda t: next(c for t0, c in reversed(sched) if t >= t0 - 1e-9)  # noqa: E731
         m, rn, dec = self.m, self.rn, self.dec
         d = self.reset()
         vel_err, tilt_max, peak = [], 0.0, np.zeros(m.nu)
@@ -143,6 +148,7 @@ class CadSim:
         vmax = np.zeros(len(rn.joints))
         slip, fell = [], False
         was_down, liftoffs, swing_steps, n_settled, xy0 = None, 0, 0, 0, None     # stepping (in place) after the settle time
+        lift_t, c_log = [], []
         self_pairs, self_steps, n_steps = {}, 0, 0                                # self-contact over the whole rollout
         snap = lambda: (d.qpos[3:7].copy(), d.qvel[3:6].copy(), d.qpos[self.pol_q].copy(), d.qvel[self.pol_d].copy())  # noqa: E731
         obs_hist = deque([snap()] * (self.n_obs + 1), maxlen=self.n_obs + 1)
@@ -150,7 +156,8 @@ class CadSim:
         last_tgt = d.ctrl[self.pol_a].copy()
         for k in range(int(T / self.dt_pol)):
             quat, gyro, q, dq = obs_hist[0]
-            tgt = rn.targets(quat, gyro, q, dq, cmd, d.time)
+            c = cmd_at(d.time)
+            tgt = rn.targets(quat, gyro, q, dq, c, d.time)
             prev, last_tgt = last_tgt, tgt
             for i in range(dec):
                 # CAN-hub first-order hold: the new target is reached at the end of the policy period (firmware alpha ramp)
@@ -167,9 +174,12 @@ class CadSim:
                     nsq += 1
             v_b = policy_io.quat_rotate_inverse(d.qpos[3:7], d.qvel[0:3])
             if k * self.dt_pol > settle_s:                           # after the start transient
-                vel_err.append([v_b[0] - cmd[0], v_b[1] - cmd[1], d.qvel[5] - cmd[2]])
+                vel_err.append([v_b[0] - c[0], v_b[1] - c[1], d.qvel[5] - c[2]])
+                c_log.append(c)
                 down = self.feet_down(d)
-                liftoffs += 0 if was_down is None else int(np.sum(was_down & ~down))
+                n_lift = 0 if was_down is None else int(np.sum(was_down & ~down))
+                liftoffs += n_lift
+                lift_t += [float(d.time)] * n_lift
                 was_down, swing_steps, n_settled = down, swing_steps + int(not down.all()), n_settled + 1
                 xy0 = d.qpos[0:2].copy() if xy0 is None else xy0
             sc = self.self_contacts(d)
@@ -191,11 +201,13 @@ class CadSim:
                 frame_cb(k, d)
         e = np.array(vel_err) if vel_err else np.zeros((1, 3))
         worst = int(np.argmax(peak / self.effort))
-        r = {"command": list(cmd), "duration_s": T, "fell": fell, "time_survived_s": round(float(d.time), 2),
-             "mean_velocity_b": np.round(e.mean(axis=0) + np.array(cmd), 3).tolist(),
+        r = {"command": list(sched[0][1]) if len(sched) == 1 else [[t0, list(c)] for t0, c in sched], "duration_s": T, "fell": fell,
+             "time_survived_s": round(float(d.time), 2),
+             "mean_velocity_b": np.round(e.mean(axis=0) + (np.mean(c_log, axis=0) if c_log else np.zeros(3)), 3).tolist(),
              "velocity_rmse": np.round(np.sqrt((e ** 2).mean(axis=0)), 3).tolist(),
              "max_tilt_deg": round(tilt_max, 2), "stance_foot_slip_m_s_p95": round(float(np.percentile(slip, 95)), 3) if slip else None,
              "foot_liftoffs_per_s": round(liftoffs / max(n_settled * self.dt_pol, 1e-9), 2),
+             "foot_liftoffs_last_2s_per_s": round(sum(t > float(d.time) - 2.0 for t in lift_t) / 2.0, 2),
              "swing_fraction": round(swing_steps / max(n_settled, 1), 3),
              "base_travel_m": round(float(np.linalg.norm(d.qpos[0:2] - xy0)), 3) if xy0 is not None else None,
              "self_contact_fraction": round(self_steps / max(n_steps, 1), 3),
