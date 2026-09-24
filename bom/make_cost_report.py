@@ -239,7 +239,7 @@ def build(rows, s):
   <div><span>Estimated cost of the robot</span><b>{inr(total)}</b></div>
   <div class="grand"><span>With 15 % prototype contingency</span><b>{inr(grand)}</b></div>
 </div>
-<div class="cover-foot">{REPORT_DATE} · design v0.5 · all figures from the project bill of materials ({REPO})</div>
+<div class="cover-foot">{REPORT_DATE} · release v1.0-alpha · all figures from the project bill of materials ({REPO})</div>
 ''', "cover"))
 
     # 2 — overview

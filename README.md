@@ -77,7 +77,8 @@ firmware for the motor-control boards, a physics simulation, and the trained wal
 
 ## Honest status
 
-**JX1 has not been built yet.** It is complete **on the computer**:
+**Current release: [v1.0-alpha](docs/releases/v1.0-alpha.md) (2026-09-24), the complete design package.** JX1 has not
+been built yet. It is complete **on the computer**:
 
 | Done (on the computer) | Not done yet (needs a real robot) |
 |---|---|
@@ -423,9 +424,14 @@ the worst load. See [what is metal, what is printed](#what-is-metal-what-is-3d-p
 the head, the grippers and the covers.
 
 **Why is it so expensive? Can I use cheaper motors?**
-The 21 motors are 77 % of the cost. A walking humanoid's hips and knees need 60–120 N·m peak torque with
-back-drivability and a built-in driver, which hobby servos can't give. The cheapest real saving is buying the same
-RobStride units through a China distributor (≈ ₹1.87 lakh less). A cheaper actuator can go in: the CAD is
+The 21 motors are 77 % of the cost. Each one is a complete joint: a high-torque brushless motor, a precision
+planetary gearbox, bearings, an absolute encoder and a motor driver in one machined can. A walking humanoid's hips and
+knees need 60–120 N·m peak torque while staying back-drivable, which hobby servos can't give. Of the ₹5.46 lakh,
+₹3.86 lakh is RobStride's list price, ₹1.25 lakh is import duty (about 32 %: customs duty, surcharge and 18 % IGST) and
+₹0.36 lakh is shipping; none are stocked in India. They are still the cheapest option found: ₹290 per N·m of peak
+torque for the RS04, against ₹2,200–7,900 per N·m for integrated actuators sold in India
+([actuator study](actuators/actuator_selection.md)). The cheapest real saving is buying the same RobStride units through
+a China distributor (≈ ₹1.87 lakh less). A cheaper actuator can go in: the CAD is
 parametric, so you change the actuator class in `tools/cad/params.py` and regenerate, then re-run the checks.
 
 **Do I need SolidWorks?**
