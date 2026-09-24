@@ -52,8 +52,18 @@ class Runner:
         return policy_io.clip_ankle_targets(tgt, self.joints, self.polys)
 
 
-def load_cad_model(io):
-    m = mujoco.MjModel.from_xml_path(str(REPO / io["trained"]["source_mjcf"]))
+def load_cad_model(io, terrain_cfg=None):
+    src = REPO / io["trained"]["source_mjcf"]
+    if terrain_cfg:                              # same heightfield as the rough training task, under the full CAD model
+        from jx1_rl import config
+        from jx1_rl.terrain import Terrain
+        tc = config.load(terrain_cfg)["terrain"]
+        spec = mujoco.MjSpec.from_file(str(src))
+        spec.meshdir = str((src.parent / spec.meshdir).resolve())
+        Terrain(tc, seed=tc.get("seed", 0)).add_to_spec(spec)
+        m = spec.compile()
+    else:
+        m = mujoco.MjModel.from_xml_path(str(src))
     act_of = {}
     for a in range(m.nu):
         j = mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, m.actuator_trnid[a, 0])
@@ -66,10 +76,10 @@ def load_cad_model(io):
     return m, act_of
 
 
-def run(policy_dir: Path, render=True, hub_interp=True):
+def run(policy_dir: Path, render=True, hub_interp=True, terrain=None):
     rn = Runner(policy_dir)
     io = rn.io
-    m, act_of = load_cad_model(io)
+    m, act_of = load_cad_model(io, terrain)
     dt_pol = io["control"]["policy_dt_s"]
     dec = int(round(dt_pol / m.opt.timestep))
     jq = {j: m.jnt_qposadr[mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, j)] for j in act_of}
@@ -146,13 +156,14 @@ def run(policy_dir: Path, render=True, hub_interp=True):
         r = results[name]
         print(f"{name:13s} cmd {cmd} -> {'FELL' if fell else 'ok  '} v_mean {r['mean_velocity_b']} rmse {r['velocity_rmse']} "
               f"tilt {r['max_tilt_deg']:5.1f} deg peak {r['peak_torque_joint']} {r['peak_torque_fraction']:.0%}", flush=True)
-    summary = {"hub_interpolation": hub_interp, "policy": (policy_dir.resolve().relative_to(REPO).as_posix() if policy_dir.resolve().is_relative_to(REPO) else str(policy_dir)), "model": io["trained"]["source_mjcf"], "physics_dt_s": m.opt.timestep,
+    summary = {"terrain": terrain or "flat", "hub_interpolation": hub_interp, "policy": (policy_dir.resolve().relative_to(REPO).as_posix() if policy_dir.resolve().is_relative_to(REPO) else str(policy_dir)), "model": io["trained"]["source_mjcf"], "physics_dt_s": m.opt.timestep,
                "decimation": dec, "scenarios": results, "all_upright": not any(r["fell"] for r in results.values())}
-    (policy_dir / "sim2sim.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
+    tag = "" if not terrain else "_" + Path(terrain).stem.replace("jx1_walk_", "")
+    (policy_dir / f"sim2sim{tag}.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
     if frames:
         import PIL.Image
         ims = [PIL.Image.fromarray(f) for f in frames]
-        ims[0].save(policy_dir / "sim2sim_walk.gif", save_all=True, append_images=ims[1:], duration=80, loop=0, optimize=True)
+        ims[0].save(policy_dir / f"sim2sim_walk{tag}.gif", save_all=True, append_images=ims[1:], duration=80, loop=0, optimize=True)
     return summary
 
 
@@ -161,8 +172,9 @@ def main():
     ap.add_argument("--policy", default=str(RL_DIR / "policies" / "jx1_walk_flat"))
     ap.add_argument("--no-render", action="store_true")
     ap.add_argument("--no-hub-interp", action="store_true", help="apply targets immediately instead of the hubs' 20 ms ramp")
+    ap.add_argument("--terrain", default=None, help="task YAML with a terrain section (e.g. rl/config/jx1_walk_rough.yaml)")
     a = ap.parse_args()
-    s = run(Path(a.policy), render=not a.no_render, hub_interp=not a.no_hub_interp)
+    s = run(Path(a.policy), render=not a.no_render, hub_interp=not a.no_hub_interp, terrain=a.terrain)
     print("all upright:", s["all_upright"])
 
 
