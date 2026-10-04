@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "bom"))
 from make_cost_report import CSS, PREVIEW_JS, bars, e, edge, inr, short, table, words  # noqa: E402
 
-REPORT_DATE = "24 Sep – 4 Oct 2026"     # prices checked over these dates (servos and filament on 4 Oct)
+REPORT_DATE = "24 Sep – 5 Oct 2026"     # prices checked over these dates (servos and filament on 4 Oct)
 
 BOM = ROOT / "jx0" / "bom" / "jx0_bom.csv"
 OUT_PDF = ROOT / "jx0" / "bom" / "JX0_cost_estimate.pdf"
@@ -98,8 +98,8 @@ def build(rows):
     # 2 - overview
     spec = [("Height / mass", f"{SPEC['height']} / {SPEC['mass']} (CAD, all parts)"),
             ("Joints", "17, every one a Feetech STS3215 12 V serial bus servo (30 kg·cm stall, position feedback), like the reference robot"),
-            ("Legs", "6 joints each: hip yaw, roll, pitch, knee, ankle pitch, roll"),
-            ("Arms and head", "shoulder pitch and elbow per arm (a shoulder cradle and a flat blade), neck yaw under a soft rounded head"),
+            ("Legs", "6 joints each: hip yaw, roll, pitch, knee, ankle pitch, roll; every pitch and roll joint double-sided (a U-bracket on the servo's horn and rear hub, the servo body in a cage), like the reference robot"),
+            ("Arms and head", "shoulder pitch and elbow per arm (the shoulder servo in a hood outside the chest, the elbow servo in a box below it, a paddle blade), neck yaw under a soft rounded head"),
             ("Brain", "Raspberry Pi 4: 100 Hz gait playback with arm swing, IMU balance, offline speech recognition and voice"),
             ("Talking", "Claude over Wi-Fi writes the replies and calls the robot's actions (walk, turn, wave, nod, look)"),
             ("Power", "3S 2200 mAh LiPo (about 70 min of walking, CALCULATED) or a 12.6 V bench supply"),

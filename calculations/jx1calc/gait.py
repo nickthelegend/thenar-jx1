@@ -22,6 +22,7 @@ class GaitParams:
     n_steps: int = 8
     hip_height: float = 0.54       # nominal hip-centre height above ground (m)
     zmp_offset_x: float = 0.015    # ZMP reference ahead of the ankle projection during single support
+    zmp_offset_y: float = 0.0      # ZMP reference inward of the ankle (toward the other foot) during single support
     lateral_step: float = 0.0      # sideways advance per step (m)
     turn_per_step_deg: float = 0.0
     dt: float = 0.005
@@ -74,7 +75,9 @@ def plan_steps(d: Design, g: GaitParams) -> Plan:
         else:
             advance = g.step_length / 2 if k == 1 else g.step_length
             target = pos[stance] + fwd * advance + lat * side * w + lat * g.lateral_step
-        stance_zmp = pos[stance] + np.array([np.cos(yaw[stance]), np.sin(yaw[stance])]) * g.zmp_offset_x
+        st_sgn = 1 if stance == "l" else -1
+        stance_zmp = (pos[stance] + np.array([np.cos(yaw[stance]), np.sin(yaw[stance])]) * g.zmp_offset_x
+                      - np.array([-np.sin(yaw[stance]), np.cos(yaw[stance])]) * st_sgn * g.zmp_offset_y)
         zmp_keys.append((tk, tk + T_ds, prev_zmp.copy(), stance_zmp.copy()))
         events.append((tk + T_ds, tk + g.step_time, swing, pos[swing].copy(), target.copy(), yaw[swing], new_heading))
         pos[swing], yaw[swing] = target, new_heading

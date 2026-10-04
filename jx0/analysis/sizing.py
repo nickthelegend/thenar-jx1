@@ -30,36 +30,36 @@ from run_leg_analysis import static_case  # noqa: E402
 
 DESIGN = ROOT / "jx0" / "design_point.yaml"
 OUT = ROOT / "jx0" / "results"
-H = 0.215                                   # walking hip height (as jx0/sim/walk_jx0.py): knees bent ~45 deg
+H = 0.140                                   # walking hip height (as jx0/sim/walk_jx0.py, v0.4 legs): knees bent ~55 deg
 POLICY = {"dynamic_peak_factor": 1.5, "static_peak_factor": 1.25, "continuous_factor": 1.3, "torque_speed_factor": 1.5}
 
 
 def gaits():
-    sq0, sqT, sqA = 1.0, 1.6, 0.045
+    sq0, sqT, sqA = 1.0, 1.6, 0.025
 
     def squat(t):
         return H - sqA * 0.5 * (1 - np.cos(2 * np.pi * (t - sq0) / sqT)) if sq0 <= t <= sq0 + sqT else H
     # Hobby servos are slow (no-load ~4.7 rad/s at 7.4 V): a 0.4 s step needs ~7 rad/s at the knee, so JX0 walks with
     # 0.55-0.6 s steps and 1.5 cm foot lift (sweep 2026-09-24: 5 cm / 0.6 s already reaches 96 % of the torque-speed line)
-    common = dict(zmp_offset_x=0.005, hip_height=H, ds_ratio=0.25, step_height=0.015)   # as walk_jx0
+    common = dict(zmp_offset_x=0.0, zmp_offset_y=0.02, hip_height=H, ds_ratio=0.25, step_height=0.012)   # as walk_jx0
     return [
-        GaitParams("walk_slow_0.05ms", step_length=0.030, step_time=0.60, n_steps=8, **common),
-        GaitParams("walk_nominal_0.067ms", step_length=0.040, step_time=0.60, n_steps=10, **common),
-        GaitParams("walk_fast_0.073ms", step_length=0.040, step_time=0.55, n_steps=10, **common),
-        GaitParams("turn_10deg_per_step", step_length=0.015, step_time=0.60, n_steps=8, turn_per_step_deg=10.0, **common),
-        GaitParams("squat_4.5cm_1.6s", n_steps=0, t_start=0.4, t_end=2.6, pelvis_height_profile=squat, **common),
+        GaitParams("walk_slow_0.042ms", step_length=0.025, step_time=0.60, n_steps=8, **common),
+        GaitParams("walk_nominal_0.05ms", step_length=0.030, step_time=0.60, n_steps=10, **common),
+        GaitParams("walk_brisk_0.055ms", step_length=0.030, step_time=0.55, n_steps=10, **common),
+        GaitParams("turn_10deg_per_step", step_length=0.012, step_time=0.60, n_steps=8, turn_per_step_deg=10.0, **common),
+        GaitParams("squat_2.5cm_1.6s", n_steps=0, t_start=0.4, t_end=2.6, pelvis_height_profile=squat, **common),
     ]
 
 
 def statics(d: Design):
     ya = d.hip_spacing / 2
     toe, heel, hw, m = d.foot_length - d.ankle_from_heel, d.ankle_from_heel, d.foot_width / 2, 0.005
-    hs = 0.205                              # single-leg poses: the pelvis shifts over the stance foot, so it sits lower
-    return [("stand_double", "both", (0.005, 0.0), H), ("stand_deep_squat", "both", (0.005, 0.0), 0.18),
-            ("single_leg", "l", (0.005, ya), hs), ("single_leg_bent", "l", (0.005, ya), 0.19),
-            ("single_leg_cop_toe", "l", (toe - m, ya), hs), ("single_leg_cop_heel", "l", (-(heel - m), ya), hs),
-            ("single_leg_cop_outer_edge", "l", (0.005, ya + hw - m), hs),
-            ("single_leg_cop_inner_edge", "l", (0.005, ya - hw + m), hs)]
+    hs = 0.118                              # single-leg poses: the pelvis shifts over the stance foot, so it sits lower
+    return [("stand_double", "both", (0.005, 0.0), H), ("stand_deep_squat", "both", (0.005, 0.0), 0.115),
+            ("single_leg", "l", (0.005, ya), hs), ("single_leg_bent", "l", (0.005, ya), 0.11),
+            ("single_leg_cop_toe", "l", (toe - m, ya), hs - 0.02), ("single_leg_cop_heel", "l", (-(heel - m), ya), hs - 0.02),
+            ("single_leg_cop_outer_edge", "l", (0.005, ya + hw - m), hs - 0.02),
+            ("single_leg_cop_inner_edge", "l", (0.005, ya - hw + m), hs - 0.02)]
 
 
 def main():
@@ -104,7 +104,7 @@ def main():
         print(f"{g.name}: zmp error {1000 * zerr:.1f} mm", flush=True)
 
     for name, stance, cxy, hh in statics(d):
-        sc = static_case(model, d, name, stance, cxy, hh, swing_lift=0.03)
+        sc = static_case(model, d, name, stance, cxy, hh, swing_lift=0.02)
         for j in LEG_JOINTS:
             v = abs(float(sc["tau"][dof[j]]))
             if v > per[j]["static_peak"]:

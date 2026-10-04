@@ -32,25 +32,27 @@ from jx0bot.balance import GAINS, Balance  # noqa: E402  (the robot's own balanc
 OUT = ROOT / "jx0" / "results"
 IMG = OUT / "images"
 GAIT_DIR = ROOT / "jx0" / "software" / "jx0bot" / "gaits"
-H = 0.215                  # walking hip height: a little more crouched than 0.222 survives model errors better (verify)
-COMMON = dict(zmp_offset_x=0.005, hip_height=H, ds_ratio=0.25, step_height=0.015, t_start=0.8, t_end=1.0)
+H = 0.140                  # walking hip height (v0.4 legs: 153 mm hip to floor, knees bent like the reference robot)
+COMMON = dict(zmp_offset_x=0.0, zmp_offset_y=0.02, hip_height=H, ds_ratio=0.25, step_height=0.012, t_start=0.8, t_end=1.0)
+# zmp_offset_y: the ZMP stays 20 mm inside each foot, so the short v0.4 legs lean ~15 deg sideways at most (0 mm: 26 deg, the
+# ankle-roll limit); chosen by Monte Carlo (jx0/verify/robustness.py) over step time 0.45-0.6 s and offset 0-20 mm
 BUS_HZ = 100.0             # goal packets per second: 100 Hz halves the hold-and-delay of 50 Hz (jx0/verify/robustness.py)
 GAITS = {
-    "forward": dict(step_length=0.040, step_time=0.60, n_steps=10),
+    "forward": dict(step_length=0.030, step_time=0.60, n_steps=10),
     "forward_slow": dict(step_length=0.030, step_time=0.60, n_steps=8),
-    "backward": dict(step_length=-0.025, step_time=0.60, n_steps=8),
+    "backward": dict(step_length=-0.020, step_time=0.60, n_steps=8),
     "turn_left": dict(step_length=0.0, step_time=0.60, n_steps=8, turn_per_step_deg=10.0),
     "turn_right": dict(step_length=0.0, step_time=0.60, n_steps=8, turn_per_step_deg=-10.0),
-    "side_left": dict(step_length=0.0, step_time=0.60, n_steps=6, lateral_step=0.015),
+    "side_left": dict(step_length=0.0, step_time=0.60, n_steps=6, lateral_step=0.012),
     # the robot's building blocks: 2 steps from standing to standing, repeated by jx0bot.robot.walk / turn
-    "forward_2": dict(step_length=0.040, step_time=0.60, n_steps=2),
-    "forward_4": dict(step_length=0.040, step_time=0.60, n_steps=4),
-    "backward_2": dict(step_length=-0.025, step_time=0.60, n_steps=2),
-    "backward_4": dict(step_length=-0.025, step_time=0.60, n_steps=4),
+    "forward_2": dict(step_length=0.030, step_time=0.60, n_steps=2),
+    "forward_4": dict(step_length=0.030, step_time=0.60, n_steps=4),
+    "backward_2": dict(step_length=-0.020, step_time=0.60, n_steps=2),
+    "backward_4": dict(step_length=-0.020, step_time=0.60, n_steps=4),
     "turn_left_2": dict(step_length=0.0, step_time=0.60, n_steps=2, turn_per_step_deg=10.0),
     "turn_right_2": dict(step_length=0.0, step_time=0.60, n_steps=2, turn_per_step_deg=-10.0),
-    "side_left_2": dict(step_length=0.0, step_time=0.60, n_steps=2, lateral_step=0.015),
-    "side_right_2": dict(step_length=0.0, step_time=0.60, n_steps=2, lateral_step=-0.015),
+    "side_left_2": dict(step_length=0.0, step_time=0.60, n_steps=2, lateral_step=0.012),
+    "side_right_2": dict(step_length=0.0, step_time=0.60, n_steps=2, lateral_step=-0.012),
 }
 ARM_POSE = {"l_shoulder_pitch": 0.0, "r_shoulder_pitch": 0.0, "l_elbow": np.radians(-20), "r_elbow": np.radians(-20)}
 K_SWING = 1.6                                      # arm swing: shoulder pitch = 1.6 x the opposite hip's pitch swing

@@ -36,7 +36,7 @@ python -m jx0bot.calibrate center
 ```
 
 Every servo goes to mid-travel (2048 ticks). While they hold, fit the horns and printed links so each joint is as close
-to its zero pose as the horn splines allow: legs straight, feet flat, shoulder cradles and blades hanging straight down,
+to its zero pose as the horn splines allow: legs straight, feet flat, shoulder hoods and blades hanging straight down,
 head facing forward. Then press Enter to release.
 
 ## 3. Record the exact zero pose
@@ -45,7 +45,7 @@ head facing forward. Then press Enter to release.
 python -m jx0bot.calibrate zero
 ```
 
-Torque goes off. Hold the robot in the zero pose (a small set square against the pelvis, thigh and shin plates helps)
+Torque goes off. Hold the robot in the zero pose (a small set square against the pelvis, thigh and shin brackets helps)
 and press Enter. All 17 encoder readings are written into `config.yaml` as `zero_ticks`.
 
 ## 4. Check every joint's direction

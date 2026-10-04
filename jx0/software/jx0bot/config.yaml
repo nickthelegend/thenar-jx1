@@ -12,18 +12,18 @@ bus:
 
 # STS3215 leg servos: bus ID, direction (+1 / -1: servo tick direction vs the joint sign — ALL PLACEHOLDERS until
 # calibrate.py directions checks each joint), zero_ticks (servo reading
-# with the joint at 0 rad — robot in the zero pose), limits = the collision-free range from jx0/verify/verify_cad.py
+# with the joint at 0 rad — robot in the zero pose), limits = inside the collision-free range from jx0/verify/verify_cad.py (v0.4 double-sided legs)
 leg_servos:
   l_hip_yaw:     {id: 1,  direction: 1,  zero_ticks: 2048, limits_deg: [-30, 30]}
-  l_hip_roll:    {id: 2,  direction: 1,  zero_ticks: 2048, limits_deg: [-20, 40]}
-  l_hip_pitch:   {id: 3,  direction: 1,  zero_ticks: 2048, limits_deg: [-100, 30]}
-  l_knee:        {id: 4,  direction: 1,  zero_ticks: 2048, limits_deg: [0, 120]}
+  l_hip_roll:    {id: 2,  direction: 1,  zero_ticks: 2048, limits_deg: [-20, 22]}
+  l_hip_pitch:   {id: 3,  direction: 1,  zero_ticks: 2048, limits_deg: [-70, 8]}
+  l_knee:        {id: 4,  direction: 1,  zero_ticks: 2048, limits_deg: [0, 84]}
   l_ankle_pitch: {id: 5,  direction: 1,  zero_ticks: 2048, limits_deg: [-55, 15]}
   l_ankle_roll:  {id: 6,  direction: 1,  zero_ticks: 2048, limits_deg: [-20, 20]}
   r_hip_yaw:     {id: 7,  direction: 1,  zero_ticks: 2048, limits_deg: [-30, 30]}
-  r_hip_roll:    {id: 8,  direction: 1,  zero_ticks: 2048, limits_deg: [-40, 20]}
-  r_hip_pitch:   {id: 9,  direction: 1,  zero_ticks: 2048, limits_deg: [-100, 30]}
-  r_knee:        {id: 10, direction: 1,  zero_ticks: 2048, limits_deg: [0, 120]}
+  r_hip_roll:    {id: 8,  direction: 1,  zero_ticks: 2048, limits_deg: [-22, 18]}
+  r_hip_pitch:   {id: 9,  direction: 1,  zero_ticks: 2048, limits_deg: [-70, 8]}
+  r_knee:        {id: 10, direction: 1,  zero_ticks: 2048, limits_deg: [0, 84]}
   r_ankle_pitch: {id: 11, direction: 1,  zero_ticks: 2048, limits_deg: [-55, 15]}
   r_ankle_roll:  {id: 12, direction: 1,  zero_ticks: 2048, limits_deg: [-20, 20]}
 

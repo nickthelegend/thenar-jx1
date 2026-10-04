@@ -49,20 +49,20 @@ def components():
                   (f"ankle_{side}", f"JX0_AnkleBracket_{side}", pose(p=ankle)),
                   (f"foot_{side}", "JX0_Foot", pose(p=ankle))]
         comps += [
-            (f"servo_hip_yaw_{side}", ST, pose(servo_axes((1, 0, 0), (0, 0, -1)), hip + [0, 0, G.ZY + hf])),
+            (f"servo_hip_yaw_{side}", ST, pose(servo_axes((0, -sg, 0), (0, 0, -1)), hip + [0, 0, G.ZY + hf])),
             (f"servo_hip_roll_{side}", ST, pose(servo_axes((0, -sg, 0), (1, 0, 0)), hip + [G.XR - hf, 0, 0])),
             (f"servo_hip_pitch_{side}", ST, pose(servo_axes((1, 0, 0), (0, sg, 0)), hip)),
-            (f"servo_knee_{side}", ST, pose(servo_axes((0, 0, 1), (0, -sg, 0)), knee + [0, sg * (-16.0 + hf), 0])),
+            (f"servo_knee_{side}", ST, pose(servo_axes((1, 0, 0), (0, sg, 0)), knee)),          # lying forward
             (f"servo_ankle_pitch_{side}", ST, pose(servo_axes((0, 0, 1), (0, sg, 0)), ankle)),
             (f"servo_ankle_roll_{side}", ST, pose(servo_axes((0, -sg, 0), (1, 0, 0)), ankle + [G.XA - hf, 0, 0])),
         ]
         sh, el = arm_points(sg)
         comps += [(f"upper_arm_{side}", f"JX0_UpperArm_{side}", pose(p=sh)),
                   (f"blade_{side}", f"JX0_ArmBlade_{side}", pose(p=el)),
-                  # shoulder pitch: inside the chest cap, horn out through the side wall, case behind the shaft
-                  (f"servo_shoulder_pitch_{side}", ST, pose(servo_axes((-1, 0, 0), (0, sg, 0)), sh - [0, sg * hf, 0])),
-                  # elbow: in the shoulder cradle, rear face on the cradle plate, horn outward, case up
-                  (f"servo_elbow_{side}", ST, pose(servo_axes((0, 0, 1), (0, sg, 0)), el - [0, sg * hf, 0]))]
+                  # shoulder pitch: outside the chest in the arm's hood, horn on the chest pad, case down
+                  (f"servo_shoulder_pitch_{side}", ST, pose(servo_axes((0, 0, -1), (0, -sg, 0)), sh + [0, sg * hf, 0])),
+                  # elbow: in the box under the shoulder servo, lying forward, horn outward
+                  (f"servo_elbow_{side}", ST, pose(servo_axes((1, 0, 0), (0, sg, 0)), el - [0, sg * hf, 0]))]
     return comps
 
 
@@ -84,7 +84,7 @@ def link_of(key):
              "shin": (f"{s}_shin", knee), "servo_ankle_pitch": (f"{s}_shin", knee),
              "ankle": (f"{s}_ankle_cross", ankle), "servo_ankle_roll": (f"{s}_ankle_cross", ankle),
              "foot": (f"{s}_foot", ankle),
-             "servo_shoulder_pitch": ("torso", (0, 0, 0)), "upper_arm": (f"{s}_upper_arm", sh),
+             "servo_shoulder_pitch": (f"{s}_upper_arm", sh), "upper_arm": (f"{s}_upper_arm", sh),
              "servo_elbow": (f"{s}_upper_arm", sh), "blade": (f"{s}_forearm", el)}
     link, origin = table[base]
     return link, np.asarray(origin, float)

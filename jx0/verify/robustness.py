@@ -45,13 +45,17 @@ def _setup(gait, overrides=None):
         design = Design(W.DESIGN)
         xml = W.build(design)
         m = mujoco.MjModel.from_xml_string(xml)
-        saved = dict(W.COMMON)
-        W.COMMON.update(overrides or {})
+        saved, saved_g = dict(W.COMMON), dict(W.GAITS[gait])
+        ov = dict(overrides or {})
+        if "step_time" in ov:                                        # per-gait parameter
+            W.GAITS[gait]["step_time"] = ov.pop("step_time")
+        W.COMMON.update(ov)
         try:
             g, res = W.plan(m, design, gait)
         finally:
             W.COMMON.clear()
             W.COMMON.update(saved)
+            W.GAITS[gait] = saved_g
         _CACHE[key] = (xml, g, res, design.act_classes["ST"])
     return _CACHE[key]
 
@@ -69,11 +73,17 @@ def sample(rng, latencies=(0, 1, 2)):
             "slope_deg": list(rng.uniform(-2.0, 2.0, 2))}
 
 
+GAIT_DIR = ROOT / "jx0" / "software" / "jx0bot" / "gaits"
+ENC = 2 * math.pi / 4096                                   # STS3215 encoder step: what the robot reads back
+
+
 def trial(spec):
-    """One walk. spec: gait, scenario, gains (balance.py overrides), push (t, N toward +y, s) or None, seed."""
+    """One walk. spec: gait, scenario, gains (balance.py overrides), push (t, N toward +y, s) or None, seed;
+    capture: True plays the gait through jx0bot.stepper (capture-point stepping, as the robot does), with `params`."""
     import mujoco
     import walk_jx0 as W
     from jx0bot.balance import Balance
+    from jx0bot.stepper import CaptureStepper
     xml, g, res, st = _setup(spec["gait"], spec.get("gait_overrides"))
     sc, rng = spec["scenario"], np.random.default_rng(spec.get("seed", 0))
     m = mujoco.MjModel.from_xml_string(xml)
@@ -104,9 +114,16 @@ def trial(spec):
     lag = int(round(sc["latency"] * 0.02 / frame))                 # latency is given in 20 ms units
     pipe = deque([dict(goal)] * (lag + 1), maxlen=lag + 1)
     bal = Balance(spec.get("gains"), dt=frame)
+    stepper = None
+    if spec.get("capture"):
+        stepper = CaptureStepper(json.loads((GAIT_DIR / f"{spec['gait']}.json").read_text(encoding="utf-8")),
+                                 spec.get("gains"), spec.get("params"))
+        stepper.start()
     bl = math.radians(sc["backlash_deg"]) / 2
     bias = [math.radians(v) for v in sc["bias_deg"]]
     fell, max_tilt, hist = False, 0.0, []
+    loads = {} if spec.get("loads") else None
+    series = {} if spec.get("series") else None
     for k in range(int(T / dt)):
         t = k * dt
         i = min(int(round(t / g.dt)), len(t_ref) - 1)
@@ -115,10 +132,14 @@ def trial(spec):
             n_deg = math.radians(sc["imu_deg"])
             r_m, p_m = roll + bias[0] + rng.normal(0, n_deg), pitch + bias[1] + rng.normal(0, n_deg)
             wx, wy = d.qvel[3] + rng.normal(0, sc["gyro"]), d.qvel[4] + rng.normal(0, sc["gyro"])
-            corr = bal.update(r_m, p_m, wx, wy, contact[min(i, len(contact) - 1)])
-            arms = W.arm_goals(q_ref[i], q_ref[0], adr)
-            new = {n: float((q_ref[i, adr[n][0]] if n.split("_", 1)[1] in W.LEG_JOINTS else arms.get(n, 0.0)) + corr.get(n, 0.0))
-                   for n in names}
+            if stepper is not None:
+                q_enc = {n: round(float(d.qpos[adr[n][0]]) / ENC) * ENC for n in names}
+                new = {**goal, **stepper.frame(min(int(round(t / frame)), stepper.n - 1), q_enc, r_m, p_m, wx, wy)}
+            else:
+                corr = bal.update(r_m, p_m, wx, wy, contact[min(i, len(contact) - 1)])
+                arms = W.arm_goals(q_ref[i], q_ref[0], adr)
+                new = {n: float((q_ref[i, adr[n][0]] if n.split("_", 1)[1] in W.LEG_JOINTS else arms.get(n, 0.0)) + corr.get(n, 0.0))
+                       for n in names}
             pipe.append(new)
             goal = pipe[0]                                  # what the servos act on, `latency` frames late
         for n in names:
@@ -127,9 +148,13 @@ def trial(spec):
             err = 0.0 if abs(err) < bl else err - math.copysign(bl, err)       # gear backlash
             d.ctrl[act[n]] = servo.torque(d.qpos[qa] + err, d.qpos[qa], d.qvel[da])
         if spec.get("push") is not None:
-            tp, f, dur = spec["push"]
-            d.xfrc_applied[torso, 1] = f if tp <= t < tp + dur else 0.0
+            tp, f, dur = spec["push"][:3]
+            d.xfrc_applied[torso, spec["push"][3] if len(spec["push"]) > 3 else 1] = f if tp <= t < tp + dur else 0.0
         mujoco.mj_step(m, d)
+        if loads is not None and k % 2 == 0:
+            joint_loads(m, d, loads)
+        if series is not None and k % 10 == 0:
+            joint_wrench_series(m, d, series)
         if k % 10 == 0:
             tilt = math.degrees(math.hypot(roll, pitch))
             max_tilt = max(max_tilt, tilt)
@@ -145,7 +170,80 @@ def trial(spec):
     return {"gait": spec["gait"], "fell": fell, "pass": bool(ok), "pos_err_m": round(pos_err, 3),
             "heading_err_deg": round(head_err, 1), "max_tilt_deg": round(max_tilt, 1), "push": spec.get("push"),
             "end_roll_deg": round(math.degrees(h[-1, 6]), 1), "end_pitch_deg": round(math.degrees(h[-1, 7]), 1),
-            "end_t_s": round(float(h[-1, 8]), 2)}
+            "end_t_s": round(float(h[-1, 8]), 2), **({"loads": loads} if loads is not None else {}),
+            **({"series": series} if series is not None else {})}
+
+
+LOAD_JOINTS = [f"{s}_{j}" for s in "lr" for j in ("hip_yaw", "hip_roll", "hip_pitch", "knee", "ankle_pitch", "ankle_roll")]
+
+
+def _servo_points():
+    """Per leg joint: offsets along the joint axis (m, left leg; the right mirrors the y-axis joints) from the joint's
+    anchor to the servo's output horn face and to the servo's centre (the middle of a U-bracket's two arms)."""
+    sys.path.insert(0, str(ROOT / "jx0" / "cad"))
+    import geometry as G
+    hf = G.HF / 1000
+    return {"hip_yaw": (G.ZY / 1000, (G.ZY + G.HF) / 1000), "hip_roll": (G.XR / 1000, (G.XR - G.HF) / 1000),
+            "hip_pitch": (hf, 0.0), "knee": (hf, 0.0), "ankle_pitch": (hf, 0.0),
+            "ankle_roll": (G.XA / 1000, (G.XA - G.HF) / 1000)}
+
+
+_SP = None
+
+
+def joint_wrench_series(m, d, series):
+    """Left-leg joints: the 6-axis load (force N, moment N m about the servo's centre) the joint passes between its two
+    links, expressed in the parent link's frame and in the child link's frame (verify_fea superposes per instant)."""
+    import mujoco
+    global _SP
+    _SP = _SP or _servo_points()
+    mujoco.mj_rnePostConstraint(m, d)
+    c = d.subtree_com[0]
+    for n in LOAD_JOINTS[:6]:
+        j = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, n)
+        b = m.jnt_bodyid[j]
+        a, p = d.xaxis[j], d.xanchor[j]
+        tau_c, f = d.cfrc_int[b][:3], d.cfrc_int[b][3:]
+        q = p + a * _SP[n[2:]][1]
+        tq = tau_c + np.cross(c - q, f)
+        Rp, Rc = d.xmat[m.body_parentid[b]].reshape(3, 3), d.xmat[b].reshape(3, 3)
+        e = series.setdefault(n, {"parent": [], "child": []})
+        e["parent"].append([round(float(v), 4) for v in np.concatenate([Rp.T @ f, Rp.T @ tq])])
+        e["child"].append([round(float(v), 4) for v in np.concatenate([Rc.T @ f, Rc.T @ tq])])
+
+
+YAW_RING_R = 0.016           # m: effective radius of the hip-yaw thrust ring's contact (11.5..19 mm ring)
+
+
+def joint_loads(m, d, peaks):
+    """Peak loads each leg joint transmits (the parent link on the child): torque about the axis (what the servo drives),
+    bending moment about the other two axes at the servo's horn face (what a single-sided joint's output shaft carries)
+    and at the servo's centre (what a U-bracket's two arms carry as a force couple), axial and radial force."""
+    import mujoco
+    global _SP
+    _SP = _SP or _servo_points()
+    mujoco.mj_rnePostConstraint(m, d)
+    c = d.subtree_com[0]
+    for n in LOAD_JOINTS:
+        j = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, n)
+        b = m.jnt_bodyid[j]
+        a, p = d.xaxis[j], d.xanchor[j]
+        tau_c, f = d.cfrc_int[b][:3], d.cfrc_int[b][3:]
+        t_ax, f_ax = float((tau_c + np.cross(c - p, f)) @ a), float(f @ a)
+        horn, centre = _SP[n[2:]]
+        sg = -1.0 if (n[0] == "r" and n[2:] in ("hip_pitch", "knee", "ankle_pitch")) else 1.0
+
+        def bend(off):
+            q = p + a * sg * off
+            tq = tau_c + np.cross(c - q, f)
+            return float(np.linalg.norm(tq - (tq @ a) * a))
+        vals = {"torque_nm": abs(t_ax), "bending_horn_nm": bend(horn), "bending_centre_nm": bend(centre),
+                "axial_n": abs(f_ax), "radial_n": float(np.linalg.norm(f - f_ax * a))}
+        if n.endswith("hip_yaw"):        # the thrust ring takes the bending while the leg presses the disc up into it
+            vals["yaw_shaft_residual_nm"] = max(0.0, vals["bending_horn_nm"] - max(0.0, -f_ax) * YAW_RING_R)
+        pk = peaks.setdefault(n, {k: 0.0 for k in vals})
+        for k, v in vals.items():
+            pk[k] = max(pk[k], v)
 
 
 class PerturbedWorld:
@@ -270,10 +368,11 @@ def run_all(specs, pool):
 def summarise(results, key=None):
     n = len(results)
     ok = sum(r["pass"] for r in results)
-    return {"trials": n, "passed": ok, "rate": round(ok / max(1, n), 3)}
+    up = sum(not r.get("fell", not r["pass"]) for r in results)
+    return {"trials": n, "passed": ok, "rate": round(ok / max(1, n), 3), "stayed_up": up, "stayed_up_rate": round(up / max(1, n), 3)}
 
 
-def evaluate(gains, pool, n_mc=140, forces=(2.0, 4.0, 6.0)):
+def evaluate(gains, pool, n_mc=140, forces=(2.0, 4.0, 6.0, 8.0, 10.0, 12.0)):
     """Held-out scenarios (seed 7 / 8, not used for tuning). Latency 0-20 ms is the realistic set (the robot's loop:
     IMU filter ~5 ms + bus 1.3 ms + compute < 1 ms); 40 ms is a stress test."""
     out = {"gains": gains}

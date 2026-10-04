@@ -6,16 +6,24 @@ a list of primitives:
     ("cut",  (x0, x1), (y0, y1), (z0, z1))                 pocket
     ("cyl",  axis, (c0, c1), r, (s0, s1))                  boss cylinder along axis; c = the other two coords in xyz order
     ("hole", axis, (c0, c1), d, (s0, s1))                  cylindrical cut
+    ("prism"/"pcut", axis, profile, (s0, s1))              extruded profile (true arcs allowed, see path_points)
 Servo interface: Feetech STS3215 12 V (Waveshare ST3215; research/raw/jx0_india_sourcing_raw.md, Waveshare 2D drawing): case 45.22 x
-24.72 x 32 mm between the two horn faces, Ø19.2 horn on both faces (37.25 across them), output axis 10.11 mm from the
-case end, horn holes 4 x Ø2.5 on a 14 mm circle, case mounting holes on the connector (rear) face 24.45 x 20.5 mm, first
-row 18.41 mm from the output end. Screw sizes are not published: holes are Ø2.2 (M2 self-tapping) — ASSUMED, fit-check.
-Every joint (12 leg, 4 arm, 1 neck) is the same 12 V STS3215. The style follows the reference robot in
-media/reference.mp4: faceted octagonal torso with a vented chest cap, the neck servo exposed under a soft rounded head
-with four holes, arms that are a shoulder cradle plus a flat blade, round-ended leg plates, cross-pattern horn screws.
+24.72 x 32 mm between the two horn faces, Ø19.2 horn on both faces (37.25 across them): the output horn on one face and
+a passive hub on the rear face, output axis 10.11 mm from the case end, horn holes 4 x Ø2.5 on a 14 mm circle, case
+mounting holes on the rear face 20.5 mm apart along the case and 24.45 mm across, first row 18.41 mm from the output
+end. Screw sizes are not published: holes are Ø2.2 (M2 self-tapping) — ASSUMED, fit-check. The rear hub's screw
+pattern is ASSUMED equal to the horn's (fit-check; if it has only a centre hole, the U-bracket arm takes one M3 screw).
+Every joint (12 leg, 4 arm, 1 neck) is the same 12 V STS3215.
 
-Joints are single-sided: each servo's case is screwed to one link through its rear face, the next link bolts to its
-output horn. All three hip axes meet at the hip centre and both ankle axes at the ankle centre (the gait model assumes it).
+v0.4 — legs like the reference robot (media/reference.mp4): every leg pitch and roll joint is DOUBLE-SIDED. The servo's
+case sits in a cage on one link (four walls + a rear plate screwed to the case); the next link is a U-bracket that grabs
+the servo on both sides, the output horn and the rear hub, so the joint's load passes through both faces instead of
+bending the output shaft. Each hip-yaw servo carries its leg through a thrust ring under the pelvis. Short legs (62 mm
+thigh, 58 mm shin, ankle 33 mm above the floor, as measured on the reference) under a tall torso whose skirt hides the
+hip-yaw servos; the knee servo lies forward, which gives the thigh the reference's dog-leg plate. Arms: the shoulder
+servo hangs outside the chest in a hood (its horn bolted to a pad on the chest wall), the elbow servo in a box under it,
+and a thick paddle blade, as on the reference robot.
+All three hip axes meet at the hip centre and both ankle axes at the ankle centre (the gait model assumes it).
 """
 from __future__ import annotations
 
@@ -24,25 +32,38 @@ ST = dict(L=45.22, W=24.72, CASE=32.0, ENV=35.0, HORN_D=19.2, HORN_FACE=18.625, 
           PCD=14.0, HORN_HOLE=2.7, MOUNT_L=(8.30, 32.75), MOUNT_W=10.25, SCREW=2.2, DISC_CLEAR=22.0)
 T = 3.0            # plate thickness (PETG)
 C = 0.4            # clearance
+HF, HC, HW = ST["HORN_FACE"], ST["CASE"] / 2, ST["W"] / 2      # horn face, case half thickness, case half width
+WALL = 2.5         # servo cage wall
+RP = 2.4           # cage rear plate: the case screws through it; the rear hub stands 0.2 mm proud of it, so a
+                   # U-bracket's boss slides over it onto the hub when the bracket is fitted (assembly)
+TU = 4.5           # U-bracket arm plate (verify_fea)
+BOSS_H, BOSS_R = 2.0, 9.0     # U-bracket boss on the rear hub (keeps the arm 2 mm clear of the cage's rear plate)
 ZY = 30.0          # hip-yaw horn face above the hip centre
-THIGH, SHIN = 100.0, 100.0
+YAW_DISC_T = 9.0   # hip-yaw bracket disc on the yaw horn (rides under the thrust ring); 9 mm: verify_fea
+THIGH, SHIN = 62.0, 58.0
 HIP_Y = 45.0       # half hip spacing
-XR = -15.0         # hip-roll horn face (servo behind the hip centre, horn facing +x)
-XA = -20.0         # ankle-roll horn face (servo behind the ankle centre, horn facing +x); the foot upright on it keeps
-                   # 1 mm clear of the ankle-pitch servo's case corner (r 16.0 mm) at every toes-up angle (verify_cad)
-SOLE_TO_ANKLE, FOOT_X, FOOT_W = 35.0, (-62.0, 58.0), 70.0
+XR = -14.01        # hip-roll horn face (servo behind the hip centre, horn facing +x); its U-bracket's front arm is the
+                   # back wall of the hip-pitch cage
+XA = -22.0         # ankle-roll horn face (servo behind the ankle centre, horn facing +x)
+SOLE_TO_ANKLE, SOLE_T, FOOT_X, FOOT_W = 33.0, 5.0, (-68.0, 56.0), 70.0
 # torso: octagonal prism, half depth TD (x) and half width TW (y), vertical edges chamfered TCH, split at TZS into the
-# lower shell and the chest cap; walls TWALL
+# lower shell and the chest cap; walls TWALL. TZB: bottom of the skirt that hides the hip-yaw servos; TZ0: the floor
 TD, TW, TCH, TWALL = 42.0, 60.0, 16.0, 2.5
-TZ0, TZS, TZT, TOP_CH = 68.625, 168.0, 210.0, 8.0     # cap tall enough that the thickened wall under the top chamfer
-                                                     # clears the shoulder servos (verify_cad)
-# shoulder pitch: horn face just proud of the torso side wall, axis 12.5 mm forward of the torso centre
-SHOULDER = (12.5, TW - TWALL + (ST["HORN_FACE"] - ST["CASE"] / 2), 186.0)
+TZB, TZ0, TZS, TZT, TOP_CH = 33.0, 68.625, 168.0, 210.0, 8.0
+# shoulder pitch: the servo hangs outside the chest; its horn bolts to a pad on the chest side wall (horn face y = 63)
+SHOULDER = (12.5, TW + 3.0, 186.0)
 UA_L = 52.0                                                         # shoulder pitch axis to elbow axis
-UA_PLATE = (1.0, 4.0)                                               # cradle plate (y, outward from the pitch horn face)
-ELBOW_Y = UA_PLATE[1] + ST["CASE"] + (ST["HORN_FACE"] - ST["CASE"] / 2)   # elbow horn face: 38.625 outboard
-BLADE_L, BLADE_T = 100.0, 5.0
-NECK_Z = TZT + ST["CASE"] + (ST["HORN_FACE"] - ST["CASE"] / 2)     # neck horn face (head origin): 239.625
+ELBOW_Y = 39.25                                                     # elbow horn face, outboard of the shoulder horn face
+BLADE_L, BLADE_T = 100.0, 6.0
+# printed mass / solid mass. Body parts: 3 walls + 25 % gyroid. Pelvis and leg brackets (PETG): 6 walls, 6 top and
+# bottom layers, 40 % gyroid, so their 2.4-4.5 mm plates print solid, as the finite-element check assumes (verify_fea)
+FILL_BODY, FILL_LEG = 0.55, 0.80
+LEG_PARTS = ("JX0_Pelvis", "JX0_HipYawBracket", "JX0_HipRollBracket", "JX0_Thigh", "JX0_Shin", "JX0_AnkleBracket", "JX0_Foot")
+
+
+def fill(name):
+    return FILL_LEG if name.startswith(LEG_PARTS) else FILL_BODY
+NECK_Z = TZT + ST["CASE"] + (HF - HC)                               # neck horn face (head origin): 244.625
 
 
 def horn_holes(axis, c, s, pcd=ST["PCD"], d=ST["HORN_HOLE"], centre=6.0):
@@ -203,118 +224,300 @@ def late(prims):
     return [("l" + q[0],) + tuple(q[1:]) for q in prims]
 
 
+# ------------------------------------------------------------------------------------------------ servo cage + U-bracket
+def _rng(a, b):
+    return (min(a, b), max(a, b))
+
+
+def _box(r):
+    """r = {'x': (a, b), 'y': ..., 'z': ...} -> box primitive."""
+    return ("box", _rng(*r["x"]), _rng(*r["y"]), _rng(*r["z"]))
+
+
+def _others(axis):
+    return [k for k in "xyz" if k != axis]
+
+
+class Servo:
+    """An STS3215 placed in a part frame: c = centre (the shaft, on the case's mid-plane), a = shaft axis, hs = +-1 the
+    side of the output horn along a, l = (axis, +-1) from the shaft toward the case's long end; w = the third axis."""
+
+    def __init__(self, c, a, hs, l):
+        self.c = dict(zip("xyz", map(float, c)))
+        self.a, self.hs = a, hs
+        self.l, self.ls = l
+        self.w = next(k for k in "xyz" if k not in (a, self.l))
+
+    def l_range(self, grow=0.0):
+        lo, hi = (-ST["LA"], ST["LB"]) if self.ls > 0 else (-ST["LB"], ST["LA"])
+        return self.c[self.l] + lo - grow, self.c[self.l] + hi + grow
+
+    def shaft2(self):
+        return tuple(self.c[k] for k in _others(self.a))
+
+
+def cage(S, rp=RP, wall=WALL, skip=(), thin=None, ext=0.0, omit=None, counterbore=False):
+    """The case holder of servo S: a rear plate (case screws, the rear hub's clearance hole) and four walls around the
+    case, open on the horn side (the servo slides in from there). thin = {wall: thickness} overrides; skip = walls left
+    out ('l0' / 'l1' the case ends, 'w0' / 'w1' its sides); ext = walls reach this far past the case's horn-side face
+    (for plates that join the cage to a U-bracket arm there). The plate is 2.4 mm so the rear hub stands 0.2 mm proud
+    of it: the U-bracket's boss slides over the plate onto the hub when the bracket is fitted; omit = -1 / +1 leaves
+    out the near case screw on that side of the width axis, the one in the boss's way (three screws + the walls hold
+    the case). counterbore: screw heads sunk 2 mm (thick plates only)."""
+    thin = thin or {}
+    t = {k: thin.get(k, wall) for k in ("l0", "l1", "w0", "w1")}
+    a0 = S.c[S.a]
+    rear_in, rear_out = a0 - S.hs * HC, a0 - S.hs * (HC + rp)
+    A = _rng(rear_out, a0 + S.hs * (HC + ext))
+    l0, l1 = S.l_range(C)
+    w0, w1 = S.c[S.w] - HW - C, S.c[S.w] + HW + C
+    L, W = (l0 - t["l0"], l1 + t["l1"]), (w0 - t["w0"], w1 + t["w1"])
+    walls = {"l0": ((l0 - t["l0"], l0), W), "l1": ((l1, l1 + t["l1"]), W),
+             "w0": (L, (w0 - t["w0"], w0)), "w1": (L, (w1, w1 + t["w1"]))}
+    out = [_box({S.a: A, S.l: lr, S.w: wr}) for k, (lr, wr) in walls.items() if k not in skip]
+    pr = _rng(rear_in, rear_out)
+    out.append(_box({S.a: pr, S.l: L, S.w: W}))
+    o = _others(S.a)
+    sc = S.shaft2()
+    span = (pr[0] - 0.1, pr[1] + 0.1)
+    out.append(("hole", S.a, sc, ST["DISC_CLEAR"], span))
+    cb = _rng(rear_out, rear_out + S.hs * 2.0)
+    cb = (cb[0] - 0.1, cb[1]) if rear_out < rear_in else (cb[0], cb[1] + 0.1)
+    for lo in ST["MOUNT_L"]:
+        for ws in (-1, 1):
+            if omit == ws and lo == ST["MOUNT_L"][0]:
+                continue
+            c = list(sc)
+            c[o.index(S.l)] += S.ls * lo
+            c[o.index(S.w)] += ws * ST["MOUNT_W"]
+            out.append(("hole", S.a, tuple(c), ST["SCREW"], span))
+            if counterbore:
+                out.append(("hole", S.a, tuple(c), 4.2, cb))
+    return out
+
+
+def u_arms(S, prof_horn, prof_hub=None, extra_horn=(), extra_hub=(), tu_horn=TU):
+    """U-bracket around servo S: one arm on the output horn, one on the rear hub (a 2 mm boss keeps that arm clear of the
+    cage's rear plate), each an extrusion of its (u, v) profile (the two coords other than the shaft axis, xyz order),
+    with the horn's 4-screw cross pattern. extra_* = more profiles fused to each arm (same thickness)."""
+    prof_hub = prof_hub or prof_horn
+    a0, sc = S.c[S.a], S.shaft2()
+    h = _rng(a0 + S.hs * HF, a0 + S.hs * (HF + tu_horn))
+    b = _rng(a0 - S.hs * HF, a0 - S.hs * (HF + BOSS_H))
+    p = _rng(a0 - S.hs * (HF + BOSS_H), a0 - S.hs * (HF + BOSS_H + TU))
+    out = [("prism", S.a, prof_horn, h), ("cyl", S.a, sc, BOSS_R, b), ("prism", S.a, prof_hub, p)]
+    out += [("prism", S.a, e, h) for e in extra_horn] + [("prism", S.a, e, p) for e in extra_hub]
+    out += horn_holes(S.a, sc, (h[0] - 0.1, h[1] + 0.1))
+    out += horn_holes(S.a, sc, (min(b[0], p[0]) - 0.1, max(b[1], p[1]) + 0.1))
+    return out
+
+
+def rect(u0, u1, v0, v1, r=0.0):
+    pts = [(u0, v0), (u1, v0), (u1, v1), (u0, v1)]
+    return rounded_polygon(pts, [r] * 4) if r > 0 else pts
+
+
+# ------------------------------------------------------------------------------------------------ the servos (left leg)
+def yaw_servo(sy=1):                       # pelvis frame: horn down, case toward the robot's middle
+    return Servo((0.0, sy * HIP_Y, ZY + HF), "z", -1, ("y", -sy))
+
+
+def roll_servo():                          # hip frame: behind the hip centre, horn forward, case toward the middle
+    return Servo((XR - HF, 0.0, 0.0), "x", +1, ("y", -1))
+
+
+def pitch_servo():                         # hip frame: on the hip centre, horn outward, case forward
+    return Servo((0.0, 0.0, 0.0), "y", +1, ("x", +1))
+
+
+def knee_servo(z=-THIGH):                  # hip frame (thigh): lying forward, horn outward
+    return Servo((0.0, 0.0, z), "y", +1, ("x", +1))
+
+
+def ankle_pitch_servo(z=-SHIN):            # knee frame (shin): standing up, horn outward
+    return Servo((0.0, 0.0, z), "y", +1, ("z", +1))
+
+
+def ankle_roll_servo():                    # ankle frame: behind the ankle centre, horn forward, case toward the middle
+    return Servo((XA - HF, 0.0, 0.0), "x", +1, ("y", -1))
+
+
 # ------------------------------------------------------------------------------------------------ legs (left side)
 def pelvis():
-    zr = ZY + (ST["HORN_FACE"] - ST["CASE"] / 2) + ST["CASE"]          # yaw servo rear (connector) face = 64.625
-    p = [("box", (-13.0, 38.0), (-62.0, 62.0), (zr, zr + 4.0)),                           # pelvis plate
-         ("box", (-13.0, -10.6), (-62.0, 62.0), (zr - 14.0, zr + 0.5)),                   # rear rib
-         ("box", (35.6, 38.0), (-62.0, 62.0), (zr - 14.0, zr + 0.5))]                     # front rib
+    """Inside the torso skirt: the two hip-yaw servo cages hang from a plate bolted under the torso floor, each with a
+    thrust ring under it. The hip-yaw bracket rides 0.3 mm under the ring, so the leg's load in stance goes into the
+    pelvis through the ring, not through the yaw servo's output shaft (PTFE tape or grease on the ring)."""
+    zr = ZY + HF + HC                                                         # yaw case top (rear face) = 64.625
+    plate = [(28.0, -50.0), (28.0, 50.0), (21.0, 57.0), (-24.0, 57.0), (-24.0, -57.0), (21.0, -57.0)]
+    p = [("prism", "z", plate, (zr, TZ0)),
+         ("box", (24.5, 28.0), (-45.0, 45.0), (zr - 14.0, zr + 0.5)),                       # front rib
+         ("box", (-24.0, -20.5), (-45.0, 45.0), (zr - 14.0, zr + 0.5))]                     # rear rib
     for sy in (1, -1):
-        p += rear_face_mount("z", (0.0, sy * HIP_Y), (0, 1), (1, 1), (zr - 0.1, zr + 4.1))
-    for x in (0.0, 28.0):
+        p += cage(yaw_servo(sy), rp=TZ0 - zr, thin={"l1": 1.2} if sy > 0 else {"l0": 1.2}, counterbore=True)
+        p += [("cyl", "z", (0.0, sy * HIP_Y), 19.0, (ZY + 0.3, ZY + HF - HC)),             # thrust ring
+              ("hole", "z", (0.0, sy * HIP_Y), 23.0, (ZY + 0.2, ZY + HF - HC + 0.1))]
+    for x in (-20.0, 24.0):                                                                 # bolts to the torso floor
         for y in (-25.0, 25.0):
-            p.append(("hole", "z", (x, y), 3.2, (zr - 0.1, zr + 4.1)))                   # torso bolts
+            p.append(("hole", "z", (x, y), 3.2, (zr - 0.1, TZ0 + 0.1)))
     return p
 
 
 def hip_yaw_bracket():
-    """Bolts to the hip-yaw horn (above) and holds the hip-roll servo (axis x, behind the hip centre) by its rear face."""
-    xr_rear = XR - (ST["HORN_FACE"] - ST["CASE"] / 2) - ST["CASE"]                     # roll servo rear face = -49.625
-    p = [("box", (xr_rear - T, 12.0), (-16.0, 16.0), (ZY - T, ZY)),                     # plate on the yaw horn
-         ("box", (xr_rear - T, xr_rear), (-38.0, 13.0), (-15.0, ZY)),                    # rear plate (servo mount)
-         ("box", (xr_rear - 0.5, -24.0), (10.5, 13.5), (ZY - 12.0, ZY - 0.5)),          # gusset
-         ("box", (xr_rear - 0.5, -24.0), (-16.0, -13.0), (ZY - 12.0, ZY - 0.5))]        # gusset
-    p += horn_holes("z", (0.0, 0.0), (ZY - T - 0.1, ZY + 0.1))
-    p += rear_face_mount("x", (0.0, 0.0), (0, -1), (1, 1), (xr_rear - T - 0.1, xr_rear + 0.1))
+    """A 7 mm disc on the hip-yaw horn (it rides under the thrust ring), a keel under its centre, and a solid block
+    down onto the cage of the hip-roll servo behind the hip (verify_fea: the load path from the disc to the cage)."""
+    zd = ZY - YAW_DISC_T                                     # the roll bracket's top corners swing up to z 20.7
+    xc = (19.0 ** 2 - 11.0 ** 2) ** 0.5
+    middle = [(-xc, -11.0), (xc, -11.0), ("arc", (19.0, 0.0)), (xc, 11.0), (-xc, 11.0), ("arc", (-19.0, 0.0))]
+    p = [("cyl", "z", (0.0, 0.0), 19.0, (ZY - 7.0, ZY)),                                   # disc on the yaw horn: 7 mm,
+         ("prism", "z", middle, (zd, ZY - 6.9)),                                            # 9 across the middle (the
+         # thigh's arms swing under its sides when the hip rolls)
+         ("box", (-14.5, 14.0), (-5.0, 5.0), (19.6, zd + 0.1)),                            # keel (clear of the roll
+         ("box", (-50.0, -14.6), (-35.0, 12.0), (HW + C + 3.0 - 0.1, ZY))]                 # bracket); solid block
+    p += cage(roll_servo(), wall=3.0, omit=-1)                 # (the roll U slides on from below)
+    p += horn_holes("z", (0.0, 0.0), (19.5, ZY + 0.1))
+    for k in range(4):                                                                      # counterbores from below:
+        import math                                                                         # M2 x 10 horn screws
+        a = math.radians(90 * k)
+        p.append(("hole", "z", (7.0 * math.cos(a), 7.0 * math.sin(a)), 4.6, (19.5, ZY - 6.0)))
     return p
 
 
 def hip_roll_bracket():
-    """Bolts to the hip-roll horn (x = XR) and holds the hip-pitch servo (axis y, case forward) by its rear face (-y)."""
-    yr = -(ST["HORN_FACE"] - (ST["HORN_FACE"] - ST["CASE"] / 2))                         # pitch servo rear face = -16
-    p = [("box", (XR, XR + T), (-17.5, 17.5), (-15.0, 15.0)),                            # plate on the roll horn (clears the thigh)
-         ("box", (XR + 0.5, 38.0), (yr - T, yr), (-15.0, 15.0)),                         # rear plate of the pitch servo
-         ("box", (XR + 0.5, XR + 12.0), (yr - T + 0.5, -2.0), (-15.0, -12.8))]           # gusset (clear of the pitch servo case)
-    p += horn_holes("x", (0.0, 0.0), (XR - 0.1, XR + T + 0.1))
-    p += rear_face_mount("y", (0.0, 0.0), (0, 1), (1, 1), (yr - T - 0.1, yr + 0.1))
+    """U-bracket on both faces of the hip-roll servo (front arm on the horn, rear arm on the hub, joined by a stiff
+    bridge outboard of the thigh) carrying the hip-pitch servo's cage; the front arm is the cage's back wall."""
+    R, P = roll_servo(), pitch_servo()
+    front = rect(-18.45, 16.05, -HW - C - WALL - 0.05, HW + C + WALL + 0.05)                 # (y, z)
+    rear = rect(-15.0, 35.5, -11.0, 15.0, 6.0)                                               # (short below: the knee)
+    p = u_arms(R, front, rear, tu_horn=3.5)                                                  # (the pitch case is behind it)
+    p += cage(P, omit=-1)                                       # (the thigh slides on from below)
+    xb = XR - 37.25 - BOSS_H - TU
+    yb = HF + TU + 2.1                                                                      # thigh arm + its screw heads
+    p += [("box", (XR, XR + 3.5), (16.0, yb + 0.5), (9.0, 14.0)),                         # front arm out to the bridge
+          ("box", (XR, XR + 3.5), (yb, yb + 10.0), (-2.0, 14.0)),                         # (through the thigh's band
+          ("box", (xb, XR + 3.5), (yb + 0.4, yb + 10.0), (-2.0, 14.0))]                   # only above its boss); bridge
+    for k in range(4):                                                                      # counterbores: roll horn screw
+        import math                                                                         # heads inside the pitch cage
+        a = math.radians(90 * k)
+        p.append(("hole", "x", (7.0 * math.cos(a), 7.0 * math.sin(a)), 4.6, (XR + 1.5, XR + 3.6)))
     return p
 
 
 def thigh():
-    """Bolts to the hip-pitch horn (outside, +y) and carries the knee servo on its inner face (case up, horn -y)."""
-    y0 = ST["HORN_FACE"]
-    p = [("prism", "y", rounded_polygon([(-15, 15), (15, 15), (15, -THIGH - 15), (-15, -THIGH - 15)], [14.9] * 4),
-          (y0, y0 + 4.0)),                                                                  # 4 mm round-ended side plate
-         ("box", (-15.0, -11.0), (y0 + 3.5, y0 + 9.0), (-THIGH + 20.0, -5.0)),           # rear flange (stiffener)
-         ("box", (11.0, 15.0), (y0 + 3.5, y0 + 9.0), (-THIGH + 20.0, -5.0))]             # front flange
-    p += horn_holes("y", (0.0, 0.0), (y0 - 0.1, y0 + 4.1))
-    p += rear_face_mount("y", (0.0, -THIGH), (1, 1), (0, 1), (y0 - 0.1, y0 + 4.1))
+    """The reference robot's dog-leg thigh: U-bracket arms on both faces of the hip-pitch servo, running down and
+    forward around the knee servo's cage (the knee servo lies forward). Solid plates join each arm to the cage over
+    their whole overlap, outside the shin's reach around the knee (verify_fea). The cage is open at the front: the knee
+    servo slides in from there (horn off), and its two far case screws go in through holes in the inner arm."""
+    K = knee_servo()
+    z = -THIGH
+    arm = rounded_polygon([(-13.0, 13.0), (13.0, 13.0), (21.0, -10.0), (39.0, z + 22.0), (39.0, z - 16.5),
+                           (15.5, z - 16.5), (15.5, z + 14.5), (-13.0, z + 14.5)],
+                          [12.9, 12.9, 8.0, 8.0, 5.0, 3.0, 0.0, 3.0])
+    p = u_arms(pitch_servo(), arm)
+    p += cage(K, skip=("l1",), ext=0.4, omit=-1)               # (the shin slides on from below)
+    xf = ST["LB"] + C + WALL                                                                  # front of the cage
+    zt, zb = z + HW + C + WALL, z - HW - C - WALL
+    for ys in ((HC + 0.05, HF + 0.1), (-HF - BOSS_H - 0.1, -HC - RP + 0.1)):
+        p += [("box", (15.5, xf - 0.07), ys, (zb + 0.07, zt - 0.07)),                        # in front of the knee
+              ("box", (-ST["LA"] - C - WALL + 0.07, 15.53), ys, (z + 13.5, zt - 0.07))]      # and above it
+    for dz in (-ST["MOUNT_W"], ST["MOUNT_W"]):                                                # screwdriver access
+        p.append(("hole", "y", (ST["MOUNT_L"][1], z + dz), 5.0, (-HF - BOSS_H - TU - 0.1, -HC - RP - 0.05)))
     return p
 
 
 def shin():
-    """Bolts to the knee horn (inside, -y) and carries the ankle-pitch servo on its outer face (case up, horn +y).
-    The knee servo's rear face sits on the thigh plate at y = +18.625, so its horn face is at 18.625 - 32 - 2.625 = -16."""
-    y1 = ST["HORN_FACE"] - ST["CASE"] - (ST["HORN_FACE"] - ST["CASE"] / 2)
-    p = [("prism", "y", rounded_polygon([(-15, 15), (15, 15), (15, -SHIN - 15), (-15, -SHIN - 15)], [14.9] * 4),
-          (y1 - 4.0, y1)),
-         ("box", (-15.0, -11.0), (y1 - 9.0, y1 - 3.5), (-SHIN + 22.0, -15.0)),
-         ("box", (11.0, 15.0), (y1 - 9.0, y1 - 3.5), (-SHIN + 22.0, -15.0))]
-    p += horn_holes("y", (0.0, 0.0), (y1 - 4.1, y1 + 0.1))
-    # ankle-pitch servo: rear face on the plate's inner side at y = -16 (horn outward at +18.625)
-    p += rear_face_mount("y", (0.0, -SHIN), (1, 1), (0, 1), (y1 - 4.1, y1 + 0.1))
+    """U-bracket arms on both faces of the knee servo, widening into solid plates over the top of the ankle-pitch
+    servo's cage (case up) below. The cage is open at the bottom: the servo slides up into it, and the foot's roll
+    bracket passes under its lower back corner when the toes point down; the far case screws go in through the arm."""
+    A = ankle_pitch_servo()
+    w = HW + C + WALL
+    zc = -SHIN + 23.0                                                                          # arms reach down to here
+    arm = rounded_polygon([(-13.0, -2.0), (-w, -13.0), (-w, zc), (w, zc), (w, -13.0), (13.0, -2.0), (13.0, 13.0),
+                           (-13.0, 13.0)], [0.0, 2.0, 3.0, 3.0, 2.0, 0.0, 12.9, 12.9])
+    p = u_arms(knee_servo(0.0), arm)
+    p += cage(A, skip=("w0", "l0"), ext=0.4)
+    top = -SHIN + ST["LB"] + C + WALL
+    p += [("cut", (-w - 0.1, w + 0.1), (-HC - RP - 0.1, -HC + 0.1),                          # rear plate: nothing below
+           (-SHIN - ST["LA"] - C - WALL - 0.1, -SHIN - ST["LA"] - C)),                     # the case (foot bracket)
+          ("box", (-w, -HW - C), (-HC - RP, HC + 0.4), (-SHIN + 20.0, top)),               # upper part of the back wall
+          ("box", (-w + 0.07, w - 0.07), (HC + 0.05, HF + 0.1), (zc + 0.07, top - 0.07)),  # solid plates: arms onto
+          ("box", (-w + 0.07, w - 0.07), (-HF - BOSS_H - 0.1, -HC - RP + 0.1), (zc + 0.07, top - 0.07))]   # the cage
+    for dx in (-ST["MOUNT_W"], ST["MOUNT_W"]):                                                # screwdriver access
+        p.append(("hole", "y", (dx, -SHIN + ST["MOUNT_L"][1]), 5.0, (-HF - BOSS_H - TU - 0.1, -HC - RP - 1.65)))
+    # the rear plate is 4 mm above the ankle axis (verify_fea): the ankle bracket's boss only slides along it below
+    yo = -HC - RP
+    p += [("box", (-w + 0.07, w - 0.07), (yo - 1.6, yo + 0.05), (-SHIN, top - 0.07)),
+          ("hole", "y", (0.0, -SHIN), ST["DISC_CLEAR"], (yo - 1.7, yo + 0.1))]
+    for lo in ST["MOUNT_L"]:
+        for dx in (-ST["MOUNT_W"], ST["MOUNT_W"]):
+            p += [("hole", "y", (dx, -SHIN + lo), ST["SCREW"], (yo - 1.7, yo + 0.1)),
+                  ("hole", "y", (dx, -SHIN + lo), 4.2, (yo - 1.7, yo - 0.0))]               # heads sunk in
     return p
 
 
 def ankle_bracket():
-    """Bolts to the ankle-pitch horn (+y) and holds the ankle-roll servo (axis x, behind the ankle) by its rear face."""
-    y0 = ST["HORN_FACE"]
-    xa_rear = XA - (ST["HORN_FACE"] - ST["CASE"] / 2) - ST["CASE"]                     # roll servo rear face = -52.625
-    p = [("box", (xa_rear - T, 14.0), (y0, y0 + T), (-15.0, 15.0)),                     # side plate on the pitch horn
-         ("box", (xa_rear - T, xa_rear), (-35.5, y0 + 0.5), (-15.0, 15.0)),              # rear plate (roll servo mount; short
-                                                                                          # inboard end: clears the other ankle)
-         ("box", (xa_rear - 0.5, -24.0), (y0 - 3.0, y0 + 0.5), (-15.0, -12.0))]          # gusset
-    p += horn_holes("y", (0.0, 0.0), (y0 - 0.1, y0 + T + 0.1))
-    p += rear_face_mount("x", (0.0, 0.0), (0, -1), (1, 1), (xa_rear - T - 0.1, xa_rear + 0.1))
+    """U-bracket on both faces of the ankle-pitch servo. Its arms are full-height side plates back to the ankle-roll
+    servo's cage (behind the ankle): outboard a solid plate over the whole cage side; inboard (the roll servo's case
+    is there) over the cage's top and onto a rim that closes the cage's horn face around the horn, so arms and cage
+    are one box (verify_fea). The roll servo slides into the cage from the inboard end, horn off. Below the ankle axis
+    the plates leave room for the foot's roll bracket, which swings there."""
+    R = ankle_roll_servo()
+    zt = HW + C + WALL
+    x_back = XA - HF - HC - RP
+    x_case = XA - HF + HC                                                                       # roll case's horn face
+    xf = XA + TU + 0.6                                                                          # clear of the foot's arm
+    front = rounded_polygon([(13.0, -18.0), (13.0, 13.0), (xf, zt + 0.05), (xf, -18.0)], [8.0, 12.9, 0.0, 0.0])
+    slab = rect(x_case + 0.05, xf + 0.1, -6.5, zt + 0.05)                                     # over the foot bracket
+    # (the foot's roll bracket reaches the arms' planes only below z -8 at the +-20 deg roll limit)
+    top = rect(x_back, xf + 0.1, zt - WALL - 0.05, zt + 0.05)                                 # on the cage's top wall
+    side = rect(x_back, x_case + 0.3, -zt - 0.05, zt + 0.05)                                  # outboard: whole cage side
+    p = u_arms(ankle_pitch_servo(0.0), front, extra_horn=[slab, top, side], extra_hub=[slab, top])
+    p += cage(R, skip=("l0",), omit=-1)                       # the roll servo slides in from the inboard end;
+    #                                                                         the foot slides on from below
+    p += [("box", (x_case, XA - 0.4), (-ST["LB"] - C - WALL, HW + C + WALL - 0.1 + 0.6), (-zt, zt)),   # rim over the
+          ("hole", "x", (0.0, 0.0), 22.0, (x_case - 0.1, XA - 0.3))]                        # case's horn face: a box
+    p.append(("pcut", "x", chamfer_cut((-ST["LB"] - C - WALL, -zt), (1, 1), 9.0), (x_back - 0.1, x_case + 0.1)))
+    p.append(("box", (x_back + 0.07, x_case + 0.23), (12.9, HF + 0.1), (-zt + 0.02, zt - 0.02)))   # outboard: arm onto cage
     return p
 
 
 def foot():
-    """Sole plate + an upright that bolts to the ankle-roll horn (x = XA). Symmetric: one part for both feet."""
+    """Sole plate (45° chamfered corners like the reference robot's) and a U-bracket on both faces of the ankle-roll
+    servo. Symmetric: one part for both feet."""
     zs = -SOLE_TO_ANKLE
-    p = [("box", FOOT_X, (-FOOT_W / 2, FOOT_W / 2), (zs, zs + 6.0)),                     # sole plate
-         ("box", (XA, XA + T), (-12.0, 12.0), (zs + 5.5, 12.0)),                         # upright on the roll horn (24 wide:
-         ("box", (XA + 2.5, XA + 6.0), (-12.0, 12.0), (zs + 5.5, -20.0))]                # heel block   clears the ankle bracket to ~24 deg roll)
-    p += horn_holes("x", (0.0, 0.0), (XA - 0.1, XA + T + 0.1))
-    for x in (-42.0, 10.0, 36.0):                                                        # lightening, clear of the upright
-        p.append(("hole", "z", (x, 0.0), 12.0, (zs - 0.1, zs + 6.1)))
-    for xc, yc, du, dv in ((FOOT_X[1], FOOT_W / 2, -1, -1), (FOOT_X[1], -FOOT_W / 2, -1, 1),
-                           (FOOT_X[0], FOOT_W / 2, 1, -1), (FOOT_X[0], -FOOT_W / 2, 1, 1)):
-        p.append(("pcut", "z", corner_cut((xc, yc), (du, dv), 12.0), (zs - 0.1, zs + 6.1)))   # rounded corners
+    x0, x1, hw = FOOT_X[0], FOOT_X[1], FOOT_W / 2
+    sole = [(x1, -hw + 14.0), (x1, hw - 14.0), (x1 - 14.0, hw), (x0 + 10.0, hw), (x0, hw - 10.0), (x0, -hw + 10.0),
+            (x0 + 10.0, -hw), (x1 - 14.0, -hw)]
+    p = [("prism", "z", sole, (zs, zs + SOLE_T))]
+    arm = rounded_polygon([(-16.0, zs + SOLE_T - 0.5), (16.0, zs + SOLE_T - 0.5), (13.0, 13.0), (-13.0, 13.0)],
+                          [0.0, 0.0, 12.9, 12.9])                                               # (y, z)
+    p += u_arms(ankle_roll_servo(), arm)
+    for x in (-40.0, 14.0, 36.0):                                                               # lightening holes
+        p.append(("hole", "z", (x, 0.0), 12.0, (zs - 0.1, zs + SOLE_T + 0.1)))
     return p
 
 
 # ------------------------------------------------------------------------------------------------ upper body
 def torso():
-    """Lower torso shell (pelvis frame): the reference robot's octagonal body, floor bolted to the pelvis, open top that
-    the chest cap closes. Inside: Raspberry Pi on the back wall, battery, servo driver, power. A lip around the top
-    takes the cap (4 screws through the cap wall)."""
+    """Lower torso shell (pelvis frame): the reference robot's octagonal body. Its floor bolts onto the pelvis; below the
+    floor a skirt hides the hip-yaw servos, so the legs come straight out from under the body. Inside: Raspberry Pi on
+    the back wall, battery, servo driver, power. A lip around the top takes the chest cap (4 screws through the cap)."""
     w = TWALL
-    p = [("prism", "z", octagon(TD, TW, TCH), (TZ0, TZS)),
+    p = [("prism", "z", octagon(TD, TW, TCH), (TZB, TZS)),
          ("pcut", "z", oct_inset(w), (TZ0 + w, TZS + 0.1)),
-         ("cut", (-TD - 0.1, -TD + w + 0.1), (-16.0, 16.0), (TZ0 + w, TZ0 + w + 14.0)),      # leg cables in
-         ("hole", "x", (0.0, 88.0), 12.0, (-TD - 0.1, -TD + w + 0.1))]                      # push-to-talk button
-    for x in (0.0, 28.0):
+         ("pcut", "z", oct_inset(w), (TZB - 0.1, TZ0)),                                          # the skirt (open below)
+         ("cut", (-34.0, -26.0), (-14.0, 14.0), (TZ0 - 0.1, TZ0 + w + 0.1)),                    # leg cables up
+         ("hole", "x", (0.0, 88.0), 12.0, (-TD - 0.1, -TD + w + 0.1))]                          # push-to-talk button
+    for x in (-20.0, 24.0):
         for y in (-25.0, 25.0):
-            p.append(("hole", "z", (x, y), 3.2, (TZ0 - 0.1, TZ0 + w + 0.1)))              # bolts to the pelvis
-    p += [("lprism", "z", oct_inset(w - 0.5), (TZS - 6.0, TZS)),                           # lip, fused to the wall
-          ("lprism", "z", oct_inset(w + 0.2), (TZS - 0.1, TZS + 5.0)),                     # lip above the seam
+            p.append(("hole", "z", (x, y), 3.2, (TZ0 - 0.1, TZ0 + w + 0.1)))                  # bolts to the pelvis
+    p += [("lprism", "z", oct_inset(w - 0.5), (TZS - 6.0, TZS)),                               # lip, fused to the wall
+          ("lprism", "z", oct_inset(w + 0.2), (TZS - 0.1, TZS + 5.0)),                         # lip above the seam
           ("lpcut", "z", oct_inset(w + 2.2), (TZS - 6.1, TZS + 5.1))]
     for x in (TD, -TD):
         sgn = 1 if x > 0 else -1
         for y in (-15.0, 15.0):
             p.append(("lhole", "x", (y, TZS + 2.5), 2.5, tuple(sorted((sgn * (TD - w - 2.4), sgn * (TD - w + 0.3))))))
-    for y in (-29.0, 29.0):                                                                 # Raspberry Pi standoffs
+    for y in (-29.0, 29.0):                                                                     # Raspberry Pi standoffs
         for z in (96.0, 145.0):
             p.append(("lcyl", "x", (y, z), 3.2, (-TD + w - 0.5, -TD + w + 6.0)))
             p.append(("lhole", "x", (y, z), 2.5, (-TD + w, -TD + w + 6.1)))
@@ -322,22 +525,22 @@ def torso():
 
 
 def chest_cap():
-    """Chest cap (pelvis frame): top of the octagonal torso with chamfered top edges, vent slots over the shoulder servos
-    and a speaker grille, the neck STS3215 standing on top, and the two shoulder-pitch STS3215 inside (horns out through
-    the side walls)."""
+    """Chest cap (pelvis frame): top of the octagonal torso with chamfered top edges, vent slots and a speaker grille,
+    the neck STS3215 standing on top, and on each side wall the pad the shoulder servo's horn bolts to (from inside)."""
     w, ch = TWALL, TOP_CH
     p = [("prism", "z", octagon(TD, TW, TCH), (TZS, TZT)),
          ("pcut", "x", chamfer_cut((TW, TZT), (-1, -1), ch), (-TD - 1.0, TD + 1.0)),
          ("pcut", "x", chamfer_cut((-TW, TZT), (1, -1), ch), (-TD - 1.0, TD + 1.0)),
          ("pcut", "y", chamfer_cut((TD, TZT), (-1, -1), ch), (-TW - 1.0, TW + 1.0)),
          ("pcut", "y", chamfer_cut((-TD, TZT), (1, -1), ch), (-TW - 1.0, TW + 1.0)),
-         # hollow, open below, stepped under the chamfers so the wall stays >= 2.5 mm
          ("pcut", "z", oct_inset(w), (TZS - 0.1, TZT - ch - w)),
          ("pcut", "z", oct_inset(w + ch / 2), (TZT - ch - w - 0.1, TZT - ch / 2 - w)),
          ("pcut", "z", oct_inset(w + ch), (TZT - ch / 2 - w - 0.1, TZT - w))]
-    sx, _, sz = SHOULDER
+    sx, sy, sz = SHOULDER
     for sgn in (1, -1):
-        p.append(("hole", "y", (sx, sz), 22.0, tuple(sorted((sgn * (TW - w - 0.1), sgn * (TW + 0.1))))))   # pitch horns
+        ys = tuple(sorted((sgn * (TW - w - 0.5), sgn * sy)))
+        p.append(("lcyl", "y", (sx, sz), 12.5, ys))                                            # shoulder pad
+        p += late(horn_holes("y", (sx, sz), (ys[0] - 0.1, ys[1] + 0.1)))
         for xc in (-15.0, -9.0, -3.0, 3.0, 9.0, 15.0):                                         # vent slots
             p.append(("cut", (xc - 1.25, xc + 1.25), tuple(sorted((sgn * 36.0, sgn * 48.0))), (TZT - w - 0.1, TZT + 0.1)))
         for y in (-15.0, 15.0):                                                                # screws into the lip
@@ -346,12 +549,6 @@ def chest_cap():
         for y in (-12.0, -6.0, 0.0, 6.0, 12.0):
             p.append(("hole", "z", (x, y), 3.5, (TZT - w - 0.1, TZT + 0.1)))
     p += rear_face_mount("z", (0.0, 0.0), (1, 1), (0, 1), (TZT - w - 0.1, TZT + 0.1))         # neck servo on top
-    # shoulder-pitch servo plates inside (case behind the shaft, rear face toward the middle)
-    yr = TW - w - ST["CASE"]
-    for sgn in (1, -1):
-        ys = tuple(sorted((sgn * (yr - 3.0), sgn * yr)))
-        p.append(("lbox", (-(TD - w) - 0.5, TD - w + 0.5), ys, (TZS + 6.5, TZT - w + 0.5)))
-        p += late(rear_face_mount("y", (sx, sz), (0, -1), (1, 1), (ys[0] - 0.1, ys[1] + 0.1)))
     return p
 
 
@@ -378,27 +575,35 @@ def head():
     return p
 
 
+def shoulder_servo():                      # arm frame (shoulder axis on the horn face, y outward): case down
+    return Servo((0.0, HF, 0.0), "y", -1, ("z", -1))
+
+
+def elbow_servo():                         # arm frame: under the shoulder servo, lying forward, horn outward
+    return Servo((0.0, ELBOW_Y - HF, -UA_L), "y", +1, ("x", +1))
+
+
 def upper_arm():
-    """Arm link 1 (frame: shoulder-pitch axis on the pitch horn face, y outward), the reference robot's shoulder cradle:
-    a round-ended plate on the pitch horn and a cradle around the elbow STS3215 (axis y, horn outward) 52 mm below."""
-    wx = ST["W"] / 2 + C
-    z_top = -UA_L + ST["LB"] + C
-    prof = rounded_polygon([(-16.0, 16.0), (16.0, 16.0), (16.0, -UA_L - 16.0), (-16.0, -UA_L - 16.0)], [15.9] * 4)
-    p = [("cyl", "y", (0.0, 0.0), 11.0, (0.0, UA_PLATE[0] + 0.1)),                        # pad on the horn
-         ("prism", "y", prof, UA_PLATE),
-         ("box", (wx, wx + 2.5), (UA_PLATE[1] - 0.5, 20.0), (-UA_L - 14.0, z_top + 2.5)),   # cradle: front wall
-         ("box", (-wx - 2.5, -wx), (UA_PLATE[1] - 0.5, 20.0), (-UA_L - 14.0, z_top + 2.5)), # back wall
-         ("box", (-wx - 2.5, wx + 2.5), (UA_PLATE[1] - 0.5, 20.0), (z_top, z_top + 2.5))]   # top
-    p += horn_holes("y", (0.0, 0.0), (-0.1, UA_PLATE[1] + 0.1))
-    p += rear_face_mount("y", (0.0, -UA_L), (1, 1), (0, 1), (UA_PLATE[0] - 0.1, UA_PLATE[1] + 0.1))
+    """Arm link 1 (frame: shoulder-pitch axis on the shoulder horn face, y outward), the reference robot's shoulder: the
+    shoulder STS3215 hangs outside the chest (its horn bolted to the chest pad) in a hood, and the elbow STS3215 lies in
+    a box under it, horn outward."""
+    S = shoulder_servo()
+    top = ST["LA"] + C + WALL
+    p = cage(S) + cage(elbow_servo())
+    hw = HW + C + WALL + 0.05
+    hood = rounded_polygon([(-hw, top - WALL + 0.05), (hw, top - WALL + 0.05), (hw, top + 4.0), (-hw, top + 4.0)],
+                           [0.0, 0.0, 6.0, 6.0])                                                # (x, z) rounded hood
+    p.append(("prism", "y", hood, (HF - HC, HF + HC + RP)))
     return p
 
 
 def arm_blade():
-    """Arm link 2 (frame: elbow axis on the elbow horn face, y outward): the flat tapered blade of the reference robot."""
-    prof = rounded_polygon([(-17.0, 16.0), (17.0, 16.0), (17.0, -12.0), (12.0, -BLADE_L), (-10.0, -BLADE_L), (-17.0, -12.0)],
-                           [16.0, 16.0, 40.0, 10.0, 10.0, 40.0])
-    return [("prism", "y", prof, (0.0, BLADE_T))] + horn_holes("y", (0.0, 0.0), (-0.1, BLADE_T + 0.1))
+    """Arm link 2 (frame: elbow axis on the elbow horn face, y outward): the reference robot's thick paddle blade with a
+    raised boss on the horn."""
+    prof = rounded_polygon([(-17.0, 16.0), (17.0, 16.0), (19.0, -30.0), (13.0, -BLADE_L), (-11.0, -BLADE_L), (-17.0, -30.0)],
+                           [16.0, 16.0, 40.0, 12.0, 12.0, 40.0])
+    return [("prism", "y", prof, (0.0, BLADE_T)), ("cyl", "y", (0.0, 0.0), 12.5, (BLADE_T, BLADE_T + 2.0))] + \
+        horn_holes("y", (0.0, 0.0), (-0.1, BLADE_T + 2.1))
 
 
 # ------------------------------------------------------------------------------------------------ catalogue

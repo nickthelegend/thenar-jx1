@@ -26,9 +26,11 @@ SERVO = (0.0452, 0.0247, 0.035)                 # STS3215 body
 WHITE, BLACK, ORANGE, GREY, RUBBER = ".93 .93 .95 1", ".12 .12 .14 1", ".95 .42 .11 1", ".55 .57 .6 1", ".08 .08 .08 1"
 SAGE = ".74 .86 .58 1"                           # the reference robot's colour (light green PETG)
 ARM_JOINTS = ["shoulder_pitch", "elbow"]
-# each side (ESTIMATED from the CAD printed masses in jx0/cad/parts/index.json + 89 g per STS3215 + screws):
-# upper arm = shoulder cradle + elbow STS3215; forearm = the blade
-ARM_MASS = {"upper_arm": 0.100, "forearm": 0.012}
+# each side (ESTIMATED from the CAD printed masses in jx0/cad/parts/index.json + 89 g per STS3215 + screws), v0.4:
+# upper arm = hood + elbow box + the shoulder AND elbow STS3215 (the shoulder servo hangs outside the chest, in the arm);
+# forearm = the blade
+ARM_MASS = {"upper_arm": 0.205, "forearm": 0.016}
+ARM_COM = {"upper_arm": (0.0064, 0.0198, -0.0326), "forearm": (0.0008, 0.0032, -0.0382)}   # left arm, link frames
 HEAD_MASS = 0.073                                    # CAD head 66.8 g + microphone + screws (ESTIMATED)
 
 
@@ -136,11 +138,11 @@ def build(design: Design | None = None, timestep: float = 0.001) -> str:
         sh, el = (v * 1e-3 for v in arm_points(sgn))
         mu, mf = ARM_MASS["upper_arm"], ARM_MASS["forearm"]
         return f"""<body name="{side}_upper_arm" pos="{_f(sh)}">
-  <inertial pos="0 {sgn * 0.019} -0.038" mass="{mu}" diaginertia="4e-5 4e-5 1.5e-5"/>
+  <inertial pos="{_f(np.array(ARM_COM['upper_arm']) * [1, sgn, 1])}" mass="{mu}" diaginertia="1.1e-4 1.3e-4 7e-5"/>
   <joint name="{side}_shoulder_pitch" axis="0 1 0" range="{rng['shoulder_pitch'][0]:.4f} {rng['shoulder_pitch'][1]:.4f}" damping="0.01" armature="0.005"/>
   {"".join(cadv.get(f"{side}_upper_arm", [])) if cadv else _box((0.032, 0.036, 0.07), (0, sgn * 0.018, -0.035), BLACK)}
   <body name="{side}_forearm" pos="{_f(el - sh)}">
-    <inertial pos="0.001 {sgn * 0.0025} -0.045" mass="{mf}" diaginertia="1.2e-5 1.2e-5 1e-6"/>
+    <inertial pos="{_f(np.array(ARM_COM['forearm']) * [1, sgn, 1])}" mass="{mf}" diaginertia="1.5e-5 1.5e-5 1.5e-6"/>
     <joint name="{side}_elbow" axis="0 1 0" range="{rng['elbow'][0]:.4f} {rng['elbow'][1]:.4f}" damping="0.01" armature="0.005"/>
     {"".join(cadv.get(f"{side}_forearm", [])) if cadv else _box((0.03, 0.005, lf), (0, sgn * 0.0025, -lf / 2), SAGE)}
     <site name="{side}_hand" pos="0 0 -0.095" size="0.005" group="4"/>

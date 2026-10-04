@@ -1,9 +1,9 @@
-"""Run every JX0 verification and write the report (about 15 minutes on a 12-core PC, no SolidWorks needed):
+"""Run every JX0 verification and write the report (about 30 minutes on a 12-core PC, no SolidWorks needed):
 
     python jx0/verify/run_all.py          -> jx0/results/verification.md
 
 Order: servo sizing, the 14 gaits (exports the robot's gait files), CAD interference, robustness (model errors,
-pushes, whole-program missions), power and timing, the software unit tests, then the report.
+pushes, whole-program missions), joint strength and bracket FEA, power and timing, the software unit tests, then the report.
 """
 from __future__ import annotations
 
@@ -19,6 +19,8 @@ STEPS = [
     ("CAD interference", [PY, "jx0/verify/verify_cad.py"]),
     ("robustness: model errors and pushes", [PY, "jx0/verify/robustness.py", "final"]),
     ("robustness: whole-program missions", [PY, "jx0/verify/robustness.py", "mission"]),
+    ("joint strength (single- vs double-sided)", [PY, "jx0/verify/verify_strength.py"]),
+    ("printed brackets: voxel FEA", [PY, "jx0/verify/verify_fea.py"]),
     ("power and timing", [PY, "jx0/verify/verify_power.py"]),
     ("software tests", [PY, "-m", "unittest", "discover", "-s", "jx0/software/tests"]),
 ]

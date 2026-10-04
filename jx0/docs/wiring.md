@@ -44,9 +44,11 @@ The IDs are in `jx0/software/jx0bot/config.yaml`. Every servo ships as ID 1, so 
 `/dev/ttyUSB0` or `/dev/ttyACM0` (set `bus.port` in config.yaml). Set the board's mode jumper for USB/serial pass-through,
 as the Waveshare wiki for the board describes.
 
-Arm and neck cables: the shoulder servos sit inside the chest cap, so their cables stay inside. Each elbow cable runs
-down the outside of its cradle (zip-tie it so the blade cannot catch it), and the neck cable goes in through the gap
-next to the neck servo.
+Arm and neck cables: each shoulder servo hangs outside the chest in its arm's hood. Its cable and the elbow servo's run
+together from the hood into the chest cap through the gap under the cap's side chamfer, with enough slack for the arm
+to swing up in front (zip-tie them to the hood so the blade cannot catch them). The neck cable goes in through the gap
+next to the neck servo. Leg cables: up the back of each leg, zip-tied to the brackets, into the torso through the slot
+in its floor; leave a loop at every joint for its full range.
 
 ## Raspberry Pi GPIO map (BCM numbers, physical pin in brackets)
 
@@ -67,10 +69,10 @@ The servos need no GPIO at all: they're all on the USB servo bus.
 ## Where things sit
 
 - **Lower torso:** the Raspberry Pi on the 4 standoffs on the back wall, the battery on the floor, the servo driver and
-  the UBEC beside it. The push-to-talk button goes in the hole in the back wall, and the leg cables come in through the
-  slot at the bottom of the back wall.
-- **Chest cap:** the two shoulder servos (screwed to the inner plates, horns out through the side walls), the speaker
-  under the round grille on top, and the neck servo standing on top.
+  the UBEC beside it. The push-to-talk button goes in the hole in the back wall, and the leg cables come up through the
+  slot in the floor.
+- **Chest cap:** the speaker under the round grille on top and the neck servo standing on top. The two shoulder
+  servos are in the arms' hoods, their horns bolted to the pads on the cap's side walls.
 - **Pelvis:** the MPU6050, as close to the hip centre as you can, **x arrow forward, y arrow to the robot's left**
   (otherwise set `imu.mount` in config.yaml).
 - **Head:** the INMP441 microphone glued behind the four face holes. Its cable goes down through the hole in the head

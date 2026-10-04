@@ -21,7 +21,7 @@ sys.path.insert(0, str(HERE))
 import geometry as G  # noqa: E402
 from layout import components  # noqa: E402
 
-PETG, FILL = 1.27, 0.55          # g/cm^3, printed / solid (as build_cad.py)
+PETG = 1.27                      # g/cm^3; printed / solid = geometry.fill(name) (as build_cad.py)
 RGBA = {"sage": "0.74 0.86 0.58 1", "black": "0.1 0.1 0.11 1", "white": "0.92 0.92 0.94 1", "orange": "0.95 0.42 0.11 1"}
 # extrusion of a (u, v) profile by w along each axis, as proper rotations (no mirroring): rows map (u, v, w) -> (x, y, z)
 AXIS_MAP = {"z": np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]], float),
@@ -78,7 +78,7 @@ def main():
         mesh = build(prims).to_mesh()
         tm = trimesh.Trimesh(np.asarray(mesh.vert_properties)[:, :3], np.asarray(mesh.tri_verts))
         tm.export(stl / f"{name}.stl")
-        g = tm.volume / 1000 * PETG * FILL
+        g = tm.volume / 1000 * PETG * G.fill(name)
         if name in G.PARTS:
             total += g * qty
             print(f"{name:22s} x{qty}  {g:6.1f} g printed (est.)  watertight {tm.is_watertight}")

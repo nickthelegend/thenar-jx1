@@ -1,0 +1,145 @@
+{
+ "generated_by": "jx0/verify/verify_fea.py",
+ "label": "CALCULATED (voxel FEA, PETG ASSUMED)",
+ "material": {
+  "E_gpa": 2.0,
+  "nu": 0.38,
+  "static_mpa": 50.0,
+  "fatigue_mpa": 15.0
+ },
+ "voxel_mm": 0.7,
+ "load_cases": {
+  "walking": "14 gaits, nominal robot",
+  "worst": "+ 42 model-error walks + 48 pushes of 0.96 N.s",
+  "runs_that_fell_excluded": 0
+ },
+ "parts": {
+  "pelvis": {
+   "loaded_by": "l_hip_yaw (parent frame)",
+   "elements": 168724,
+   "dof": 632091,
+   "support_nodes": 456,
+   "load_nodes": 3202,
+   "instants": {
+    "walking": 6810,
+    "worst": 62520
+   },
+   "walking_mpa_p99_9": 2.18,
+   "walking_mpa_max": 8.52,
+   "worst_mpa_p99_9": 4.54,
+   "worst_mpa_max": 16.64,
+   "fatigue_safety": 6.9,
+   "static_safety": 11.0,
+   "seconds": 132.4
+  },
+  "hip_yaw_bracket": {
+   "loaded_by": "l_hip_roll (parent frame)",
+   "elements": 149405,
+   "dof": 508026,
+   "support_nodes": 522,
+   "load_nodes": 7806,
+   "instants": {
+    "walking": 6810,
+    "worst": 62520
+   },
+   "walking_mpa_p99_9": 4.47,
+   "walking_mpa_max": 11.86,
+   "worst_mpa_p99_9": 10.1,
+   "worst_mpa_max": 26.29,
+   "fatigue_safety": 3.4,
+   "static_safety": 5.0,
+   "seconds": 89.3
+  },
+  "hip_roll_bracket": {
+   "loaded_by": "l_hip_pitch (parent frame)",
+   "elements": 84757,
+   "dof": 314271,
+   "support_nodes": 980,
+   "load_nodes": 2512,
+   "instants": {
+    "walking": 6810,
+    "worst": 62520
+   },
+   "walking_mpa_p99_9": 5.57,
+   "walking_mpa_max": 10.26,
+   "worst_mpa_p99_9": 12.75,
+   "worst_mpa_max": 25.74,
+   "fatigue_safety": 2.7,
+   "static_safety": 3.9,
+   "seconds": 49.2
+  },
+  "thigh": {
+   "loaded_by": "l_knee (parent frame)",
+   "elements": 124302,
+   "dof": 454311,
+   "support_nodes": 979,
+   "load_nodes": 2406,
+   "instants": {
+    "walking": 6810,
+    "worst": 62520
+   },
+   "walking_mpa_p99_9": 6.58,
+   "walking_mpa_max": 22.55,
+   "worst_mpa_p99_9": 14.78,
+   "worst_mpa_max": 52.84,
+   "fatigue_safety": 2.3,
+   "static_safety": 3.4,
+   "seconds": 72.6
+  },
+  "shin": {
+   "loaded_by": "l_ankle_pitch (parent frame)",
+   "elements": 72466,
+   "dof": 267327,
+   "support_nodes": 979,
+   "load_nodes": 2319,
+   "instants": {
+    "walking": 6810,
+    "worst": 62520
+   },
+   "walking_mpa_p99_9": 6.99,
+   "walking_mpa_max": 15.48,
+   "worst_mpa_p99_9": 26.15,
+   "worst_mpa_max": 76.88,
+   "fatigue_safety": 2.1,
+   "static_safety": 1.9,
+   "seconds": 47.3
+  },
+  "ankle_bracket": {
+   "loaded_by": "l_ankle_roll (parent frame)",
+   "elements": 104366,
+   "dof": 375972,
+   "support_nodes": 980,
+   "load_nodes": 3023,
+   "instants": {
+    "walking": 6810,
+    "worst": 62520
+   },
+   "walking_mpa_p99_9": 8.22,
+   "walking_mpa_max": 22.94,
+   "worst_mpa_p99_9": 23.75,
+   "worst_mpa_max": 68.66,
+   "fatigue_safety": 1.8,
+   "static_safety": 2.1,
+   "seconds": 86.0
+  },
+  "foot": {
+   "loaded_by": "l_ankle_roll (child frame)",
+   "elements": 142492,
+   "dof": 504180,
+   "support_nodes": 16777,
+   "load_nodes": 978,
+   "instants": {
+    "walking": 6810,
+    "worst": 62520
+   },
+   "walking_mpa_p99_9": 3.11,
+   "walking_mpa_max": 3.68,
+   "worst_mpa_p99_9": 7.61,
+   "worst_mpa_max": 11.15,
+   "fatigue_safety": 4.8,
+   "static_safety": 6.6,
+   "seconds": 104.5
+  }
+ },
+ "seconds": 642.6
+}

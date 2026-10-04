@@ -132,12 +132,15 @@ class Design:
         spec = {
             "hip_yaw_link": [("hip_roll", ao.get("hip_roll", [-0.055, 0.0, 0.0]), "x")],   # roll actuator behind hip centre, axis x
             "hip_roll_link": [("hip_pitch", ao.get("hip_pitch", [0.0, 0.055, 0.0]), "y")],  # pitch actuator lateral of hip centre, axis y
-            "thigh": [("knee", [0.0, 0.0, self.knee_act_z], "y")],          # knee actuator (coaxial with knee by default)
+            "thigh": [("knee", ao.get("knee", [0.0, 0.0, self.knee_act_z]), "y")],   # knee actuator (coaxial with knee by default)
             "shin": [("ankle_A", [0.0, ay, -self.shin + self.ankle_hA], "y"),
                       ("ankle_B", [0.0, -ay, -self.shin + self.ankle_hB], "y")],
             "ankle_cross": [],
             "foot": [],
         }
+        if "ankle_roll_actuator_m" in lay:          # serial ankle: the roll servo rides on the ankle cross (JX0 v0.4)
+            spec["shin"] = [e for e in spec["shin"] if e[0] != "ankle_B"]
+            spec["ankle_cross"] = [("ankle_B", lay["ankle_roll_actuator_m"], "x")]
         sb = lay.get("structure_box_m", {})
         struct_box = {
             "hip_yaw_link": tuple(sb.get("hip_yaw_link", (0.10, 0.08, 0.06))),

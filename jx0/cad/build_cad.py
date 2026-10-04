@@ -30,7 +30,7 @@ COLOURS = {"white": (0.92, 0.92, 0.94), "orange": (0.95, 0.42, 0.11), "black": (
            "cyan": (0.45, 0.9, 1.0), "sage": (0.74, 0.86, 0.58)}
 BASE = {"z": ("Front Plane", "XY"), "y": ("Top Plane", "XZ"), "x": ("Right Plane", "YZ")}
 PETG_DENSITY = 1270.0          # kg/m^3
-PRINT_FILL = 0.55              # printed mass / solid mass (3 walls + 25 % gyroid on these small parts, ESTIMATED)
+# printed mass / solid mass: geometry.fill(name) (body 0.55, pelvis and leg brackets 0.80; ESTIMATED)
 
 
 class FrameGrabber:
@@ -154,7 +154,7 @@ def build_part(s: Session, name, prims, colour, slow=False, frames=None):
     vol_cm3 = (mp.get("volume_m3", 0.0) or 0.0) * 1e6
     rec = {"part": name, "bodies": info["bodies"], "errors": info["errors"], "bbox_mm": got, "bbox_expected_mm": want,
            "bbox_ok": ok_bbox, "volume_cm3": round(vol_cm3, 2), "solid_mass_g_petg": round(vol_cm3 * PETG_DENSITY / 1000, 1),
-           "printed_mass_g": round(vol_cm3 * PETG_DENSITY / 1000 * PRINT_FILL, 1), "features": b.n, "triangles": tris,
+           "printed_mass_g": round(vol_cm3 * PETG_DENSITY / 1000 * G.fill(name), 1), "print_fill": G.fill(name), "features": b.n, "triangles": tris,
            "com_mm": [round(v / MM, 2) for v in mp.get("com_m", [0, 0, 0])]}
     return part, rec
 

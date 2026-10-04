@@ -144,6 +144,48 @@ class ConfigAndGaits(unittest.TestCase):
                 self.assertTrue(st[0] or st[1], f"{name}: a frame with no foot on the ground")
 
 
+class Kinematics(unittest.TestCase):
+    """jx0bot.kinematics (leg FK/IK and the whole-body COM the walking controller uses) against the MuJoCo model."""
+
+    def setUp(self):
+        try:
+            import mujoco  # noqa: F401
+        except ImportError:
+            self.skipTest("mujoco not installed")
+        import os
+        os.environ.setdefault("JX0_STL_DIR", str(ROOT / "nonexistent"))
+        sys.path.insert(0, str(ROOT / "jx0" / "sim"))
+
+    def test_fk_ik_com_match_model(self):
+        import mujoco
+        import numpy as np
+        import walk_jx0 as W
+        from jx1calc.design import Design
+        from jx0bot import kinematics as K
+        m = mujoco.MjModel.from_xml_string(W.build(Design(W.DESIGN)))
+        d = mujoco.MjData(m)
+        rng = np.random.default_rng(3)
+        adr = lambda n: m.jnt_qposadr[mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, n)]  # noqa: E731
+        for _ in range(50):
+            d.qpos[:] = 0
+            d.qpos[2], d.qpos[3] = 0.3, 1.0
+            for n, v in W.ARM_POSE.items():
+                d.qpos[adr(n)] = v
+            q = {s: rng.uniform([-0.4, -0.3, -1.0, 0.2, -0.8, -0.3], [0.4, 0.3, 0.1, 1.4, 0.2, 0.3]) for s in "lr"}
+            for s in "lr":
+                for j, v in zip(K.LEG, q[s]):
+                    d.qpos[adr(f"{s}_{j}")] = v
+            mujoco.mj_forward(m, d)
+            c, mass = K.com(q["l"], q["r"])
+            self.assertLess(np.linalg.norm(c - (d.subtree_com[1] - d.xpos[1])), 2e-4)
+            self.assertAlmostEqual(mass, float(m.body_subtreemass[1]), places=3)
+            for s in "lr":
+                p, R = K.fk(q[s], s)
+                b = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, f"{s}_foot")
+                self.assertLess(np.linalg.norm(p - (d.xpos[b] - d.xpos[1])), 1e-9)
+                self.assertLess(np.abs(K.ik(p, R, s) - q[s]).max(), 1e-9)
+
+
 class FakeBus:
     def __init__(self):
         self.ticks, self.torqued = {}, {}
@@ -415,5 +457,5 @@ class MainProgram(unittest.TestCase):
             main_mod.SimIO, main_mod.Brain, main_mod.print_and_say, builtins.input, sys.argv = saved
         self.assertIn("Okay, walking.", said)
         self.assertIn("Done!", said)
-        self.assertGreater(captured["x"], 0.012)          # two 2 cm steps from standing: it moved forward
-        self.assertGreater(captured["z"], 0.18)           # and it is still upright (pelvis height)
+        self.assertGreater(captured["x"], 0.009)          # two 1.5 cm steps from standing: it moved forward
+        self.assertGreater(captured["z"], 0.11)           # and it is still upright (pelvis height, v0.4 legs)
