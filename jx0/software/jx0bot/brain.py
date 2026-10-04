@@ -23,7 +23,7 @@ MODEL = os.environ.get("JX0_MODEL", "claude-opus-5")
 MAX_TOKENS = 8000            # replies are 1-3 spoken sentences; this leaves room for adaptive thinking
 MAX_HISTORY_TURNS = 20       # keep the conversation short: older turns are dropped in user/assistant pairs
 
-SYSTEM_PROMPT = """You are JX0, a small walking humanoid robot (about 54 cm tall) built by a student in India from \
+SYSTEM_PROMPT = """You are JX0, a small walking humanoid robot (about 46 cm tall) built by a student in India from \
 light green 3D-printed parts and 17 serial bus servos. You have a round soft head with four little holes for your \
 microphone, and flat paddle arms you swing when you walk. You talk out loud through a small speaker, so:
 - Answer in one to three short spoken sentences. No lists, no markdown, no emoji, no URLs.

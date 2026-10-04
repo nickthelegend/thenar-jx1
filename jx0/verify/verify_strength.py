@@ -81,8 +81,9 @@ def _stress(j, pk):
 
 
 def evaluate(walk, push):
-    """Fatigue from the walking loads (every step, ~10^6 cycles over the robot's life), static strength from the worst
-    of walking and the pushes."""
+    """Fatigue from the walking loads (every step, ~10^6 cycles over the robot's life: the gaits on the nominal robot
+    and on the 42 randomly wrong ones, which is conservative), static strength from the worst of walking and the
+    pushes."""
     rows = {}
     for j in JOINTS:
         w3, ws3, w4, ws4, wx = _stress(j, walk[j])
@@ -107,10 +108,13 @@ def main():
     sp = specs()
     with Pool(os.cpu_count()) as pool:
         res = pool.map(RB.trial, sp, chunksize=1)
-    ok = [r for r in res if not r["fell"]]
-    walk = _peaks([r for r in ok if r.get("push") is None])
-    push = _peaks([r for r in ok if r.get("push") is not None])
+    ok = [(s, r) for s, r in zip(sp, res) if not r["fell"]]
+    walk = _peaks([r for s, r in ok if s.get("push") is None])
+    push = _peaks([r for s, r in ok if s.get("push") is not None])
+    nominal = _peaks([r for s, r in ok if s.get("push") is None and "seed" not in s])
     rows = evaluate(walk, push)
+    rows["hip_yaw"]["v04"]["shaft_bending_nominal_walking_nm"] = round(nominal["hip_yaw"]["yaw_shaft_residual_nm"], 2)
+    ok = [r for s, r in ok]
     fell = len(res) - len(ok)
     out = {"generated_by": "jx0/verify/verify_strength.py",
            "label": "CALCULATED (MuJoCo loads, beam formulas, PETG strength ASSUMED)",

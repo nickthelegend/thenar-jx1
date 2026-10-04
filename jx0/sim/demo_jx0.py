@@ -1,6 +1,6 @@
 """JX0 demo film from the simulation, staged like the reference video (media/reference.mp4): the robot walks on a
-wooden floor with its arms swinging, waves, gets shoved from the side while walking and keeps going, and kicks over a
-plastic bottle in its way. The real robot program (jx0bot.robot.Robot, the same code that runs on the Pi) drives the
+wooden floor with its arms swinging, waves, gets shoved from the side while walking and keeps going, and bumps a
+plastic bottle out of its way. The real robot program (jx0bot.robot.Robot, the same code that runs on the Pi) drives the
 CAD robot in MuJoCo frame by frame; the push and the bottle are plain physics.
 
     python jx0/sim/demo_jx0.py      -> jx0/results/images/jx0_demo.mp4 and jx0_demo.webp (preview); needs ffmpeg on PATH
@@ -8,6 +8,7 @@ CAD robot in MuJoCo frame by frame; the push and the bottle are plain physics.
 from __future__ import annotations
 
 import math
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -28,10 +29,10 @@ from jx0bot.robot import ARM_JOINTS, LEG_JOINTS, REST_ARMS, Robot, load_config  
 OUT = ROOT / "jx0" / "results" / "images"
 ASSETS = HERE / "assets"
 W, H, FPS = 1280, 720, 30
-STILLS = {"wave": 3.4, "walk": 9.0, "kick": 13.4}   # clean frames (no caption) saved as jx0_demo_<name>.png
+STILLS = {"wave": 3.4, "walk": 9.0, "kick": 16.6}   # clean frames (no caption) saved as jx0_demo_<name>.png
 BOTTLE_AT = (0.24, -0.045)                           # in the right leg's path, about 7 steps ahead
-PUSH_N, PUSH_S = 6.0, 0.12                          # sideways shove on the torso: 6 N for 0.12 s (0.72 N·s; it recovers at this
-                                                    # moment of the walk; it survives ~50 % of such shoves, verification.md)
+PUSH_N, PUSH_S = 8.0, 0.12                          # sideways shove on the torso: 8 N for 0.12 s (0.96 N·s: it stays up in
+                                                    # all 48 timings of such a shove mid-walk, verification.md)
 
 
 def wood_texture(path: Path, size=1024, seed=3):
@@ -85,9 +86,10 @@ def scene_xml(xml: str) -> str:
     <light pos="0.4 0.4 1.6" dir="0 -0.3 -1" diffuse=".35 .35 .33"/>"""
     xml = xml.replace("</worldbody>", room + "\n  </worldbody>", 1)        # after the robot: its freejoint stays qpos[0:7]
     # shins and feet can hit the bottle and the box (contype 2), nothing else on the robot collides with them
+    shin = float(re.search(r'<body name="l_ankle_cross" pos="0 0 (-[0-9.]+)"', xml).group(1))
     for s in "lr":
-        xml = xml.replace(f'<body name="{s}_shin" pos="0 0 -0.1">',
-                          f'<body name="{s}_shin" pos="0 0 -0.1">\n<geom type="capsule" fromto="0 0 -0.01 0 0 -0.095" size="0.022" '
+        head = re.search(rf'<body name="{s}_shin" pos="[^"]*">', xml).group(0)
+        xml = xml.replace(head, head + f'\n<geom type="capsule" fromto="0 0 -0.01 0 0 {shin + 0.008:.3f}" size="0.022" '
                           f'contype="2" conaffinity="0" rgba="0 0 0 0" mass="0"/>', 1)
     return xml
 
@@ -217,11 +219,17 @@ def main():
 
     cfg = load_config()
     io = StepIO(cfg, sink)
-    if test:
-        io.frame = lambda: None
     robot = Robot(io, cfg)
     io.settle({**robot.stand_pose, **REST_ARMS})
     bottle = mujoco.mj_name2id(io.m, mujoco.mjtObj.mjOBJ_BODY, "bottle")
+    if test:
+        x0, hit = float(io.d.xpos[bottle][0]), []
+
+        def track():
+            if not hit and io.d.xpos[bottle][0] > x0 + 0.002:
+                hit.append(io.d.time)
+                print(f"    the bottle starts moving at t = {io.d.time:.2f} s", flush=True)
+        io.frame = track
 
     def bottle_tilt():
         w, x, y, z = io.d.xquat[bottle]

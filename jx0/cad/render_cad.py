@@ -17,6 +17,7 @@ from swlib.core import C, Session, set_view, typed  # noqa: E402
 ASM = ROOT / "jx0" / "cad" / "JX0_Robot.SLDASM"
 IMG = ROOT / "jx0" / "cad" / "images"
 VIEWS = {"front": (1.0, -0.8, 0.45), "back": (-1.0, 0.8, 0.45), "side": (0.0, -1.0, 0.25), "legs": (0.9, -1.0, 0.1)}
+UPPER_BODY = ("torso", "chest", "head", "arm", "blade")      # hidden in the legs view, with the 5 upper servos
 
 
 def export_views():
@@ -24,14 +25,22 @@ def export_views():
     doc = s.open_doc(ASM.resolve())
     IMG.mkdir(parents=True, exist_ok=True)
     out = {}
+    asm = typed(doc, "IAssemblyDoc")
+    comps = [typed(c, "IComponent2") for c in asm.GetComponents(True)]
+    upper = [c for c in comps if any(k in c.Name2.lower() for k in UPPER_BODY)]
+    servos = sorted((c for c in comps if "servo" in c.Name2.lower()), key=lambda c: c.GetBox(False, False)[2])
+    upper += servos[12:]                                        # the 12 lowest servos are the legs
     for name, eye in VIEWS.items():
+        if name == "legs":                                      # the legs alone: hide the body, arms and head
+            for c in upper:
+                c.Visible = C.swComponentHidden
         set_view(s.app, doc, eye=eye)
-        if name == "legs":                                      # zoom onto the legs
-            typed(doc.ActiveView, "IModelView")
-            doc.ViewZoomTo2(-0.09, -0.11, -0.16, 0.09, 0.11, 0.06)
         path = (IMG / f"jx0_cad_{name}.png").resolve()
         ext = typed(doc.Extension, "IModelDocExtension")
         ok = ext.SaveAs3(str(path), C.swSaveAsCurrentVersion, C.swSaveAsOptions_Silent | C.swSaveAsOptions_Copy, None, None, 0, 0)
+        if name == "legs":
+            for c in upper:
+                c.Visible = C.swComponentVisible
         out[name] = path
         print(name, ok, path.relative_to(ROOT))
     return out

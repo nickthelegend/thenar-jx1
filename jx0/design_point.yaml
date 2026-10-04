@@ -113,11 +113,11 @@ mass_budget:
     carries: [knee]
     com_m: [0.012, -0.002, -0.043]
   shin:
-    structure_kg: {value: 0.029, label: ESTIMATED, note: "v0.4 SolidWorks: shin 25.0 g printed (knee U-bracket + ankle-pitch cage) + screws"}
+    structure_kg: {value: 0.029, label: ESTIMATED, note: "v0.4 SolidWorks: shin 25.2 g printed (knee U-bracket + ankle-pitch cage) + screws"}
     carries: [ankle_A]
     com_m: [0.002, -0.003, -0.025]
   ankle_cross:
-    structure_kg: {value: 0.040, label: ESTIMATED, note: "v0.4 SolidWorks: ankle bracket 35.8 g printed (U-bracket + closed roll cage) + screws; carries the ankle-roll servo (layout.ankle_roll_actuator_m)"}
+    structure_kg: {value: 0.040, label: ESTIMATED, note: "v0.4 SolidWorks: ankle bracket 35.9 g printed (U-bracket + closed roll cage) + screws; carries the ankle-roll servo (layout.ankle_roll_actuator_m)"}
     carries: [ankle_B]
     com_m: [-0.031, 0.001, 0.0]
   foot:

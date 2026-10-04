@@ -108,17 +108,28 @@ def main():
                      f"{r['worst_mpa_p99_9']} ({r['static_safety']}) |")
         L += ["", "Stress maps: `images/fea_*.png`."]
 
+    jj = st.get("joints", {})
+    v3w = (min((r["v03_single_sided"]["walking_mpa"] for r in jj.values()), default=0),
+           max((r["v03_single_sided"]["walking_mpa"] for r in jj.values()), default=0))
+    v3s = max((r["v03_single_sided"]["shaft_bending_worst_nm"] for r in jj.values()), default=0)
+    knee_ts = next((f"{r['torque_speed_utilisation']:.0%}" for r in siz.get("joints", []) if r.get("joint") == "knee"), "n/a")
     L += ["", "## What the verification found and fixed", "",
           "### v0.4 (double-sided legs, 2026-10-05)", "",
           "- **Single-sided joints would break** (the builder's own call, confirmed): with v0.4's loads, a v0.3-style joint's "
-          "printed plate sees 32–64 MPa every step, above PETG's fatigue strength at every leg joint, and the servo's "
-          "output shaft carries up to 3.3 N·m of bending. Every leg pitch and roll joint is now a U-bracket on the servo's "
-          "horn and rear hub, the servo body screwed into a cage, like the reference robot.",
+          f"printed plate sees {v3w[0]:.0f}–{v3w[1]:.0f} MPa every step, above PETG's fatigue strength at every leg joint, and "
+          f"the servo's output shaft carries up to {v3s:.1f} N·m of bending. Every leg pitch and roll joint is now a U-bracket "
+          "on the servo's horn and rear hub, the servo body screwed into a cage, like the reference robot.",
           "- **The first U-brackets had weak joints between the arms and the next servo's cage** (voxel FEA): the shin's arms "
           "met the ankle cage through two 18 × 3 mm tabs, the ankle bracket through 2.5 mm bands, the hip-yaw disc through a "
           "thin plate. Solid plates now join each arm to its cage over the whole overlap; cage rear plates went from 2.4 to "
           "4 mm (screw heads counterbored), arms from 3.5 to 4.5 mm; the hip-yaw bracket got a 7 mm disc, a keel and a solid "
           "block; the hip-roll bracket a 10 × 16 mm bridge.",
+          "- **The final masses (2.85 kg) raised the loads by about a tenth**, and two spots fell below a safety factor of 2: "
+          "the shin's back plate beside the ankle servo's hub hole (strength 1.9: a screw counterbore 0.1 mm from the hole, "
+          "no side wall at that corner) and the ankle bracket's inboard arm where it meets the roll cage (fatigue 1.8). The "
+          "shin's plate is now 4 mm everywhere the ankle bracket's boss does not slide, with a 20 mm hub hole and that one "
+          "screw left out; the ankle bracket's inboard arm reaches 4.5 mm lower (the foot's bracket only comes within 12 mm "
+          "below the axis there): shin 2.5 / 3.2, ankle bracket 2.4 / 3.0.",
           "- **Assembly**: plates that cover a cage would have locked the servo out. The knee cage is open at the front and "
           "the ankle cage at the bottom (the servos slide in there), with screwdriver holes through the arms for the far "
           "case screws.",
@@ -126,7 +137,7 @@ def main():
           "gaits now keep the zero-moment point 20 mm inside each foot (planner option `zmp_offset_y`, chosen by Monte Carlo "
           "over 0–20 mm and 0.45–0.6 s steps): 15° at most, 50 % peak load.",
           "- **Knee speed**: with 62/58 mm leg links the knee swings faster; 0.5 s steps reach the servo's no-load speed. The "
-          "gaits keep 0.6 s steps (sizing: 56 % of the torque-speed line at 0.55 s).",
+          f"gaits keep 0.6 s steps (sizing: {knee_ts} of the torque-speed line at 0.55 s).",
           "- **Collision ranges re-measured** for every joint; limits set inside them (left leg: hip roll −20…22°, hip pitch "
           "−70…8°, knee 0…84°, ankle roll ±20°; every range the gaits use is inside).",
           "", "### v0.3 (2026-10-04)", "",
@@ -140,10 +151,15 @@ def main():
         L.append("- **Pushes**: " + ", ".join(f"{k} stays up {100 * v['stayed_up_rate']:.0f} %" for k, v in pu.items() if "stayed_up_rate" in v)
                  + " of 48 timed pushes mid-walk. Harder shoves need a step to a new place; the gait player does not re-plan "
                  "its steps (a capture-point stepper is in `jx0bot/stepper.py`, not yet enabled).")
-    L += ["- **The hip-yaw joint is still single-sided**: there is no room for a second support between the yaw servo and the "
-          "hip-roll servo. A thrust ring under the pelvis carries the leg's axial load and part of the bending; the yaw "
-          "servo's two output bearings carry the rest (see the table above). Check the yaw horns for play after the first "
-          "hours of walking; a printed slewing ring is the upgrade path.",
+    yw = jj.get("hip_yaw", {}).get("v04", {})
+    L += ["- **The hip-yaw joint is still single-sided**, as on the reference robot (its yaw servo stands under the body): "
+          "there is no room for a second support between the yaw servo and the hip-roll servo. A thrust ring under the "
+          "pelvis carries the leg's axial load and part of the bending; the yaw servo's output shaft and its two bearings "
+          f"carry the rest: about {yw.get('shaft_bending_nominal_walking_nm', float('nan')):.1f} N·m in normal walking, "
+          f"{yw.get('shaft_bending_walking_nm', float('nan')):.1f} N·m on a randomly wrong robot, "
+          f"{yw.get('shaft_bending_worst_nm', float('nan')):.1f} N·m in the hardest pushes (Feetech publishes no rating for "
+          "it). Check the yaw horns for play after the first hours of walking; a retainer lip under the yaw disc (so the "
+          "pelvis holds it from above and below) is the upgrade path.",
           "- **Material and servo data are assumed**: PETG strengths (50 / 15 MPa), the STS3215's rear hub screw pattern "
           "(assumed equal to the horn's), and the servo stiffness (60 N·m/rad, 0.6–1.4x tested). Print a test U-bracket and "
           "fit-check a servo before printing the rest; measure the servo stiffness (bringup.md step 5).",

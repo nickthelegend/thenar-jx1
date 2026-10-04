@@ -146,15 +146,15 @@
   "rated_nm": 0.98
  },
  "realtime": {
-  "python_ms_per_frame_pc": 0.047,
-  "python_ms_per_frame_pi4_est": 0.23,
+  "python_ms_per_frame_pc": 0.025,
+  "python_ms_per_frame_pi4_est": 0.12,
   "bus_bytes_per_frame": 127,
   "bus_ms_per_frame": 1.27,
   "imu_read_ms_est": 0.4,
   "frame_ms": 10.0,
-  "frame_used_ms_pi4_est": 1.9,
+  "frame_used_ms_pi4_est": 1.79,
   "ok": true
  },
  "pass": true,
- "seconds": 5.8
+ "seconds": 5.1
 }

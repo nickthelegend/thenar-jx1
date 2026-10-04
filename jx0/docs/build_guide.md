@@ -17,7 +17,7 @@ Every leg pitch and roll joint is **double-sided**, like the reference robot. Th
 
 So the joint's load goes through both ends of the servo instead of bending its output shaft. With the simulated
 walking loads, a one-plate joint (v0.3) would stress its plate past PETG's fatigue strength at every leg joint; the
-U-brackets keep every printed leg part at a fatigue safety factor of about 2 or more (finite elements:
+U-brackets keep every printed leg part at a fatigue safety factor of 2.3 or more (finite elements:
 [verification](../results/verification.md)). The hip-yaw joint is the one that stays single-sided: a thrust ring
 under the pelvis carries the leg's weight there.
 
@@ -49,15 +49,15 @@ Neither is published for the STS3215.
 | JX0_HipYawBracket_L / _R | 1 + 1 | 51.0 g each | 70 × 58 × 46 | PETG near-solid; disc face down |
 | JX0_HipRollBracket_L / _R | 1 + 1 | 29.0 g each | 96 × 54 × 31 | PETG near-solid; rear arm down |
 | JX0_Thigh_L / _R | 1 + 1 | 44.3 g each | 52 × 48 × 92 | PETG near-solid; outer arm down |
-| JX0_Shin_L / _R | 1 + 1 | 25.0 g each | 31 × 48 × 84 | PETG near-solid; outer arm down |
-| JX0_AnkleBracket_L / _R | 1 + 1 | 35.8 g each | 72 × 61 × 33 | PETG near-solid; outer arm down |
+| JX0_Shin_L / _R | 1 + 1 | 25.2 g each | 31 × 48 × 84 | PETG near-solid; outer arm down |
+| JX0_AnkleBracket_L / _R | 1 + 1 | 35.9 g each | 72 × 61 × 33 | PETG near-solid; outer arm down |
 | JX0_Foot | 2 | 51.1 g each | 124 × 70 × 46 | PETG near-solid; sole down |
 | JX0_Torso (lower shell with the skirt) | 1 | 105.9 g | 84 × 120 × 140 | PLA; floor down |
 | JX0_ChestCap | 1 | 46.4 g | 84 × 126 × 42 | PLA; upside down (top face on the bed), chamfers 45° |
 | JX0_Head | 1 | 66.8 g | 66 × 78 × 62 | PLA; upright on its floor, tree supports inside the rounded top |
 | JX0_UpperArm_L / _R (shoulder hood + elbow box) | 1 + 1 | 22.7 g each | 53 × 35 × 84 | PLA; outer plate down |
 | JX0_ArmBlade_L / _R | 1 + 1 | 15.3 g each | 36 × 8 × 116 | PLA; lying flat |
-| **Total** | **20** | **823 g** | | 527 g PETG + 295 g PLA |
+| **Total** | **20** | **823 g** | | 528 g PETG + 295 g PLA |
 
 ## 2. Before assembly: servo IDs and centring
 
@@ -94,8 +94,9 @@ Legs, top down (left shown; the right is the mirror image):
      inner plate, and the two far ones through the holes in the inner arm. Fit the knee horn.
    - Slide the thigh onto the hip-pitch servo from below: 4 × M2 × 8 into the horn, 4 × M2 × 10 into the hub.
 5. **Shin.**
-   - Slide the ankle-pitch servo up into the shin's cage from below. The near screws go in sunk; the far ones go
-     through the holes in the inner arm.
+   - Slide the ankle-pitch servo up into the shin's cage from below. The front near screw goes in sunk (the rear
+     one is left out on purpose: that corner has no side wall, and a hole there would weaken the plate beside the
+     hub); the far ones go through the holes in the inner arm.
    - Slide the shin onto the knee servo from below.
 6. **Ankle bracket.**
    - Slide the ankle-roll servo into its cage from the inboard end (horn off) and screw it through the back plate.
@@ -139,7 +140,7 @@ part's orientation is unclear.
 
 | Item | Where | Notes |
 |---|---|---|
-| M2 × 6 socket screws (68) | servo cases (3 or 4 per servo), hip-roll horns | size ASSUMED: fit-check on the first bracket |
+| M2 × 6 socket screws (66) | servo cases (3 or 4 per servo), hip-roll horns | size ASSUMED: fit-check on the first bracket |
 | M2 × 8 (36) | U-bracket horn arms, head | |
 | M2 × 10 (56) | U-bracket hub arms through the boss, hip-yaw discs, shoulder pads | |
 | M2 × 12 (8) | arm blades | |

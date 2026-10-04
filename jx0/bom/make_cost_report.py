@@ -98,12 +98,12 @@ def build(rows):
     # 2 - overview
     spec = [("Height / mass", f"{SPEC['height']} / {SPEC['mass']} (CAD, all parts)"),
             ("Joints", "17, every one a Feetech STS3215 12 V serial bus servo (30 kg·cm stall, position feedback), like the reference robot"),
-            ("Legs", "6 joints each: hip yaw, roll, pitch, knee, ankle pitch, roll; every pitch and roll joint double-sided (a U-bracket on the servo's horn and rear hub, the servo body in a cage), like the reference robot"),
-            ("Arms and head", "shoulder pitch and elbow per arm (the shoulder servo in a hood outside the chest, the elbow servo in a box below it, a paddle blade), neck yaw under a soft rounded head"),
+            ("Legs", "6 joints each; every pitch and roll joint double-sided (a U-bracket on the servo's horn and rear hub, the body in a cage), like the reference robot"),
+            ("Arms and head", "shoulder pitch and elbow per arm, a paddle blade; neck yaw under a soft rounded head"),
             ("Brain", "Raspberry Pi 4: 100 Hz gait playback with arm swing, IMU balance, offline speech recognition and voice"),
             ("Talking", "Claude over Wi-Fi writes the replies and calls the robot's actions (walk, turn, wave, nod, look)"),
-            ("Power", "3S 2200 mAh LiPo (about 70 min of walking, CALCULATED) or a 12.6 V bench supply"),
-            ("Structure", f"pastel green matte PLA (or PETG) on a home 3D printer: {SPEC['pieces']} parts, {SPEC['printed']}")]
+            ("Power", "3S 2200 mAh LiPo (about 73 min of walking, CALCULATED) or a 12.6 V bench supply"),
+            ("Structure", f"{SPEC['pieces']} parts, {SPEC['printed']} on a home 3D printer: pelvis and leg parts in PETG, printed near-solid; body, head and arms in pastel green matte PLA")]
     spec_html = "".join(f"<tr><th>{e(k)}</th><td>{e(v)}</td></tr>" for k, v in spec)
     pages.append(page(2, "1. What JX0 is", f'''
 <p class="lead">JX0 is a small humanoid robot designed to be built by one student at home, from a 3D printer and parts
@@ -117,23 +117,23 @@ servo sizing, physics simulation) at a price a student can afford.</p>
 <div class="two">
   <div><h2>Done (on the computer)</h2><ul class="checks">
     <li class="ok">SolidWorks CAD: {SPEC["pieces"]} printable parts and the full assembly with all 17 servos, built by script</li>
-    <li class="ok">Servo sizing for every leg joint: all pass (tightest margin 1.70×)</li>
+    <li class="ok">Servo sizing all pass (tightest 1.47×); every printed leg part passes a finite-element check</li>
     <li class="ok">Walking in a physics simulation of the CAD robot: 14 of 14 gaits pass, arms swinging</li>
-    <li class="ok">No part collisions in 1,373 moving poses; 97 % of walks succeed with random model errors</li>
+    <li class="ok">No part collisions in 1,373 moving poses; all 140 walks with random model errors and every push up to 0.96 N·s stay up</li>
     <li class="ok">Robot program (voice, Claude, walking, gestures) runs on the simulated robot: 24/24 missions</li>
     <li class="next">Next: buy the parts → print → assemble → first steps</li></ul></div>
   <div><h2>How this estimate was made</h2><ul class="notes">
     <li>Every line is a real product page at an Indian store (Robu, Evelta, Robocraze, ThinkRobotics, Quartz
       Components and others), price checked {REPORT_DATE}.</li>
     <li>GST is included where the store states it; shipping is not included.</li>
-    <li>Two small lines (button, jumper wires) are ESTIMATED.</li>
+    <li>Seven small lines (PETG, three screw lengths, PTFE tape, button, jumper wires) are ESTIMATED.</li>
     <li>Over the original ₹50,000 target because all 17 joints are STS3215, as on the reference robot.</li></ul></div>
 </div>
 <h2>From CAD to a working robot</h2>
 <div class="strip">
   <figure><img src="{uri('jx0/cad/images/jx0_cad_back.png')}" alt="SolidWorks back view"><figcaption>SolidWorks assembly, back view</figcaption></figure>
   <figure><img src="{uri('jx0/results/images/jx0_demo_wave.png')}" alt="waving"><figcaption>waving (simulation, the robot's own program)</figcaption></figure>
-  <figure><img src="{uri('jx0/results/images/jx0_demo_kick.png')}" alt="kicking a bottle"><figcaption>kicks over a bottle, like the reference video</figcaption></figure>
+  <figure><img src="{uri('jx0/results/images/jx0_demo_kick.png')}" alt="bumping a bottle"><figcaption>walks into a bottle, as in the reference video</figcaption></figure>
 </div>'''))
 
     # 3 - cost summary
@@ -157,7 +157,7 @@ servo sizing, physics simulation) at a price a student can afford.</p>
        foot=["<b>Total</b>", "", f'<span class="r"><b>{inr(total)}</b></span>', '<span class="r">100 %</span>'])}
 <h2>Five biggest lines</h2>
 {table([("Item", ""), ("Model", ""), ("Qty", "r"), ("₹", "r")], top_rows, "compact")}
-<p class="note">Why the STS3215 everywhere: the walking needs up to 1.73 N·m at the hip roll (with a 1.5× safety margin),
+<p class="note">Why the STS3215 everywhere: the walking needs up to 2.0 N·m at the hip roll (with a 1.25–1.5× safety margin),
 more than MG996R-class hobby servos give; the serial bus servos also report their position, which the calibration and the
 balance loop use; and one servo type on one bus is how the reference robot is built.</p>'''))
 

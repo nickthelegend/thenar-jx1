@@ -434,8 +434,8 @@ def shin():
     arm = rounded_polygon([(-13.0, -2.0), (-w, -13.0), (-w, zc), (w, zc), (w, -13.0), (13.0, -2.0), (13.0, 13.0),
                            (-13.0, 13.0)], [0.0, 2.0, 3.0, 3.0, 2.0, 0.0, 12.9, 12.9])
     p = u_arms(knee_servo(0.0), arm)
-    p += cage(A, skip=("w0", "l0"), ext=0.4)
-    top = -SHIN + ST["LB"] + C + WALL
+    p += cage(A, skip=("w0", "l0"), ext=0.4, omit=-1)           # (no near screw beside the hub hole at the back:
+    top = -SHIN + ST["LB"] + C + WALL                           # that corner has no side wall; verify_fea)
     p += [("cut", (-w - 0.1, w + 0.1), (-HC - RP - 0.1, -HC + 0.1),                          # rear plate: nothing below
            (-SHIN - ST["LA"] - C - WALL - 0.1, -SHIN - ST["LA"] - C)),                     # the case (foot bracket)
           ("box", (-w, -HW - C), (-HC - RP, HC + 0.4), (-SHIN + 20.0, top)),               # upper part of the back wall
@@ -443,12 +443,18 @@ def shin():
           ("box", (-w + 0.07, w - 0.07), (-HF - BOSS_H - 0.1, -HC - RP + 0.1), (zc + 0.07, top - 0.07))]   # the cage
     for dx in (-ST["MOUNT_W"], ST["MOUNT_W"]):                                                # screwdriver access
         p.append(("hole", "y", (dx, -SHIN + ST["MOUNT_L"][1]), 5.0, (-HF - BOSS_H - TU - 0.1, -HC - RP - 1.65)))
-    # the rear plate is 4 mm above the ankle axis (verify_fea): the ankle bracket's boss only slides along it below
+    # the rear plate is 4 mm thick (verify_fea) except where the ankle bracket's boss slides up along it to the hub
+    # (|x| < 9.6 below the axis); around the hub a 20 mm hole clears the hub (19.2) and the boss (18)
     yo = -HC - RP
+    zb = -SHIN - ST["LA"] - C                                                                 # the plate's bottom
     p += [("box", (-w + 0.07, w - 0.07), (yo - 1.6, yo + 0.05), (-SHIN, top - 0.07)),
-          ("hole", "y", (0.0, -SHIN), ST["DISC_CLEAR"], (yo - 1.7, yo + 0.1))]
+          ("box", (-w + 0.07, -9.6), (yo - 1.6, yo + 0.05), (zb + 0.07, -SHIN + 0.1)),
+          ("box", (9.6, w - 0.07), (yo - 1.6, yo + 0.05), (zb + 0.07, -SHIN + 0.1)),
+          ("hole", "y", (0.0, -SHIN), 20.0, (yo - 1.7, yo + 0.1))]
     for lo in ST["MOUNT_L"]:
         for dx in (-ST["MOUNT_W"], ST["MOUNT_W"]):
+            if dx < 0 and lo == ST["MOUNT_L"][0]:
+                continue
             p += [("hole", "y", (dx, -SHIN + lo), ST["SCREW"], (yo - 1.7, yo + 0.1)),
                   ("hole", "y", (dx, -SHIN + lo), 4.2, (yo - 1.7, yo - 0.0))]               # heads sunk in
     return p
@@ -467,10 +473,12 @@ def ankle_bracket():
     xf = XA + TU + 0.6                                                                          # clear of the foot's arm
     front = rounded_polygon([(13.0, -18.0), (13.0, 13.0), (xf, zt + 0.05), (xf, -18.0)], [8.0, 12.9, 0.0, 0.0])
     slab = rect(x_case + 0.05, xf + 0.1, -6.5, zt + 0.05)                                     # over the foot bracket
-    # (the foot's roll bracket reaches the arms' planes only below z -8 at the +-20 deg roll limit)
+    slab_hub = rect(x_case + 0.05, xf + 0.1, -11.0, zt + 0.05)                                # (inboard: verify_fea)
+    # (at the +-20 deg roll limit the foot's roll bracket reaches the horn arm's plane only below z -7.5, the hub
+    # arm's plane only below z -12)
     top = rect(x_back, xf + 0.1, zt - WALL - 0.05, zt + 0.05)                                 # on the cage's top wall
     side = rect(x_back, x_case + 0.3, -zt - 0.05, zt + 0.05)                                  # outboard: whole cage side
-    p = u_arms(ankle_pitch_servo(0.0), front, extra_horn=[slab, top, side], extra_hub=[slab, top])
+    p = u_arms(ankle_pitch_servo(0.0), front, extra_horn=[slab, top, side], extra_hub=[slab_hub, top])
     p += cage(R, skip=("l0",), omit=-1)                       # the roll servo slides in from the inboard end;
     #                                                                         the foot slides on from below
     p += [("box", (x_case, XA - 0.4), (-ST["LB"] - C - WALL, HW + C + WALL - 0.1 + 0.6), (-zt, zt)),   # rim over the

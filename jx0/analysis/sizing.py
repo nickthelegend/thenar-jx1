@@ -99,7 +99,7 @@ def main():
                                 "rms_nm": round(float(np.sqrt(np.mean(tau[:, dof[j]] ** 2))), 3),
                                 "speed_peak_rad_s": round(float(np.abs(qvel[:, dof[j]]).max()), 2)}
         scen.append(row)
-        if g.name == "walk_nominal_0.067ms":
+        if g.name == "walk_nominal_0.05ms":
             traces = {"t": res["t"], **{j: tau[:, dof[j]] for j in LEG_JOINTS}}
         print(f"{g.name}: zmp error {1000 * zerr:.1f} mm", flush=True)
 
@@ -143,7 +143,7 @@ def main():
     if traces:
         for j in LEG_JOINTS:
             ax[1].plot(traces["t"], traces[j], lw=1, label=j)
-        ax[1].set_title("left-leg joint torque, walking 0.067 m/s")
+        ax[1].set_title("left-leg joint torque, walking 0.05 m/s")
         ax[1].set_xlabel("s")
         ax[1].set_ylabel("N·m")
         ax[1].legend(fontsize=7, ncol=3)

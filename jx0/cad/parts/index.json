@@ -265,19 +265,19 @@
    13.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 24.54,
-  "solid_mass_g_petg": 31.2,
-  "printed_mass_g": 25.0,
-  "features": 37,
-  "triangles": 2764,
+  "volume_cm3": 24.8,
+  "solid_mass_g_petg": 31.5,
+  "printed_mass_g": 25.2,
+  "print_fill": 0.8,
+  "features": 36,
+  "triangles": 2652,
   "com_mm": [
-   1.53,
-   -2.94,
-   -25.1
+   1.5,
+   -3.12,
+   -25.47
   ],
   "quantity": 1,
-  "build_s": 55.6,
-  "print_fill": 0.8
+  "build_s": 68.9
  },
  "JX0_Shin_R": {
   "part": "JX0_Shin_R",
@@ -300,19 +300,19 @@
    13.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 24.54,
-  "solid_mass_g_petg": 31.2,
-  "printed_mass_g": 25.0,
-  "features": 37,
-  "triangles": 2764,
+  "volume_cm3": 24.8,
+  "solid_mass_g_petg": 31.5,
+  "printed_mass_g": 25.2,
+  "print_fill": 0.8,
+  "features": 36,
+  "triangles": 2652,
   "com_mm": [
-   1.53,
-   2.94,
-   -25.1
+   1.5,
+   3.12,
+   -25.47
   ],
   "quantity": 1,
-  "build_s": 58.1,
-  "print_fill": 0.8
+  "build_s": 67.9
  },
  "JX0_AnkleBracket_L": {
   "part": "JX0_AnkleBracket_L",
@@ -335,19 +335,19 @@
    15.31
   ],
   "bbox_ok": true,
-  "volume_cm3": 35.25,
-  "solid_mass_g_petg": 44.8,
-  "printed_mass_g": 35.8,
+  "volume_cm3": 35.37,
+  "solid_mass_g_petg": 44.9,
+  "printed_mass_g": 35.9,
+  "print_fill": 0.8,
   "features": 30,
   "triangles": 2102,
   "com_mm": [
-   -31.36,
-   1.13,
-   -0.05
+   -31.32,
+   1.05,
+   -0.08
   ],
   "quantity": 1,
-  "build_s": 84.5,
-  "print_fill": 0.8
+  "build_s": 48.0
  },
  "JX0_AnkleBracket_R": {
   "part": "JX0_AnkleBracket_R",
@@ -370,19 +370,19 @@
    15.31
   ],
   "bbox_ok": true,
-  "volume_cm3": 35.25,
-  "solid_mass_g_petg": 44.8,
-  "printed_mass_g": 35.8,
+  "volume_cm3": 35.37,
+  "solid_mass_g_petg": 44.9,
+  "printed_mass_g": 35.9,
+  "print_fill": 0.8,
   "features": 30,
   "triangles": 2102,
   "com_mm": [
-   -31.36,
-   -1.13,
-   -0.05
+   -31.32,
+   -1.05,
+   -0.08
   ],
   "quantity": 1,
-  "build_s": 87.2,
-  "print_fill": 0.8
+  "build_s": 44.7
  },
  "JX0_Foot": {
   "part": "JX0_Foot",

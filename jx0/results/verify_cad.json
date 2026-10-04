@@ -284,14 +284,14 @@
      1005.1
     ],
     "16.0": [
-     "ankle_L",
-     "ankle_R",
-     1238.4
+     "shin_L",
+     "foot_R",
+     12.2
     ],
     "18.0": [
      "shin_L",
      "foot_R",
-     99.8
+     129.5
     ]
    },
    "ok": true
@@ -459,6 +459,6 @@
    "ok": true
   }
  },
- "seconds": 436.9,
+ "seconds": 451.4,
  "pass": true
 }

@@ -30,7 +30,7 @@
    "worst_mpa_max": 16.64,
    "fatigue_safety": 6.9,
    "static_safety": 11.0,
-   "seconds": 132.4
+   "seconds": 81.6
   },
   "hip_yaw_bracket": {
    "loaded_by": "l_hip_roll (parent frame)",
@@ -48,7 +48,7 @@
    "worst_mpa_max": 26.29,
    "fatigue_safety": 3.4,
    "static_safety": 5.0,
-   "seconds": 89.3
+   "seconds": 47.9
   },
   "hip_roll_bracket": {
    "loaded_by": "l_hip_pitch (parent frame)",
@@ -66,7 +66,7 @@
    "worst_mpa_max": 25.74,
    "fatigue_safety": 2.7,
    "static_safety": 3.9,
-   "seconds": 49.2
+   "seconds": 27.4
   },
   "thigh": {
    "loaded_by": "l_knee (parent frame)",
@@ -84,43 +84,43 @@
    "worst_mpa_max": 52.84,
    "fatigue_safety": 2.3,
    "static_safety": 3.4,
-   "seconds": 72.6
+   "seconds": 39.2
   },
   "shin": {
    "loaded_by": "l_ankle_pitch (parent frame)",
-   "elements": 72466,
-   "dof": 267327,
+   "elements": 73504,
+   "dof": 270822,
    "support_nodes": 979,
-   "load_nodes": 2319,
+   "load_nodes": 2321,
    "instants": {
     "walking": 6810,
     "worst": 62520
    },
-   "walking_mpa_p99_9": 6.99,
-   "walking_mpa_max": 15.48,
-   "worst_mpa_p99_9": 26.15,
-   "worst_mpa_max": 76.88,
-   "fatigue_safety": 2.1,
-   "static_safety": 1.9,
-   "seconds": 47.3
+   "walking_mpa_p99_9": 5.97,
+   "walking_mpa_max": 6.1,
+   "worst_mpa_p99_9": 15.48,
+   "worst_mpa_max": 24.89,
+   "fatigue_safety": 2.5,
+   "static_safety": 3.2,
+   "seconds": 22.5
   },
   "ankle_bracket": {
    "loaded_by": "l_ankle_roll (parent frame)",
-   "elements": 104366,
-   "dof": 375972,
+   "elements": 104758,
+   "dof": 377148,
    "support_nodes": 980,
    "load_nodes": 3023,
    "instants": {
     "walking": 6810,
     "worst": 62520
    },
-   "walking_mpa_p99_9": 8.22,
-   "walking_mpa_max": 22.94,
-   "worst_mpa_p99_9": 23.75,
-   "worst_mpa_max": 68.66,
-   "fatigue_safety": 1.8,
-   "static_safety": 2.1,
-   "seconds": 86.0
+   "walking_mpa_p99_9": 6.17,
+   "walking_mpa_max": 16.72,
+   "worst_mpa_p99_9": 16.54,
+   "worst_mpa_max": 48.8,
+   "fatigue_safety": 2.4,
+   "static_safety": 3.0,
+   "seconds": 49.1
   },
   "foot": {
    "loaded_by": "l_ankle_roll (child frame)",
@@ -138,8 +138,8 @@
    "worst_mpa_max": 11.15,
    "fatigue_safety": 4.8,
    "static_safety": 6.6,
-   "seconds": 104.5
+   "seconds": 55.2
   }
  },
- "seconds": 642.6
+ "seconds": 383.1
 }

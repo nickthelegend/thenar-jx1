@@ -24,15 +24,17 @@
 ## New: JX0, the small STS3215 humanoid you can build now
 
 <p align="center">
-  <a href="jx0/README.md"><img src="jx0/docs/images/jx0_cover.png" alt="JX0 v0.3: SolidWorks front and back views, and the simulated robot walking with its arms swinging" width="800"></a>
+  <a href="jx0/README.md"><img src="jx0/docs/images/jx0_cover.png" alt="JX0 v0.4: SolidWorks front and back views with double-sided leg joints, and the simulated robot walking with its arms swinging" width="800"></a>
 </p>
 
-JX1's parts cost about ₹7 lakh. **[JX0](jx0/README.md)** is the small version you can build now: 54 cm tall, printed
-in pastel green, **every one of its 17 joints a Feetech STS3215 12 V servo**, styled after a friend's working robot. It
-**walks with its arms swinging, takes a push, and talks (Claude)**, for **₹58,548** in parts. It uses the same design
-pipeline as JX1:
+JX1's parts cost about ₹7 lakh. **[JX0](jx0/README.md)** is the small version you can build now: 46 cm tall, printed
+in pastel green, **every one of its 17 joints a Feetech STS3215 12 V servo**, styled after a friend's working robot,
+with the same **double-sided leg joints** (every leg servo held on its horn and its rear hub by a U-bracket). It
+**walks with its arms swinging, stays up through hard pushes, and talks (Claude)**, for **₹58,234** in parts. It uses
+the same design pipeline as JX1:
 - the SolidWorks CAD is built by script;
 - the servo sizing passes;
+- every printed leg part passes a finite-element check under the simulated walking and push loads;
 - all 14 walking gaits pass in simulation;
 - the robot's own program runs on the simulated robot.
 
