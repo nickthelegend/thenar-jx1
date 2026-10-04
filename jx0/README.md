@@ -36,8 +36,8 @@
 <p align="center">
   <img src="docs/images/jx0_cad_timelapse.webp" alt="SolidWorks timelapse: the JX0 parts built feature by feature, then the assembly" width="520"><br>
   <sub>Built in SolidWorks by script (<code>cad/build_cad.py</code>, <code>cad/build_assembly.py</code>). Timelapses:
-  <a href="../media/jx0_cad_timelapse_v03.mp4">v0.3 (63 s)</a> ·
-  <a href="../media/jx0_cad_timelapse.mp4">every version, from the first parts (99 s)</a>.</sub>
+  <a href="../media/jx0_cad_timelapse_v03.mp4">v0.3 (81 s)</a> ·
+  <a href="../media/jx0_cad_timelapse.mp4">every version, from the first parts (117 s)</a>.</sub>
 </p>
 
 ## The reference robot
@@ -55,7 +55,7 @@ takes a shove, and knocks over a bottle on the way. JX0 matches that:
 | soft rounded head with four holes | rounded head, narrower at the chin, four holes in a diamond (the microphone listens through them) |
 | shoulder cradle holding a servo, flat tapered arm | shoulder STS3215 in the chest cap, cradle holding the elbow STS3215, flat tapered blade |
 | round-ended leg plates, cross-pattern horn screws | the same, on JX0's verified 6-DOF legs |
-| walks with the arms swinging, takes a shove | gaits verified with a 1.6× counter-swing; survives a 0.7 N·s side push mid-walk in simulation (see below) |
+| walks with the arms swinging, takes a shove | gaits verified with a 1.6× counter-swing; shrugs off light taps, firmer shoves only sometimes (see [verification](results/verification.md)) |
 | runs off a 12.6 V bench supply | 3S LiPo, or a 12.6 V bench supply on the same XT60 |
 
 ## Honest status
@@ -63,16 +63,21 @@ takes a shove, and knocks over a bottle on the way. JX0 matches that:
 | | Status |
 |---|---|
 | SolidWorks CAD: 20 printed parts + all 17 servos in the assembly | **done**, every part rebuilt by script, one body each, no errors |
+| Parts colliding, standing or in motion (every gait frame and action, 1,373 poses) | **none** (after fixing 6 clashes the check found) |
 | Servo sizing (every leg joint, 5 gaits + static cases), 2.43 kg robot | **passes**; the tightest is hip roll with a 1.70× margin |
 | Walking in simulation, on the CAD masses and a servo model | **14 of 14 gaits pass** with arm swing (forward 0.067 m/s, backward, turns, side-steps) |
-| Push recovery in simulation (sideways shove on the torso mid-walk) | survives **0.72 N·s** (a light tap; it tilts 10° and walks on); falls at 1.08 N·s. The reference robot takes harder shoves, so stepping to catch itself is the next controller upgrade |
-| Robot program (voice, Claude brain, walking, gestures) | **written and run in simulation**; not yet on hardware |
+| Walking when the real robot differs from the model (servo stiffness, latency, backlash, IMU noise, mass, friction, slope) | **97 %** of 140 random walks (latency up to 20 ms); 86 % even with 40 ms latency |
+| The whole robot program, an 8-action mission, random realistic errors | **24 of 24** completed without a fall |
+| Pushes mid-walk | a light tap (0.24 N·s) **never** knocks it over; a firm shove (0.48 N·s) does about a third of the time |
+| Robot program (voice, Claude brain, walking, gestures) | **written, unit-tested (19 tests) and run in simulation**; not yet on hardware |
 | Parts list | ₹58,548; STS3215 price and stock (48) checked 2026-10-04 |
 | Physical robot | **not built yet**: this is what the funding is for |
 
-Unverified until the robot is built, and the first things to check: the servo stiffness setting, the M2 screw fit in
-the printed holes, the I2S audio overlay, and battery life (about 1 h of walking, ESTIMATED from the 7–19 W the
-reference robot drew on its bench supply).
+All of it is in the **[verification report](results/verification.md)**: what was checked, what it found and fixed, and
+the honest limits (`python jx0/verify/run_all.py` re-runs everything in about 15 minutes). Unverified until the robot
+is built, and the first things to check: the servo stiffness setting, the M2 screw fit in the printed holes and the
+I2S audio overlay. Battery life is about 70 minutes of walking (CALCULATED: 1.5 A average; the model matches the
+reference robot's measured 0.6–1.5 A).
 
 ## What it can do
 
@@ -88,7 +93,7 @@ reference robot drew on its bench supply).
 
 | | |
 |---|---|
-| Height, mass | 53.7 cm, 2.43 kg (CAD) |
+| Height, mass | 54.2 cm, 2.43 kg (CAD) |
 | Joints | 17 Feetech STS3215 12 V serial bus servos: 6 per leg, shoulder pitch and elbow per arm, neck yaw |
 | Brain | Raspberry Pi 4 (2 GB): gaits at 50 Hz, MPU6050 balance, Vosk speech recognition, Piper voice, Claude over Wi-Fi |
 | Power | 3S 2200 mAh LiPo straight to the servo bus (12 V servos); a 5 V UBEC for the Pi; or a 12.6 V bench supply |
@@ -149,17 +154,20 @@ It needs an `ANTHROPIC_API_KEY`. Without one, you can still run three things:
 | Design point: sizes, masses, joint ranges | [design_point.yaml](design_point.yaml) | every value labelled VERIFIED / CALCULATED / ESTIMATED / ASSUMED |
 | Servo sizing | [analysis/sizing.py](analysis/sizing.py) → [results/sizing.md](results/sizing.md) | peak ×1.5 ≤ stall, RMS ×1.3 ≤ rated, inside the torque-speed line: **all pass** |
 | CAD | [cad/geometry.py](cad/geometry.py) → SolidWorks by script | 20 printed parts, assembly with all 17 servos, masses fed back into the design point |
-| Walking | [sim/walk_jx0.py](sim/walk_jx0.py) → [results/walking.json](results/walking.json) | 14/14 gaits with arm swing: tilt ≤ 1.0°, final position error ≤ 7 mm, servo peaks ≤ 78 % of stall |
-| Push recovery | [sim/walk_jx0.py](sim/walk_jx0.py) → `walking.json` `push_test` | survives 0.72 N·s mid-walk, falls at 1.08 N·s |
-| Whole robot program | [sim/demo_jx0.py](sim/demo_jx0.py) | every action runs on the simulated robot; it takes a 0.72 N·s side push and kicks a bottle over |
+| Walking | [sim/walk_jx0.py](sim/walk_jx0.py) → [results/walking.json](results/walking.json) | 14/14 gaits with arm swing at 100 Hz: tilt ≤ 0.9°, final position error ≤ 8 mm, servo peaks ≤ 56 % of stall |
+| Collisions | [verify/verify_cad.py](verify/verify_cad.py) | 0 clashes in 666 part pairs and 1,373 moving poses; joint limits inside the collision-free ranges |
+| Robustness | [verify/robustness.py](verify/robustness.py) | 97 % of walks with random model errors; 24/24 whole-program missions; pushes: 100 % at 0.24 N·s, 62 % at 0.48 N·s |
+| Power and timing | [verify/verify_power.py](verify/verify_power.py) | 1.5 A walking (≈ 70 min per charge), 2.1 A peak; the 100 Hz loop uses ~2 of 10 ms on a Pi 4 |
+| Software | [software/tests](software/tests/test_jx0bot.py) | 19 unit tests: servo protocol bytes vs the Feetech manual, config, gait files, Claude tool loop |
+| Whole robot program | [sim/demo_jx0.py](sim/demo_jx0.py) | every action runs on the simulated robot; it takes a light side push and kicks a bottle over |
 
 | Gait | Speed | Distance plan → sim | Heading error | Max tilt | Peak servo load |
 |---|---|---|---|---|---|
-| forward (10 steps) | 0.067 m/s | 0.340 → 0.338 m | 0.0° | 0.9° | 78 % |
-| forward slow | 0.050 m/s | 0.195 → 0.194 m | 0.0° | 0.9° | 76 % |
-| backward | 0.042 m/s | 0.163 → 0.156 m | 0.0° | 1.0° | 76 % |
-| turn left 70° / right 70° | — | — | −1.3° / +1.3° | 1.0° | 76 % |
-| side-step left | — | 0.075 → 0.074 m | +0.1° | 0.9° | 76 % |
+| forward (10 steps) | 0.067 m/s | 0.340 → 0.337 m | +0.1° | 0.9° | 56 % |
+| forward slow | 0.050 m/s | 0.195 → 0.194 m | +0.1° | 0.9° | 56 % |
+| backward | 0.042 m/s | 0.163 → 0.154 m | 0.0° | 0.9° | 56 % |
+| turn left 70° / right 70° | — | — | −1.8° / +2.0° | 0.9° | 56 % |
+| side-step left | — | 0.075 → 0.074 m | +0.2° | 0.9° | 56 % |
 
 ## Folder map
 

@@ -4,7 +4,7 @@
 bus:
   port: /dev/ttyUSB0          # Waveshare serial bus servo driver on USB (or /dev/serial0 on the Pi UART)
   baud: 1000000
-  rate_hz: 50                 # goal packets per second (the rate the gaits were verified at)
+  rate_hz: 100                # goal packets per second (the rate the gaits were verified at; 127-byte packets = 13 % of the bus)
   # servo stiffness/damping the walking simulation needs (N·m/rad, N·m·s/rad): set the STS3215 P/D registers so a
   # joint deflects ~2.8 deg at stall torque (calibrate.py stiffness measures it)
   stiffness_nm_per_rad: 60
@@ -12,20 +12,20 @@ bus:
 
 # STS3215 leg servos: bus ID, direction (+1 / -1: servo tick direction vs the joint sign — ALL PLACEHOLDERS until
 # calibrate.py directions checks each joint), zero_ticks (servo reading
-# with the joint at 0 rad — robot in the zero pose), limits from jx0/design_point.yaml
+# with the joint at 0 rad — robot in the zero pose), limits = the collision-free range from jx0/verify/verify_cad.py
 leg_servos:
   l_hip_yaw:     {id: 1,  direction: 1,  zero_ticks: 2048, limits_deg: [-30, 30]}
   l_hip_roll:    {id: 2,  direction: 1,  zero_ticks: 2048, limits_deg: [-20, 40]}
   l_hip_pitch:   {id: 3,  direction: 1,  zero_ticks: 2048, limits_deg: [-100, 30]}
-  l_knee:        {id: 4,  direction: 1,  zero_ticks: 2048, limits_deg: [0, 130]}
-  l_ankle_pitch: {id: 5,  direction: 1,  zero_ticks: 2048, limits_deg: [-60, 45]}
-  l_ankle_roll:  {id: 6,  direction: 1,  zero_ticks: 2048, limits_deg: [-25, 25]}
+  l_knee:        {id: 4,  direction: 1,  zero_ticks: 2048, limits_deg: [0, 120]}
+  l_ankle_pitch: {id: 5,  direction: 1,  zero_ticks: 2048, limits_deg: [-55, 15]}
+  l_ankle_roll:  {id: 6,  direction: 1,  zero_ticks: 2048, limits_deg: [-20, 20]}
   r_hip_yaw:     {id: 7,  direction: 1,  zero_ticks: 2048, limits_deg: [-30, 30]}
   r_hip_roll:    {id: 8,  direction: 1,  zero_ticks: 2048, limits_deg: [-40, 20]}
   r_hip_pitch:   {id: 9,  direction: 1,  zero_ticks: 2048, limits_deg: [-100, 30]}
-  r_knee:        {id: 10, direction: 1,  zero_ticks: 2048, limits_deg: [0, 130]}
-  r_ankle_pitch: {id: 11, direction: 1,  zero_ticks: 2048, limits_deg: [-60, 45]}
-  r_ankle_roll:  {id: 12, direction: 1,  zero_ticks: 2048, limits_deg: [-25, 25]}
+  r_knee:        {id: 10, direction: 1,  zero_ticks: 2048, limits_deg: [0, 120]}
+  r_ankle_pitch: {id: 11, direction: 1,  zero_ticks: 2048, limits_deg: [-55, 15]}
+  r_ankle_roll:  {id: 12, direction: 1,  zero_ticks: 2048, limits_deg: [-20, 20]}
 
 # arm and neck STS3215 on the same bus (IDs 13-17). Limits: the shoulder cradle and the blades clear the torso and the
 # legs over these ranges (jx0/design_point.yaml); directions are placeholders until calibrate.py directions
@@ -42,10 +42,7 @@ imu:
   address: 0x68
   mount: identity             # rotation from the sensor axes to the pelvis axes (x forward, y left, z up)
 
-balance:                      # the stabiliser the gaits were verified with (jx0/sim/walk_jx0.py)
-  k_ankle: 0.6
-  d_ankle: 0.05
-  k_hip: 0.3
+balance: {}                   # gain overrides for jx0bot/balance.py; empty = the verified defaults (balance.GAINS)
 
 voice:
   talk_button_gpio: 17        # push-to-talk button to GND (internal pull-up)

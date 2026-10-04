@@ -81,4 +81,5 @@ the first thing to measure on real hardware.
 4. If it tips, the program stops the gait by itself past 25° of tilt. Check the direction table and the IMU mounting
    (`imu.mount`) before trying again.
 5. When it walks reliably, try what the reference video shows: a gentle push from the side while it walks. In the
-   simulation it takes a 0.7 N·s shove (a light tap) and walks on, but falls at 1.1 N·s, so keep your hand ready.
+   simulation a light tap (0.24 N·s) never knocks it over, but a firm shove (0.48 N·s) does about a third of the time,
+   so keep your hand ready (results/verification.md).

@@ -19,6 +19,8 @@ from pathlib import Path
 
 import yaml
 
+from .balance import Balance
+
 HERE = Path(__file__).resolve().parent
 LEG = ["hip_yaw", "hip_roll", "hip_pitch", "knee", "ankle_pitch", "ankle_roll"]
 LEG_JOINTS = [f"{s}_{j}" for s in "lr" for j in LEG]
@@ -173,8 +175,11 @@ class Robot:
         f = self.gaits["forward_2"]
         self.stand_pose = {k: v for k, v in zip(f["joints"], f["q"][0]) if k in LEG_JOINTS}   # walking stance, knees bent
         self.q = {**{j: 0.0 for j in LEG_JOINTS + ARM_JOINTS}, **REST_ARMS}
-        self.bal = cfg["balance"]
+        self.bal = cfg.get("balance") or None          # gain overrides; defaults in balance.GAINS
         self.dt = 1.0 / cfg["bus"]["rate_hz"]
+        for name, g in self.gaits.items():          # the gaits were verified at the bus rate: refuse a mismatch
+            if abs(g["dt"] - self.dt) > 1e-9:
+                raise ValueError(f"gait {name} is {1 / g['dt']:.0f} Hz but bus.rate_hz is {cfg['bus']['rate_hz']}")
         self.busy = threading.Lock()
 
     # ---------------------------------------------------------------- low level
@@ -198,18 +203,16 @@ class Robot:
         self.move_to({**self.stand_pose, **REST_ARMS, "neck_yaw": 0.0}, seconds)
 
     def play(self, name: str):
-        """Play one verified gait (legs and arm swing) at 50 Hz with the IMU stabiliser on the stance leg(s)."""
+        """Play one verified gait (legs and arm swing) at 50 Hz with the balance controller (balance.py): ankle and hip
+        corrections on the stance leg, a stepping reflex on the swing leg."""
         g = self.gaits[name]
-        joints, k_a, d_a, k_h = g["joints"], self.bal["k_ankle"], self.bal["d_ankle"], self.bal["k_hip"]
+        joints = g["joints"]
+        bal = Balance(self.bal, dt=self.dt)
         for frame, stance in zip(g["q"], g["stance"]):
             roll, pitch, _, rate = self.io.attitude()
             q = dict(zip(joints, frame))
-            for side, on in (("l", stance[0]), ("r", stance[1])):
-                if on:
-                    q[f"{side}_ankle_pitch"] += k_a * pitch + d_a * rate[1]
-                    q[f"{side}_ankle_roll"] += k_a * roll + d_a * rate[0]
-                    q[f"{side}_hip_pitch"] += k_h * pitch
-                    q[f"{side}_hip_roll"] += k_h * roll
+            for k, v in bal.update(roll, pitch, rate[0], rate[1], stance).items():
+                q[k] += v
             self._send(q)
             if abs(roll) > math.radians(25) or abs(pitch) > math.radians(25):
                 raise RuntimeError("tipping over: stopped the gait")
@@ -218,8 +221,8 @@ class Robot:
     # ---------------------------------------------------------------- actions (the brain's tools)
     def walk(self, steps: int, direction: str = "forward") -> str:
         steps = max(1, min(10, int(steps)))
-        if direction == "forward":             # verified blocks: forward (10 steps), forward_4, forward_2
-            plan = ["forward"] if steps >= 10 else ["forward_4"] * (steps // 4) + ["forward_2"] * ((steps % 4 + 1) // 2)
+        if direction == "forward":             # 4- and 2-step blocks: each ends standing, which resets small errors
+            plan = ["forward_4"] * (steps // 4) + ["forward_2"] * ((steps % 4 + 1) // 2)   # (100 % vs 90 % for one long walk)
         elif direction == "backward":
             plan = ["backward_4"] * (steps // 4) + ["backward_2"] * ((steps % 4 + 1) // 2)
         else:                                  # side-steps come in pairs

@@ -28,12 +28,14 @@ ZY = 30.0          # hip-yaw horn face above the hip centre
 THIGH, SHIN = 100.0, 100.0
 HIP_Y = 45.0       # half hip spacing
 XR = -15.0         # hip-roll horn face (servo behind the hip centre, horn facing +x)
-XA = -18.0         # ankle-roll horn face (servo behind the ankle centre, horn facing +x)
+XA = -20.0         # ankle-roll horn face (servo behind the ankle centre, horn facing +x); the foot upright on it keeps
+                   # 1 mm clear of the ankle-pitch servo's case corner (r 16.0 mm) at every toes-up angle (verify_cad)
 SOLE_TO_ANKLE, FOOT_X, FOOT_W = 35.0, (-62.0, 58.0), 70.0
 # torso: octagonal prism, half depth TD (x) and half width TW (y), vertical edges chamfered TCH, split at TZS into the
 # lower shell and the chest cap; walls TWALL
 TD, TW, TCH, TWALL = 42.0, 60.0, 16.0, 2.5
-TZ0, TZS, TZT, TOP_CH = 68.625, 168.0, 205.0, 8.0
+TZ0, TZS, TZT, TOP_CH = 68.625, 168.0, 210.0, 8.0     # cap tall enough that the thickened wall under the top chamfer
+                                                     # clears the shoulder servos (verify_cad)
 # shoulder pitch: horn face just proud of the torso side wall, axis 12.5 mm forward of the torso centre
 SHOULDER = (12.5, TW - TWALL + (ST["HORN_FACE"] - ST["CASE"] / 2), 186.0)
 UA_L = 52.0                                                         # shoulder pitch axis to elbow axis
@@ -232,7 +234,7 @@ def hip_roll_bracket():
     yr = -(ST["HORN_FACE"] - (ST["HORN_FACE"] - ST["CASE"] / 2))                         # pitch servo rear face = -16
     p = [("box", (XR, XR + T), (-17.5, 17.5), (-15.0, 15.0)),                            # plate on the roll horn (clears the thigh)
          ("box", (XR + 0.5, 38.0), (yr - T, yr), (-15.0, 15.0)),                         # rear plate of the pitch servo
-         ("box", (XR + 0.5, XR + 12.0), (yr - T + 0.5, -2.0), (-15.0, -12.0))]           # gusset
+         ("box", (XR + 0.5, XR + 12.0), (yr - T + 0.5, -2.0), (-15.0, -12.8))]           # gusset (clear of the pitch servo case)
     p += horn_holes("x", (0.0, 0.0), (XR - 0.1, XR + T + 0.1))
     p += rear_face_mount("y", (0.0, 0.0), (0, 1), (1, 1), (yr - T - 0.1, yr + 0.1))
     return p
@@ -269,7 +271,8 @@ def ankle_bracket():
     y0 = ST["HORN_FACE"]
     xa_rear = XA - (ST["HORN_FACE"] - ST["CASE"] / 2) - ST["CASE"]                     # roll servo rear face = -52.625
     p = [("box", (xa_rear - T, 14.0), (y0, y0 + T), (-15.0, 15.0)),                     # side plate on the pitch horn
-         ("box", (xa_rear - T, xa_rear), (-38.0, y0 + 0.5), (-15.0, 15.0)),              # rear plate (roll servo mount)
+         ("box", (xa_rear - T, xa_rear), (-35.5, y0 + 0.5), (-15.0, 15.0)),              # rear plate (roll servo mount; short
+                                                                                          # inboard end: clears the other ankle)
          ("box", (xa_rear - 0.5, -24.0), (y0 - 3.0, y0 + 0.5), (-15.0, -12.0))]          # gusset
     p += horn_holes("y", (0.0, 0.0), (y0 - 0.1, y0 + T + 0.1))
     p += rear_face_mount("x", (0.0, 0.0), (0, -1), (1, 1), (xa_rear - T - 0.1, xa_rear + 0.1))
@@ -280,11 +283,11 @@ def foot():
     """Sole plate + an upright that bolts to the ankle-roll horn (x = XA). Symmetric: one part for both feet."""
     zs = -SOLE_TO_ANKLE
     p = [("box", FOOT_X, (-FOOT_W / 2, FOOT_W / 2), (zs, zs + 6.0)),                     # sole plate
-         ("box", (XA, XA + T), (-15.0, 15.0), (zs + 5.5, 12.0)),                         # upright on the roll horn
-         ("box", (XA + 2.5, XA + 6.0), (-15.0, 15.0), (zs + 5.5, -20.0))]                # heel block
+         ("box", (XA, XA + T), (-12.0, 12.0), (zs + 5.5, 12.0)),                         # upright on the roll horn (24 wide:
+         ("box", (XA + 2.5, XA + 6.0), (-12.0, 12.0), (zs + 5.5, -20.0))]                # heel block   clears the ankle bracket to ~24 deg roll)
     p += horn_holes("x", (0.0, 0.0), (XA - 0.1, XA + T + 0.1))
-    for x in (-50.0, -20.0, 20.0, 45.0):
-        p.append(("hole", "z", (x, 0.0), 12.0, (zs - 0.1, zs + 6.1)))                   # lightening
+    for x in (-42.0, 10.0, 36.0):                                                        # lightening, clear of the upright
+        p.append(("hole", "z", (x, 0.0), 12.0, (zs - 0.1, zs + 6.1)))
     for xc, yc, du, dv in ((FOOT_X[1], FOOT_W / 2, -1, -1), (FOOT_X[1], -FOOT_W / 2, -1, 1),
                            (FOOT_X[0], FOOT_W / 2, 1, -1), (FOOT_X[0], -FOOT_W / 2, 1, 1)):
         p.append(("pcut", "z", corner_cut((xc, yc), (du, dv), 12.0), (zs - 0.1, zs + 6.1)))   # rounded corners

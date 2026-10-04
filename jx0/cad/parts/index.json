@@ -122,18 +122,18 @@
    15.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 6.8,
-  "solid_mass_g_petg": 8.6,
-  "printed_mass_g": 4.8,
+  "volume_cm3": 6.7,
+  "solid_mass_g_petg": 8.5,
+  "printed_mass_g": 4.7,
   "features": 13,
   "triangles": 1154,
   "com_mm": [
-   1.88,
+   2.02,
    -9.33,
-   -0.75
+   -0.58
   ],
   "quantity": 1,
-  "build_s": 26.7
+  "build_s": 28.7
  },
  "JX0_HipRollBracket_R": {
   "part": "JX0_HipRollBracket_R",
@@ -156,18 +156,18 @@
    15.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 6.8,
-  "solid_mass_g_petg": 8.6,
-  "printed_mass_g": 4.8,
+  "volume_cm3": 6.7,
+  "solid_mass_g_petg": 8.5,
+  "printed_mass_g": 4.7,
   "features": 13,
   "triangles": 1154,
   "com_mm": [
-   1.88,
+   2.02,
    9.33,
-   -0.75
+   -0.58
   ],
   "quantity": 1,
-  "build_s": 27.0
+  "build_s": 26.6
  },
  "JX0_Thigh_L": {
   "part": "JX0_Thigh_L",
@@ -310,68 +310,68 @@
   "bodies": 1,
   "errors": [],
   "bbox_mm": [
-   -55.62,
-   -38.0,
+   -57.62,
+   -35.5,
    -15.0,
    14.0,
    21.62,
    15.0
   ],
   "bbox_expected_mm": [
-   -55.62,
-   -38.0,
+   -57.62,
+   -35.5,
    -15.0,
    14.0,
    21.62,
    15.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 10.28,
-  "solid_mass_g_petg": 13.1,
+  "volume_cm3": 10.25,
+  "solid_mass_g_petg": 13.0,
   "printed_mass_g": 7.2,
   "features": 13,
   "triangles": 1122,
   "com_mm": [
-   -34.23,
-   7.68,
-   -0.34
+   -34.94,
+   8.89,
+   -0.36
   ],
   "quantity": 1,
-  "build_s": 27.0
+  "build_s": 24.0
  },
  "JX0_AnkleBracket_R": {
   "part": "JX0_AnkleBracket_R",
   "bodies": 1,
   "errors": [],
   "bbox_mm": [
-   -55.62,
+   -57.62,
    -21.62,
    -15.0,
    14.0,
-   38.0,
+   35.5,
    15.0
   ],
   "bbox_expected_mm": [
-   -55.62,
+   -57.62,
    -21.62,
    -15.0,
    14.0,
-   38.0,
+   35.5,
    15.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 10.28,
-  "solid_mass_g_petg": 13.1,
+  "volume_cm3": 10.25,
+  "solid_mass_g_petg": 13.0,
   "printed_mass_g": 7.2,
   "features": 13,
   "triangles": 1122,
   "com_mm": [
-   -34.23,
-   -7.68,
-   -0.34
+   -34.94,
+   -8.89,
+   -0.36
   ],
   "quantity": 1,
-  "build_s": 26.8
+  "build_s": 27.4
  },
  "JX0_Foot": {
   "part": "JX0_Foot",
@@ -394,18 +394,18 @@
    12.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 51.29,
-  "solid_mass_g_petg": 65.1,
-  "printed_mass_g": 35.8,
-  "features": 16,
-  "triangles": 1088,
+  "volume_cm3": 51.07,
+  "solid_mass_g_petg": 64.9,
+  "printed_mass_g": 35.7,
+  "features": 15,
+  "triangles": 980,
   "com_mm": [
-   -3.22,
+   -3.21,
    0.0,
-   -30.29
+   -30.64
   ],
   "quantity": 2,
-  "build_s": 32.7
+  "build_s": 29.8
  },
  "JX0_Torso": {
   "part": "JX0_Torso",
@@ -485,7 +485,7 @@
    168.0,
    42.0,
    60.0,
-   205.0
+   210.0
   ],
   "bbox_expected_mm": [
    -42.0,
@@ -493,21 +493,21 @@
    168.0,
    42.0,
    60.0,
-   205.0
+   210.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 67.62,
-  "solid_mass_g_petg": 85.9,
-  "printed_mass_g": 47.2,
+  "volume_cm3": 74.53,
+  "solid_mass_g_petg": 94.6,
+  "printed_mass_g": 52.1,
   "features": 58,
-  "triangles": 4728,
+  "triangles": 4712,
   "com_mm": [
-   -0.89,
+   -0.81,
    -0.01,
-   192.52
+   195.52
   ],
   "quantity": 1,
-  "build_s": 124.2
+  "build_s": 154.4
  },
  "JX0_UpperArm_L": {
   "part": "JX0_UpperArm_L",

@@ -36,7 +36,7 @@
       <site name="imu" pos="0 0 0.03" size="0.005" group="4"/>
       <body name="torso" pos="0 0 0">
         <inertial pos="0 0 0.146" mass="0.8100" diaginertia="0.00384075 0.003132 0.00157275"/>
-        <geom type="mesh" mesh="m_JX0_Torso" pos="0 0 0" quat="1 0 0 0" rgba=".74 .86 .58 1" contype="0" conaffinity="0"/><geom type="mesh" mesh="m_JX0_ChestCap" pos="0 0 0" quat="1 0 0 0" rgba=".74 .86 .58 1" contype="0" conaffinity="0"/><geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="0 0 0.221" quat="0.707107 0 0 0.707107" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/><geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="0.0125 0.0415 0.186" quat="0 0 0.707107 0.707107" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/><geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="0.0125 -0.0415 0.186" quat="0 0 -0.707107 0.707107" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/>
+        <geom type="mesh" mesh="m_JX0_Torso" pos="0 0 0" quat="1 0 0 0" rgba=".74 .86 .58 1" contype="0" conaffinity="0"/><geom type="mesh" mesh="m_JX0_ChestCap" pos="0 0 0" quat="1 0 0 0" rgba=".74 .86 .58 1" contype="0" conaffinity="0"/><geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="0 0 0.226" quat="0.707107 0 0 0.707107" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/><geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="0.0125 0.0415 0.186" quat="0 0 0.707107 0.707107" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/><geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="0.0125 -0.0415 0.186" quat="0 0 -0.707107 0.707107" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/>
         <body name="l_upper_arm" pos="0.0125 0.060125 0.186">
   <inertial pos="0 0.019 -0.038" mass="0.1" diaginertia="4e-5 4e-5 1.5e-5"/>
   <joint name="l_shoulder_pitch" axis="0 1 0" range="-3.1416 1.0472" damping="0.01" armature="0.005"/>
@@ -59,7 +59,7 @@
     <site name="r_hand" pos="0 0 -0.095" size="0.005" group="4"/>
   </body>
 </body>
-        <body name="head" pos="0 0 0.239625">
+        <body name="head" pos="0 0 0.244625">
           <inertial pos="0 0 0.031" mass="0.072" diaginertia="4e-5 4e-5 4e-5"/>
           <joint name="neck_yaw" axis="0 0 1" range="-1.3963 1.3963" damping="0.01" armature="0.0005"/>
           <geom type="mesh" mesh="m_JX0_Head" pos="0 0 0" quat="1 0 0 0" rgba=".74 .86 .58 1" contype="0" conaffinity="0"/>
@@ -82,17 +82,17 @@
 <geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="0 0.002625 -0.1" quat="0.5 0.5 -0.5 0.5" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/>
 <body name="l_shin" pos="0 0 -0.1">
 <inertial pos="0 0 -0.0901418" mass="0.194" diaginertia="9.32513e-05 7.68419e-05 4.60656e-05"/>
-<joint name="l_knee" axis="0 1 0" range="0.000000 2.268928" armature="0.005" damping="0.01"/>
+<joint name="l_knee" axis="0 1 0" range="0.000000 2.094395" armature="0.005" damping="0.01"/>
 <geom type="mesh" mesh="m_JX0_Shin_L" pos="0 0 0" quat="1 0 0 0" rgba=".74 .86 .58 1" contype="0" conaffinity="0"/>
 <geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="0 0 -0.1" quat="-0.5 0.5 0.5 0.5" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/>
 <body name="l_ankle_cross" pos="0 0 -0.1">
 <inertial pos="0 0 0" mass="0.011" diaginertia="1.65e-06 1.65e-06 1.65e-06"/>
-<joint name="l_ankle_pitch" axis="0 1 0" range="-1.047198 0.785398" armature="0.005" damping="0.01"/>
+<joint name="l_ankle_pitch" axis="0 1 0" range="-0.959931 0.261799" armature="0.005" damping="0.01"/>
 <geom type="mesh" mesh="m_JX0_AnkleBracket_L" pos="0 0 0" quat="1 0 0 0" rgba=".74 .86 .58 1" contype="0" conaffinity="0"/>
-<geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="-0.036625 0 0" quat="-0.5 0.5 -0.5 0.5" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/>
+<geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="-0.038625 0 0" quat="-0.5 0.5 -0.5 0.5" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/>
 <body name="l_foot" pos="0 0 0">
 <inertial pos="0.01 0 -0.03" mass="0.044" diaginertia="2.12667e-05 5.61e-05 7.07667e-05"/>
-<joint name="l_ankle_roll" axis="1 0 0" range="-0.436332 0.436332" armature="0.005" damping="0.01"/>
+<joint name="l_ankle_roll" axis="1 0 0" range="-0.349066 0.349066" armature="0.005" damping="0.01"/>
 <geom type="mesh" mesh="m_JX0_Foot" pos="0 0 0" quat="1 0 0 0" rgba=".74 .86 .58 1" contype="0" conaffinity="0"/>
 <geom name="l_foot_geom" type="box" size="0.06 0.035 0.001" pos="-0.002 0 -0.034" rgba=".08 .08 .08 1"/>
 <site name="l_sole" pos="0 0 -0.035" size="0.005" group="4"/>
@@ -114,17 +114,17 @@
 <geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="0 -0.002625 -0.1" quat="-0.5 0.5 0.5 0.5" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/>
 <body name="r_shin" pos="0 0 -0.1">
 <inertial pos="0 -0 -0.0901418" mass="0.194" diaginertia="9.32513e-05 7.68419e-05 4.60656e-05"/>
-<joint name="r_knee" axis="0 1 0" range="0.000000 2.268928" armature="0.005" damping="0.01"/>
+<joint name="r_knee" axis="0 1 0" range="0.000000 2.094395" armature="0.005" damping="0.01"/>
 <geom type="mesh" mesh="m_JX0_Shin_R" pos="0 0 0" quat="1 0 0 0" rgba=".74 .86 .58 1" contype="0" conaffinity="0"/>
 <geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="0 0 -0.1" quat="0.5 0.5 -0.5 0.5" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/>
 <body name="r_ankle_cross" pos="0 0 -0.1">
 <inertial pos="0 -0 0" mass="0.011" diaginertia="1.65e-06 1.65e-06 1.65e-06"/>
-<joint name="r_ankle_pitch" axis="0 1 0" range="-1.047198 0.785398" armature="0.005" damping="0.01"/>
+<joint name="r_ankle_pitch" axis="0 1 0" range="-0.959931 0.261799" armature="0.005" damping="0.01"/>
 <geom type="mesh" mesh="m_JX0_AnkleBracket_R" pos="0 0 0" quat="1 0 0 0" rgba=".74 .86 .58 1" contype="0" conaffinity="0"/>
-<geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="-0.036625 0 0" quat="0.5 0.5 0.5 0.5" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/>
+<geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="-0.038625 0 0" quat="0.5 0.5 0.5 0.5" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/>
 <body name="r_foot" pos="0 0 0">
 <inertial pos="0.01 -0 -0.03" mass="0.044" diaginertia="2.12667e-05 5.61e-05 7.07667e-05"/>
-<joint name="r_ankle_roll" axis="1 0 0" range="-0.436332 0.436332" armature="0.005" damping="0.01"/>
+<joint name="r_ankle_roll" axis="1 0 0" range="-0.349066 0.349066" armature="0.005" damping="0.01"/>
 <geom type="mesh" mesh="m_JX0_Foot" pos="0 0 0" quat="1 0 0 0" rgba=".74 .86 .58 1" contype="0" conaffinity="0"/>
 <geom name="r_foot_geom" type="box" size="0.06 0.035 0.001" pos="-0.002 0 -0.034" rgba=".08 .08 .08 1"/>
 <site name="r_sole" pos="0 0 -0.035" size="0.005" group="4"/>

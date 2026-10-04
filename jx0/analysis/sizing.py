@@ -30,7 +30,7 @@ from run_leg_analysis import static_case  # noqa: E402
 
 DESIGN = ROOT / "jx0" / "design_point.yaml"
 OUT = ROOT / "jx0" / "results"
-H = 0.222                                   # walking hip height: knees bent ~40 deg (leg length 0.235 m)
+H = 0.215                                   # walking hip height (as jx0/sim/walk_jx0.py): knees bent ~45 deg
 POLICY = {"dynamic_peak_factor": 1.5, "static_peak_factor": 1.25, "continuous_factor": 1.3, "torque_speed_factor": 1.5}
 
 
@@ -41,7 +41,7 @@ def gaits():
         return H - sqA * 0.5 * (1 - np.cos(2 * np.pi * (t - sq0) / sqT)) if sq0 <= t <= sq0 + sqT else H
     # Hobby servos are slow (no-load ~4.7 rad/s at 7.4 V): a 0.4 s step needs ~7 rad/s at the knee, so JX0 walks with
     # 0.55-0.6 s steps and 1.5 cm foot lift (sweep 2026-09-24: 5 cm / 0.6 s already reaches 96 % of the torque-speed line)
-    common = dict(zmp_offset_x=0.005, hip_height=H, ds_ratio=0.25, step_height=0.015)
+    common = dict(zmp_offset_x=0.005, hip_height=H, ds_ratio=0.25, step_height=0.015)   # as walk_jx0
     return [
         GaitParams("walk_slow_0.05ms", step_length=0.030, step_time=0.60, n_steps=8, **common),
         GaitParams("walk_nominal_0.067ms", step_length=0.040, step_time=0.60, n_steps=10, **common),

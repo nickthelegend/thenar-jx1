@@ -26,12 +26,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from jx1calc.design import Design, LEG_JOINTS  # noqa: E402
 from jx1calc.gait import GaitParams, synthesize  # noqa: E402
 from jx0_model import ARM_JOINTS, DESIGN, build  # noqa: E402
+sys.path.insert(0, str(ROOT / "jx0" / "software"))
+from jx0bot.balance import GAINS, Balance  # noqa: E402  (the robot's own balance controller)
 
 OUT = ROOT / "jx0" / "results"
 IMG = OUT / "images"
 GAIT_DIR = ROOT / "jx0" / "software" / "jx0bot" / "gaits"
-H = 0.222
+H = 0.215                  # walking hip height: a little more crouched than 0.222 survives model errors better (verify)
 COMMON = dict(zmp_offset_x=0.005, hip_height=H, ds_ratio=0.25, step_height=0.015, t_start=0.8, t_end=1.0)
+BUS_HZ = 100.0             # goal packets per second: 100 Hz halves the hold-and-delay of 50 Hz (jx0/verify/robustness.py)
 GAITS = {
     "forward": dict(step_length=0.040, step_time=0.60, n_steps=10),
     "forward_slow": dict(step_length=0.030, step_time=0.60, n_steps=8),
@@ -60,7 +63,7 @@ def arm_goals(q_row, q_first, adr):
         qa = adr[f"{o}_hip_pitch"][0]
         out[f"{s}_shoulder_pitch"] = ARM_POSE[f"{s}_shoulder_pitch"] + K_SWING * float(q_row[qa] - q_first[qa])
     return out
-K_ANKLE, D_ANKLE, K_HIP = 0.6, 0.05, 0.3          # stabiliser (rad per rad of tilt, per rad/s) — as JX1
+K_ANKLE, D_ANKLE, K_HIP = GAINS["ka"], GAINS["da"], GAINS["kh"]   # reported in walking.json
 
 
 def rpy(q):
@@ -86,7 +89,7 @@ def plan(model, design, name):
     return g, synthesize(model, design, g)
 
 
-def run(name, kp=60.0, kd=0.6, bus_hz=50.0, stabiliser=True, render=False, push=None):
+def run(name, kp=60.0, kd=0.6, bus_hz=BUS_HZ, stabiliser=True, render=False, push=None, gains=None):
     """push = (t_start s, force N toward the robot's left, duration s): a sideways shove on the torso, as in the
     reference video."""
     design = Design(DESIGN)
@@ -112,6 +115,7 @@ def run(name, kp=60.0, kd=0.6, bus_hz=50.0, stabiliser=True, render=False, push=
     dt, T = m.opt.timestep, float(t_ref[-1])
     period = max(1, int(round(1.0 / (bus_hz * dt))))
     goal = {n: float(d.qpos[adr[n][0]]) for n in jnames}
+    bal = Balance(gains, dt=1.0 / bus_hz)
     peak = {n: 0.0 for n in jnames}
     sat = {n: 0 for n in jnames}
     hist, frames, fell, trk = [], [], False, []
@@ -127,15 +131,7 @@ def run(name, kp=60.0, kd=0.6, bus_hz=50.0, stabiliser=True, render=False, push=
         roll, pitch, yaw = rpy(d.qpos[3:7])
         if k % period == 0:                                   # a new goal packet on the bus
             st = contact[min(i, len(contact) - 1)]
-            corr = {}
-            if stabiliser:
-                wx, wy = d.qvel[3], d.qvel[4]
-                for s, on in (("l", st[0]), ("r", st[1])):
-                    if on:
-                        corr[f"{s}_ankle_pitch"] = K_ANKLE * pitch + D_ANKLE * wy
-                        corr[f"{s}_ankle_roll"] = K_ANKLE * roll + D_ANKLE * wx
-                        corr[f"{s}_hip_pitch"] = K_HIP * pitch
-                        corr[f"{s}_hip_roll"] = K_HIP * roll
+            corr = bal.update(roll, pitch, d.qvel[3], d.qvel[4], st) if stabiliser else {}
             arms = arm_goals(q_ref[i], q_ref[0], adr)
             for n in jnames:
                 base = q_ref[i, adr[n][0]] if n.split("_", 1)[1] in LEG_JOINTS else arms.get(n, 0.0)
@@ -174,7 +170,7 @@ def run(name, kp=60.0, kd=0.6, bus_hz=50.0, stabiliser=True, render=False, push=
            "speed_m_s": round(abs(g.step_length) / g.step_time, 3),
            "servo_model": {"kp_nm_per_rad": kp, "kd_nm_s_per_rad": kd, "bus_hz": bus_hz, "stall_nm": leg_servo.stall,
                            "no_load_rad_s": leg_servo.w0, "label": "ASSUMED servo stiffness; datasheet stall/speed"},
-           "stabiliser": {"k_ankle": K_ANKLE, "d_ankle": D_ANKLE, "k_hip": K_HIP} if stabiliser else None,
+           "stabiliser": dict(bal.g) if stabiliser else None,
            "fell": fell, "duration_s": round(float(h[-1, 0]), 2), "planned_duration_s": round(T, 2),
            "distance_m": {"plan": round(dist_plan, 3), "sim": round(dist_sim, 3)}, "final_position_error_m": round(pos_err, 3),
            "heading_deg": {"plan": round(yaw_plan, 1), "error": round(head_err, 1)}, "max_tilt_deg": round(float(h[:, 7].max()), 1),
@@ -189,7 +185,7 @@ def run(name, kp=60.0, kd=0.6, bus_hz=50.0, stabiliser=True, render=False, push=
 def export_gait(name, g, res, adr):
     """The planned leg trajectory and the arm swing at 50 Hz in joint names/radians, for the robot (jx0bot.robot plays it)."""
     t, q, c = res["t"], res["qpos"], res["plan"].contact
-    step = max(1, int(round(0.02 / g.dt)))
+    step = max(1, int(round(1.0 / BUS_HZ / g.dt)))
     legs = [f"{s}_{j}" for s in "lr" for j in LEG_JOINTS]
     arm_names = [f"{s}_{j}" for s in "lr" for j in ARM_JOINTS]
     joints = legs + arm_names
@@ -236,17 +232,7 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     summary = {"generated_by": "jx0/sim/walk_jx0.py", "label": "CALCULATED (MuJoCo, servo model ASSUMED)", "gaits": results,
                "pass": all(r["pass"] for r in results.values())}
-    if a.gait == "all":                        # push recovery, like the hand in the reference video: a sideways shove
-        pushes = []                            # on the torso half way through the 10-step forward walk, 0.12 s long
-        for f in (6.0, 9.0, 12.0, 15.0, 18.0, 21.0):
-            out, _, _ = run("forward", kp=a.kp, stabiliser=not a.no_stabiliser, push=(4.0, f, 0.12))
-            pushes.append({"force_n": f, "impulse_ns": round(f * 0.12, 2), "fell": out["fell"], "max_tilt_deg": out["max_tilt_deg"],
-                           "pass": out["pass"]})
-            print(f"push {f:4.1f} N x 0.12 s = {f * 0.12:.2f} N.s  fell {out['fell']!s:5s} tilt {out['max_tilt_deg']:.1f} deg "
-                  f"-> {'PASS' if out['pass'] else 'FAIL'}", flush=True)
-        ok = [q["impulse_ns"] for q in pushes if q["pass"]]
-        summary["push_test"] = {"gait": "forward", "at_s": 4.0, "direction": "+y (toward the robot's left)", "results": pushes,
-                                "largest_survived_ns": max(ok) if ok else 0.0}
+    summary["push_recovery"] = "see jx0/results/verify_robustness.json (24 push timings x 2 directions)"
     if a.gait == "all":
         (OUT / "walking.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
     print("walking:", "PASS" if summary["pass"] else "FAIL", f"({sum(r['pass'] for r in results.values())}/{len(results)})")

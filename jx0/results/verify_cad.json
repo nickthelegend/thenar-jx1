@@ -1,0 +1,479 @@
+{
+ "clash_threshold_mm3": 1.0,
+ "static_zero_pose": {
+  "pairs_checked": 666,
+  "clashes": []
+ },
+ "static_walking_stance": {
+  "pairs_checked": 666,
+  "clashes": []
+ },
+ "motion": {
+  "poses_checked": 1373,
+  "clashes": []
+ },
+ "joint_sweeps": {
+  "l_hip_yaw": {
+   "limits_deg": [
+    -30,
+    30
+   ],
+   "stance_deg": -0.0,
+   "own_limb_clear_deg": [
+    -30.0,
+    30.0
+   ],
+   "gaits_use_deg": [
+    -5.0,
+    5.0
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {
+    "-30.0": [
+     "foot_L",
+     "foot_R",
+     156.9
+    ],
+    "-28.0": [
+     "foot_L",
+     "foot_R",
+     63.4
+    ],
+    "-26.0": [
+     "foot_L",
+     "foot_R",
+     2.6
+    ],
+    "24.0": [
+     "hip_yaw_L",
+     "servo_hip_roll_R",
+     50.3
+    ],
+    "26.0": [
+     "hip_yaw_L",
+     "servo_hip_roll_R",
+     138.3
+    ],
+    "28.0": [
+     "hip_yaw_L",
+     "servo_hip_roll_R",
+     223.7
+    ],
+    "30.0": [
+     "hip_yaw_L",
+     "servo_hip_roll_R",
+     305.0
+    ]
+   },
+   "ok": true
+  },
+  "l_hip_roll": {
+   "limits_deg": [
+    -20,
+    40
+   ],
+   "stance_deg": 0.0,
+   "own_limb_clear_deg": [
+    -20.0,
+    40.0
+   ],
+   "gaits_use_deg": [
+    -13.7,
+    16.6
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {
+    "-20.0": [
+     "shin_L",
+     "shin_R",
+     1679.2
+    ],
+    "-18.0": [
+     "shin_L",
+     "shin_R",
+     852.1
+    ],
+    "-16.0": [
+     "shin_L",
+     "shin_R",
+     24.5
+    ],
+    "-14.0": [
+     "ankle_L",
+     "ankle_R",
+     1400.2
+    ],
+    "-12.0": [
+     "ankle_L",
+     "ankle_R",
+     1151.0
+    ],
+    "-10.0": [
+     "ankle_L",
+     "ankle_R",
+     813.1
+    ],
+    "-8.0": [
+     "ankle_L",
+     "ankle_R",
+     418.5
+    ],
+    "-6.0": [
+     "ankle_L",
+     "ankle_R",
+     20.4
+    ]
+   },
+   "ok": true
+  },
+  "l_hip_pitch": {
+   "limits_deg": [
+    -100,
+    30
+   ],
+   "stance_deg": -27.5,
+   "own_limb_clear_deg": [
+    -100.0,
+    30.0
+   ],
+   "gaits_use_deg": [
+    -37.0,
+    -12.6
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {},
+   "ok": true
+  },
+  "l_knee": {
+   "limits_deg": [
+    0,
+    120
+   ],
+   "stance_deg": 51.6,
+   "own_limb_clear_deg": [
+    0.0,
+    120.0
+   ],
+   "gaits_use_deg": [
+    44.3,
+    65.0
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {},
+   "ok": true
+  },
+  "l_ankle_pitch": {
+   "limits_deg": [
+    -55,
+    15
+   ],
+   "stance_deg": -24.1,
+   "own_limb_clear_deg": [
+    -55.0,
+    15.0
+   ],
+   "gaits_use_deg": [
+    -38.3,
+    -13.9
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {},
+   "ok": true
+  },
+  "l_ankle_roll": {
+   "limits_deg": [
+    -20,
+    20
+   ],
+   "stance_deg": 0.0,
+   "own_limb_clear_deg": [
+    -20.0,
+    20.0
+   ],
+   "gaits_use_deg": [
+    -16.6,
+    13.7
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {},
+   "ok": true
+  },
+  "r_hip_yaw": {
+   "limits_deg": [
+    -30,
+    30
+   ],
+   "stance_deg": -0.0,
+   "own_limb_clear_deg": [
+    -30.0,
+    30.0
+   ],
+   "gaits_use_deg": [
+    -5.0,
+    5.0
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {
+    "-30.0": [
+     "servo_hip_roll_L",
+     "hip_yaw_R",
+     305.0
+    ],
+    "-28.0": [
+     "servo_hip_roll_L",
+     "hip_yaw_R",
+     223.7
+    ],
+    "-26.0": [
+     "servo_hip_roll_L",
+     "hip_yaw_R",
+     138.3
+    ],
+    "-24.0": [
+     "servo_hip_roll_L",
+     "hip_yaw_R",
+     50.3
+    ],
+    "26.0": [
+     "foot_L",
+     "foot_R",
+     2.6
+    ],
+    "28.0": [
+     "foot_L",
+     "foot_R",
+     63.4
+    ],
+    "30.0": [
+     "foot_L",
+     "foot_R",
+     156.9
+    ]
+   },
+   "ok": true
+  },
+  "r_hip_roll": {
+   "limits_deg": [
+    -40,
+    20
+   ],
+   "stance_deg": 0.0,
+   "own_limb_clear_deg": [
+    -40.0,
+    20.0
+   ],
+   "gaits_use_deg": [
+    -16.6,
+    13.7
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {
+    "6.0": [
+     "ankle_L",
+     "ankle_R",
+     20.4
+    ],
+    "8.0": [
+     "ankle_L",
+     "ankle_R",
+     418.5
+    ],
+    "10.0": [
+     "ankle_L",
+     "ankle_R",
+     813.1
+    ],
+    "12.0": [
+     "ankle_L",
+     "ankle_R",
+     1151.0
+    ],
+    "14.0": [
+     "ankle_L",
+     "ankle_R",
+     1400.2
+    ],
+    "16.0": [
+     "shin_L",
+     "shin_R",
+     24.5
+    ],
+    "18.0": [
+     "shin_L",
+     "shin_R",
+     852.1
+    ],
+    "20.0": [
+     "shin_L",
+     "shin_R",
+     1679.2
+    ]
+   },
+   "ok": true
+  },
+  "r_hip_pitch": {
+   "limits_deg": [
+    -100,
+    30
+   ],
+   "stance_deg": -27.5,
+   "own_limb_clear_deg": [
+    -100.0,
+    30.0
+   ],
+   "gaits_use_deg": [
+    -36.0,
+    -12.6
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {},
+   "ok": true
+  },
+  "r_knee": {
+   "limits_deg": [
+    0,
+    120
+   ],
+   "stance_deg": 51.6,
+   "own_limb_clear_deg": [
+    0.0,
+    120.0
+   ],
+   "gaits_use_deg": [
+    44.3,
+    65.0
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {},
+   "ok": true
+  },
+  "r_ankle_pitch": {
+   "limits_deg": [
+    -55,
+    15
+   ],
+   "stance_deg": -24.1,
+   "own_limb_clear_deg": [
+    -55.0,
+    15.0
+   ],
+   "gaits_use_deg": [
+    -36.6,
+    -13.9
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {},
+   "ok": true
+  },
+  "r_ankle_roll": {
+   "limits_deg": [
+    -20,
+    20
+   ],
+   "stance_deg": 0.0,
+   "own_limb_clear_deg": [
+    -20.0,
+    20.0
+   ],
+   "gaits_use_deg": [
+    -13.7,
+    16.6
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {},
+   "ok": true
+  },
+  "l_shoulder_pitch": {
+   "limits_deg": [
+    -180,
+    60
+   ],
+   "stance_deg": 0.0,
+   "own_limb_clear_deg": [
+    -180.0,
+    60.0
+   ],
+   "gaits_use_deg": [
+    -13.6,
+    23.8
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {},
+   "ok": true
+  },
+  "l_elbow": {
+   "limits_deg": [
+    -130,
+    30
+   ],
+   "stance_deg": -20.0,
+   "own_limb_clear_deg": [
+    -130.0,
+    30.0
+   ],
+   "gaits_use_deg": [
+    -20.0,
+    -20.0
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {},
+   "ok": true
+  },
+  "r_shoulder_pitch": {
+   "limits_deg": [
+    -180,
+    60
+   ],
+   "stance_deg": 0.0,
+   "own_limb_clear_deg": [
+    -180.0,
+    60.0
+   ],
+   "gaits_use_deg": [
+    -15.2,
+    23.8
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {},
+   "ok": true
+  },
+  "r_elbow": {
+   "limits_deg": [
+    -130,
+    30
+   ],
+   "stance_deg": -20.0,
+   "own_limb_clear_deg": [
+    -130.0,
+    30.0
+   ],
+   "gaits_use_deg": [
+    -20.0,
+    -20.0
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {},
+   "ok": true
+  },
+  "neck_yaw": {
+   "limits_deg": [
+    -80,
+    80
+   ],
+   "stance_deg": 0.0,
+   "own_limb_clear_deg": [
+    -80.0,
+    80.0
+   ],
+   "gaits_use_deg": [
+    0.0,
+    0.0
+   ],
+   "own_limb_contacts": {},
+   "other_leg_contacts_from_stance": {},
+   "ok": true
+  }
+ },
+ "seconds": 529.8,
+ "pass": true
+}

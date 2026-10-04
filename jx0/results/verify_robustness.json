@@ -1,0 +1,658 @@
+{
+ "final": {
+  "gains": null,
+  "model_errors_latency_0_20ms": {
+   "trials": 140,
+   "passed": 136,
+   "rate": 0.971,
+   "per_gait": {
+    "forward": {
+     "trials": 20,
+     "passed": 18,
+     "rate": 0.9
+    },
+    "forward_4": {
+     "trials": 20,
+     "passed": 20,
+     "rate": 1.0
+    },
+    "backward_4": {
+     "trials": 20,
+     "passed": 19,
+     "rate": 0.95
+    },
+    "turn_left_2": {
+     "trials": 20,
+     "passed": 20,
+     "rate": 1.0
+    },
+    "turn_right_2": {
+     "trials": 20,
+     "passed": 20,
+     "rate": 1.0
+    },
+    "side_left_2": {
+     "trials": 20,
+     "passed": 20,
+     "rate": 1.0
+    },
+    "side_right_2": {
+     "trials": 20,
+     "passed": 19,
+     "rate": 0.95
+    }
+   },
+   "failures": [
+    {
+     "gait": "forward",
+     "fell": true,
+     "pass": false,
+     "pos_err_m": 0.206,
+     "heading_err_deg": -3.3,
+     "max_tilt_deg": 30.8,
+     "push": null,
+     "end_roll_deg": 30.8,
+     "end_pitch_deg": -0.8,
+     "end_t_s": 7.57
+    },
+    {
+     "gait": "forward",
+     "fell": true,
+     "pass": false,
+     "pos_err_m": 0.108,
+     "heading_err_deg": 21.2,
+     "max_tilt_deg": 30.7,
+     "push": null,
+     "end_roll_deg": 30.6,
+     "end_pitch_deg": 1.3,
+     "end_t_s": 4.63
+    },
+    {
+     "gait": "backward_4",
+     "fell": true,
+     "pass": false,
+     "pos_err_m": 0.167,
+     "heading_err_deg": 0.6,
+     "max_tilt_deg": 30.7,
+     "push": null,
+     "end_roll_deg": 30.7,
+     "end_pitch_deg": -0.0,
+     "end_t_s": 3.61
+    },
+    {
+     "gait": "side_right_2",
+     "fell": true,
+     "pass": false,
+     "pos_err_m": 0.162,
+     "heading_err_deg": -4.9,
+     "max_tilt_deg": 30.9,
+     "push": null,
+     "end_roll_deg": 30.9,
+     "end_pitch_deg": -0.3,
+     "end_t_s": 2.17
+    }
+   ]
+  },
+  "model_errors_latency_40ms_stress": {
+   "trials": 140,
+   "passed": 120,
+   "rate": 0.857,
+   "per_gait": {
+    "forward": {
+     "trials": 20,
+     "passed": 8,
+     "rate": 0.4
+    },
+    "forward_4": {
+     "trials": 20,
+     "passed": 19,
+     "rate": 0.95
+    },
+    "backward_4": {
+     "trials": 20,
+     "passed": 15,
+     "rate": 0.75
+    },
+    "turn_left_2": {
+     "trials": 20,
+     "passed": 20,
+     "rate": 1.0
+    },
+    "turn_right_2": {
+     "trials": 20,
+     "passed": 20,
+     "rate": 1.0
+    },
+    "side_left_2": {
+     "trials": 20,
+     "passed": 20,
+     "rate": 1.0
+    },
+    "side_right_2": {
+     "trials": 20,
+     "passed": 18,
+     "rate": 0.9
+    }
+   },
+   "failures": [
+    {
+     "gait": "forward",
+     "fell": true,
+     "pass": false,
+     "pos_err_m": 0.279,
+     "heading_err_deg": -102.5,
+     "max_tilt_deg": 30.6,
+     "push": null,
+     "end_roll_deg": 3.3,
+     "end_pitch_deg": 30.5,
+     "end_t_s": 7.25
+    },
+    {
+     "gait": "backward_4",
+     "fell": true,
+     "pass": false,
+     "pos_err_m": 0.17,
+     "heading_err_deg": 0.7,
+     "max_tilt_deg": 30.9,
+     "push": null,
+     "end_roll_deg": 30.9,
+     "end_pitch_deg": -0.4,
+     "end_t_s": 3.61
+    },
+    {
+     "gait": "forward",
+     "fell": true,
+     "pass": false,
+     "pos_err_m": 0.188,
+     "heading_err_deg": -4.2,
+     "max_tilt_deg": 30.3,
+     "push": null,
+     "end_roll_deg": 30.3,
+     "end_pitch_deg": -0.1,
+     "end_t_s": 4.5
+    },
+    {
+     "gait": "forward",
+     "fell": true,
+     "pass": false,
+     "pos_err_m": 0.129,
+     "heading_err_deg": -1.7,
+     "max_tilt_deg": 30.1,
+     "push": null,
+     "end_roll_deg": 30.0,
+     "end_pitch_deg": 2.6,
+     "end_t_s": 5.91
+    },
+    {
+     "gait": "forward",
+     "fell": true,
+     "pass": false,
+     "pos_err_m": 0.14,
+     "heading_err_deg": 36.4,
+     "max_tilt_deg": 31.0,
+     "push": null,
+     "end_roll_deg": 31.0,
+     "end_pitch_deg": -1.2,
+     "end_t_s": 7.34
+    },
+    {
+     "gait": "backward_4",
+     "fell": true,
+     "pass": false,
+     "pos_err_m": 0.16,
+     "heading_err_deg": -0.1,
+     "max_tilt_deg": 30.2,
+     "push": null,
+     "end_roll_deg": 30.2,
+     "end_pitch_deg": -0.3,
+     "end_t_s": 3.45
+    },
+    {
+     "gait": "forward",
+     "fell": true,
+     "pass": false,
+     "pos_err_m": 0.148,
+     "heading_err_deg": -11.1,
+     "max_tilt_deg": 30.8,
+     "push": null,
+     "end_roll_deg": 29.2,
+     "end_pitch_deg": 10.0,
+     "end_t_s": 4.73
+    },
+    {
+     "gait": "side_right_2",
+     "fell": true,
+     "pass": false,
+     "pos_err_m": 0.166,
+     "heading_err_deg": -0.6,
+     "max_tilt_deg": 30.6,
+     "push": null,
+     "end_roll_deg": 30.6,
+     "end_pitch_deg": -0.1,
+     "end_t_s": 2.33
+    }
+   ]
+  },
+  "pushes_mid_walk": {
+   "0.24 N.s": {
+    "trials": 48,
+    "passed": 48,
+    "rate": 1.0
+   },
+   "0.48 N.s": {
+    "trials": 48,
+    "passed": 30,
+    "rate": 0.625
+   },
+   "0.72 N.s": {
+    "trials": 48,
+    "passed": 24,
+    "rate": 0.5
+   }
+  }
+ },
+ "generated_by": "jx0/verify/robustness.py",
+ "seconds_final": 112.8,
+ "mission": {
+  "steps": [
+   "walk {'steps': 8, 'direction': 'forward'}",
+   "turn {'degrees': 40}",
+   "walk {'steps': 4, 'direction': 'forward'}",
+   "walk {'steps': 2, 'direction': 'left'}",
+   "walk {'steps': 2, 'direction': 'backward'}",
+   "wave {'arm': 'right'}",
+   "nod {'kind': 'yes'}",
+   "look {'direction': 'left'}"
+  ],
+  "trials": 24,
+  "passed": 24,
+  "rate": 1.0,
+  "results": [
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 9.6,
+    "distance_m": 0.3,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 9.6,
+    "distance_m": 0.32,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 9.0,
+    "distance_m": 0.3,
+    "latency_ms": 0
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 9.2,
+    "distance_m": 0.32,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 9.0,
+    "distance_m": 0.29,
+    "latency_ms": 0
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 9.5,
+    "distance_m": 0.32,
+    "latency_ms": 0
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 9.5,
+    "distance_m": 0.35,
+    "latency_ms": 0
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 9.4,
+    "distance_m": 0.31,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 10.6,
+    "distance_m": 0.33,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 9.1,
+    "distance_m": 0.35,
+    "latency_ms": 0
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 9.2,
+    "distance_m": 0.25,
+    "latency_ms": 0
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 11.3,
+    "distance_m": 0.35,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 9.9,
+    "distance_m": 0.29,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 9.6,
+    "distance_m": 0.35,
+    "latency_ms": 0
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 8.9,
+    "distance_m": 0.3,
+    "latency_ms": 0
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 10.9,
+    "distance_m": 0.34,
+    "latency_ms": 0
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 10.1,
+    "distance_m": 0.33,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 11.1,
+    "distance_m": 0.34,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 9.9,
+    "distance_m": 0.33,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 8.9,
+    "distance_m": 0.27,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 10.2,
+    "distance_m": 0.35,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 11.6,
+    "distance_m": 0.36,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 11.6,
+    "distance_m": 0.36,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 10.1,
+    "distance_m": 0.32,
+    "latency_ms": 20
+   }
+  ]
+ },
+ "seconds_mission": 36.9
+}

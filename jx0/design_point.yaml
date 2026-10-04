@@ -13,7 +13,7 @@ frames:
   zero_pose: "legs straight and vertical, feet flat and parallel, arms hanging, all joint angles 0"
 
 overall:
-  height_m: {value: 0.537, label: CALCULATED, note: "CAD: sole 235 mm below the hip centres, head top 301.6 mm above"}
+  height_m: {value: 0.542, label: CALCULATED, note: "CAD: sole 235 mm below the hip centres, head top 306.6 mm above"}
   mass_target_kg: {value: 2.0, label: ESTIMATED}
 
 geometry:
@@ -38,9 +38,9 @@ joint_ranges_deg:
   hip_yaw:     {min: -30,  max: 30,  label: ASSUMED, note: "+ = toes out (left leg)"}
   hip_roll:    {min: -20,  max: 40,  label: ASSUMED, note: "+ = abduction (left leg)"}
   hip_pitch:   {min: -100, max: 30,  label: ASSUMED, note: "- = flexion (leg forward)"}
-  knee:        {min: 0,    max: 130, label: ASSUMED, note: "+ = flexion"}
-  ankle_pitch: {min: -60,  max: 45,  label: ASSUMED, note: "- = dorsiflexion (toes up)"}
-  ankle_roll:  {min: -25,  max: 25,  label: ASSUMED}
+  knee:        {min: 0,    max: 120, label: CALCULATED, note: "+ = flexion; CAD contact at 126 (verify_cad)"}
+  ankle_pitch: {min: -55,  max: 15,  label: CALCULATED, note: "- = dorsiflexion (toes up); CAD contact beyond +18 (verify_cad)"}
+  ankle_roll:  {min: -20,  max: 20,  label: CALCULATED, note: "CAD own-limb clear to +-20 (verify_cad)"}
 
 # One actuator class for all 17 joints (legs, arms, neck): the Feetech STS3215 12 V serial bus servo (Evelta sells it as
 # ST3215-C018; Waveshare as ST3215).
@@ -127,7 +127,7 @@ upper_body_geometry:
   shoulder_pitch_origin: {value: [0.0125, 0.060125, 0.186], label: CALCULATED, note: "CAD: pitch horn face just outside the chest-cap side wall"}
   upper_arm_m: {value: 0.052, label: CALCULATED, note: "CAD: shoulder-pitch axis to elbow axis (the cradle)"}
   forearm_m: {value: 0.100, label: CALCULATED, note: "CAD: elbow axis to blade tip"}
-  neck_yaw_origin: {value: [0.0, 0.0, 0.239625], label: CALCULATED, note: "CAD: neck STS3215 standing on the chest cap, horn face"}
+  neck_yaw_origin: {value: [0.0, 0.0, 0.244625], label: CALCULATED, note: "CAD: neck STS3215 standing on the chest cap, horn face"}
   head_size_m: {value: [0.066, 0.078, 0.062], label: CALCULATED, note: "CAD head: soft block, four face holes"}
 
 upper_body_joint_ranges_deg:
