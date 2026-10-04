@@ -10,7 +10,9 @@ Servo interface: Waveshare / Feetech ST3215 (research/raw/jx0_india_sourcing_raw
 24.72 x 32 mm between the two horn faces, Ø19.2 horn on both faces (37.25 across them), output axis 10.11 mm from the
 case end, horn holes 4 x Ø2.5 on a 14 mm circle, case mounting holes on the connector (rear) face 24.45 x 20.5 mm, first
 row 18.41 mm from the output end. Screw sizes are not published: holes are Ø2.2 (M2 self-tapping) — ASSUMED, fit-check.
-Arm and neck servos: MG90S (PWM) — dimensions ASSUMED (common datasheet values), fit-check.
+Every joint (12 leg, 4 arm, 1 neck) is the same 12 V STS3215. The style follows the reference robot in
+media/reference.mp4: faceted octagonal torso with a vented chest cap, the neck servo exposed under a soft rounded head
+with four holes, arms that are a shoulder cradle plus a flat blade, round-ended leg plates, cross-pattern horn screws.
 
 Joints are single-sided: each servo's case is screwed to one link through its rear face, the next link bolts to its
 output horn. All three hip axes meet at the hip centre and both ankle axes at the ankle centre (the gait model assumes it).
@@ -20,7 +22,6 @@ from __future__ import annotations
 # ------------------------------------------------------------------------------------------------ interface parameters
 ST = dict(L=45.22, W=24.72, CASE=32.0, ENV=35.0, HORN_D=19.2, HORN_FACE=18.625, LA=10.11, LB=35.11,
           PCD=14.0, HORN_HOLE=2.7, MOUNT_L=(8.30, 32.75), MOUNT_W=10.25, SCREW=2.2, DISC_CLEAR=22.0)
-MG = dict(L=22.8, W=12.2, H=28.4, LA=5.8, LB=17.0, SPLINE=4.0, TAB_SPAN=28.0, SCREW=2.2)   # MG90S, ASSUMED
 T = 3.0            # plate thickness (PETG)
 C = 0.4            # clearance
 ZY = 30.0          # hip-yaw horn face above the hip centre
@@ -29,13 +30,17 @@ HIP_Y = 45.0       # half hip spacing
 XR = -15.0         # hip-roll horn face (servo behind the hip centre, horn facing +x)
 XA = -18.0         # ankle-roll horn face (servo behind the ankle centre, horn facing +x)
 SOLE_TO_ANKLE, FOOT_X, FOOT_W = 35.0, (-62.0, 58.0), 70.0
-TORSO = dict(x=(-40.0, 40.0), y=(-66.0, 66.0), z=(68.625, 196.0), wall=2.5)
-SHOULDER = (0.0, 66.0, 176.0)
-ARM_Y = 17.0       # shoulder-roll axis outboard of the torso side wall (upper arm clears the wall by 2.8 mm)
-GRIP_Z = -44.0     # gripper MG90S shaft below the elbow axis (forearm frame)
-GRIP_Y = -MG["H"] / 2    # gripper spline top (y) in the left forearm frame: the case bottom rests on the plate
-NECK_Z = 196.0
-FACE_Z = 30.0      # display centre above the neck horn (head frame)
+# torso: octagonal prism, half depth TD (x) and half width TW (y), vertical edges chamfered TCH, split at TZS into the
+# lower shell and the chest cap; walls TWALL
+TD, TW, TCH, TWALL = 42.0, 60.0, 16.0, 2.5
+TZ0, TZS, TZT, TOP_CH = 68.625, 168.0, 205.0, 8.0
+# shoulder pitch: horn face just proud of the torso side wall, axis 12.5 mm forward of the torso centre
+SHOULDER = (12.5, TW - TWALL + (ST["HORN_FACE"] - ST["CASE"] / 2), 186.0)
+UA_L = 52.0                                                         # shoulder pitch axis to elbow axis
+UA_PLATE = (1.0, 4.0)                                               # cradle plate (y, outward from the pitch horn face)
+ELBOW_Y = UA_PLATE[1] + ST["CASE"] + (ST["HORN_FACE"] - ST["CASE"] / 2)   # elbow horn face: 38.625 outboard
+BLADE_L, BLADE_T = 100.0, 5.0
+NECK_Z = TZT + ST["CASE"] + (ST["HORN_FACE"] - ST["CASE"] / 2)     # neck horn face (head origin): 239.625
 
 
 def horn_holes(axis, c, s, pcd=ST["PCD"], d=ST["HORN_HOLE"], centre=6.0):
@@ -43,7 +48,7 @@ def horn_holes(axis, c, s, pcd=ST["PCD"], d=ST["HORN_HOLE"], centre=6.0):
     import math
     out = [("hole", axis, c, centre, s)] if centre else []
     for k in range(4):
-        a = math.radians(45 + 90 * k)
+        a = math.radians(90 * k)
         out.append(("hole", axis, (c[0] + pcd / 2 * math.cos(a), c[1] + pcd / 2 * math.sin(a)), d, s))
     return out
 
@@ -64,12 +69,35 @@ def rear_face_mount(axis, shaft_c, l_dir, w_dir, s):
     return out
 
 
+BOSSES, CUTS = ("box", "cyl", "prism"), ("cut", "hole", "pcut")
+
+
+def base_kind(kind):
+    """"lbox" -> "box": the "l" (late) variants are applied after the ordinary cuts, e.g. mounts inside a hollow shell."""
+    return kind[1:] if kind.startswith("l") and kind[1:] in BOSSES + CUTS else kind
+
+
+def phase(prim):
+    """Build order: 0 bosses, 1 cuts, 2 late bosses, 3 late cuts."""
+    k = prim[0]
+    return (2 if base_kind(k) != k else 0) + (1 if base_kind(k) in CUTS else 0)
+
+
 def mirror_y(prims):
     """Right-side copy of a left-side part (y -> -y)."""
     out = []
     for p in prims:
-        if p[0] in ("box", "cut"):
+        k = base_kind(p[0])
+        if k in ("box", "cut"):
             out.append((p[0], p[1], (-p[2][1], -p[2][0]), p[3]))
+        elif k in ("prism", "pcut"):
+            kind, axis, pts, s = p
+            if axis == "y":
+                out.append((kind, axis, pts, (-s[1], -s[0])))
+            elif axis == "x":
+                out.append((kind, axis, [(-a, b) for a, b in pts], s))
+            else:
+                out.append((kind, axis, [(a, -b) for a, b in pts], s))
         else:
             kind, axis, c, r, s = p
             if axis == "y":
@@ -79,6 +107,64 @@ def mirror_y(prims):
             else:
                 out.append((kind, axis, (c[0], -c[1]), r, s))
     return out
+
+
+# ------------------------------------------------------------------------------------------------ profile helpers
+def _unit(u, v):
+    import math
+    n = math.hypot(u, v)
+    return u / n, v / n
+
+
+def rounded_polygon(corners, radii, n=6):
+    """Convex polygon (u, v) with each corner filleted (radius 0 = sharp), n segments per fillet."""
+    import math
+    out, m = [], len(corners)
+    for i, (P, r) in enumerate(zip(corners, radii)):
+        if r <= 0:
+            out.append(P)
+            continue
+        A, B = corners[i - 1], corners[(i + 1) % m]
+        u1, u2 = _unit(A[0] - P[0], A[1] - P[1]), _unit(B[0] - P[0], B[1] - P[1])
+        half = math.acos(max(-1.0, min(1.0, u1[0] * u2[0] + u1[1] * u2[1]))) / 2
+        d, bis = r / math.tan(half), _unit(u1[0] + u2[0], u1[1] + u2[1])
+        cu, cv = P[0] + bis[0] * r / math.sin(half), P[1] + bis[1] * r / math.sin(half)
+        a1 = math.atan2(P[1] + u1[1] * d - cv, P[0] + u1[0] * d - cu)
+        a2 = math.atan2(P[1] + u2[1] * d - cv, P[0] + u2[0] * d - cu)
+        da = (a2 - a1 + math.pi) % (2 * math.pi) - math.pi
+        out += [(round(cu + r * math.cos(a1 + da * k / n), 3), round(cv + r * math.sin(a1 + da * k / n), 3)) for k in range(n + 1)]
+    return out
+
+
+def corner_cut(c, inward, r, n=6, e=0.6):
+    """Profile of the material outside a fillet of radius r at the solid's corner c; inward = (+-1, +-1) into the solid."""
+    import math
+    (uc, vc), (du, dv) = c, inward
+    cu, cv = uc + du * r, vc + dv * r
+    arc = [(round(cu - du * r * math.sin(math.pi / 2 * k / n), 3), round(cv - dv * r * math.cos(math.pi / 2 * k / n), 3))
+           for k in range(n + 1)]
+    return [(uc - du * e, vc - dv * e), (uc + du * r, vc - dv * e)] + arc + [(uc - du * e, vc + dv * r)]
+
+
+def chamfer_cut(c, inward, ch, e=0.6):
+    """Triangle removing a 45° chamfer of leg ch at the solid's corner c (inward as in corner_cut)."""
+    (uc, vc), (du, dv) = c, inward
+    return [(uc - du * e, vc - dv * e), (uc + du * (ch + e), vc - dv * e), (uc - du * e, vc + dv * (ch + e))]
+
+
+def octagon(hx, hy, c):
+    """Rectangle +-hx, +-hy with its 4 corners chamfered by c, as (x, y) points."""
+    return [(hx, -hy + c), (hx, hy - c), (hx - c, hy), (-hx + c, hy), (-hx, hy - c), (-hx, -hy + c), (-hx + c, -hy), (hx - c, -hy)]
+
+
+def oct_inset(d):
+    """The torso octagon inset by d (the 45° faces move in by d too)."""
+    return octagon(TD - d, TW - d, TCH - d * (2 - 2 ** 0.5))
+
+
+def late(prims):
+    """The same features, built after the ordinary cuts (for mounts inside a hollow shell)."""
+    return [("l" + q[0],) + tuple(q[1:]) for q in prims]
 
 
 # ------------------------------------------------------------------------------------------------ legs (left side)
@@ -121,7 +207,8 @@ def hip_roll_bracket():
 def thigh():
     """Bolts to the hip-pitch horn (outside, +y) and carries the knee servo on its inner face (case up, horn -y)."""
     y0 = ST["HORN_FACE"]
-    p = [("box", (-15.0, 15.0), (y0, y0 + 4.0), (-THIGH - 15.0, 14.0)),                  # 4 mm side plate
+    p = [("prism", "y", rounded_polygon([(-15, 15), (15, 15), (15, -THIGH - 15), (-15, -THIGH - 15)], [14.9] * 4),
+          (y0, y0 + 4.0)),                                                                  # 4 mm round-ended side plate
          ("box", (-15.0, -11.0), (y0 + 3.5, y0 + 9.0), (-THIGH + 20.0, -5.0)),           # rear flange (stiffener)
          ("box", (11.0, 15.0), (y0 + 3.5, y0 + 9.0), (-THIGH + 20.0, -5.0))]             # front flange
     p += horn_holes("y", (0.0, 0.0), (y0 - 0.1, y0 + 4.1))
@@ -133,7 +220,8 @@ def shin():
     """Bolts to the knee horn (inside, -y) and carries the ankle-pitch servo on its outer face (case up, horn +y).
     The knee servo's rear face sits on the thigh plate at y = +18.625, so its horn face is at 18.625 - 32 - 2.625 = -16."""
     y1 = ST["HORN_FACE"] - ST["CASE"] - (ST["HORN_FACE"] - ST["CASE"] / 2)
-    p = [("box", (-15.0, 15.0), (y1 - 4.0, y1), (-SHIN - 12.0, 13.0)),
+    p = [("prism", "y", rounded_polygon([(-15, 15), (15, 15), (15, -SHIN - 15), (-15, -SHIN - 15)], [14.9] * 4),
+          (y1 - 4.0, y1)),
          ("box", (-15.0, -11.0), (y1 - 9.0, y1 - 3.5), (-SHIN + 22.0, -15.0)),
          ("box", (11.0, 15.0), (y1 - 9.0, y1 - 3.5), (-SHIN + 22.0, -15.0))]
     p += horn_holes("y", (0.0, 0.0), (y1 - 4.1, y1 + 0.1))
@@ -163,205 +251,173 @@ def foot():
     p += horn_holes("x", (0.0, 0.0), (XA - 0.1, XA + T + 0.1))
     for x in (-50.0, -20.0, 20.0, 45.0):
         p.append(("hole", "z", (x, 0.0), 12.0, (zs - 0.1, zs + 6.1)))                   # lightening
+    for xc, yc, du, dv in ((FOOT_X[1], FOOT_W / 2, -1, -1), (FOOT_X[1], -FOOT_W / 2, -1, 1),
+                           (FOOT_X[0], FOOT_W / 2, 1, -1), (FOOT_X[0], -FOOT_W / 2, 1, 1)):
+        p.append(("pcut", "z", corner_cut((xc, yc), (du, dv), 12.0), (zs - 0.1, zs + 6.1)))   # rounded corners
     return p
 
 
 # ------------------------------------------------------------------------------------------------ upper body
 def torso():
-    x0, x1 = TORSO["x"]
-    y0, y1 = TORSO["y"]
-    z0, z1 = TORSO["z"]
-    w = TORSO["wall"]
-    p = [("box", (x0, x1), (y0, y1), (z0, z1)),
-         ("cut", (x0 - 1.0, x1 - w), (y0 + w, y1 - w), (z0 + w, z1 - w))]                # open back
+    """Lower torso shell (pelvis frame): the reference robot's octagonal body, floor bolted to the pelvis, open top that
+    the chest cap closes. Inside: Raspberry Pi on the back wall, battery, servo driver, power. A lip around the top
+    takes the cap (4 screws through the cap wall)."""
+    w = TWALL
+    p = [("prism", "z", octagon(TD, TW, TCH), (TZ0, TZS)),
+         ("pcut", "z", oct_inset(w), (TZ0 + w, TZS + 0.1)),
+         ("cut", (-TD - 0.1, -TD + w + 0.1), (-16.0, 16.0), (TZ0 + w, TZ0 + w + 14.0)),      # leg cables in
+         ("hole", "x", (0.0, 88.0), 12.0, (-TD - 0.1, -TD + w + 0.1))]                      # push-to-talk button
     for x in (0.0, 28.0):
         for y in (-25.0, 25.0):
-            p.append(("hole", "z", (x, y), 3.2, (z0 - 0.1, z0 + w + 0.1)))
-    for y in (-12.0, -6.0, 0.0, 6.0, 12.0):                                              # speaker grille
-        for z in (86.0, 93.0):
-            p.append(("hole", "x", (y, z), 3.0, (x1 - w - 0.1, x1 + 0.1)))
-    p.append(("hole", "x", (0.0, 104.0), 12.0, (x1 - w - 0.1, x1 + 0.1)))                # push-to-talk button
-    for y in (-29.0, 29.0):                                                              # Raspberry Pi standoffs
-        for z in (115.5, 164.5):
-            p.append(("cyl", "x", (y, z), 3.0, (x1 - w - 7.0, x1 - w + 0.5)))
-            p.append(("hole", "x", (y, z), 2.2, (x1 - w - 7.1, x1 - w + 0.6)))
-    # shoulder-pitch MG90S holders (horn out through the side walls) and the neck MG90S holder (horn up)
+            p.append(("hole", "z", (x, y), 3.2, (TZ0 - 0.1, TZ0 + w + 0.1)))              # bolts to the pelvis
+    p += [("lprism", "z", oct_inset(w - 0.5), (TZS - 6.0, TZS)),                           # lip, fused to the wall
+          ("lprism", "z", oct_inset(w + 0.2), (TZS - 0.1, TZS + 5.0)),                     # lip above the seam
+          ("lpcut", "z", oct_inset(w + 2.2), (TZS - 6.1, TZS + 5.1))]
+    for x in (TD, -TD):
+        sgn = 1 if x > 0 else -1
+        for y in (-15.0, 15.0):
+            p.append(("lhole", "x", (y, TZS + 2.5), 2.5, tuple(sorted((sgn * (TD - w - 2.4), sgn * (TD - w + 0.3))))))
+    for y in (-29.0, 29.0):                                                                 # Raspberry Pi standoffs
+        for z in (96.0, 145.0):
+            p.append(("lcyl", "x", (y, z), 3.2, (-TD + w - 0.5, -TD + w + 6.0)))
+            p.append(("lhole", "x", (y, z), 2.5, (-TD + w, -TD + w + 6.1)))
+    return p
+
+
+def chest_cap():
+    """Chest cap (pelvis frame): top of the octagonal torso with chamfered top edges, vent slots over the shoulder servos
+    and a speaker grille, the neck STS3215 standing on top, and the two shoulder-pitch STS3215 inside (horns out through
+    the side walls)."""
+    w, ch = TWALL, TOP_CH
+    p = [("prism", "z", octagon(TD, TW, TCH), (TZS, TZT)),
+         ("pcut", "x", chamfer_cut((TW, TZT), (-1, -1), ch), (-TD - 1.0, TD + 1.0)),
+         ("pcut", "x", chamfer_cut((-TW, TZT), (1, -1), ch), (-TD - 1.0, TD + 1.0)),
+         ("pcut", "y", chamfer_cut((TD, TZT), (-1, -1), ch), (-TW - 1.0, TW + 1.0)),
+         ("pcut", "y", chamfer_cut((-TD, TZT), (1, -1), ch), (-TW - 1.0, TW + 1.0)),
+         # hollow, open below, stepped under the chamfers so the wall stays >= 2.5 mm
+         ("pcut", "z", oct_inset(w), (TZS - 0.1, TZT - ch - w)),
+         ("pcut", "z", oct_inset(w + ch / 2), (TZT - ch - w - 0.1, TZT - ch / 2 - w)),
+         ("pcut", "z", oct_inset(w + ch), (TZT - ch / 2 - w - 0.1, TZT - w))]
     sx, _, sz = SHOULDER
     for sgn in (1, -1):
-        yin, yout = sgn * (y1 - w - 20.0), sgn * (y1 - w + 0.5)
-        p.append(("box", (sx - MG["LA"] - C - 2.0, sx + MG["LB"] + C + 2.0), tuple(sorted((yin, yout))), (sz - 8.5, sz + 8.5)))
-        p.append(("cut", (sx - MG["LA"] - C, sx + MG["LB"] + C), tuple(sorted((yin - sgn * 0.1, yout))), (sz - MG["W"] / 2 - C, sz + MG["W"] / 2 + C)))
-        p.append(("hole", "y", (sx, sz), 11.0, tuple(sorted((sgn * (y1 - w - 0.1), sgn * (y1 + 0.1))))))
-    p.append(("box", (-MG["LB"] - C - 2.0, MG["LA"] + C + 2.0), (-8.5, 8.5), (z1 - w - 22.0, z1 - w + 0.5)))
-    p.append(("cut", (-MG["LB"] - C, MG["LA"] + C), (-MG["W"] / 2 - C, MG["W"] / 2 + C), (z1 - w - 22.1, z1 - w + 0.1)))
-    p.append(("hole", "z", (0.0, 0.0), 11.0, (z1 - w - 0.1, z1 + 0.1)))
+        p.append(("hole", "y", (sx, sz), 22.0, tuple(sorted((sgn * (TW - w - 0.1), sgn * (TW + 0.1))))))   # pitch horns
+        for xc in (-15.0, -9.0, -3.0, 3.0, 9.0, 15.0):                                         # vent slots
+            p.append(("cut", (xc - 1.25, xc + 1.25), tuple(sorted((sgn * 36.0, sgn * 48.0))), (TZT - w - 0.1, TZT + 0.1)))
+        for y in (-15.0, 15.0):                                                                # screws into the lip
+            p.append(("hole", "x", (y, TZS + 2.5), 3.4, tuple(sorted((sgn * (TD - w - 0.1), sgn * (TD + 0.1))))))
+    for x in (18.0, 24.0, 30.0):                                                               # speaker grille
+        for y in (-12.0, -6.0, 0.0, 6.0, 12.0):
+            p.append(("hole", "z", (x, y), 3.5, (TZT - w - 0.1, TZT + 0.1)))
+    p += rear_face_mount("z", (0.0, 0.0), (1, 1), (0, 1), (TZT - w - 0.1, TZT + 0.1))         # neck servo on top
+    # shoulder-pitch servo plates inside (case behind the shaft, rear face toward the middle)
+    yr = TW - w - ST["CASE"]
+    for sgn in (1, -1):
+        ys = tuple(sorted((sgn * (yr - 3.0), sgn * yr)))
+        p.append(("lbox", (-(TD - w) - 0.5, TD - w + 0.5), ys, (TZS + 6.5, TZT - w + 0.5)))
+        p += late(rear_face_mount("y", (sx, sz), (0, -1), (1, 1), (ys[0] - 0.1, ys[1] + 0.1)))
     return p
 
 
 def head():
-    """Head shell (frame: neck horn top, 1.5 mm above the torso top). The round 1.28" GC9A01 display IS the face (eyes and
-    mouth drawn by jx0bot/face.py): it sits behind a 33 mm window with a raised bezel. OV5647 camera lens above it, ears
-    with vent holes, rounded top edges, open back for wiring."""
-    x0, x1, y, zt, r, w = -32.0, 32.0, 40.0, 76.0, 8.0, 2.5
-    p = [("box", (x0, x1), (-y, y), (0.0, zt)),
-         ("box", (x0 + r, x1 - r), (-y, y), (zt - 0.1, zt + r)),                        # top between the rounded edges
-         ("cyl", "y", (x0 + r, zt), r, (-y, y)),
-         ("cyl", "y", (x1 - r, zt), r, (-y, y)),
-         ("cyl", "x", (0.0, FACE_Z), 21.0, (x1 - 0.1, x1 + 1.5)),                       # display bezel
-         ("cyl", "y", (-2.0, 40.0), 12.0, (y - 0.1, y + 5.0)),                          # ears
-         ("cyl", "y", (-2.0, 40.0), 12.0, (-y - 5.0, -y + 0.1)),
-         ("cut", (x0 - 1.0, x1 - w), (-y + w, y - w), (w, zt)),                         # hollow, open back
-         ("cut", (x0 + r, x1 - r), (-y + w, y - w), (zt - 0.1, zt + r - w)),
-         ("hole", "y", (x0 + r, zt), 2 * (r - w), (-y + w, y - w)),
-         ("hole", "y", (x1 - r, zt), 2 * (r - w), (-y + w, y - w)),
-         ("hole", "x", (0.0, FACE_Z), 33.0, (x1 - w - 0.1, x1 + 1.6)),                  # display window (active area 32.4)
-         ("hole", "x", (0.0, 64.0), 8.0, (x1 - w - 0.1, x1 + 0.1)),                     # OV5647 lens
-         ("hole", "z", (0.0, 0.0), 3.0, (-0.1, w + 0.1))]
-    for x, yy in ((0.0, 7.0), (0.0, -7.0)):
-        p.append(("hole", "z", (x, yy), 1.6, (-0.1, w + 0.1)))                          # MG90S horn screws
-    for dz in (-5.0, 0.0, 5.0):                                                          # ear vents
-        p.append(("hole", "y", (-2.0, 40.0 + dz), 2.5, (y - w - 0.1, y + 5.1)))
-        p.append(("hole", "y", (-2.0, 40.0 + dz), 2.5, (-y - 5.1, -y + w + 0.1)))
-    return p
-
-
-def display():
-    """GC9A01 round display module stand-in (head frame): PCB 38.5 mm (ASSUMED, fit-check) and the 35.6 mm glass, pressed
-    against the inside of the face window (hot glue or a printed clip)."""
-    return [("cyl", "x", (0.0, FACE_Z), 19.25, (26.3, 27.9)),
-            ("cyl", "x", (0.0, FACE_Z), 17.8, (27.9, 29.5))]
-
-
-def screen_face():
-    """What the display shows at rest (a render stand-in, not a part): the eyes and smile from jx0bot/face.py, scaled
-    0.135 mm/pixel onto the 32.4 mm active area."""
-    px = 32.4 / 240
-    xs = (29.5, 29.8)
-    p = []
-    for sgn in (1, -1):                                                                  # eyes: 48 x 72 px pills
-        cy, cz, hw, hh = sgn * 42 * px, FACE_Z + 18 * px, 24 * px, 12 * px
-        p += [("box", xs, (cy - hw, cy + hw), (cz - hh, cz + hh)),
-              ("cyl", "x", (cy, cz - hh), hw, xs), ("cyl", "x", (cy, cz + hh), hw, xs)]
-    for k in range(-2, 3):                                                               # smile
-        yc = k * 2.0
-        zc = FACE_Z - 8.4 + 0.075 * yc * yc
-        p.append(("box", xs, (yc - 1.2, yc + 1.2), (zc - 0.75, zc + 0.75)))
-    return p
-
-
-def shoulder_bracket():
-    """Arm link 1 (frame at the shoulder-pitch axis on the torso side wall; y outward): holds the shoulder-roll MG90S."""
-    yc, zc = ARM_Y, -16.0
-    zlo, zhi = zc - MG["LB"] - C - 2.0, zc + MG["LA"] + C + 2.0
-    p = [("box", (-10.0, 10.0), (1.5, 4.0), (-34.0, 8.0)),
-         ("box", (-MG["H"] + 11.4 - 2.0, 11.4), (1.5, yc + MG["W"] / 2 + C + 2.0), (zlo, zhi)),       # holder, bridged to the plate
-         ("cut", (-MG["H"] + 11.4 - 2.1, 11.5), (yc - MG["W"] / 2 - C, yc + MG["W"] / 2 + C), (zc - MG["LB"] - C, zc + MG["LA"] + C)),
-         ("cut", (-15.0, 8.0), (4.5, yc - MG["W"] / 2 - C - 2.0), (zlo - 0.1, zhi - 4.0)),            # lightening slot, open below
-         ("hole", "y", (0.0, 0.0), 3.0, (1.4, 4.1))]
+    """Head (frame: neck horn face, z up): the reference robot's soft rounded block, narrower at the chin, with four
+    holes in a diamond on the face (the microphone listens through them). Hollow (walls >= 2.5 mm under every fillet),
+    back window for the wiring."""
+    hx, hy, hz = 33.0, 39.0, 62.0
+    front = rounded_polygon([(-28.0, 0.0), (28.0, 0.0), (hy, 36.0), (hy, hz), (-hy, hz), (-hy, 36.0)],
+                            [10.0, 10.0, 26.0, 20.0, 20.0, 26.0])
+    p = [("prism", "x", front, (-hx, hx))]
+    for xc, zc, du, dv, r in ((hx, hz, -1, -1, 22.0), (-hx, hz, 1, -1, 22.0), (hx, 0.0, -1, 1, 12.0), (-hx, 0.0, 1, 1, 12.0)):
+        p.append(("pcut", "y", corner_cut((xc, zc), (du, dv), r), (-hy - 1.0, hy + 1.0)))   # rounded top / chin edges
+    for xc, yc, du, dv in ((hx, hy, -1, -1), (hx, -hy, -1, 1), (-hx, hy, 1, -1), (-hx, -hy, 1, 1)):
+        p.append(("pcut", "z", corner_cut((xc, yc), (du, dv), 20.0), (-0.1, hz + 0.1)))     # rounded vertical edges
+    p += [("cut", (-26.0, 26.0), (-24.0, 24.0), (4.0, 16.1)),                                # hollow, in steps
+          ("cut", (-26.0, 26.0), (-30.0, 30.0), (16.0, 52.0)),
+          ("cut", (-18.0, 18.0), (-24.0, 24.0), (51.9, 58.0)),
+          ("cut", (-hx - 0.1, -25.9), (-16.0, 16.0), (16.0, 44.0)),                          # back window
+          ("hole", "z", (-18.0, 0.0), 8.0, (-0.1, 4.1))]                                    # mic cable down
+    for yc, zc in ((0.0, 49.0), (7.0, 42.0), (-7.0, 42.0), (0.0, 35.0)):                    # the four face holes
+        p.append(("hole", "x", (yc, zc), 5.0, (25.9, hx + 0.1)))
+    p += horn_holes("z", (0.0, 0.0), (-0.1, 4.1))
     return p
 
 
 def upper_arm():
-    """Arm link 2 (frame at the shoulder-roll axis): hangs from the roll horn, holds the elbow MG90S (axis y)."""
-    ze = -55.0
-    p = [("box", (15.4, 17.9), (-7.0, 7.0), (ze - 8.0, 8.0)),
-         ("box", (-0.5, 16.5), (-MG["H"] / 2, MG["H"] / 2), (ze - MG["LA"] - C - 2.0, ze + MG["LB"] + C + 2.0)),
-         ("cut", (1.5, 14.5), (-MG["H"] / 2 - 0.1, MG["H"] / 2 + 0.1), (ze - MG["LA"] - C, ze + MG["LB"] + C)),
-         ("hole", "x", (0.0, 0.0), 3.0, (15.3, 18.0))]
+    """Arm link 1 (frame: shoulder-pitch axis on the pitch horn face, y outward), the reference robot's shoulder cradle:
+    a round-ended plate on the pitch horn and a cradle around the elbow STS3215 (axis y, horn outward) 52 mm below."""
+    wx = ST["W"] / 2 + C
+    z_top = -UA_L + ST["LB"] + C
+    prof = rounded_polygon([(-16.0, 16.0), (16.0, 16.0), (16.0, -UA_L - 16.0), (-16.0, -UA_L - 16.0)], [15.9] * 4)
+    p = [("cyl", "y", (0.0, 0.0), 11.0, (0.0, UA_PLATE[0] + 0.1)),                        # pad on the horn
+         ("prism", "y", prof, UA_PLATE),
+         ("box", (wx, wx + 2.5), (UA_PLATE[1] - 0.5, 20.0), (-UA_L - 14.0, z_top + 2.5)),   # cradle: front wall
+         ("box", (-wx - 2.5, -wx), (UA_PLATE[1] - 0.5, 20.0), (-UA_L - 14.0, z_top + 2.5)), # back wall
+         ("box", (-wx - 2.5, wx + 2.5), (UA_PLATE[1] - 0.5, 20.0), (z_top, z_top + 2.5))]   # top
+    p += horn_holes("y", (0.0, 0.0), (-0.1, UA_PLATE[1] + 0.1))
+    p += rear_face_mount("y", (0.0, -UA_L), (1, 1), (0, 1), (UA_PLATE[0] - 0.1, UA_PLATE[1] + 0.1))
     return p
 
 
-# claw fingers (forearm-frame y of the slots, left hand): 3 fingers on the paddle and 3 on the palm, 3 mm slots
-FINGER_SLOTS = ((-8.63, -5.63), (4.43, 7.43))
-PALM_SLOTS = FINGER_SLOTS                          # aligned: the three fingers meet three palm fingers
-
-
-def forearm():
-    """Arm link 3 = the hand (frame at the elbow axis, left side). Plate on the elbow horn; the gripper MG90S sits in a
-    sleeve against the plate with its shaft pointing inboard (-y) 44 mm below the elbow; the fixed palm at the back is what
-    the finger (JX0_Finger) closes against. Opening up to ~45 mm at 60 deg."""
-    y0 = MG["H"] / 2 + MG["SPLINE"]                       # inner face of the plate (elbow spline top)
-    zs, c0 = GRIP_Z, GRIP_Z + (MG["LB"] - MG["LA"]) / 2   # gripper shaft, gripper case centre
-    tab = GRIP_Y + MG["SPLINE"] + 10.0                     # y of the tab underside (the tabs rest on the sleeve end)
-    zlo, zhi = zs - MG["LA"] - 5.2, zs + MG["LB"] + 5.2
-    p = [("box", (-9.0, 9.0), (y0, y0 + 2.5), (-80.0, 8.0)),
-         ("box", (-MG["W"] / 2 - C - 2.0, MG["W"] / 2 + C + 2.0), (tab, y0), (zlo, zhi)),                 # servo sleeve
-         ("cut", (-MG["W"] / 2 - C, MG["W"] / 2 + C), (tab - 0.1, y0), (zs - MG["LA"] - C, zs + MG["LB"] + C)),
-         ("box", (-10.0, -4.5), (GRIP_Y - 4.5, y0 + 2.5), (-88.0, zlo)),                                  # palm
-         ("hole", "y", (0.0, 0.0), 3.0, (y0 - 0.1, y0 + 2.6))]
-    for z in (c0 - MG["TAB_SPAN"] / 2, c0 + MG["TAB_SPAN"] / 2):                                          # tab screws
-        p.append(("hole", "y", (0.0, z), 1.6, (tab - 0.1, tab + 6.0)))
-    for y_lo, y_hi in PALM_SLOTS:                                                                        # 3 palm fingers
-        p.append(("cut", (-10.1, -4.4), (y_lo, y_hi), (-88.1, -74.0)))
-    return p
-
-
-def finger():
-    """Gripper finger (frame: gripper MG90S spline top, left hand; the shaft points -y). Hub screwed to the servo horn and a
-    paddle that closes against the palm; modelled closed (0.5 mm gap), opens by swinging forward up to 60 deg."""
-    y_in = MG["H"] / 2 + MG["SPLINE"] - GRIP_Y - 0.7      # paddle stops 0.7 mm short of the forearm plate
-    p = [("box", (-4.0, 4.0), (-4.5, -2.0), (-16.0, 4.0)),
-         ("box", (-4.0, 3.0), (-4.5, y_in), (-44.0, -16.0)),
-         ("hole", "y", (0.0, 0.0), 2.5, (-4.6, -1.9))]
-    for y_lo, y_hi in FINGER_SLOTS:                                                                      # 3 fingers
-        p.append(("cut", (-4.1, 3.1), (y_lo - GRIP_Y, y_hi - GRIP_Y), (-44.1, -30.0)))
-    return p
+def arm_blade():
+    """Arm link 2 (frame: elbow axis on the elbow horn face, y outward): the flat tapered blade of the reference robot."""
+    prof = rounded_polygon([(-17.0, 16.0), (17.0, 16.0), (17.0, -12.0), (12.0, -BLADE_L), (-10.0, -BLADE_L), (-17.0, -12.0)],
+                           [16.0, 16.0, 40.0, 10.0, 10.0, 40.0])
+    return [("prism", "y", prof, (0.0, BLADE_T))] + horn_holes("y", (0.0, 0.0), (-0.1, BLADE_T + 0.1))
 
 
 # ------------------------------------------------------------------------------------------------ catalogue
-# name -> (primitives, colour, quantity, mirrored-from). Right-side parts are generated by mirroring the left ones.
+# name -> (primitives, colour, quantity). Right-side parts are generated by mirroring the left ones.
 PARTS = {
-    "JX0_Pelvis": (pelvis(), "white", 1),
-    "JX0_HipYawBracket_L": (hip_yaw_bracket(), "white", 1),
-    "JX0_HipYawBracket_R": (mirror_y(hip_yaw_bracket()), "white", 1),
-    "JX0_HipRollBracket_L": (hip_roll_bracket(), "white", 1),
-    "JX0_HipRollBracket_R": (mirror_y(hip_roll_bracket()), "white", 1),
-    "JX0_Thigh_L": (thigh(), "white", 1),
-    "JX0_Thigh_R": (mirror_y(thigh()), "white", 1),
-    "JX0_Shin_L": (shin(), "white", 1),
-    "JX0_Shin_R": (mirror_y(shin()), "white", 1),
-    "JX0_AnkleBracket_L": (ankle_bracket(), "white", 1),
-    "JX0_AnkleBracket_R": (mirror_y(ankle_bracket()), "white", 1),
-    "JX0_Foot": (foot(), "white", 2),
-    "JX0_Torso": (torso(), "white", 1),
-    "JX0_Head": (head(), "orange", 1),
-    "JX0_ShoulderBracket_L": (shoulder_bracket(), "white", 1),
-    "JX0_ShoulderBracket_R": (mirror_y(shoulder_bracket()), "white", 1),
-    "JX0_UpperArm": (upper_arm(), "white", 2),
-    "JX0_Forearm_L": (forearm(), "white", 1),
-    "JX0_Forearm_R": (mirror_y(forearm()), "white", 1),
-    "JX0_Finger_L": (finger(), "orange", 1),
-    "JX0_Finger_R": (mirror_y(finger()), "orange", 1),
+    "JX0_Pelvis": (pelvis(), "sage", 1),
+    "JX0_HipYawBracket_L": (hip_yaw_bracket(), "sage", 1),
+    "JX0_HipYawBracket_R": (mirror_y(hip_yaw_bracket()), "sage", 1),
+    "JX0_HipRollBracket_L": (hip_roll_bracket(), "sage", 1),
+    "JX0_HipRollBracket_R": (mirror_y(hip_roll_bracket()), "sage", 1),
+    "JX0_Thigh_L": (thigh(), "sage", 1),
+    "JX0_Thigh_R": (mirror_y(thigh()), "sage", 1),
+    "JX0_Shin_L": (shin(), "sage", 1),
+    "JX0_Shin_R": (mirror_y(shin()), "sage", 1),
+    "JX0_AnkleBracket_L": (ankle_bracket(), "sage", 1),
+    "JX0_AnkleBracket_R": (mirror_y(ankle_bracket()), "sage", 1),
+    "JX0_Foot": (foot(), "sage", 2),
+    "JX0_Torso": (torso(), "sage", 1),
+    "JX0_ChestCap": (chest_cap(), "sage", 1),
+    "JX0_Head": (head(), "sage", 1),
+    "JX0_UpperArm_L": (upper_arm(), "sage", 1),
+    "JX0_UpperArm_R": (mirror_y(upper_arm()), "sage", 1),
+    "JX0_ArmBlade_L": (arm_blade(), "sage", 1),
+    "JX0_ArmBlade_R": (mirror_y(arm_blade()), "sage", 1),
 }
 
 
+# ------------------------------------------------------------------------------------------------ servo stand-in
 def servo_st():
-    """ST3215 stand-in (frame: shaft axis = z, output horn face at z = +HORN_FACE, case length toward +x)."""
+    """STS3215 stand-in (frame: shaft axis = z, output horn face at z = +HORN_FACE, case length toward +x)."""
     hf, case = ST["HORN_FACE"], ST["CASE"]
     return [("box", (-ST["LA"], ST["LB"]), (-ST["W"] / 2, ST["W"] / 2), (-case / 2, case / 2)),
             ("cyl", "z", (0.0, 0.0), ST["HORN_D"] / 2, (case / 2 - 0.5, hf)),
             ("cyl", "z", (0.0, 0.0), ST["HORN_D"] / 2, (-hf, -case / 2 + 0.5))] + horn_holes("z", (0.0, 0.0), (hf - 1.0, hf + 0.1), centre=0)
 
 
-def servo_mg():
-    """MG90S stand-in (frame: shaft axis = z, spline top at z = 0; case length toward +x)."""
-    return [("box", (-MG["LA"], MG["LB"]), (-MG["W"] / 2, MG["W"] / 2), (-MG["H"] - MG["SPLINE"], -MG["SPLINE"])),
-            ("box", (-MG["LA"] - 5.0, MG["LB"] + 5.0), (-MG["W"] / 2, MG["W"] / 2), (-MG["SPLINE"] - 10.0, -MG["SPLINE"] - 7.5)),
-            ("cyl", "z", (0.0, 0.0), 2.4, (-MG["SPLINE"] - 0.5, 0.0))]
-
-
-SERVOS = {"JX0_Servo_ST3215": (servo_st(), "black", 12), "JX0_Servo_MG90S": (servo_mg(), "blue", 9),
-          "JX0_Display_GC9A01": (display(), "black", 1), "JX0_Screen_Face": (screen_face(), "cyan", 1)}
+SERVOS = {"JX0_Servo_STS3215": (servo_st(), "black", 17)}
 
 
 def bbox(prims):
     """Expected bounding box of the bosses (mm) for the CAD check."""
     lo, hi = [1e9] * 3, [-1e9] * 3
     for p in prims:
-        if p[0] == "box":
+        k0 = base_kind(p[0])
+        if k0 == "box":
             for k in range(3):
                 lo[k], hi[k] = min(lo[k], p[k + 1][0]), max(hi[k], p[k + 1][1])
-        elif p[0] == "cyl":
+        elif k0 == "prism":
+            _, axis, pts, s = p
+            ia = "xyz".index(axis)
+            others = [i for i in range(3) if i != ia]
+            lo[ia], hi[ia] = min(lo[ia], s[0]), max(hi[ia], s[1])
+            for j, i in enumerate(others):
+                vals = [q[j] for q in pts]
+                lo[i], hi[i] = min(lo[i], min(vals)), max(hi[i], max(vals))
+        elif k0 == "cyl":
             _, axis, c, r, s = p
             ia = "xyz".index(axis)
             others = [i for i in range(3) if i != ia]

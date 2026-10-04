@@ -5,8 +5,8 @@ Everything here runs on the Raspberry Pi without internet; only the brain (brain
   end of utterance detected by Vosk. Two ways to start listening: a push-to-talk button (GPIO, default pin 17)
   or a wake phrase ("hey robot") in the transcript.
 - Speaker: Piper neural TTS (Python API, 22.05 kHz) with eSpeak-NG as a fallback, played through the default
-  output device (USB speaker or I2S MAX98357A). While audio plays, `on_level(0..1)` reports loudness so the face
-  can move its mouth.
+  output device (USB speaker or I2S MAX98357A). While audio plays, `on_level(0..1)` reports loudness (optional hook,
+  e.g. for a light that pulses with the voice).
 Setup on the Pi (see jx0/docs/software_setup.md): pip install vosk sounddevice piper-tts numpy; apt install
 espeak-ng libportaudio2; download a Vosk model (vosk-model-small-en-us-0.15) and a Piper voice (en_US-lessac-medium).
 """

@@ -42,3 +42,6 @@ bom/.report_build/
 # screen recordings of the CAD sessions (large; kept locally for the timelapse)
 media/timelapse/
 jx0/bom/.report_build/
+
+# the reference robot video (a friend's robot): kept local, not published
+media/reference.mp4

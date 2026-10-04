@@ -1,12 +1,13 @@
 """JX0 body: joint I/O (real hardware or the MuJoCo model), verified gait playback with IMU balance, and the actions
-the brain can call (wave, nod, look, walk, turn, and the gripper hands: open, close, take, give).
+the brain can call (wave, nod, look, walk, turn).
 
-Both back ends take the same joint targets (radians, the simulation's sign convention):
-- HardwareIO: 12 ST3215 leg servos on the serial bus (servo_bus.py), 9 MG90S on Pi GPIO via pigpio (arms, grippers,
-  neck), MPU6050 IMU.
-- SimIO: the JX0 MuJoCo model (jx0/sim/jx0_model.py) with the same hobby-servo model the gaits were verified with;
-  runs on a PC (python -m jx0bot.main --sim) so the whole robot, voice included, can be tried before it is built.
-Gaits (gaits/*.json) are 50 Hz leg trajectories exported by jx0/sim/walk_jx0.py after passing the closed-loop test.
+Every joint is a Feetech STS3215 12 V serial bus servo (12 legs, 2 per arm, the neck), all on one bus, so both back
+ends take the same joint targets (radians, the simulation's sign convention):
+- HardwareIO: the 17 servos through the serial bus servo driver (servo_bus.py), MPU6050 IMU.
+- SimIO: the JX0 MuJoCo model (jx0/sim/jx0_model.py) with the same servo model the gaits were verified with; runs on a
+  PC (python -m jx0bot.main --sim) so the whole robot, voice included, can be tried before it is built.
+Gaits (gaits/*.json) are 50 Hz trajectories (legs plus the arm swing) exported by jx0/sim/walk_jx0.py after passing
+the closed-loop test.
 """
 from __future__ import annotations
 
@@ -16,16 +17,13 @@ import threading
 import time
 from pathlib import Path
 
-import numpy as np
 import yaml
 
 HERE = Path(__file__).resolve().parent
 LEG = ["hip_yaw", "hip_roll", "hip_pitch", "knee", "ankle_pitch", "ankle_roll"]
 LEG_JOINTS = [f"{s}_{j}" for s in "lr" for j in LEG]
-ARM_JOINTS = [f"{s}_{j}" for s in "lr" for j in ("shoulder_pitch", "shoulder_roll", "elbow", "grip")] + ["neck_yaw"]
-GRIP_OPEN, GRIP_REST = math.radians(55), math.radians(5)     # gripper finger: 0 = shut on the palm, + = open
-REST_ARMS = {"l_shoulder_roll": math.radians(6), "r_shoulder_roll": math.radians(-6),
-             "l_elbow": math.radians(-25), "r_elbow": math.radians(-25), "l_grip": GRIP_REST, "r_grip": GRIP_REST}
+ARM_JOINTS = [f"{s}_{j}" for s in "lr" for j in ("shoulder_pitch", "elbow")] + ["neck_yaw"]
+REST_ARMS = {"l_shoulder_pitch": 0.0, "r_shoulder_pitch": 0.0, "l_elbow": math.radians(-20), "r_elbow": math.radians(-20)}
 
 
 def load_config(path: Path = HERE / "config.yaml") -> dict:
@@ -54,59 +52,42 @@ class HardwareIO(RealTime):
     def __init__(self, cfg: dict):
         from .imu import MPU6050
         from .servo_bus import ServoBus, TICKS_PER_REV
-        import pigpio
         self.cfg, self.tpr = cfg, TICKS_PER_REV
         b = cfg["bus"]
         self.bus = ServoBus(b["port"], b["baud"])
-        self.legs = cfg["leg_servos"]
-        self.micro = cfg["micro_servos"]
-        self.pi = pigpio.pi()
-        if not self.pi.connected:
-            raise RuntimeError("pigpio daemon not running: sudo systemctl start pigpiod")
+        self.servos = {**cfg["leg_servos"], **cfg["arm_servos"]}
         im = cfg["imu"]
         self.imu = MPU6050(im["i2c_bus"], im["address"], im.get("mount"))
         self.imu.calibrate()
 
     def torque(self, on: bool):
-        for s in self.legs.values():
+        for s in self.servos.values():
             self.bus.torque(s["id"], on)
-        if not on:
-            for m in self.micro.values():
-                self.pi.set_servo_pulsewidth(m["gpio"], 0)
 
     def send(self, q: dict):
         ticks = {}
-        for name, s in self.legs.items():
+        for name, s in self.servos.items():
             if name in q:
                 lo, hi = (math.radians(v) for v in s["limits_deg"])
                 a = min(max(q[name], lo), hi)
                 ticks[s["id"]] = int(round(s["zero_ticks"] + s["direction"] * a * self.tpr / (2 * math.pi)))
         self.bus.set_positions(ticks)
-        for name, m in self.micro.items():
-            if name in q:
-                deg = max(-90.0, min(90.0, math.degrees(q[name]) * m["direction"]))
-                p0, p1, p2 = m["pulse_us"]
-                us = p1 + (p2 - p1) * deg / 90 if deg >= 0 else p1 + (p1 - p0) * deg / 90
-                self.pi.set_servo_pulsewidth(m["gpio"], int(us))
 
     def attitude(self):
         roll, pitch, yaw, rate = self.imu.update()
         return roll, pitch, yaw, rate
 
     def read_pose(self) -> dict:
-        """Leg joint angles from the servo encoders (the MG90S cannot report theirs)."""
-        q = {}
-        for name, s in self.legs.items():
-            q[name] = s["direction"] * (self.bus.position(s["id"]) - s["zero_ticks"]) * 2 * math.pi / self.tpr
-        return q
+        """Every joint angle from the servo encoders."""
+        return {name: s["direction"] * (self.bus.position(s["id"]) - s["zero_ticks"]) * 2 * math.pi / self.tpr
+                for name, s in self.servos.items()}
 
     def close(self):
         self.torque(False)
-        self.pi.stop()
 
 
 class SimIO(RealTime):
-    """JX0 in MuJoCo with the hobby-servo model (physics in a background thread, real time, optional viewer)."""
+    """JX0 in MuJoCo with the servo model (physics in a background thread, real time, optional viewer)."""
 
     def __init__(self, cfg: dict, viewer: bool = True):
         import sys
@@ -116,16 +97,13 @@ class SimIO(RealTime):
         sys.path.insert(0, str(root / "jx0" / "sim"))
         from jx0_model import build
         from walk_jx0 import ServoModel
-        from jx0_model import SMALL_SERVO_STALL
         from jx1calc.design import Design
         self.mj = mujoco
         design = Design(root / "jx0" / "design_point.yaml")
         self.m = mujoco.MjModel.from_xml_string(build(design))
         self.d = mujoco.MjData(self.m)
-        st = design.act_classes["ST"]
-        b = cfg["bus"]
-        self.leg_servo = ServoModel(st["stall_torque_nm"], st["no_load_speed_rad_s"], b["stiffness_nm_per_rad"], b["damping_nm_s_per_rad"])
-        self.arm_servo = ServoModel(SMALL_SERVO_STALL, 6.0, 15.0, 0.15)
+        st, b = design.act_classes["ST"], cfg["bus"]
+        self.servo = ServoModel(st["stall_torque_nm"], st["no_load_speed_rad_s"], b["stiffness_nm_per_rad"], b["damping_nm_s_per_rad"])
         names = LEG_JOINTS + ARM_JOINTS
         self.adr = {n: (self.m.jnt_qposadr[mujoco.mj_name2id(self.m, mujoco.mjtObj.mjOBJ_JOINT, n)],
                         self.m.jnt_dofadr[mujoco.mj_name2id(self.m, mujoco.mjtObj.mjOBJ_JOINT, n)]) for n in names}
@@ -154,8 +132,7 @@ class SimIO(RealTime):
             with self.lock:
                 for n, g in self.goal.items():
                     qa, da = self.adr[n]
-                    sv = self.leg_servo if n in LEG_JOINTS else self.arm_servo
-                    self.d.ctrl[self.act[n]] = sv.torque(g, self.d.qpos[qa], self.d.qvel[da])
+                    self.d.ctrl[self.act[n]] = self.servo.torque(g, self.d.qpos[qa], self.d.qvel[da])
                 self.mj.mj_step(self.m, self.d)
             t_wall += dt
             ahead = t_wall - time.perf_counter()
@@ -194,7 +171,7 @@ class Robot:
         self.io, self.cfg = io, cfg
         self.gaits = {p.stem: json.loads(p.read_text(encoding="utf-8")) for p in (HERE / "gaits").glob("*.json")}
         f = self.gaits["forward_2"]
-        self.stand_pose = dict(zip(f["joints"], f["q"][0]))          # walking stance (knees bent), feet together
+        self.stand_pose = {k: v for k, v in zip(f["joints"], f["q"][0]) if k in LEG_JOINTS}   # walking stance, knees bent
         self.q = {**{j: 0.0 for j in LEG_JOINTS + ARM_JOINTS}, **REST_ARMS}
         self.bal = cfg["balance"]
         self.dt = 1.0 / cfg["bus"]["rate_hz"]
@@ -221,7 +198,7 @@ class Robot:
         self.move_to({**self.stand_pose, **REST_ARMS, "neck_yaw": 0.0}, seconds)
 
     def play(self, name: str):
-        """Play one verified gait at 50 Hz with the IMU stabiliser on the stance leg(s)."""
+        """Play one verified gait (legs and arm swing) at 50 Hz with the IMU stabiliser on the stance leg(s)."""
         g = self.gaits[name]
         joints, k_a, d_a, k_h = g["joints"], self.bal["k_ankle"], self.bal["d_ankle"], self.bal["k_hip"]
         for frame, stance in zip(g["q"], g["stance"]):
@@ -269,50 +246,15 @@ class Robot:
         return f"turned {turned:.0f} degrees"
 
     def wave(self, arm: str = "right") -> str:
+        """Raise the arm up in front and wag the blade at the elbow."""
         s = "l" if arm == "left" else "r"
-        sg = 1 if s == "l" else -1
         with self.busy:
-            self.move_to({f"{s}_shoulder_roll": sg * math.radians(100), f"{s}_elbow": math.radians(-60), f"{s}_grip": GRIP_OPEN}, 0.6)
+            self.move_to({f"{s}_shoulder_pitch": math.radians(-150), f"{s}_elbow": math.radians(-30)}, 0.8)
             for _ in range(3):
-                self.move_to({f"{s}_elbow": math.radians(-20)}, 0.25)
-                self.move_to({f"{s}_elbow": math.radians(-80)}, 0.25)
-            self._arm_rest(s, 0.6)
-        return f"waved the {arm} hand"
-
-    # ---------------------------------------------------------------- hands (one MG90S gripper finger each)
-    def _arm_rest(self, s, seconds):
-        self.move_to({f"{s}_shoulder_pitch": 0.0, f"{s}_shoulder_roll": REST_ARMS[f"{s}_shoulder_roll"],
-                      f"{s}_elbow": REST_ARMS[f"{s}_elbow"], f"{s}_grip": GRIP_REST}, seconds)
-
-    def _reach(self, s, seconds=0.8):
-        """Hold the hand out in front at chest height, fingers pointing forward."""
-        sg = 1 if s == "l" else -1
-        self.move_to({f"{s}_shoulder_pitch": math.radians(-70), f"{s}_shoulder_roll": sg * math.radians(8),
-                      f"{s}_elbow": math.radians(-20)}, seconds)
-
-    def hand(self, side: str = "right", action: str = "open") -> str:
-        s = "l" if side == "left" else "r"
-        with self.busy:
-            if action == "open":
-                self.move_to({f"{s}_grip": GRIP_OPEN}, 0.4)
-            elif action == "close":
-                self.move_to({f"{s}_grip": 0.0}, 0.5)           # closes until the object (or the palm) stops the finger
-            elif action == "take":
-                self._reach(s)
-                self.move_to({f"{s}_grip": GRIP_OPEN}, 0.4)
-                self.io.sleep(3.0)                               # time for the person to put something in the hand
-                self.move_to({f"{s}_grip": 0.0}, 0.6)
-                self.move_to({f"{s}_shoulder_pitch": math.radians(-30), f"{s}_elbow": math.radians(-80)}, 0.8)   # carry
-            elif action == "give":
-                self._reach(s)
-                self.io.sleep(1.0)
-                self.move_to({f"{s}_grip": GRIP_OPEN}, 0.4)
-                self.io.sleep(2.0)
-                self._arm_rest(s, 0.8)
-            else:
-                raise ValueError(f"unknown hand action {action}")
-        return {"open": f"opened the {side} hand", "close": f"closed the {side} hand",
-                "take": f"took the object in the {side} hand", "give": f"handed over the object from the {side} hand"}[action]
+                self.move_to({f"{s}_elbow": math.radians(10)}, 0.25)
+                self.move_to({f"{s}_elbow": math.radians(-50)}, 0.25)
+            self.move_to({f"{s}_shoulder_pitch": REST_ARMS[f"{s}_shoulder_pitch"], f"{s}_elbow": REST_ARMS[f"{s}_elbow"]}, 0.8)
+        return f"waved the {arm} arm"
 
     def nod(self, kind: str = "yes") -> str:
         with self.busy:
@@ -346,6 +288,4 @@ class Robot:
             return self.walk(args["steps"], args["direction"])
         if name == "turn":
             return self.turn(args["degrees"])
-        if name == "hand":
-            return self.hand(args["side"], args["action"])
         raise ValueError(f"unknown action {name}")

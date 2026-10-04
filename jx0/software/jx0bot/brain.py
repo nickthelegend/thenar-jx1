@@ -3,7 +3,7 @@
 - Model: claude-opus-5 (override with JX0_MODEL), low effort for short spoken replies.
 - Streaming: text deltas are cut into sentences and handed to `on_sentence` as soon as each one ends, so the robot
   starts speaking while the rest of the reply is still being generated.
-- Robot actions are client tools (wave, nod, walk, turn, look, hand). Inputs stream eagerly, so every input is validated
+- Robot actions are client tools (wave, nod, walk, turn, look). Inputs stream eagerly, so every input is validated
   here before the action runs; a turn cut off by max_tokens or a refusal never runs its tools.
 - Refusal fallbacks are enabled server-side (`fallbacks: "default"`), so a declined request is retried on the model
   Anthropic recommends instead of coming back empty.
@@ -23,9 +23,9 @@ MODEL = os.environ.get("JX0_MODEL", "claude-opus-5")
 MAX_TOKENS = 8000            # replies are 1-3 spoken sentences; this leaves room for adaptive thinking
 MAX_HISTORY_TURNS = 20       # keep the conversation short: older turns are dropped in user/assistant pairs
 
-SYSTEM_PROMPT = """You are JX0, a small walking humanoid robot (about 50 cm tall) built by a student in India from \
-3D-printed parts and hobby servos. You have a round screen face, and two gripper hands that can hold light things
-like a pen or a paper ball. You talk out loud through a small speaker, so:
+SYSTEM_PROMPT = """You are JX0, a small walking humanoid robot (about 54 cm tall) built by a student in India from \
+light green 3D-printed parts and 17 serial bus servos. You have a round soft head with four little holes for your \
+microphone, and flat paddle arms you swing when you walk. You talk out loud through a small speaker, so:
 - Answer in one to three short spoken sentences. No lists, no markdown, no emoji, no URLs.
 - Be warm, curious and a little playful. You are proud of being a home-built robot and happy to explain how you work.
 - You can move. Use the tools when the user asks you to, or when a small gesture fits (a wave hello, a nod). Walking \
@@ -53,13 +53,6 @@ TOOLS = [
     {"name": "look", "description": "Turn the head to look left, right or straight ahead.", "eager_input_streaming": True,
      "input_schema": {"type": "object", "properties": {"direction": {"type": "string", "enum": ["left", "right", "center"]}},
                       "required": ["direction"], "additionalProperties": False}},
-    {"name": "hand", "description": "Use a gripper hand. open / close the fingers; take = hold the hand out open, wait 3 "
-                                    "seconds for the person to put a light object in it, then grip it; give = hold the hand "
-                                    "out and let go of what it holds.", "eager_input_streaming": True,
-     "input_schema": {"type": "object", "properties": {
-         "side": {"type": "string", "enum": ["left", "right"]},
-         "action": {"type": "string", "enum": ["open", "close", "take", "give"]}},
-         "required": ["side", "action"], "additionalProperties": False}},
 ]
 _SCHEMAS = {t["name"]: t["input_schema"] for t in TOOLS}
 

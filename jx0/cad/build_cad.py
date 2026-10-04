@@ -27,7 +27,7 @@ import geometry as G  # noqa: E402
 PARTS_DIR = ROOT / "jx0" / "cad" / "parts"
 STL_DIR = ROOT / "jx0" / "cad" / "stl"
 COLOURS = {"white": (0.92, 0.92, 0.94), "orange": (0.95, 0.42, 0.11), "black": (0.12, 0.12, 0.14), "blue": (0.15, 0.3, 0.75),
-           "cyan": (0.45, 0.9, 1.0)}
+           "cyan": (0.45, 0.9, 1.0), "sage": (0.74, 0.86, 0.58)}
 BASE = {"z": ("Front Plane", "XY"), "y": ("Top Plane", "XZ"), "x": ("Right Plane", "YZ")}
 PETG_DENSITY = 1270.0          # kg/m^3
 PRINT_FILL = 0.55              # printed mass / solid mass (3 walls + 25 % gyroid on these small parts, ESTIMATED)
@@ -72,9 +72,20 @@ class Builder:
 
     def feature(self, prim):
         self.n += 1
-        kind = prim[0]
+        kind = G.base_kind(prim[0])
         tag = f"{kind}{self.n}"
-        if kind in ("box", "cut"):
+        if kind in ("prism", "pcut"):
+            _, axis, pts, (s0, s1) = prim
+            pname, key = self.plane(axis, s0)
+            uv = [self._uv(key, *{"x": (s0, a, b), "y": (a, s0, b), "z": (a, b, s0)}[axis]) for a, b in pts]
+            with self.p.sketch(key, f"S_{tag}", plane_name=pname) as sk:
+                sk.polygon(uv)
+            depth = (s1 - s0) * MM
+            if kind == "prism":
+                self.extrude(f"S_{tag}", depth, f"Boss_{self.n}")
+            else:
+                self.p.cut(f"S_{tag}", depth, f"Cut_{self.n}", reverse=True)
+        elif kind in ("box", "cut"):
             (x0, x1), (y0, y1), (z0, z1) = prim[1], prim[2], prim[3]
             pname, key = self.plane("z", z0)
             with self.p.sketch(key, f"S_{tag}", plane_name=pname) as sk:
@@ -119,14 +130,15 @@ def build_part(s: Session, name, prims, colour, slow=False, frames=None):
     part.gv("clearance", G.C)
     b = Builder(part, slow, frames)
     first = True
-    # bosses first, then pockets and holes (so every cut sees the finished solid)
-    for prim in [q for q in prims if q[0] in ("box", "cyl")] + [q for q in prims if q[0] in ("cut", "hole")]:
+    # bosses, then pockets and holes (so every cut sees the finished solid), then the "late" features: bosses that sit
+    # inside a hollowed shell (servo mounts, standoffs) and the holes through them
+    for prim in sorted(prims, key=G.phase):
         b.feature(prim)
         if first:
             set_view(s.app, part.doc, eye=(1.0, -0.8, 0.6))
             first = False
     part.color(COLOURS[colour])
-    part.prop("Material", "PETG (printed)" if colour in ("white", "orange") else "stand-in")
+    part.prop("Material", "PETG (printed)" if colour in ("white", "orange", "sage") else "stand-in")
     part.prop("Project", "JX0")
     part.rebuild()
     set_view(s.app, part.doc, eye=(1.0, -0.8, 0.6))

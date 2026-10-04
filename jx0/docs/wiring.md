@@ -1,83 +1,77 @@
 # JX0 wiring
 
-One 3S LiPo powers everything. The 12 leg servos run straight off the pack (they are 12 V servos). Two 5 V
-converters feed the Raspberry Pi and the 9 small arm, gripper and neck servos. **Connect every ground together**: the
-Pi drives the small servos' signal wires, so they need a common ground.
+All 17 joints are the same Feetech STS3215 12 V serial bus servo, like the reference robot, so the wiring is short:
+one serial bus for every servo, one 5 V converter for the Raspberry Pi, and a few small audio and IMU modules.
 
 ## Power
 
 ```mermaid
 flowchart LR
-  BAT["3S LiPo 11.1 V 2200 mAh<br/>(XT60)"] --> SW["10 A toggle switch"]
+  BAT["3S LiPo 11.1 V 2200 mAh (XT60)<br/>or a 12.6 V bench supply"] --> SW["10 A toggle switch"]
   BAT -. balance lead .-> ALARM["LiPo voltage alarm"]
   SW --> DRV["Waveshare serial bus servo driver<br/>DC in 9-12.6 V"]
-  DRV --> LEGS["12 x ST3215 leg servos<br/>(two daisy chains, one per leg)"]
+  DRV --> BUS["17 x STS3215<br/>legs, arms, neck"]
   SW --> UBEC["UBEC 5 V 5 A"] --> PI["Raspberry Pi 4<br/>5 V pins 2 + 4, GND pin 6"]
-  SW --> BUCK["MINI560 buck 5 V 5 A"] --> MICRO["9 x MG90S<br/>(red + brown wires)"]
   PI -- USB --> DRV
 ```
 
 | Run | Wire | Why |
 |---|---|---|
-| Battery → switch → servo driver | 16 AWG silicone | the 12 leg servos can pull several amps together while walking |
-| Switch → UBEC, switch → MINI560 | 20 AWG | under 3 A each |
+| Battery → switch → servo driver | 16 AWG silicone | the servos together can pull a few amps while walking |
+| Switch → UBEC | 20 AWG | under 2 A |
 | UBEC → Pi 5 V (pins 2 and 4) and GND (pin 6) | 20 AWG | 5 V on the GPIO pins bypasses the Pi's input fuse, so double-check the polarity before you plug in |
-| MINI560 → MG90S red (+) and brown (−) | 20 AWG to a small bus strip | 9 servos; a gripper holding something draws its stall current (about 0.7 A, ESTIMATED) |
 
-- **Set the MINI560 to 5.0 V before connecting servos.** Some MINI560 boards are fixed-voltage and some are
-  adjustable: measure the output with a multimeter first.
-- Plug the voltage alarm into the balance lead and set it to about 3.5 V per cell. Stop when it beeps: running a LiPo
-  flat ruins it.
+- **Bench supply (how the reference robot is run):** set it to 12.6 V and a 3 A current limit, and plug it into the
+  same XT60 instead of the battery. On the reference robot's supply display, a robot like this draws 0.6–1.5 A at 12.6 V
+  (about 7–19 W) while walking. That lets you test for hours without charging.
+- Plug the voltage alarm into the LiPo's balance lead and set it to about 3.5 V per cell. Stop when it beeps: running a
+  LiPo flat ruins it.
 - Charge with the B3 charger only, never unattended, and on a non-flammable surface.
 
-## Leg servos (serial bus)
+## The servo bus
 
-The ST3215s share one serial bus. Each has two identical connectors, so chain them: driver → hip yaw → hip roll →
-hip pitch → knee → ankle pitch → ankle roll, once per leg. Every servo needs its own ID (IDs are in
-`jx0/software/jx0bot/config.yaml`; set them with `calibrate.py set-id` **one servo at a time**, see
-[bringup.md](bringup.md)).
+Every STS3215 has two identical 3-pin connectors, so the servos chain one into the next. Use three chains from the
+driver board:
 
-| Leg | Hip yaw | Hip roll | Hip pitch | Knee | Ankle pitch | Ankle roll |
-|---|---|---|---|---|---|---|
-| Left | 1 | 2 | 3 | 4 | 5 | 6 |
-| Right | 7 | 8 | 9 | 10 | 11 | 12 |
+| Chain | Servos (bus ID) |
+|---|---|
+| Left leg | hip yaw 1 → hip roll 2 → hip pitch 3 → knee 4 → ankle pitch 5 → ankle roll 6 |
+| Right leg | hip yaw 7 → hip roll 8 → hip pitch 9 → knee 10 → ankle pitch 11 → ankle roll 12 |
+| Arms and neck | left shoulder 13 → left elbow 14 → neck 17 → right shoulder 15 → right elbow 16 |
 
-Connect the driver board to the Pi by USB (the Pi sees it as `/dev/ttyUSB0` or `/dev/ttyACM0`; set `bus.port` in
-config.yaml). Set the board's mode jumper for USB/serial pass-through as the Waveshare wiki for the board describes.
+The IDs are in `jx0/software/jx0bot/config.yaml`. Every servo ships as ID 1, so set them with `calibrate.py set-id`,
+**one servo at a time** (see [bringup.md](bringup.md)). Connect the driver board to the Pi by USB; the Pi sees it as
+`/dev/ttyUSB0` or `/dev/ttyACM0` (set `bus.port` in config.yaml). Set the board's mode jumper for USB/serial pass-through,
+as the Waveshare wiki for the board describes.
+
+Arm and neck cables: the shoulder servos sit inside the chest cap, so their cables stay inside. Each elbow cable runs
+down the outside of its cradle (zip-tie it so the blade cannot catch it), and the neck cable goes in through the gap
+next to the neck servo.
 
 ## Raspberry Pi GPIO map (BCM numbers, physical pin in brackets)
 
 | Function | GPIO (pin) | Connects to |
 |---|---|---|
-| 3.3 V | (1), (17) | MPU6050 VCC, INMP441 VDD, display VCC |
+| 3.3 V | (1), (17) | MPU6050 VCC, INMP441 VDD |
 | 5 V in | (2), (4) | UBEC + |
 | GND | (6), (9), (14), (20), (25), (30), (34), (39) | all grounds |
 | I2C SDA / SCL | 2 (3) / 3 (5) | MPU6050 SDA / SCL |
-| Left gripper MG90S | 4 (7) | orange signal wire |
-| Left shoulder pitch / roll | 5 (29) / 6 (31) | MG90S signal |
-| Left elbow | 12 (32) | MG90S signal |
-| Right shoulder pitch / roll | 13 (33) / 16 (36) | MG90S signal |
-| Right elbow | 22 (15) | MG90S signal |
-| Neck yaw | 23 (16) | MG90S signal |
-| Right gripper MG90S | 26 (37) | MG90S signal |
 | Push-to-talk button | 17 (11) | button to GND (internal pull-up) |
-| Display SPI MOSI / SCLK / CS | 10 (19) / 11 (23) / 8 (24) | GC9A01 SDA (DIN) / SCL (CLK) / CS |
-| Display DC / RST / backlight | 25 (22) / 24 (18) / 27 (13) | GC9A01 DC / RST / BLK |
 | I2S bit clock | 18 (12) | INMP441 SCK and MAX98357A BCLK |
 | I2S word select | 19 (35) | INMP441 WS and MAX98357A LRC |
 | I2S data in | 20 (38) | INMP441 SD (L/R pin to GND = left channel) |
 | I2S data out | 21 (40) | MAX98357A DIN (Vin from 5 V, speaker on + / −) |
-| Camera | CSI ribbon | OV5647 |
 
-The small servos get their pulses from the `pigpio` daemon (hardware-timed DMA), so any GPIO works and no PCA9685
-board is needed. The display, microphone and amplifier pins are the Pi's SPI0 and I2S (PCM) pins and cannot move.
+The servos need no GPIO at all: they're all on the USB servo bus.
 
 ## Where things sit
 
-- Torso: Raspberry Pi on the 4 standoffs inside the front wall, servo driver and converters on the floor, battery at
-  the back (open back, strap it in), speaker behind the front grille, push-to-talk button in the chest hole.
-- Pelvis: the MPU6050, as close to the hip centre as you can, **x arrow forward, y arrow to the robot's left**
+- **Lower torso:** the Raspberry Pi on the 4 standoffs on the back wall, the battery on the floor, the servo driver and
+  the UBEC beside it. The push-to-talk button goes in the hole in the back wall, and the leg cables come in through the
+  slot at the bottom of the back wall.
+- **Chest cap:** the two shoulder servos (screwed to the inner plates, horns out through the side walls), the speaker
+  under the round grille on top, and the neck servo standing on top.
+- **Pelvis:** the MPU6050, as close to the hip centre as you can, **x arrow forward, y arrow to the robot's left**
   (otherwise set `imu.mount` in config.yaml).
-- Head: the round display pressed into the face window (hot glue on the PCB edge), the camera behind the lens hole
-  above it, and the microphone behind the left ear vents. Take the cables down through the neck with a loop of slack
-  for the ±80° neck turn.
+- **Head:** the INMP441 microphone glued behind the four face holes. Its cable goes down through the hole in the head
+  floor, with a loop of slack for the ±80° neck turn.

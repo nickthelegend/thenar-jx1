@@ -5,13 +5,13 @@ bus:
   port: /dev/ttyUSB0          # Waveshare serial bus servo driver on USB (or /dev/serial0 on the Pi UART)
   baud: 1000000
   rate_hz: 50                 # goal packets per second (the rate the gaits were verified at)
-  # servo stiffness/damping the walking simulation needs (N·m/rad, N·m·s/rad): set the ST3215 P/D registers so a
-  # joint deflects ~2.8 deg at stall torque (calibrate.py --stiffness measures it)
+  # servo stiffness/damping the walking simulation needs (N·m/rad, N·m·s/rad): set the STS3215 P/D registers so a
+  # joint deflects ~2.8 deg at stall torque (calibrate.py stiffness measures it)
   stiffness_nm_per_rad: 60
   damping_nm_s_per_rad: 0.6
 
-# ST3215 leg servos: bus ID, direction (+1 / -1: servo tick direction vs the joint sign — ALL PLACEHOLDERS until
-# calibrate.py --directions checks each joint), zero_ticks (servo reading
+# STS3215 leg servos: bus ID, direction (+1 / -1: servo tick direction vs the joint sign — ALL PLACEHOLDERS until
+# calibrate.py directions checks each joint), zero_ticks (servo reading
 # with the joint at 0 rad — robot in the zero pose), limits from jx0/design_point.yaml
 leg_servos:
   l_hip_yaw:     {id: 1,  direction: 1,  zero_ticks: 2048, limits_deg: [-30, 30]}
@@ -27,19 +27,14 @@ leg_servos:
   r_ankle_pitch: {id: 11, direction: 1,  zero_ticks: 2048, limits_deg: [-60, 45]}
   r_ankle_roll:  {id: 12, direction: 1,  zero_ticks: 2048, limits_deg: [-25, 25]}
 
-# MG90S micro servos on Pi GPIO (pigpio DMA-timed pulses, 50 Hz): BCM pin, pulse at -90 / 0 / +90 deg (µs), direction.
-# Grippers: 0 deg = finger shut on the palm, +55 deg = open; set the horn so 0 deg is just touching the palm.
-# (GPIO 18-21 are taken by I2S audio, 8-11 by the display SPI, 2-3 by the IMU I2C)
-micro_servos:
-  l_shoulder_pitch: {gpio: 5,  pulse_us: [500, 1500, 2500], direction: 1}
-  l_shoulder_roll:  {gpio: 6,  pulse_us: [500, 1500, 2500], direction: 1}
-  l_elbow:          {gpio: 12, pulse_us: [500, 1500, 2500], direction: 1}
-  r_shoulder_pitch: {gpio: 13, pulse_us: [500, 1500, 2500], direction: 1}
-  r_shoulder_roll:  {gpio: 16, pulse_us: [500, 1500, 2500], direction: 1}
-  r_elbow:          {gpio: 22, pulse_us: [500, 1500, 2500], direction: 1}
-  neck_yaw:         {gpio: 23, pulse_us: [500, 1500, 2500], direction: 1}
-  l_grip:           {gpio: 4,  pulse_us: [500, 1500, 2500], direction: 1}
-  r_grip:           {gpio: 26, pulse_us: [500, 1500, 2500], direction: 1}
+# arm and neck STS3215 on the same bus (IDs 13-17). Limits: the shoulder cradle and the blades clear the torso and the
+# legs over these ranges (jx0/design_point.yaml); directions are placeholders until calibrate.py directions
+arm_servos:
+  l_shoulder_pitch: {id: 13, direction: 1,  zero_ticks: 2048, limits_deg: [-180, 60]}
+  l_elbow:          {id: 14, direction: 1,  zero_ticks: 2048, limits_deg: [-130, 30]}
+  r_shoulder_pitch: {id: 15, direction: 1,  zero_ticks: 2048, limits_deg: [-180, 60]}
+  r_elbow:          {id: 16, direction: 1,  zero_ticks: 2048, limits_deg: [-130, 30]}
+  neck_yaw:         {id: 17, direction: 1,  zero_ticks: 2048, limits_deg: [-80, 80]}
 
 imu:
   type: mpu6050
@@ -56,15 +51,3 @@ voice:
   talk_button_gpio: 17        # push-to-talk button to GND (internal pull-up)
   vosk_model: models/vosk-model-small-en-us-0.15
   piper_voice: models/en_US-lessac-medium.onnx
-
-face:
-  backend: gc9a01             # gc9a01 | st7789 | none (renders to face.png for testing)
-  # if the colours or the picture are wrong on first power-up (python -m jx0bot.face --test), flip these, no code change:
-  bgr: true                   # GC9A01 panel colour order (red and blue swapped -> false)
-  invert: true                # display inversion (washed-out / negative colours -> false)
-  rotate: 0                   # 0-3, quarter turns, if the face is sideways
-  spi_port: 0
-  spi_device: 0
-  gpio_dc: 25
-  gpio_rst: 24
-  gpio_backlight: 27          # GPIO 18-21 are the I2S mic + amplifier

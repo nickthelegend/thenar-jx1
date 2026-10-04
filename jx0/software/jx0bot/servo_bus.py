@@ -1,4 +1,4 @@
-"""Feetech STS serial-bus protocol (Waveshare ST3215 / Feetech STS3215 and the other STS-series servos).
+"""Feetech STS serial-bus protocol for JX0's 17 Feetech STS3215 (12 V) servos (also Waveshare ST3215, other STS servos).
 
 Half-duplex TTL UART through a bus-servo adapter (USB or the Pi's UART), default 1 Mbit/s. Packet:
     0xFF 0xFF ID LEN INSTR PARAM... CHECKSUM,   LEN = len(PARAM) + 2,   CHECKSUM = ~(ID + LEN + INSTR + sum(PARAM)) & 0xFF

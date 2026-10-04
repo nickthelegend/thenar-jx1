@@ -18,7 +18,6 @@ def main():
     ap.add_argument("--sim", action="store_true", help="simulated body (MuJoCo) instead of the servos")
     ap.add_argument("--text", action="store_true", help="type to JX0 instead of using the microphone")
     ap.add_argument("--no-viewer", action="store_true")
-    ap.add_argument("--no-face", action="store_true")
     a = ap.parse_args()
     cfg = load_config()
 
@@ -28,29 +27,13 @@ def main():
         io.settle({**robot.stand_pose, **REST_ARMS})
     robot.stand()
 
-    face = None
-    if not a.no_face:
-        from .face import Face
-        face = Face(cfg["face"], backend="none" if a.sim else cfg["face"]["backend"])
-        face.start()
-
     if a.text:
-        speak = print_and_say(face)
+        speak = print_and_say()
     else:
         from .voice import Speaker
-        speaker = Speaker(on_level=face.mouth if face else None)
-        speak = speaker.say
+        speak = Speaker().say
 
-    def act(name, args):
-        if face:
-            face.set_mood("happy" if name == "wave" else "busy")
-        try:
-            return robot.act(name, args)
-        finally:
-            if face:
-                face.set_mood("idle")
-
-    brain = Brain(act=act, on_sentence=speak)
+    brain = Brain(act=robot.act, on_sentence=speak)
     speak("Hi, I am J X zero. Ask me anything, or tell me to wave or walk.")
 
     if a.text:
@@ -68,23 +51,19 @@ def main():
         button = Button(cfg["voice"]["talk_button_gpio"], pull_up=True)
         while True:
             rest = listener.wait_for_wake(button)
-            if face:
-                face.set_mood("listening")
             text = rest or listener.listen(timeout_s=8.0)
-            if face:
-                face.set_mood("idle")
             if text:
                 print(f"heard: {text}")
                 brain.reply(text)
     io.close()
 
 
-def print_and_say(face):
+def print_and_say():
     """Text mode: print the reply, and try to speak it too when a TTS engine is available."""
     import queue
     try:
         from .voice import Speaker
-        sp = Speaker(on_level=face.mouth if face else None)
+        sp = Speaker()
     except Exception:
         sp = None
     q: queue.Queue = queue.Queue()

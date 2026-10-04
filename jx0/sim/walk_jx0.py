@@ -25,7 +25,7 @@ sys.path.insert(0, str(ROOT / "calculations"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from jx1calc.design import Design, LEG_JOINTS  # noqa: E402
 from jx1calc.gait import GaitParams, synthesize  # noqa: E402
-from jx0_model import ARM_JOINTS, DESIGN, SMALL_SERVO_STALL, build  # noqa: E402
+from jx0_model import ARM_JOINTS, DESIGN, build  # noqa: E402
 
 OUT = ROOT / "jx0" / "results"
 IMG = OUT / "images"
@@ -49,8 +49,17 @@ GAITS = {
     "side_left_2": dict(step_length=0.0, step_time=0.60, n_steps=2, lateral_step=0.015),
     "side_right_2": dict(step_length=0.0, step_time=0.60, n_steps=2, lateral_step=-0.015),
 }
-ARM_POSE = {"l_shoulder_roll": np.radians(6), "r_shoulder_roll": np.radians(-6), "l_elbow": np.radians(-25), "r_elbow": np.radians(-25),
-            "l_grip": np.radians(5), "r_grip": np.radians(5)}
+ARM_POSE = {"l_shoulder_pitch": 0.0, "r_shoulder_pitch": 0.0, "l_elbow": np.radians(-20), "r_elbow": np.radians(-20)}
+K_SWING = 1.6                                      # arm swing: shoulder pitch = 1.6 x the opposite hip's pitch swing
+
+
+def arm_goals(q_row, q_first, adr):
+    """Arm counter-swing like the reference robot: each shoulder follows the opposite leg's hip pitch."""
+    out = dict(ARM_POSE)
+    for s, o in (("l", "r"), ("r", "l")):
+        qa = adr[f"{o}_hip_pitch"][0]
+        out[f"{s}_shoulder_pitch"] = ARM_POSE[f"{s}_shoulder_pitch"] + K_SWING * float(q_row[qa] - q_first[qa])
+    return out
 K_ANKLE, D_ANKLE, K_HIP = 0.6, 0.05, 0.3          # stabiliser (rad per rad of tilt, per rad/s) — as JX1
 
 
@@ -89,10 +98,10 @@ def run(name, kp=60.0, kd=0.6, bus_hz=50.0, stabiliser=True, render=False):
                m.jnt_dofadr[mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, n)]) for n in jnames}
     act = {n: mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_ACTUATOR, n) for n in jnames}
     leg_servo = ServoModel(servo_leg["stall_torque_nm"], servo_leg["no_load_speed_rad_s"], kp, kd)
-    arm_servo = ServoModel(SMALL_SERVO_STALL, 6.0, kp * 0.25, kd * 0.25)
+    arm_servo = ServoModel(servo_leg["stall_torque_nm"], servo_leg["no_load_speed_rad_s"], kp, kd)   # every joint is an STS3215
     # start in the first planned pose, arms in the walking pose
     d.qpos[:] = q_ref[0]
-    for n, v in ARM_POSE.items():
+    for n, v in arm_goals(q_ref[0], q_ref[0], adr).items():
         d.qpos[adr[n][0]] = v
     d.qpos[2] += 0.002
     mujoco.mj_forward(m, d)
@@ -124,8 +133,9 @@ def run(name, kp=60.0, kd=0.6, bus_hz=50.0, stabiliser=True, render=False):
                         corr[f"{s}_ankle_roll"] = K_ANKLE * roll + D_ANKLE * wx
                         corr[f"{s}_hip_pitch"] = K_HIP * pitch
                         corr[f"{s}_hip_roll"] = K_HIP * roll
+            arms = arm_goals(q_ref[i], q_ref[0], adr)
             for n in jnames:
-                base = q_ref[i, adr[n][0]] if n.split("_", 1)[1] in LEG_JOINTS else ARM_POSE.get(n, 0.0)
+                base = q_ref[i, adr[n][0]] if n.split("_", 1)[1] in LEG_JOINTS else arms.get(n, 0.0)
                 goal[n] = float(base + corr.get(n, 0.0))
         for n in jnames:
             qa, da = adr[n]
@@ -172,13 +182,19 @@ def run(name, kp=60.0, kd=0.6, bus_hz=50.0, stabiliser=True, render=False):
 
 
 def export_gait(name, g, res, adr):
-    """The planned leg trajectory at 50 Hz in joint names/radians, for the robot (jx0bot.gait plays it)."""
+    """The planned leg trajectory and the arm swing at 50 Hz in joint names/radians, for the robot (jx0bot.robot plays it)."""
     t, q, c = res["t"], res["qpos"], res["plan"].contact
     step = max(1, int(round(0.02 / g.dt)))
-    joints = [f"{s}_{j}" for s in "lr" for j in LEG_JOINTS]
+    legs = [f"{s}_{j}" for s in "lr" for j in LEG_JOINTS]
+    arm_names = [f"{s}_{j}" for s in "lr" for j in ARM_JOINTS]
+    joints = legs + arm_names
+    rows = []
+    for i in range(0, len(t), step):
+        arms = arm_goals(q[i], q[0], adr)
+        rows.append([round(float(q[i, adr[j][0]]), 5) for j in legs] + [round(float(arms[j]), 5) for j in arm_names])
     data = {"name": name, "dt": round(step * g.dt, 4), "hip_height_m": g.hip_height, "step_length_m": g.step_length,
             "step_time_s": g.step_time, "turn_per_step_deg": g.turn_per_step_deg, "lateral_step_m": g.lateral_step,
-            "joints": joints, "q": [[round(float(q[i, adr[j][0]]), 5) for j in joints] for i in range(0, len(t), step)],
+            "joints": joints, "q": rows,
             "stance": [[bool(c[i, 0]), bool(c[i, 1])] for i in range(0, len(t), step)],
             "source": "jx0/sim/walk_jx0.py (ZMP preview control on the JX0 model, verified through the servo model)"}
     GAIT_DIR.mkdir(parents=True, exist_ok=True)

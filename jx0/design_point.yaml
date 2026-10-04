@@ -1,11 +1,11 @@
-# JX0 design point — the small (~50 cm, ~2.0 kg) 3D-printed MVP humanoid. Same schema as calculations/design_point.yaml
+# JX0 design point — the small (~54 cm, ~2.4 kg) 3D-printed MVP humanoid. Same schema as calculations/design_point.yaml
 # (JX1), so the JX1 analysis pipeline (jx1calc: parametric model, ZMP preview-control gait, whole-body IK, inverse
 # dynamics) sizes it unchanged. Every value carries an evidence label: VERIFIED / MEASURED / CALCULATED / ESTIMATED /
 # ASSUMED / UNVERIFIED. Masses are ASSUMED until the CAD mass properties replace them.
 meta:
-  version: "0.2"
-  date: "2026-09-24"
-  status: "CAD v0.2 (jx0/cad, SolidWorks): 12 V ST3215 leg servos, PETG parts, Raspberry Pi 4; parts list ₹46,858 (jx0/bom)"
+  version: "0.3"
+  date: "2026-10-04"
+  status: "v0.3 (2026-10-04): restyled after the reference robot (media/reference.mp4); all 17 joints Feetech STS3215 12 V; sage PETG; Raspberry Pi 4"
 
 frames:
   convention: "ROS REP-103: x forward, y left, z up. Joint rotation positive by right-hand rule about the listed axis."
@@ -13,7 +13,7 @@ frames:
   zero_pose: "legs straight and vertical, feet flat and parallel, arms hanging, all joint angles 0"
 
 overall:
-  height_m: {value: 0.517, label: CALCULATED, note: "CAD: sole 235 mm below the hip centres, head top 281.5 mm above"}
+  height_m: {value: 0.537, label: CALCULATED, note: "CAD: sole 235 mm below the hip centres, head top 301.6 mm above"}
   mass_target_kg: {value: 2.0, label: ESTIMATED}
 
 geometry:
@@ -93,8 +93,8 @@ mass_budget:
     carries: [hip_yaw, hip_yaw]
     com_m: [0.0, 0.0, 0.025]
   upper_body:
-    mass_kg: {value: 0.747, label: ESTIMATED, note: "CAD printed torso 97 g + head 48 g + arm links 55 g (shoulder 6.6, upper arm 4.7, forearm/hand 10.8, finger 5.2 g per side); 9 MG90S 121 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, driver + UBEC + buck 35 g, sensors/voice/face/camera 27 g, switch 10 g, wiring 62 g, screws 22 g"}
-    com_m: [0.0, 0.0, 0.130]
+    mass_kg: {value: 1.106, label: ESTIMATED, note: "v0.3 (reference style, every joint STS3215): CAD printed torso 83 g + chest cap 47 g + head 66 g + arms 39 g (cradle 8.1 + blade 11.2 g per side); 5 STS3215 (2 shoulder, 2 elbow, neck) 445 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, servo driver + UBEC 30 g, IMU/mic/amp/speaker/button 20 g, switch 10 g, wiring 70 g, screws 25 g"}
+    com_m: [0.0, 0.0, 0.146]
     inertia_box_m: [0.08, 0.13, 0.20]
   hip_yaw_link:
     structure_kg: {value: 0.014, label: ESTIMATED, note: "CAD 9.0 g + screws"}
@@ -123,15 +123,13 @@ mass_budget:
 
 # Upper body (arms and head) — used by the simulation model; lumped into upper_body for the leg analysis.
 upper_body_geometry:
-  shoulder_pitch_origin: {value: [0.0, 0.066, 0.176], label: CALCULATED, note: "CAD: shoulder-pitch axis at the torso side wall"}
-  upper_arm_m: {value: 0.055, label: CALCULATED, note: "CAD: shoulder-roll axis to elbow axis"}
-  forearm_m: {value: 0.085, label: CALCULATED}
-  neck_yaw_origin: {value: [0.0, 0.0, 0.1975], label: CALCULATED}
-  head_size_m: {value: [0.064, 0.08, 0.084], label: CALCULATED, note: "CAD head shell without bezel and ears"}
+  shoulder_pitch_origin: {value: [0.0125, 0.060125, 0.186], label: CALCULATED, note: "CAD: pitch horn face just outside the chest-cap side wall"}
+  upper_arm_m: {value: 0.052, label: CALCULATED, note: "CAD: shoulder-pitch axis to elbow axis (the cradle)"}
+  forearm_m: {value: 0.100, label: CALCULATED, note: "CAD: elbow axis to blade tip"}
+  neck_yaw_origin: {value: [0.0, 0.0, 0.239625], label: CALCULATED, note: "CAD: neck STS3215 standing on the chest cap, horn face"}
+  head_size_m: {value: [0.066, 0.078, 0.062], label: CALCULATED, note: "CAD head: soft block, four face holes"}
 
 upper_body_joint_ranges_deg:
-  shoulder_pitch: {min: -180, max: 60,  label: ASSUMED, note: "- = arm raises forward"}
-  shoulder_roll:  {min: -10,  max: 120, label: ASSUMED, note: "+ = abduction (left arm)"}
-  elbow:          {min: -120, max: 0,   label: ASSUMED}
+  shoulder_pitch: {min: -180, max: 60,  label: ASSUMED, note: "- = arm raises forward (the cradle swings past the torso side)"}
+  elbow:          {min: -130, max: 30,  label: ASSUMED, note: "- = blade swings forward"}
   neck_yaw:       {min: -80,  max: 80,  label: ASSUMED}
-  grip:           {min: 0,    max: 60,  label: CALCULATED, note: "gripper finger: 0 = closed on the palm, + = open (CAD clearance to 60 deg)"}

@@ -1,9 +1,9 @@
-"""JX0 bring-up: servo IDs, zero pose, joint directions, and a stiffness check. Run on the Pi with the legs hanging free
-(robot on a stand) and the 3S battery connected to the servo driver.
+"""JX0 bring-up for the 17 STS3215 servos (legs, arms, neck): IDs, zero pose, joint directions, and a stiffness check.
+Run on the Pi with the legs hanging free (robot on a stand) and 12 V on the servo driver (3S battery or a bench supply).
 
     python -m jx0bot.calibrate scan                      # which IDs answer, with voltage and temperature
     python -m jx0bot.calibrate set-id 1 7                # ONE servo on the bus: change its ID from 1 to 7
-    python -m jx0bot.calibrate center                    # all servos to mid-travel, BEFORE fitting horns and links
+    python -m jx0bot.calibrate center                    # all 17 servos to mid-travel, BEFORE fitting horns and links
     python -m jx0bot.calibrate zero                      # torque off, pose the robot in the zero pose, press Enter
     python -m jx0bot.calibrate directions                # moves each joint +10 deg; you answer y/n
     python -m jx0bot.calibrate stiffness l_knee          # holds a joint; push on it and read the stiffness
@@ -30,11 +30,19 @@ POSITIVE = {
     "knee": "the knee BENDS (shin swings backward)",
     "ankle_pitch": "the toes point DOWN",
     "ankle_roll": "the foot's LEFT edge goes UP",
+    "shoulder_pitch": "the arm swings BACKWARD",
+    "elbow": "the blade swings BACKWARD",
+    "yaw": "the head turns to the robot's LEFT",
 }
 
 ZERO_POSE = """Zero pose (all joint angles 0): legs straight down and parallel, feet flat and pointing forward, soles level
-with each other, hip-yaw and hip-roll brackets square to the pelvis. The printed parts are square at zero, so use a
-small set square against the pelvis, thigh and shin plates."""
+with each other, hip-yaw and hip-roll brackets square to the pelvis, shoulder cradles and blades hanging straight down,
+head facing forward. The printed parts are square at zero, so use a small set square against the pelvis, thigh and shin
+plates."""
+
+
+def all_servos(cfg: dict) -> dict:
+    return {**cfg["leg_servos"], **cfg["arm_servos"]}
 
 
 def set_field(joint: str, field: str, value) -> None:
@@ -59,31 +67,24 @@ def scan(bus: ServoBus, ids=range(1, 21)):
 
 
 def center(bus: ServoBus, cfg: dict):
-    """Leg servos to 2048 ticks and the MG90S to 1500 us (0 deg), so every horn goes on near the joint's zero."""
+    """Every servo to 2048 ticks (mid-travel), so every horn goes on near the joint's zero."""
     ids = scan(bus)
     bus.set_positions({i: 2048 for i in ids})
     for i in ids:
         bus.torque(i, True)
-    try:
-        import pigpio
-        pi = pigpio.pi()
-        for name, m in cfg["micro_servos"].items():
-            pi.set_servo_pulsewidth(m["gpio"], m["pulse_us"][1])
-        print("MG90S at 1500 us: fit the arm/neck horns straight, and each gripper finger just touching its palm")
-    except Exception as exc:                          # pigpio not installed or its daemon not running
-        print(f"MG90S not centred ({exc}); sudo systemctl start pigpiod")
-    input("Servos holding mid-travel. Fit the horns and links now, then press Enter to release... ")
+    input("Servos holding mid-travel. Fit the horns and links now (legs straight, cradles and blades hanging down, "
+          "head forward), then press Enter to release... ")
     for i in ids:
         bus.torque(i, False)
 
 
 def zero(bus: ServoBus, cfg: dict):
-    legs = cfg["leg_servos"]
-    for s in legs.values():
+    servos = all_servos(cfg)
+    for s in servos.values():
         bus.torque(s["id"], False)
     print(ZERO_POSE)
-    input("Torque is off. Put the legs in the zero pose, hold them there, and press Enter... ")
-    for name, s in legs.items():
+    input("Torque is off. Put the robot in the zero pose, hold it there, and press Enter... ")
+    for name, s in servos.items():
         p = bus.position(s["id"])
         set_field(name, "zero_ticks", p)
         print(f"{name:14s} id {s['id']:2d}  zero_ticks {p}")
@@ -91,10 +92,9 @@ def zero(bus: ServoBus, cfg: dict):
 
 
 def directions(bus: ServoBus, cfg: dict):
-    legs = cfg["leg_servos"]
     step = int(round(math.radians(10) * TICKS_PER_REV / (2 * math.pi)))
     input("Robot on a stand, legs hanging free. Press Enter to start; each joint moves 10 deg and back... ")
-    for name, s in legs.items():
+    for name, s in all_servos(cfg).items():
         joint = name.split("_", 1)[1]
         z = s["zero_ticks"]
         bus.set_positions({s["id"]: z})
@@ -115,7 +115,7 @@ def directions(bus: ServoBus, cfg: dict):
 def stiffness(bus: ServoBus, cfg: dict, joint: str):
     """Hold the joint at zero and print the deflection. Hang a known weight on a known lever (e.g. 0.5 kg at 10 cm =
     0.49 N·m): the walking gaits need about 60 N·m/rad, i.e. ~0.5 deg (5-6 ticks) of sag for that load."""
-    s = cfg["leg_servos"][joint]
+    s = all_servos(cfg)[joint]
     z = s["zero_ticks"]
     bus.set_positions({s["id"]: z})
     bus.torque(s["id"], True)

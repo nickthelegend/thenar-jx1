@@ -1,8 +1,8 @@
 # JX0 software setup
 
-JX0's program is `jx0/software/jx0bot`: it listens (Vosk, offline), thinks (Claude, over Wi-Fi), talks (Piper, offline),
-shows a face on the round screen, and moves: verified walking gaits with IMU balance, waving, nodding, looking around,
-and taking and giving things with its gripper hands.
+JX0's program is `jx0/software/jx0bot`. It listens (Vosk, offline), thinks (Claude, over Wi-Fi), talks (Piper,
+offline), and moves all 17 STS3215 joints over one serial bus: verified walking gaits with arm swing and IMU balance,
+turning, waving, nodding and looking around.
 
 ## Try it on a PC first (no robot needed)
 
@@ -16,7 +16,7 @@ pip install -r jx0/software/requirements-pc.txt
 cd jx0/software && python -m jx0bot.main --sim --text
 ```
 
-A MuJoCo window opens with JX0 standing. Type things like "wave at me", "walk forward four steps", "take this pen" or
+A MuJoCo window opens with JX0 standing. Type things like "wave at me", "walk forward four steps", "look left" or
 "turn around". You need an Anthropic API key in the environment (`ANTHROPIC_API_KEY`; see "The brain" below).
 
 To render the demo film without a key: `python jx0/sim/demo_jx0.py`.
@@ -44,14 +44,8 @@ JX0**: after a reboot, `arecord -l` and `aplay -l` should both list the card. A 
 a fallback with no overlay at all.
 
 ```bash
-sudo apt install -y git python3-venv espeak-ng libportaudio2 pigpio
+sudo apt install -y git python3-venv espeak-ng libportaudio2
 ```
-
-```bash
-sudo systemctl enable --now pigpiod
-```
-
-(If `pigpio` is not in your apt sources, build it from its GitHub repository `joan2937/pigpio`.)
 
 ### 2. Code and Python packages
 
@@ -105,7 +99,7 @@ before the legs are powered.
 ```ini
 [Unit]
 Description=JX0 robot
-After=network-online.target pigpiod.service
+After=network-online.target
 
 [Service]
 User=pi
@@ -127,12 +121,11 @@ sudo systemctl enable --now jx0
 | File | Job |
 |---|---|
 | `main.py` | wires everything together: listen, then think, then speak and move |
-| `brain.py` | Claude conversation with streaming speech and the robot's tools (wave, nod, walk, turn, look, hand) |
-| `voice.py` | Vosk listener (button or wake phrase) and the Piper / eSpeak speaker with mouth-level callback |
-| `face.py` | the eyes and mouth on the round screen (idle, listening, busy, happy, talking) and the display self-test |
-| `robot.py` | joint I/O for the real robot or the simulation; gait playback with IMU balance; all actions |
-| `servo_bus.py` | Feetech STS serial protocol for the ST3215 leg servos |
+| `brain.py` | Claude conversation with streaming speech and the robot's tools (wave, nod, walk, turn, look) |
+| `voice.py` | Vosk listener (button or wake phrase) and the Piper / eSpeak speaker |
+| `robot.py` | joint I/O for the real robot or the simulation; gait playback (legs and arm swing) with IMU balance; all actions |
+| `servo_bus.py` | Feetech STS serial protocol for the 17 STS3215 servos |
 | `imu.py` | MPU6050 driver with a complementary filter |
-| `calibrate.py` | servo IDs, centring, zero pose, joint directions, stiffness check |
-| `config.yaml` | servo IDs, directions, zero ticks, GPIO pins, balance gains, display settings |
-| `gaits/*.json` | 50 Hz leg trajectories that passed the closed-loop simulation check (`jx0/sim/walk_jx0.py`) |
+| `calibrate.py` | servo IDs, centring, zero pose, joint directions, stiffness check (all 17 servos) |
+| `config.yaml` | servo IDs, directions, zero ticks, limits, IMU, balance gains, push-to-talk pin |
+| `gaits/*.json` | 50 Hz trajectories (legs and arm swing) that passed the closed-loop simulation check (`jx0/sim/walk_jx0.py`) |

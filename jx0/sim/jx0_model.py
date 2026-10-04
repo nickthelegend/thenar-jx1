@@ -1,9 +1,9 @@
 """MuJoCo model of JX0 generated from jx0/design_point.yaml (masses and geometry), for planning, simulation and renders.
 
 Joint, body and site names follow the analysis convention (pelvis, l_hip_yaw ... r_ankle_roll, l_sole, r_sole, imu), so
-the JX1 gait pipeline (calculations/jx1calc) plans on this model directly. Arms (shoulder pitch/roll, elbow, gripper
-finger) and the neck are separate bodies with joints, so the robot can wave, grab and look around; the leg analysis lumps
-them into upper_body.
+the JX1 gait pipeline (calculations/jx1calc) plans on this model directly. Arms (shoulder pitch and elbow, each an
+STS3215 like every other joint) and the neck are separate bodies with joints, so the robot swings its arms, waves and
+looks around; the leg analysis lumps them into upper_body.
 Collision: feet only (plus the floor). Actuators are torque motors; the servo behaviour (position control, stiffness,
 torque-speed limit) is applied in Python by `ServoModel` in walk_jx0.py.
 """
@@ -22,14 +22,14 @@ sys.path.insert(0, str(ROOT / "jx0" / "cad"))
 import geometry as G  # noqa: E402
 
 DESIGN = ROOT / "jx0" / "design_point.yaml"
-SERVO = (0.0452, 0.0247, 0.035)                 # ST3215 body (ASSUMED until the datasheet check)
+SERVO = (0.0452, 0.0247, 0.035)                 # STS3215 body
 WHITE, BLACK, ORANGE, GREY, RUBBER = ".93 .93 .95 1", ".12 .12 .14 1", ".95 .42 .11 1", ".55 .57 .6 1", ".08 .08 .08 1"
-ARM_JOINTS = ["shoulder_pitch", "shoulder_roll", "elbow", "grip"]
-# each side (ESTIMATED from the CAD printed masses in jx0/cad/parts/index.json + 13.4 g per MG90S):
-# upper arm = printed link + elbow MG90S; forearm (hand) = printed link + gripper MG90S; finger = printed finger
-ARM_MASS = {"upper_arm": 0.020, "forearm": 0.026, "finger": 0.006}
-HEAD_MASS = 0.062                                    # CAD head shell + round display + camera (ESTIMATED)
-SMALL_SERVO_STALL = 0.19                         # N·m, MG90S: 1.8 kg·cm at 4.8 V, 2.2 kg·cm at 6 V (datasheet), 5 V supply
+SAGE = ".74 .86 .58 1"                           # the reference robot's colour (light green PETG)
+ARM_JOINTS = ["shoulder_pitch", "elbow"]
+# each side (ESTIMATED from the CAD printed masses in jx0/cad/parts/index.json + 89 g per STS3215 + screws):
+# upper arm = shoulder cradle + elbow STS3215; forearm = the blade
+ARM_MASS = {"upper_arm": 0.100, "forearm": 0.012}
+HEAD_MASS = 0.072                                    # CAD head 66 g + microphone + screws (ESTIMATED)
 
 
 def _f(x):
@@ -44,19 +44,24 @@ def _box(size, pos=(0, 0, 0), rgba=WHITE, euler=None, name=None, collide=False):
 
 
 CAD = ROOT / "jx0" / "cad"
-PART_RGBA = {"JX0_Head": ORANGE, "JX0_Finger_L": ORANGE, "JX0_Finger_R": ORANGE, "JX0_Servo_ST3215": BLACK,
-             "JX0_Servo_MG90S": ".15 .3 .75 1", "JX0_Display_GC9A01": ".02 .02 .03 1"}
-GLOW = {"JX0_Screen_Face"}                       # drawn with the emissive "screen" material (the face on the display)
+PART_RGBA = {"JX0_Servo_STS3215": BLACK}       # every printed part is sage
+
+
+def stl_dir():
+    """The SolidWorks STL export, or JX0_STL_DIR (e.g. meshes from jx0/cad/preview.py --stl-dir) to try a design change
+    before it is built in SolidWorks."""
+    import os
+    return Path(os.environ.get("JX0_STL_DIR", CAD / "stl"))
 
 
 def cad_visuals():
     """(asset xml, {link: [geom xml]}) with the SolidWorks STL meshes at the CAD component poses, or (None, {}) if absent."""
-    stl = CAD / "stl"
-    if not (stl / "JX0_Torso.stl").exists():
-        return None, {}
+    stl = stl_dir()
     sys.path.insert(0, str(CAD))
     from layout import components, link_of
     import mujoco as _mj
+    if not all((stl / f"{part}.stl").exists() for _, part, _ in components()):
+        return None, {}
     assets, geoms = set(), {}
     for key, part, M in components():
         link, origin = link_of(key)
@@ -64,7 +69,7 @@ def cad_visuals():
         q = np.zeros(4)
         _mj.mju_mat2Quat(q, np.ascontiguousarray(M[:3, :3]).flatten())
         pos = M[:3, 3] - origin * 1e-3
-        look = 'material="screen"' if part in GLOW else f'rgba="{PART_RGBA.get(part, WHITE)}"'
+        look = f'rgba="{PART_RGBA.get(part, SAGE)}"'
         geoms.setdefault(link, []).append(
             f'<geom type="mesh" mesh="m_{part}" pos="{_f(pos)}" quat="{_f(q)}" {look} contype="0" conaffinity="0"/>')
     asset = chr(10).join(f'<mesh name="m_{a}" file="{(stl / (a + ".stl")).as_posix()}" scale="0.001 0.001 0.001"/>' for a in sorted(assets))
@@ -126,36 +131,25 @@ def build(design: Design | None = None, timestep: float = 0.001) -> str:
     def arm(side):
         sgn = 1 if side == "l" else -1
         rng = {j: np.radians([ubr[j]["min"], ubr[j]["max"]]) for j in ARM_JOINTS}
-        if side == "r":
-            rng["shoulder_roll"] = -rng["shoulder_roll"][::-1]
-        ax = {"shoulder_pitch": "0 1 0", "shoulder_roll": "1 0 0", "elbow": "0 1 0", "grip": "0 -1 0"}   # grip + = open
-        mu, mf, mg = ARM_MASS["upper_arm"], ARM_MASS["forearm"], ARM_MASS["finger"]
-        fp = np.array([0.0, sgn * G.GRIP_Y, G.GRIP_Z]) * 1e-3                                         # finger pivot
-        return f"""<body name="{side}_shoulder" pos="{_f(sh * [1, sgn, 1])}">
-  <inertial pos="0 0 0" mass="0.02" diaginertia="2e-6 2e-6 2e-6"/>
-  <joint name="{side}_shoulder_pitch" axis="{ax['shoulder_pitch']}" range="{rng['shoulder_pitch'][0]:.4f} {rng['shoulder_pitch'][1]:.4f}" damping="0.01" armature="0.0005"/>
-  {"".join(cadv.get(f"{side}_shoulder", [])) if cadv else _box((0.03, 0.022, 0.03), (0, sgn * 0.012, 0), BLACK)}
-  <body name="{side}_upper_arm" pos="0 {sgn * G.ARM_Y * 1e-3:.4f} -0.016">
-    <inertial pos="0 0 {-la / 2}" mass="{mu}" diaginertia="{mu * la * la / 12:.3g} {mu * la * la / 12:.3g} 1e-6"/>
-    <joint name="{side}_shoulder_roll" axis="{ax['shoulder_roll']}" range="{rng['shoulder_roll'][0]:.4f} {rng['shoulder_roll'][1]:.4f}" damping="0.01" armature="0.0005"/>
-    {"".join(cadv.get(f"{side}_upper_arm", [])) if cadv else _box((0.026, 0.026, la), (0, 0, -la / 2))}
-    <body name="{side}_forearm" pos="0.008 0 {-la}">
-      <inertial pos="0 0 {-lf / 2}" mass="{mf}" diaginertia="{mf * lf * lf / 12:.3g} {mf * lf * lf / 12:.3g} 1e-6"/>
-      <joint name="{side}_elbow" axis="{ax['elbow']}" range="{rng['elbow'][0]:.4f} {rng['elbow'][1]:.4f}" damping="0.01" armature="0.0005"/>
-      {"".join(cadv.get(f"{side}_forearm", [])) if cadv else _box((0.02, 0.022, lf), (0, 0, -lf / 2))}
-      <site name="{side}_hand" pos="0 0 -0.080" size="0.005" group="4"/>
-      <body name="{side}_finger" pos="{_f(fp)}">
-        <inertial pos="0 {sgn * 0.013} -0.030" mass="{mg}" diaginertia="1e-6 1e-6 1e-6"/>
-        <joint name="{side}_grip" axis="{ax['grip']}" range="{rng['grip'][0]:.4f} {rng['grip'][1]:.4f}" damping="0.005" armature="0.0002"/>
-        {"".join(cadv.get(f"{side}_finger", [])) if cadv else _box((0.007, 0.036, 0.028), (0, sgn * 0.0136, -0.030), ORANGE)}
-      </body>
-    </body>
+        sys.path.insert(0, str(CAD))
+        from layout import arm_points
+        sh, el = (v * 1e-3 for v in arm_points(sgn))
+        mu, mf = ARM_MASS["upper_arm"], ARM_MASS["forearm"]
+        return f"""<body name="{side}_upper_arm" pos="{_f(sh)}">
+  <inertial pos="0 {sgn * 0.019} -0.038" mass="{mu}" diaginertia="4e-5 4e-5 1.5e-5"/>
+  <joint name="{side}_shoulder_pitch" axis="0 1 0" range="{rng['shoulder_pitch'][0]:.4f} {rng['shoulder_pitch'][1]:.4f}" damping="0.01" armature="0.005"/>
+  {"".join(cadv.get(f"{side}_upper_arm", [])) if cadv else _box((0.032, 0.036, 0.07), (0, sgn * 0.018, -0.035), BLACK)}
+  <body name="{side}_forearm" pos="{_f(el - sh)}">
+    <inertial pos="0.001 {sgn * 0.0025} -0.045" mass="{mf}" diaginertia="1.2e-5 1.2e-5 1e-6"/>
+    <joint name="{side}_elbow" axis="0 1 0" range="{rng['elbow'][0]:.4f} {rng['elbow'][1]:.4f}" damping="0.01" armature="0.005"/>
+    {"".join(cadv.get(f"{side}_forearm", [])) if cadv else _box((0.03, 0.005, lf), (0, sgn * 0.0025, -lf / 2), SAGE)}
+    <site name="{side}_hand" pos="0 0 -0.095" size="0.005" group="4"/>
   </body>
 </body>"""
 
     # torso = lumped upper body minus the arms and head modelled above
     ubl = d.links["upper_body"]
-    arms_head = 2 * (0.02 + ARM_MASS["upper_arm"] + ARM_MASS["forearm"] + ARM_MASS["finger"]) + HEAD_MASS
+    arms_head = 2 * (ARM_MASS["upper_arm"] + ARM_MASS["forearm"]) + HEAD_MASS
     torso_m = ubl.mass - arms_head
     nr = np.radians([ubr["neck_yaw"]["min"], ubr["neck_yaw"]["max"]])
     if cadv:
@@ -164,10 +158,7 @@ def build(design: Design | None = None, timestep: float = 0.001) -> str:
         pelvis_vis = (_box((0.06, 0.13, 0.024), (0, 0, 0.034)) + _box((sx, sy, sz), (0, hs, 0.03), BLACK, euler=(0, 0, 90))
                       + _box((sx, sy, sz), (0, -hs, 0.03), BLACK, euler=(0, 0, 90)))
         torso_vis = _box((0.075, 0.14, 0.13), (0, 0, 0.11)) + _box((0.004, 0.10, 0.07), (0.039, 0, 0.12), GREY)
-        head_vis = (_box(hsz, (0, 0, hsz[2] / 2), ORANGE)
-                    + f'<geom type="cylinder" size="0.0162 0.001" pos="{hsz[0] / 2 + 0.001:.4f} 0 {G.FACE_Z * 1e-3}" euler="0 90 0" rgba=".03 .03 .05 1" contype="0" conaffinity="0"/>'
-                    + "".join(f'<geom type="sphere" size="0.004" pos="{hsz[0] / 2 + 0.002:.4f} {y} {G.FACE_Z * 1e-3 + 0.0025}" material="screen" contype="0" conaffinity="0"/>'
-                              for y in (0.0057, -0.0057)))
+        head_vis = _box(hsz, (0, 0, hsz[2] / 2), SAGE)
     motors = [f'<motor name="{s}_{j}" joint="{s}_{j}" ctrlrange="-5 5"/>' for s in "lr" for j in LEG_JOINTS]
     motors += [f'<motor name="{s}_{j}" joint="{s}_{j}" ctrlrange="-5 5"/>' for s in "lr" for j in ARM_JOINTS]
     motors.append('<motor name="neck_yaw" joint="neck_yaw" ctrlrange="-5 5"/>')
@@ -178,7 +169,6 @@ def build(design: Design | None = None, timestep: float = 0.001) -> str:
   <asset>
     <texture name="grid" type="2d" builtin="checker" rgb1=".2 .22 .26" rgb2=".26 .28 .32" width="512" height="512"/>
     <material name="grid" texture="grid" texrepeat="8 8" reflectance=".15"/>
-    <material name="screen" rgba=".45 .9 1 1" emission="1.2"/>
     {asset_xml or ""}
   </asset>
   <worldbody>
