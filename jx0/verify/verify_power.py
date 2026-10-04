@@ -6,7 +6,7 @@
    no-load 0.2 A, stall 2.7 A).
 2. Battery: total current at 12 V (17 servos + Pi 4 + audio), peak vs the 3S 35C pack, the 10 A switch and the UBEC;
    walking time from a 2200 mAh pack; compared with the reference robot's bench supply (0.6-1.5 A at 12.6 V).
-3. Real-time budget of one 50 Hz robot frame: the bus packet time at 1 Mbit/s and the Python cost of the balance
+3. Real-time budget of one 100 Hz robot frame: the bus packet time at 1 Mbit/s and the Python cost of the balance
    controller + command mapping, measured here and scaled for a Raspberry Pi 4.
 
     python jx0/verify/verify_power.py     -> jx0/results/verify_power.json

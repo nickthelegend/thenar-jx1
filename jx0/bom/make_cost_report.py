@@ -100,7 +100,7 @@ def build(rows):
             ("Joints", "17, every one a Feetech STS3215 12 V serial bus servo (30 kg·cm stall, position feedback), like the reference robot"),
             ("Legs", "6 joints each: hip yaw, roll, pitch, knee, ankle pitch, roll"),
             ("Arms and head", "shoulder pitch and elbow per arm (a shoulder cradle and a flat blade), neck yaw under a soft rounded head"),
-            ("Brain", "Raspberry Pi 4: 50 Hz gait playback with arm swing, IMU balance, offline speech recognition and voice"),
+            ("Brain", "Raspberry Pi 4: 100 Hz gait playback with arm swing, IMU balance, offline speech recognition and voice"),
             ("Talking", "Claude over Wi-Fi writes the replies and calls the robot's actions (walk, turn, wave, nod, look)"),
             ("Power", "3S 2200 mAh LiPo (about 70 min of walking, CALCULATED) or a 12.6 V bench supply"),
             ("Structure", f"pastel green matte PLA (or PETG) on a home 3D printer: {SPEC['pieces']} parts, {SPEC['printed']}")]

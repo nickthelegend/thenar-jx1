@@ -1,7 +1,7 @@
 """JX0 balance controller, shared by the robot (robot.py), the gait checks (jx0/sim/walk_jx0.py) and the robustness
 tests (jx0/verify/robustness.py), so what is verified is exactly what runs.
 
-Runs once per 50 Hz frame on top of a verified gait trajectory, from the IMU's pelvis roll/pitch and their rates:
+Runs once per control frame (100 Hz) on top of a verified gait trajectory, from the IMU's pelvis roll/pitch and their rates:
 - stance leg(s): ankle and hip corrections against the tilt (the ankle strategy and hip strategy);
 - swing leg: a stepping reflex. The swing foot is moved toward the side the body is falling to (hip roll / hip pitch
   offset, the ankle counter-rotated so the foot stays flat), the way a person catches a shove by stepping. After the

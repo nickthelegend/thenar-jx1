@@ -6,3 +6,5 @@ pyyaml
 mujoco>=3.1
 scipy               # jx1calc gait synthesis (imported by the sim model)
 pillow
+manifold3d          # jx0/cad/preview.py and jx0/verify: the exact CAD solids without SolidWorks
+trimesh

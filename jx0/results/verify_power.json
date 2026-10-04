@@ -2,74 +2,74 @@
  "walking_forward": {
   "joints": {
    "l_hip_yaw": {
-    "peak_nm": 0.216,
+    "peak_nm": 0.211,
     "rms_nm": 0.04,
     "peak_of_stall": 0.07,
     "rms_of_rated": 0.04
    },
    "l_hip_roll": {
-    "peak_nm": 1.572,
+    "peak_nm": 1.568,
     "rms_nm": 0.559,
     "peak_of_stall": 0.53,
     "rms_of_rated": 0.57
    },
    "l_hip_pitch": {
     "peak_nm": 0.919,
-    "rms_nm": 0.25,
+    "rms_nm": 0.251,
     "peak_of_stall": 0.31,
     "rms_of_rated": 0.26
    },
    "l_knee": {
-    "peak_nm": 1.441,
-    "rms_nm": 0.573,
+    "peak_nm": 1.447,
+    "rms_nm": 0.574,
     "peak_of_stall": 0.49,
     "rms_of_rated": 0.59
    },
    "l_ankle_pitch": {
-    "peak_nm": 1.652,
-    "rms_nm": 0.375,
+    "peak_nm": 1.633,
+    "rms_nm": 0.374,
     "peak_of_stall": 0.56,
     "rms_of_rated": 0.38
    },
    "l_ankle_roll": {
-    "peak_nm": 1.026,
-    "rms_nm": 0.278,
+    "peak_nm": 1.024,
+    "rms_nm": 0.279,
     "peak_of_stall": 0.35,
-    "rms_of_rated": 0.28
+    "rms_of_rated": 0.29
    },
    "r_hip_yaw": {
-    "peak_nm": 0.135,
-    "rms_nm": 0.038,
-    "peak_of_stall": 0.05,
+    "peak_nm": 0.132,
+    "rms_nm": 0.037,
+    "peak_of_stall": 0.04,
     "rms_of_rated": 0.04
    },
    "r_hip_roll": {
-    "peak_nm": 1.354,
+    "peak_nm": 1.345,
     "rms_nm": 0.56,
     "peak_of_stall": 0.46,
     "rms_of_rated": 0.57
    },
    "r_hip_pitch": {
-    "peak_nm": 0.921,
-    "rms_nm": 0.253,
+    "peak_nm": 0.92,
+    "rms_nm": 0.254,
     "peak_of_stall": 0.31,
     "rms_of_rated": 0.26
    },
    "r_knee": {
-    "peak_nm": 1.393,
+    "peak_nm": 1.414,
     "rms_nm": 0.574,
-    "peak_of_stall": 0.47,
+    "peak_of_stall": 0.48,
     "rms_of_rated": 0.59
    },
    "r_ankle_pitch": {
-    "peak_nm": 1.653,
-    "rms_nm": 0.375,
-    "peak_of_stall": 0.56,
+    "peak_nm": 1.615,
+    "rms_nm": 0.374,
+    "peak_of_stall": 0.55,
     "rms_of_rated": 0.38
    },
    "r_ankle_roll": {
-    "peak_nm": 1.063,
-    "rms_nm": 0.286,
+    "peak_nm": 1.069,
+    "rms_nm": 0.287,
     "peak_of_stall": 0.36,
     "rms_of_rated": 0.29
    },
@@ -87,7 +87,7 @@
    },
    "r_shoulder_pitch": {
     "peak_nm": 1.26,
-    "rms_nm": 0.215,
+    "rms_nm": 0.214,
     "peak_of_stall": 0.43,
     "rms_of_rated": 0.22
    },
@@ -105,9 +105,9 @@
    }
   },
   "servo_current_avg_a": 1.06,
-  "servo_current_peak_20ms_a": 1.68,
-  "total_avg_a": 1.51,
-  "total_peak_a": 2.13,
+  "servo_current_peak_20ms_a": 1.67,
+  "total_avg_a": 1.52,
+  "total_peak_a": 2.12,
   "total_avg_w": 16.8
  },
  "standing": {
@@ -146,15 +146,15 @@
   "rated_nm": 0.98
  },
  "realtime": {
-  "python_ms_per_frame_pc": 0.062,
-  "python_ms_per_frame_pi4_est": 0.31,
+  "python_ms_per_frame_pc": 0.057,
+  "python_ms_per_frame_pi4_est": 0.28,
   "bus_bytes_per_frame": 127,
   "bus_ms_per_frame": 1.27,
   "imu_read_ms_est": 0.4,
   "frame_ms": 10.0,
-  "frame_used_ms_pi4_est": 1.98,
+  "frame_used_ms_pi4_est": 1.95,
   "ok": true
  },
  "pass": true,
- "seconds": 15.7
+ "seconds": 6.5
 }

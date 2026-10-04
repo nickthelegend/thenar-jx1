@@ -94,8 +94,8 @@ mass_budget:
     carries: [hip_yaw, hip_yaw]
     com_m: [0.0, 0.0, 0.025]
   upper_body:
-    mass_kg: {value: 1.106, label: ESTIMATED, note: "v0.3 (reference style, every joint STS3215): CAD printed torso 83 g + chest cap 47 g + head 66 g + arms 39 g (cradle 8.1 + blade 11.2 g per side); 5 STS3215 (2 shoulder, 2 elbow, neck) 445 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, servo driver + UBEC 30 g, IMU/mic/amp/speaker/button 20 g, switch 10 g, wiring 70 g, screws 25 g"}
-    com_m: [0.0, 0.0, 0.146]
+    mass_kg: {value: 1.111, label: ESTIMATED, note: "v0.3 (reference style, every joint STS3215): CAD printed torso 83 g + chest cap 52 g + head 67 g + arms 39 g (cradle 8.1 + blade 11.2 g per side); 5 STS3215 (2 shoulder, 2 elbow, neck) 445 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, servo driver + UBEC 30 g, IMU/mic/amp/speaker/button 20 g, switch 10 g, wiring 70 g, screws 25 g"}
+    com_m: [0.0, 0.0, 0.148]
     inertia_box_m: [0.08, 0.13, 0.20]
   hip_yaw_link:
     structure_kg: {value: 0.014, label: ESTIMATED, note: "CAD 9.0 g + screws"}

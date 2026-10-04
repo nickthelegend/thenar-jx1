@@ -32,17 +32,17 @@
     "-30.0": [
      "foot_L",
      "foot_R",
-     156.9
+     156.3
     ],
     "-28.0": [
      "foot_L",
      "foot_R",
-     63.4
+     63.0
     ],
     "-26.0": [
      "foot_L",
      "foot_R",
-     2.6
+     2.4
     ],
     "24.0": [
      "hip_yaw_L",
@@ -78,7 +78,7 @@
     40.0
    ],
    "gaits_use_deg": [
-    -13.7,
+    -13.6,
     16.6
    ],
    "own_limb_contacts": {},
@@ -91,7 +91,7 @@
     "-18.0": [
      "shin_L",
      "shin_R",
-     852.1
+     852.2
     ],
     "-16.0": [
      "shin_L",
@@ -174,7 +174,7 @@
    ],
    "gaits_use_deg": [
     -38.3,
-    -13.9
+    -14.0
    ],
    "own_limb_contacts": {},
    "other_leg_contacts_from_stance": {},
@@ -192,7 +192,7 @@
    ],
    "gaits_use_deg": [
     -16.6,
-    13.7
+    13.6
    ],
    "own_limb_contacts": {},
    "other_leg_contacts_from_stance": {},
@@ -237,17 +237,17 @@
     "26.0": [
      "foot_L",
      "foot_R",
-     2.6
+     2.4
     ],
     "28.0": [
      "foot_L",
      "foot_R",
-     63.4
+     63.0
     ],
     "30.0": [
      "foot_L",
      "foot_R",
-     156.9
+     156.3
     ]
    },
    "ok": true
@@ -264,7 +264,7 @@
    ],
    "gaits_use_deg": [
     -16.6,
-    13.7
+    13.6
    ],
    "own_limb_contacts": {},
    "other_leg_contacts_from_stance": {
@@ -301,7 +301,7 @@
     "18.0": [
      "shin_L",
      "shin_R",
-     852.1
+     852.2
     ],
     "20.0": [
      "shin_L",
@@ -376,7 +376,7 @@
     20.0
    ],
    "gaits_use_deg": [
-    -13.7,
+    -13.6,
     16.6
    ],
    "own_limb_contacts": {},
@@ -394,7 +394,7 @@
     60.0
    ],
    "gaits_use_deg": [
-    -13.6,
+    -13.7,
     23.8
    ],
    "own_limb_contacts": {},
@@ -474,6 +474,6 @@
    "ok": true
   }
  },
- "seconds": 529.8,
+ "seconds": 425.5,
  "pass": true
 }

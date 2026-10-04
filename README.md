@@ -41,6 +41,7 @@ pipeline as JX1:
   <a href="jx0/results/images/jx0_demo.mp4"><b>Demo film</b></a> ·
   <a href="jx0/bom/JX0_cost_estimate.pdf"><b>Cost estimate (PDF)</b></a> ·
   <a href="jx0/docs/build_guide.md"><b>Build guide</b></a> ·
+  <a href="jx0/results/verification.md"><b>Verification</b></a> ·
   <a href="media/jx0_cad_timelapse.mp4"><b>SolidWorks timelapse</b></a>
 </p>
 

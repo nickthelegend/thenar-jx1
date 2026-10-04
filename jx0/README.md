@@ -28,8 +28,9 @@
 <p align="center">
   <a href="results/images/jx0_demo.mp4"><img src="results/images/jx0_demo.webp" alt="Simulated JX0 waving, walking with its arms swinging, taking a side push and kicking over a bottle" width="720"></a><br>
   <sub><b><a href="results/images/jx0_demo.mp4">Demo film (MP4)</a></b>, staged like the reference video: JX0 walks on
-  a wooden floor with its arms swinging, waves, takes a push from the side while walking and keeps going, and kicks
-  over a plastic bottle. The robot's own program (<code>software/jx0bot</code>, the same code that runs on the Pi)
+  a wooden floor with its arms swinging, waves, takes a firm 0.72 N·s shove from the side and keeps going (this one
+  lands at a moment it can recover from; the <a href="results/verification.md">verification</a> shows it survives
+  about half of such shoves, and every light tap), and kicks over a plastic bottle. The robot's own program (<code>software/jx0bot</code>, the same code that runs on the Pi)
   drives the SolidWorks robot in MuJoCo; the push and the bottle are plain physics.</sub>
 </p>
 
@@ -64,9 +65,9 @@ takes a shove, and knocks over a bottle on the way. JX0 matches that:
 |---|---|
 | SolidWorks CAD: 20 printed parts + all 17 servos in the assembly | **done**, every part rebuilt by script, one body each, no errors |
 | Parts colliding, standing or in motion (every gait frame and action, 1,373 poses) | **none** (after fixing 6 clashes the check found) |
-| Servo sizing (every leg joint, 5 gaits + static cases), 2.43 kg robot | **passes**; the tightest is hip roll with a 1.70× margin |
+| Servo sizing (every leg joint, 5 gaits + static cases), 2.44 kg robot | **passes**; the tightest is hip roll with a 1.70× margin |
 | Walking in simulation, on the CAD masses and a servo model | **14 of 14 gaits pass** with arm swing (forward 0.067 m/s, backward, turns, side-steps) |
-| Walking when the real robot differs from the model (servo stiffness, latency, backlash, IMU noise, mass, friction, slope) | **97 %** of 140 random walks (latency up to 20 ms); 86 % even with 40 ms latency |
+| Walking when the real robot differs from the model (servo stiffness, latency, backlash, IMU noise, mass, friction, slope) | **97 %** of 140 random walks (latency up to 20 ms); 84 % even with 40 ms latency |
 | The whole robot program, an 8-action mission, random realistic errors | **24 of 24** completed without a fall |
 | Pushes mid-walk | a light tap (0.24 N·s) **never** knocks it over; a firm shove (0.48 N·s) does about a third of the time |
 | Robot program (voice, Claude brain, walking, gestures) | **written, unit-tested (19 tests) and run in simulation**; not yet on hardware |
@@ -93,11 +94,11 @@ reference robot's measured 0.6–1.5 A).
 
 | | |
 |---|---|
-| Height, mass | 54.2 cm, 2.43 kg (CAD) |
+| Height, mass | 54.2 cm, 2.44 kg (CAD) |
 | Joints | 17 Feetech STS3215 12 V serial bus servos: 6 per leg, shoulder pitch and elbow per arm, neck yaw |
-| Brain | Raspberry Pi 4 (2 GB): gaits at 50 Hz, MPU6050 balance, Vosk speech recognition, Piper voice, Claude over Wi-Fi |
+| Brain | Raspberry Pi 4 (2 GB): gaits and balance at 100 Hz, MPU6050 IMU, Vosk speech recognition, Piper voice, Claude over Wi-Fi |
 | Power | 3S 2200 mAh LiPo straight to the servo bus (12 V servos); a 5 V UBEC for the Pi; or a 12.6 V bench supply |
-| Structure | 20 printed parts, 415 g, pastel green |
+| Structure | 20 printed parts, 419 g, pastel green |
 
 ## What it costs
 
@@ -177,6 +178,7 @@ It needs an `ANTHROPIC_API_KEY`. Without one, you can still run three things:
 | `analysis/` | servo sizing |
 | `cad/` | geometry, SolidWorks build scripts, `preview.py`, `parts/*.SLDPRT`, `JX0_Robot.SLDASM`, `stl/` for printing |
 | `sim/` | MuJoCo model, walking checks, demo film |
+| `verify/` | collisions, robustness, power and timing checks; `run_all.py` writes [results/verification.md](results/verification.md) |
 | `software/jx0bot/` | the robot program (see [software_setup.md](docs/software_setup.md)) |
 | `bom/` | parts list and the cost PDF |
 | `docs/` | build guide, wiring, bring-up, software setup |

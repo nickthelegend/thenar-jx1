@@ -3,10 +3,10 @@
     python -m unittest discover -s jx0/software/tests -v
 
 - servo_bus: packet bytes against the worked examples of the Feetech/Waveshare STS protocol manual, sign encoding,
-  the sync-write packet the robot sends every 50 Hz frame;
+  the sync-write packet the robot sends every 100 Hz frame;
 - config.yaml: 17 unique bus IDs, every model joint present, limits inside the collision-free ranges found by
   jx0/verify/verify_cad.py and inside the simulation model's joint ranges;
-- gaits/*.json: every frame inside the limits, 50 Hz, blocks start and end in the same stance (so they chain);
+- gaits/*.json: every frame inside the limits, at the bus rate, blocks start and end in the same stance (so they chain);
 - HardwareIO: joint angle <-> servo ticks with direction, zero offset and clamping (on a fake bus);
 - Robot: every action through a fake I/O stays inside the limits, walk/turn plans;
 - balance: zero tilt gives zero correction, corrections oppose the tilt;
@@ -366,3 +366,54 @@ class BrainLoop(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class MainProgram(unittest.TestCase):
+    """End to end: jx0bot.main (text mode, simulated body, no viewer) with a scripted Claude. 'walk forward two steps'
+    must make the simulated robot walk forward and the reply be spoken. Runs in real time (about 8 s)."""
+
+    def test_text_mode_walks(self):
+        try:
+            import mujoco  # noqa: F401
+        except ImportError:
+            self.skipTest("mujoco not installed")
+        import builtins
+        from jx0bot import brain as brain_mod, main as main_mod
+        from jx0bot.robot import SimIO
+        captured, said = {}, []
+
+        class TestSimIO(SimIO):
+            def __init__(self, cfg, viewer=True):
+                super().__init__(cfg, viewer=False)
+                captured["io"] = self
+
+            def close(self):
+                captured["x"] = float(self.d.qpos[0])
+                captured["z"] = float(self.d.qpos[2])
+                super().close()
+
+        def brain_factory(act, on_sentence):
+            return brain_mod.Brain(act=act, on_sentence=on_sentence, client=FakeClient([
+                (["Okay, walking. "], [text("Okay, walking."), tool("walk", {"steps": 2, "direction": "forward"})], "tool_use"),
+                (["Done!"], [text("Done!")], "end_turn")]))
+
+        lines = iter(["walk forward two steps"])
+
+        def fake_input(prompt=""):
+            try:
+                return next(lines)
+            except StopIteration:
+                raise EOFError
+
+        saved = (main_mod.SimIO, main_mod.Brain, main_mod.print_and_say, builtins.input, sys.argv)
+        main_mod.SimIO, main_mod.Brain = TestSimIO, brain_factory
+        main_mod.print_and_say = lambda: said.append
+        builtins.input, sys.argv = fake_input, ["jx0bot.main", "--sim", "--text", "--no-viewer"]
+        try:
+            main_mod.main()
+        finally:
+            main_mod.SimIO, main_mod.Brain, main_mod.print_and_say, builtins.input, sys.argv = saved
+        self.assertIn("Okay, walking.", said)
+        self.assertIn("Done!", said)
+        self.assertGreater(captured["x"], 0.012)          # two 2 cm steps from standing: it moved forward
+        self.assertGreater(captured["z"], 0.18)           # and it is still upright (pelvis height)

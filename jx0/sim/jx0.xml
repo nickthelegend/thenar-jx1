@@ -35,7 +35,7 @@
       <geom type="mesh" mesh="m_JX0_Pelvis" pos="0 0 0" quat="1 0 0 0" rgba=".74 .86 .58 1" contype="0" conaffinity="0"/><geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="0 0.045 0.048625" quat="0 1 0 0" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/><geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="0 -0.045 0.048625" quat="0 1 0 0" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/>
       <site name="imu" pos="0 0 0.03" size="0.005" group="4"/>
       <body name="torso" pos="0 0 0">
-        <inertial pos="0 0 0.146" mass="0.8100" diaginertia="0.00384075 0.003132 0.00157275"/>
+        <inertial pos="0 0 0.148" mass="0.8140" diaginertia="0.00385972 0.00314747 0.00158052"/>
         <geom type="mesh" mesh="m_JX0_Torso" pos="0 0 0" quat="1 0 0 0" rgba=".74 .86 .58 1" contype="0" conaffinity="0"/><geom type="mesh" mesh="m_JX0_ChestCap" pos="0 0 0" quat="1 0 0 0" rgba=".74 .86 .58 1" contype="0" conaffinity="0"/><geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="0 0 0.226" quat="0.707107 0 0 0.707107" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/><geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="0.0125 0.0415 0.186" quat="0 0 0.707107 0.707107" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/><geom type="mesh" mesh="m_JX0_Servo_STS3215" pos="0.0125 -0.0415 0.186" quat="0 0 -0.707107 0.707107" rgba=".12 .12 .14 1" contype="0" conaffinity="0"/>
         <body name="l_upper_arm" pos="0.0125 0.060125 0.186">
   <inertial pos="0 0.019 -0.038" mass="0.1" diaginertia="4e-5 4e-5 1.5e-5"/>
@@ -60,7 +60,7 @@
   </body>
 </body>
         <body name="head" pos="0 0 0.244625">
-          <inertial pos="0 0 0.031" mass="0.072" diaginertia="4e-5 4e-5 4e-5"/>
+          <inertial pos="0 0 0.031" mass="0.073" diaginertia="4e-5 4e-5 4e-5"/>
           <joint name="neck_yaw" axis="0 0 1" range="-1.3963 1.3963" damping="0.01" armature="0.0005"/>
           <geom type="mesh" mesh="m_JX0_Head" pos="0 0 0" quat="1 0 0 0" rgba=".74 .86 .58 1" contype="0" conaffinity="0"/>
         </body>

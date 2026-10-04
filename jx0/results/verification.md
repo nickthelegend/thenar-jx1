@@ -12,14 +12,14 @@ Generated 2026-10-04 by `jx0/verify/run_all.py` from the CAD geometry, the MuJoC
 | Parts colliding in motion (1373 poses: every gait frame + every action) | 0 clashes |
 | Joint limits inside the collision-free range | 17/17 joints |
 | Walking with realistic model errors (latency 0–20 ms), all gaits | **136/140 (97 %)** |
-| Same, stress test with 40 ms latency | 120/140 (86 %) |
+| Same, stress test with 40 ms latency | 117/140 (84 %) |
 | Sideways push of 0.24 N.s mid-walk (24 moments × 2 directions) | 48/48 (100 %) |
 | Sideways push of 0.48 N.s mid-walk (24 moments × 2 directions) | 30/48 (62 %) |
 | Sideways push of 0.72 N.s mid-walk (24 moments × 2 directions) | 24/48 (50 %) |
 | Whole robot program, 8-step mission, random realistic errors | **24/24 (100 %)** |
-| Battery current walking (servos + Pi) | 1.51 A average, 2.13 A peak → about 70 min walking per charge |
-| 100 Hz control loop on a Raspberry Pi 4 (estimated) | 1.98 ms of 10 ms |
-| Software unit tests | Ran 19 tests in 0.137s: OK |
+| Battery current walking (servos + Pi) | 1.52 A average, 2.12 A peak → about 70 min walking per charge |
+| 100 Hz control loop on a Raspberry Pi 4 (estimated) | 1.95 ms of 10 ms |
+| Software unit tests | Ran 20 tests in 5.736s: OK |
 
 ## What the verification found and fixed
 
@@ -32,7 +32,7 @@ The first run of these checks failed in several places. All of these were fixed 
 - **Left and right ankle brackets touching in side-steps** (86 mm³): the brackets' inboard plates end 2.5 mm sooner.
 - **A sole lightening hole cut under the moved upright** (found by the SolidWorks rebuild): the holes were respaced.
 - **Joint limits allowing collisions**: knee 130 → 120°, ankle pitch −60…45 → −55…15°, ankle roll ±25 → ±20°.
-- **Walking fell too often with realistic errors** (long walk 4/12, pushes ~50 %): command latency was the main cause. Control now runs at 100 Hz instead of 50 Hz, the walking stance is a little lower (hip 222 → 215 mm), and walks are chained from 2- and 4-step blocks that each end standing. Long walks with realistic errors went from 4/12 to 18/20, the robot program's missions pass 24/24, and peak servo load dropped from 78 % to 56 % of stall.
+- **Walking fell too often with realistic errors** (long walk 4/12, pushes ~50 %): command latency was the main cause. Control now runs at 100 Hz instead of 50 Hz, the walking stance is a little lower (hip 222 → 215 mm), and walks are chained from 2- and 4-step blocks that each end standing (the robot's walk command uses only these). One long continuous 10-step walk with realistic errors went from 4/12 to 16/20; the 4-step blocks pass 20/20; the robot program's missions pass 24/24, and peak servo load dropped from 78 % to 56 % of stall.
 - **An over-claimed push result**: one lucky push timing had passed at 1.1 N·s. Pushes are now tested at 24 moments in both directions, and the README states the real envelope.
 - **A wrong battery estimate**: servo current is now modelled as copper loss + mechanical power. It predicts 0.45 A standing and 1.06 A walking for the servos; the reference robot's bench supply read 0.58 A and 0.6–1.5 A.
 

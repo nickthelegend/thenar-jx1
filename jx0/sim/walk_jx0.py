@@ -1,7 +1,7 @@
 """Can JX0 walk on hobby servos? Closed-loop MuJoCo test of the planned gait through a servo model.
 
 1. Plan: the JX1 gait pipeline (footsteps -> ZMP preview control -> whole-body IK) on the JX0 model (jx0_model.py).
-2. Simulate: every joint is a hobby position servo (ServoModel): the goal position arrives at 50 Hz (the bus rate the
+2. Simulate: every joint is a hobby position servo (ServoModel): the goal position arrives at 100 Hz (the bus rate the
    Raspberry Pi sends), the servo applies stiffness * error - damping * speed, limited by its torque-speed line
    (stall torque at rest, zero at the no-load speed). No feed-forward torque: hobby servos cannot take one.
 3. Balance: the pelvis IMU tilts the stance ankle and hip goals (same stabiliser law as JX1, in the software too).
@@ -183,7 +183,7 @@ def run(name, kp=60.0, kd=0.6, bus_hz=BUS_HZ, stabiliser=True, render=False, pus
 
 
 def export_gait(name, g, res, adr):
-    """The planned leg trajectory and the arm swing at 50 Hz in joint names/radians, for the robot (jx0bot.robot plays it)."""
+    """The planned leg trajectory and the arm swing at the bus rate (100 Hz) in joint names/radians, for the robot (jx0bot.robot plays it)."""
     t, q, c = res["t"], res["qpos"], res["plan"].contact
     step = max(1, int(round(1.0 / BUS_HZ / g.dt)))
     legs = [f"{s}_{j}" for s in "lr" for j in LEG_JOINTS]

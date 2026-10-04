@@ -35,6 +35,9 @@ def main():
     n_pass = sum(g["pass"] for g in gaits.values())
     fin, mis = rob.get("final", {}), rob.get("mission", {})
     ran, status = tests_summary()
+    pg = fin.get("model_errors_latency_0_20ms", {}).get("per_gait", {})
+    long_walk = f"{pg['forward']['passed']}/{pg['forward']['trials']}" if "forward" in pg else "?"
+    blocks = f"{pg['forward_4']['passed']}/{pg['forward_4']['trials']}" if "forward_4" in pg else "?"
     L = [f"# JX0 verification report", "",
          f"Generated {date.today().isoformat()} by `jx0/verify/run_all.py` from the CAD geometry, the MuJoCo model and the robot "
          "software in this repository. Everything here is simulation and analysis: the physical robot is not built yet, so the "
@@ -77,7 +80,8 @@ def main():
           "- **Joint limits allowing collisions**: knee 130 → 120°, ankle pitch −60…45 → −55…15°, ankle roll ±25 → ±20°.",
           "- **Walking fell too often with realistic errors** (long walk 4/12, pushes ~50 %): command latency was the main cause. "
           "Control now runs at 100 Hz instead of 50 Hz, the walking stance is a little lower (hip 222 → 215 mm), and walks are "
-          "chained from 2- and 4-step blocks that each end standing. Long walks with realistic errors went from 4/12 to 18/20, "
+          "chained from 2- and 4-step blocks that each end standing (the robot's walk command uses only these). One long "
+          f"continuous 10-step walk with realistic errors went from 4/12 to {long_walk}; the 4-step blocks pass {blocks}; "
           "the robot program's missions pass 24/24, and peak servo load dropped from 78 % to 56 % of stall.",
           "- **An over-claimed push result**: one lucky push timing had passed at 1.1 N·s. Pushes are now tested at 24 moments "
           "in both directions, and the README states the real envelope.",

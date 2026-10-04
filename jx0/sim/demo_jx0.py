@@ -30,7 +30,8 @@ ASSETS = HERE / "assets"
 W, H, FPS = 1280, 720, 30
 STILLS = {"wave": 3.4, "walk": 9.0, "kick": 13.4}   # clean frames (no caption) saved as jx0_demo_<name>.png
 BOTTLE_AT = (0.24, -0.045)                           # in the right leg's path, about 7 steps ahead
-PUSH_N, PUSH_S = 6.0, 0.12                          # sideways shove on the torso: 6 N for 0.12 s (0.72 N·s, the verified level)
+PUSH_N, PUSH_S = 6.0, 0.12                          # sideways shove on the torso: 6 N for 0.12 s (0.72 N·s; it recovers at this
+                                                    # moment of the walk; it survives ~50 % of such shoves, verification.md)
 
 
 def wood_texture(path: Path, size=1024, seed=3):

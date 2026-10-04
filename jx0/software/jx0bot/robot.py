@@ -6,7 +6,7 @@ ends take the same joint targets (radians, the simulation's sign convention):
 - HardwareIO: the 17 servos through the serial bus servo driver (servo_bus.py), MPU6050 IMU.
 - SimIO: the JX0 MuJoCo model (jx0/sim/jx0_model.py) with the same servo model the gaits were verified with; runs on a
   PC (python -m jx0bot.main --sim) so the whole robot, voice included, can be tried before it is built.
-Gaits (gaits/*.json) are 50 Hz trajectories (legs plus the arm swing) exported by jx0/sim/walk_jx0.py after passing
+Gaits (gaits/*.json) are 100 Hz trajectories (legs plus the arm swing) exported by jx0/sim/walk_jx0.py after passing
 the closed-loop test.
 """
 from __future__ import annotations
@@ -34,7 +34,7 @@ def load_config(path: Path = HERE / "config.yaml") -> dict:
 
 # ------------------------------------------------------------------------------------------------ back ends
 class RealTime:
-    """Frame pacing for the real-time back ends: tick(dt) returns at the next frame boundary (50 Hz bus packets)."""
+    """Frame pacing for the real-time back ends: tick(dt) returns at the next frame boundary (100 Hz bus packets)."""
     _t_next = None
 
     def tick(self, dt):
@@ -203,7 +203,7 @@ class Robot:
         self.move_to({**self.stand_pose, **REST_ARMS, "neck_yaw": 0.0}, seconds)
 
     def play(self, name: str):
-        """Play one verified gait (legs and arm swing) at 50 Hz with the balance controller (balance.py): ankle and hip
+        """Play one verified gait (legs and arm swing) at the bus rate with the balance controller (balance.py): ankle and hip
         corrections on the stance leg, a stepping reflex on the swing leg."""
         g = self.gaits[name]
         joints = g["joints"]

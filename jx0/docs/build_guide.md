@@ -26,17 +26,17 @@ and that size is ASSUMED: it is not published for the STS3215.
 |---|---|---|---|---|
 | JX0_Pelvis | 1 | 21.2 g | 51 × 124 × 18 | plate face down |
 | JX0_HipYawBracket_L / _R | 1 + 1 | 9.0 g each | 65 × 54 × 45 | horn plate down |
-| JX0_HipRollBracket_L / _R | 1 + 1 | 4.8 g each | 53 × 36 × 30 | horn plate down |
+| JX0_HipRollBracket_L / _R | 1 + 1 | 4.7 g each | 53 × 36 × 30 | horn plate down |
 | JX0_Thigh_L / _R | 1 + 1 | 11.2 g each | 30 × 9 × 130 | lying flat |
 | JX0_Shin_L / _R | 1 + 1 | 10.9 g each | 30 × 9 × 130 | lying flat |
-| JX0_AnkleBracket_L / _R | 1 + 1 | 7.2 g each | 70 × 60 × 30 | horn plate down |
-| JX0_Foot | 2 | 35.8 g each | 120 × 70 × 47 | sole down |
+| JX0_AnkleBracket_L / _R | 1 + 1 | 7.2 g each | 72 × 57 × 30 | horn plate down |
+| JX0_Foot | 2 | 35.7 g each | 120 × 70 × 47 | sole down |
 | JX0_Torso (lower shell) | 1 | 83.0 g | 84 × 120 × 104 | floor down; the standoffs and the lip print upright |
-| JX0_ChestCap | 1 | 47.2 g | 84 × 120 × 37 | upside down (top face on the bed); the chamfers are 45° |
-| JX0_Head | 1 | 65.9 g | 66 × 78 × 62 | upright on its floor, tree supports inside the rounded top |
+| JX0_ChestCap | 1 | 52.1 g | 84 × 120 × 42 | upside down (top face on the bed); the chamfers are 45° |
+| JX0_Head | 1 | 66.8 g | 66 × 78 × 62 | upright on its floor, tree supports inside the rounded top |
 | JX0_UpperArm_L / _R (shoulder cradles) | 1 + 1 | 8.1 g each | 32 × 20 × 84 | plate down |
 | JX0_ArmBlade_L / _R | 1 + 1 | 11.2 g each | 34 × 5 × 116 | lying flat |
-| **Total** | **20** | **414 g** | | one 1 kg spool; the second is for fit-checks and reprints |
+| **Total** | **20** | **419 g** | | one 1 kg spool; the second is for fit-checks and reprints |
 
 ## 2. Before assembly: servo IDs and centring
 

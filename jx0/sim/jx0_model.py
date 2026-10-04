@@ -29,7 +29,7 @@ ARM_JOINTS = ["shoulder_pitch", "elbow"]
 # each side (ESTIMATED from the CAD printed masses in jx0/cad/parts/index.json + 89 g per STS3215 + screws):
 # upper arm = shoulder cradle + elbow STS3215; forearm = the blade
 ARM_MASS = {"upper_arm": 0.100, "forearm": 0.012}
-HEAD_MASS = 0.072                                    # CAD head 66 g + microphone + screws (ESTIMATED)
+HEAD_MASS = 0.073                                    # CAD head 66.8 g + microphone + screws (ESTIMATED)
 
 
 def _f(x):

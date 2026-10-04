@@ -128,4 +128,4 @@ sudo systemctl enable --now jx0
 | `imu.py` | MPU6050 driver with a complementary filter |
 | `calibrate.py` | servo IDs, centring, zero pose, joint directions, stiffness check (all 17 servos) |
 | `config.yaml` | servo IDs, directions, zero ticks, limits, IMU, balance gains, push-to-talk pin |
-| `gaits/*.json` | 50 Hz trajectories (legs and arm swing) that passed the closed-loop simulation check (`jx0/sim/walk_jx0.py`) |
+| `gaits/*.json` | 100 Hz trajectories (legs and arm swing) that passed the closed-loop simulation check (`jx0/sim/walk_jx0.py`) |
