@@ -35,8 +35,8 @@ def _place(m: Manifold, axis, s0, s1):
     return m.transform(np.column_stack([R, off]).tolist())
 
 
-def _section(pts):
-    pts = [tuple(map(float, q)) for q in pts]
+def _section(path):
+    pts = [tuple(map(float, q)) for q in G.path_points(path, 24)]
     area = sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(pts, pts[1:] + pts[:1]))
     return CrossSection([pts if area > 0 else pts[::-1]], FillRule.NonZero)
 

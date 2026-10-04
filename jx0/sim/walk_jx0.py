@@ -86,11 +86,14 @@ def plan(model, design, name):
     return g, synthesize(model, design, g)
 
 
-def run(name, kp=60.0, kd=0.6, bus_hz=50.0, stabiliser=True, render=False):
+def run(name, kp=60.0, kd=0.6, bus_hz=50.0, stabiliser=True, render=False, push=None):
+    """push = (t_start s, force N toward the robot's left, duration s): a sideways shove on the torso, as in the
+    reference video."""
     design = Design(DESIGN)
     servo_leg = design.act_classes["ST"]
     m = mujoco.MjModel.from_xml_string(build(design))
     d = mujoco.MjData(m)
+    torso = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, "torso")
     g, res = plan(m, design, name)
     t_ref, q_ref, contact = res["t"], res["qpos"], res["plan"].contact
     jnames = [f"{s}_{j}" for s in "lr" for j in LEG_JOINTS] + [f"{s}_{j}" for s in "lr" for j in ARM_JOINTS] + ["neck_yaw"]
@@ -147,6 +150,8 @@ def run(name, kp=60.0, kd=0.6, bus_hz=50.0, stabiliser=True, render=False):
                 sat[n] += 1
             if n.split("_", 1)[1] in LEG_JOINTS:
                 trk.append(abs(goal[n] - d.qpos[qa]))
+        if push is not None:
+            d.xfrc_applied[torso, 1] = push[1] if push[0] <= t < push[0] + push[2] else 0.0
         mujoco.mj_step(m, d)
         if k % 10 == 0:
             tilt = float(np.degrees(np.hypot(roll, pitch)))
@@ -231,6 +236,17 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     summary = {"generated_by": "jx0/sim/walk_jx0.py", "label": "CALCULATED (MuJoCo, servo model ASSUMED)", "gaits": results,
                "pass": all(r["pass"] for r in results.values())}
+    if a.gait == "all":                        # push recovery, like the hand in the reference video: a sideways shove
+        pushes = []                            # on the torso half way through the 10-step forward walk, 0.12 s long
+        for f in (6.0, 9.0, 12.0, 15.0, 18.0, 21.0):
+            out, _, _ = run("forward", kp=a.kp, stabiliser=not a.no_stabiliser, push=(4.0, f, 0.12))
+            pushes.append({"force_n": f, "impulse_ns": round(f * 0.12, 2), "fell": out["fell"], "max_tilt_deg": out["max_tilt_deg"],
+                           "pass": out["pass"]})
+            print(f"push {f:4.1f} N x 0.12 s = {f * 0.12:.2f} N.s  fell {out['fell']!s:5s} tilt {out['max_tilt_deg']:.1f} deg "
+                  f"-> {'PASS' if out['pass'] else 'FAIL'}", flush=True)
+        ok = [q["impulse_ns"] for q in pushes if q["pass"]]
+        summary["push_test"] = {"gait": "forward", "at_s": 4.0, "direction": "+y (toward the robot's left)", "results": pushes,
+                                "largest_survived_ns": max(ok) if ok else 0.0}
     if a.gait == "all":
         (OUT / "walking.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
     print("walking:", "PASS" if summary["pass"] else "FAIL", f"({sum(r['pass'] for r in results.values())}/{len(results)})")

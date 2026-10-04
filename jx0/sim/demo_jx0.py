@@ -29,8 +29,8 @@ OUT = ROOT / "jx0" / "results" / "images"
 ASSETS = HERE / "assets"
 W, H, FPS = 1280, 720, 30
 STILLS = {"wave": 3.4, "walk": 9.0, "kick": 13.4}   # clean frames (no caption) saved as jx0_demo_<name>.png
-BOTTLE_AT = (0.27, -0.06)                           # in the right leg's path, about 7 steps ahead
-PUSH_N, PUSH_S = 9.0, 0.12                          # sideways shove on the torso: 9 N for 0.12 s (1.1 N·s)
+BOTTLE_AT = (0.24, -0.045)                           # in the right leg's path, about 7 steps ahead
+PUSH_N, PUSH_S = 6.0, 0.12                          # sideways shove on the torso: 6 N for 0.12 s (0.72 N·s, the verified level)
 
 
 def wood_texture(path: Path, size=1024, seed=3):
@@ -44,7 +44,7 @@ def wood_texture(path: Path, size=1024, seed=3):
         x = -int(rng.integers(0, 400))
         while x < size:
             L = int(rng.integers(300, 600))
-            base = np.array([170, 128, 86]) + rng.integers(-18, 18, 3)
+            base = np.array([178, 156, 128]) + rng.integers(-14, 14, 3)
             d.rectangle([x, y, x + L, y + h], fill=tuple(int(v) for v in base))
             for _ in range(10):                                         # grain
                 gy = y + int(rng.integers(0, h))
@@ -244,7 +244,7 @@ def main():
             robot.busy.release()
         return "walked 8 steps, pushed half way"
 
-    scene("JX0: 17 x STS3215, PETG", lambda: (robot.stand(1.0), io.sleep(0.8))[0])
+    scene("JX0: every joint an STS3215", lambda: (robot.stand(1.0), io.sleep(0.8))[0])
     scene("wave", lambda: robot.wave("right"), cam=(165.0, -8.0, 0.95))
     scene("walk, arms swinging ... push!", walk_with_push, cam=(125.0, -14.0, 1.15))
     scene("keep walking ... oops, the bottle", lambda: robot.walk(4, "forward"), cam=(115.0, -16.0, 1.15))

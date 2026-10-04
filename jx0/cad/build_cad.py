@@ -77,9 +77,10 @@ class Builder:
         if kind in ("prism", "pcut"):
             _, axis, pts, (s0, s1) = prim
             pname, key = self.plane(axis, s0)
-            uv = [self._uv(key, *{"x": (s0, a, b), "y": (a, s0, b), "z": (a, b, s0)}[axis]) for a, b in pts]
+            to_uv = lambda a, b: self._uv(key, *{"x": (s0, a, b), "y": (a, s0, b), "z": (a, b, s0)}[axis])  # noqa: E731
+            uv = [("arc", to_uv(*e[1])) if G.is_arc(e) else to_uv(*e) for e in pts]
             with self.p.sketch(key, f"S_{tag}", plane_name=pname) as sk:
-                sk.polygon(uv)
+                sk.profile(uv)
             depth = (s1 - s0) * MM
             if kind == "prism":
                 self.extrude(f"S_{tag}", depth, f"Boss_{self.n}")

@@ -16,7 +16,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "bom"))
-from make_cost_report import CSS, PREVIEW_JS, REPORT_DATE, bars, e, edge, inr, short, table, words  # noqa: E402
+from make_cost_report import CSS, PREVIEW_JS, bars, e, edge, inr, short, table, words  # noqa: E402
+
+REPORT_DATE = "24 Sep – 4 Oct 2026"     # prices checked over these dates (servos and filament on 4 Oct)
 
 BOM = ROOT / "jx0" / "bom" / "jx0_bom.csv"
 OUT_PDF = ROOT / "jx0" / "bom" / "JX0_cost_estimate.pdf"

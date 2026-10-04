@@ -48,7 +48,7 @@
    "max_tilt_deg": 0.9,
    "tracking_error_deg": {
     "rms": 0.61,
-    "max": 4.0
+    "max": 4.1
    },
    "peak_torque_fraction_of_stall": {
     "l_hip_yaw": 0.06,
@@ -298,7 +298,7 @@
    "planned_duration_s": 6.75,
    "distance_m": {
     "plan": 0.008,
-    "sim": 0.007
+    "sim": 0.006
    },
    "final_position_error_m": 0.002,
    "heading_deg": {
@@ -321,7 +321,7 @@
     "r_hip_roll": 0.52,
     "r_hip_pitch": 0.39,
     "r_knee": 0.76,
-    "r_ankle_pitch": 0.57,
+    "r_ankle_pitch": 0.58,
     "r_ankle_roll": 0.5
    },
    "saturated_fraction": {},
@@ -382,7 +382,7 @@
     "l_knee": 0.72,
     "l_ankle_pitch": 0.56,
     "l_ankle_roll": 0.47,
-    "r_hip_yaw": 0.03,
+    "r_hip_yaw": 0.02,
     "r_hip_roll": 0.6,
     "r_hip_pitch": 0.42,
     "r_knee": 0.76,
@@ -445,9 +445,9 @@
     "l_hip_roll": 0.58,
     "l_hip_pitch": 0.4,
     "l_knee": 0.73,
-    "l_ankle_pitch": 0.55,
+    "l_ankle_pitch": 0.56,
     "l_ankle_roll": 0.55,
-    "r_hip_yaw": 0.03,
+    "r_hip_yaw": 0.02,
     "r_hip_roll": 0.48,
     "r_hip_pitch": 0.46,
     "r_knee": 0.76,
@@ -577,7 +577,7 @@
     "l_knee": 0.72,
     "l_ankle_pitch": 0.56,
     "l_ankle_roll": 0.55,
-    "r_hip_yaw": 0.03,
+    "r_hip_yaw": 0.02,
     "r_hip_roll": 0.47,
     "r_hip_pitch": 0.36,
     "r_knee": 0.76,
@@ -775,8 +775,8 @@
     "r_hip_yaw": 0.1,
     "r_hip_roll": 0.47,
     "r_hip_pitch": 0.39,
-    "r_knee": 0.76,
-    "r_ankle_pitch": 0.57,
+    "r_knee": 0.77,
+    "r_ankle_pitch": 0.58,
     "r_ankle_roll": 0.43
    },
    "saturated_fraction": {},
@@ -823,7 +823,7 @@
    "final_position_error_m": 0.001,
    "heading_deg": {
     "plan": 0.0,
-    "error": 0.0
+    "error": -0.0
    },
    "max_tilt_deg": 0.9,
    "tracking_error_deg": {
@@ -837,7 +837,7 @@
     "l_knee": 0.72,
     "l_ankle_pitch": 0.56,
     "l_ankle_roll": 0.47,
-    "r_hip_yaw": 0.03,
+    "r_hip_yaw": 0.02,
     "r_hip_roll": 0.46,
     "r_hip_pitch": 0.42,
     "r_knee": 0.76,
@@ -898,20 +898,70 @@
    "peak_torque_fraction_of_stall": {
     "l_hip_yaw": 0.06,
     "l_hip_roll": 0.62,
-    "l_hip_pitch": 0.38,
+    "l_hip_pitch": 0.39,
     "l_knee": 0.74,
-    "l_ankle_pitch": 0.55,
+    "l_ankle_pitch": 0.56,
     "l_ankle_roll": 0.6,
-    "r_hip_yaw": 0.03,
+    "r_hip_yaw": 0.02,
     "r_hip_roll": 0.47,
     "r_hip_pitch": 0.38,
     "r_knee": 0.72,
     "r_ankle_pitch": 0.57,
-    "r_ankle_roll": 0.45
+    "r_ankle_roll": 0.46
    },
    "saturated_fraction": {},
    "pass": true
   }
  },
- "pass": true
+ "pass": true,
+ "push_test": {
+  "gait": "forward",
+  "at_s": 4.0,
+  "direction": "+y (toward the robot's left)",
+  "results": [
+   {
+    "force_n": 6.0,
+    "impulse_ns": 0.72,
+    "fell": false,
+    "max_tilt_deg": 10.3,
+    "pass": true
+   },
+   {
+    "force_n": 9.0,
+    "impulse_ns": 1.08,
+    "fell": true,
+    "max_tilt_deg": 30.3,
+    "pass": false
+   },
+   {
+    "force_n": 12.0,
+    "impulse_ns": 1.44,
+    "fell": true,
+    "max_tilt_deg": 30.2,
+    "pass": false
+   },
+   {
+    "force_n": 15.0,
+    "impulse_ns": 1.8,
+    "fell": true,
+    "max_tilt_deg": 30.1,
+    "pass": false
+   },
+   {
+    "force_n": 18.0,
+    "impulse_ns": 2.16,
+    "fell": true,
+    "max_tilt_deg": 31.2,
+    "pass": false
+   },
+   {
+    "force_n": 21.0,
+    "impulse_ns": 2.52,
+    "fell": true,
+    "max_tilt_deg": 31.3,
+    "pass": false
+   }
+  ],
+  "largest_survived_ns": 0.72
+ }
 }

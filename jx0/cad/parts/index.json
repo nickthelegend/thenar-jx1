@@ -190,18 +190,18 @@
    15.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 16.02,
-  "solid_mass_g_petg": 20.3,
+  "volume_cm3": 16.05,
+  "solid_mass_g_petg": 20.4,
   "printed_mass_g": 11.2,
   "features": 13,
-  "triangles": 1362,
+  "triangles": 1442,
   "com_mm": [
    0.0,
    21.47,
-   -44.38
+   -44.39
   ],
   "quantity": 1,
-  "build_s": 40.4
+  "build_s": 26.4
  },
  "JX0_Thigh_R": {
   "part": "JX0_Thigh_R",
@@ -224,18 +224,18 @@
    15.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 16.02,
-  "solid_mass_g_petg": 20.3,
+  "volume_cm3": 16.05,
+  "solid_mass_g_petg": 20.4,
   "printed_mass_g": 11.2,
   "features": 13,
-  "triangles": 1362,
+  "triangles": 1442,
   "com_mm": [
    0.0,
    -21.47,
-   -44.38
+   -44.39
   ],
   "quantity": 1,
-  "build_s": 40.8
+  "build_s": 26.4
  },
  "JX0_Shin_L": {
   "part": "JX0_Shin_L",
@@ -258,18 +258,18 @@
    15.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 15.54,
-  "solid_mass_g_petg": 19.7,
+  "volume_cm3": 15.57,
+  "solid_mass_g_petg": 19.8,
   "printed_mass_g": 10.9,
   "features": 13,
-  "triangles": 1362,
+  "triangles": 1442,
   "com_mm": [
-   -0.0,
+   0.0,
    -18.73,
-   -45.08
+   -45.09
   ],
   "quantity": 1,
-  "build_s": 40.6
+  "build_s": 27.3
  },
  "JX0_Shin_R": {
   "part": "JX0_Shin_R",
@@ -292,18 +292,18 @@
    15.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 15.54,
-  "solid_mass_g_petg": 19.7,
+  "volume_cm3": 15.57,
+  "solid_mass_g_petg": 19.8,
   "printed_mass_g": 10.9,
   "features": 13,
-  "triangles": 1362,
+  "triangles": 1442,
   "com_mm": [
-   -0.0,
+   0.0,
    18.73,
-   -45.08
+   -45.09
   ],
   "quantity": 1,
-  "build_s": 41.3
+  "build_s": 26.3
  },
  "JX0_AnkleBracket_L": {
   "part": "JX0_AnkleBracket_L",
@@ -394,18 +394,18 @@
    12.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 51.26,
+  "volume_cm3": 51.29,
   "solid_mass_g_petg": 65.1,
   "printed_mass_g": 35.8,
   "features": 16,
-  "triangles": 1072,
+  "triangles": 1088,
   "com_mm": [
    -3.22,
    0.0,
    -30.29
   ],
   "quantity": 2,
-  "build_s": 48.3
+  "build_s": 32.7
  },
  "JX0_Torso": {
   "part": "JX0_Torso",
@@ -448,7 +448,7 @@
   "bbox_mm": [
    -33.0,
    -39.0,
-   0.0,
+   -0.0,
    33.0,
    39.0,
    62.0
@@ -462,18 +462,18 @@
    62.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 94.32,
-  "solid_mass_g_petg": 119.8,
-  "printed_mass_g": 65.9,
+  "volume_cm3": 95.64,
+  "solid_mass_g_petg": 121.5,
+  "printed_mass_g": 66.8,
   "features": 23,
-  "triangles": 1588,
+  "triangles": 2064,
   "com_mm": [
-   1.83,
+   1.81,
    -0.0,
-   31.22
+   31.35
   ],
   "quantity": 1,
-  "build_s": 92.0
+  "build_s": 47.6
  },
  "JX0_ChestCap": {
   "part": "JX0_ChestCap",
@@ -530,18 +530,18 @@
    16.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 11.57,
+  "volume_cm3": 11.6,
   "solid_mass_g_petg": 14.7,
   "printed_mass_g": 8.1,
   "features": 15,
-  "triangles": 1430,
+  "triangles": 1526,
   "com_mm": [
-   -0.0,
-   6.7,
-   -27.16
+   0.0,
+   6.69,
+   -27.15
   ],
   "quantity": 1,
-  "build_s": 39.6
+  "build_s": 30.5
  },
  "JX0_UpperArm_R": {
   "part": "JX0_UpperArm_R",
@@ -564,18 +564,18 @@
    16.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 11.57,
+  "volume_cm3": 11.6,
   "solid_mass_g_petg": 14.7,
   "printed_mass_g": 8.1,
   "features": 15,
-  "triangles": 1430,
+  "triangles": 1526,
   "com_mm": [
-   -0.0,
-   -6.7,
-   -27.16
+   0.0,
+   -6.69,
+   -27.15
   ],
   "quantity": 1,
-  "build_s": 39.1
+  "build_s": 30.7
  },
  "JX0_ArmBlade_L": {
   "part": "JX0_ArmBlade_L",
@@ -598,18 +598,18 @@
    16.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 16.06,
+  "volume_cm3": 16.09,
   "solid_mass_g_petg": 20.4,
   "printed_mass_g": 11.2,
   "features": 6,
-  "triangles": 692,
+  "triangles": 700,
   "com_mm": [
    0.34,
    2.5,
-   -39.23
+   -39.19
   ],
   "quantity": 1,
-  "build_s": 35.6
+  "build_s": 13.0
  },
  "JX0_ArmBlade_R": {
   "part": "JX0_ArmBlade_R",
@@ -632,18 +632,18 @@
    16.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 16.06,
+  "volume_cm3": 16.09,
   "solid_mass_g_petg": 20.4,
   "printed_mass_g": 11.2,
   "features": 6,
-  "triangles": 692,
+  "triangles": 700,
   "com_mm": [
    0.34,
    -2.5,
-   -39.23
+   -39.19
   ],
   "quantity": 1,
-  "build_s": 36.2
+  "build_s": 13.8
  },
  "JX0_Servo_STS3215": {
   "part": "JX0_Servo_STS3215",

@@ -42,14 +42,15 @@ joint_ranges_deg:
   ankle_pitch: {min: -60,  max: 45,  label: ASSUMED, note: "- = dorsiflexion (toes up)"}
   ankle_roll:  {min: -25,  max: 25,  label: ASSUMED}
 
-# One actuator class for every leg joint: the serial bus servo (Feetech ST3215-C018 / Waveshare ST3215, 12 V).
+# One actuator class for all 17 joints (legs, arms, neck): the Feetech STS3215 12 V serial bus servo (Evelta sells it as
+# ST3215-C018; Waveshare as ST3215).
 # Case 45.2 x 24.7 x 32 mm, 89 g (Waveshare drawing and product page); the cylinder model below only feeds the
 # inertia estimate. Reflected rotor inertia ASSUMED: ~0.4 g·cm² rotor x (1:345 gearbox)^2 ≈ 0.005 kg·m² — hobby servos are
 # NOT back-drivable, so this is large relative to the links; the sizing report shows its effect.
 actuator_classes:
   ST: {mass_kg: 0.089, diameter_m: 0.035, length_m: 0.045, reflected_inertia_kgm2: 0.005,
        stall_torque_nm: 2.94, rated_torque_nm: 0.98, no_load_speed_rad_s: 4.72,
-       product: "Feetech ST3215-C018 / Waveshare ST3215 12 V serial bus servo (30 kg·cm stall, 10 kg·cm rated at 12 V)", label: VERIFIED,
+       product: "Feetech STS3215 12 V serial bus servo (ST3215-C018 / Waveshare ST3215; 30 kg·cm stall, 10 kg·cm rated at 12 V)", label: VERIFIED,
        note: "Waveshare product page: 30 kg·cm and 0.222 s/60 deg (45 rpm) at 12 V, 0.089 kg; Evelta: 10 kg·cm rated. Reflected inertia ASSUMED. research/raw/jx0_india_sourcing_raw.md"}
 
 leg_actuator_assignment:

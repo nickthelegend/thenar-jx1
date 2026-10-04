@@ -6,7 +6,7 @@ a list of primitives:
     ("cut",  (x0, x1), (y0, y1), (z0, z1))                 pocket
     ("cyl",  axis, (c0, c1), r, (s0, s1))                  boss cylinder along axis; c = the other two coords in xyz order
     ("hole", axis, (c0, c1), d, (s0, s1))                  cylindrical cut
-Servo interface: Waveshare / Feetech ST3215 (research/raw/jx0_india_sourcing_raw.md, Waveshare 2D drawing): case 45.22 x
+Servo interface: Feetech STS3215 12 V (Waveshare ST3215; research/raw/jx0_india_sourcing_raw.md, Waveshare 2D drawing): case 45.22 x
 24.72 x 32 mm between the two horn faces, Ø19.2 horn on both faces (37.25 across them), output axis 10.11 mm from the
 case end, horn holes 4 x Ø2.5 on a 14 mm circle, case mounting holes on the connector (rear) face 24.45 x 20.5 mm, first
 row 18.41 mm from the output end. Screw sizes are not published: holes are Ø2.2 (M2 self-tapping) — ASSUMED, fit-check.
@@ -54,7 +54,7 @@ def horn_holes(axis, c, s, pcd=ST["PCD"], d=ST["HORN_HOLE"], centre=6.0):
 
 
 def rear_face_mount(axis, shaft_c, l_dir, w_dir, s):
-    """ST3215 rear-face holder features on a plate: disc clearance + 4 case screw holes.
+    """STS3215 rear-face holder features on a plate: disc clearance + 4 case screw holes.
     shaft_c = shaft position in the plate's 2 other coords; l_dir / w_dir = unit direction (+-1, index 0/1) of the case
     length (from the shaft toward the long end) and width in those coords."""
     out = [("hole", axis, shaft_c, ST["DISC_CLEAR"], s)]
@@ -94,10 +94,9 @@ def mirror_y(prims):
             kind, axis, pts, s = p
             if axis == "y":
                 out.append((kind, axis, pts, (-s[1], -s[0])))
-            elif axis == "x":
-                out.append((kind, axis, [(-a, b) for a, b in pts], s))
             else:
-                out.append((kind, axis, [(a, -b) for a, b in pts], s))
+                f = (lambda a, b: (-a, b)) if axis == "x" else (lambda a, b: (a, -b))
+                out.append((kind, axis, [("arc", f(*e[1])) if is_arc(e) else f(*e) for e in pts], s))
         else:
             kind, axis, c, r, s = p
             if axis == "y":
@@ -116,34 +115,69 @@ def _unit(u, v):
     return u / n, v / n
 
 
-def rounded_polygon(corners, radii, n=6):
-    """Convex polygon (u, v) with each corner filleted (radius 0 = sharp), n segments per fillet."""
+# Profiles are lists of vertices (u, v) with optional ("arc", (um, vm)) entries between two vertices: a true arc from the
+# previous vertex through (um, vm) to the next. SolidWorks gets real arcs (smooth surfaces); path_points() traces them
+# for the preview, the bounding-box check and anything else that needs a plain polygon.
+def is_arc(e):
+    return isinstance(e, tuple) and len(e) == 2 and e[0] == "arc"
+
+
+def path_points(path, n=16):
+    """The profile as a plain polygon, each arc traced with n segments."""
     import math
-    out, m = [], len(corners)
-    for i, (P, r) in enumerate(zip(corners, radii)):
-        if r <= 0:
-            out.append(P)
-            continue
-        A, B = corners[i - 1], corners[(i + 1) % m]
-        u1, u2 = _unit(A[0] - P[0], A[1] - P[1]), _unit(B[0] - P[0], B[1] - P[1])
-        half = math.acos(max(-1.0, min(1.0, u1[0] * u2[0] + u1[1] * u2[1]))) / 2
-        d, bis = r / math.tan(half), _unit(u1[0] + u2[0], u1[1] + u2[1])
-        cu, cv = P[0] + bis[0] * r / math.sin(half), P[1] + bis[1] * r / math.sin(half)
-        a1 = math.atan2(P[1] + u1[1] * d - cv, P[0] + u1[0] * d - cu)
-        a2 = math.atan2(P[1] + u2[1] * d - cv, P[0] + u2[0] * d - cu)
-        da = (a2 - a1 + math.pi) % (2 * math.pi) - math.pi
-        out += [(round(cu + r * math.cos(a1 + da * k / n), 3), round(cv + r * math.sin(a1 + da * k / n), 3)) for k in range(n + 1)]
+    verts = [e for e in path if not is_arc(e)]
+    mids, k = {}, -1
+    for e in path:
+        if is_arc(e):
+            mids[k] = e[1]
+        else:
+            k += 1
+    out = []
+    for i, a in enumerate(verts):
+        out.append(a)
+        if i in mids:
+            b, mpt = verts[(i + 1) % len(verts)], mids[i]
+            ax, ay, bx, by, mx, my = a[0], a[1], b[0], b[1], mpt[0], mpt[1]
+            d = 2 * (ax * (my - by) + mx * (by - ay) + bx * (ay - my))
+            cx = ((ax * ax + ay * ay) * (my - by) + (mx * mx + my * my) * (by - ay) + (bx * bx + by * by) * (ay - my)) / d
+            cy = ((ax * ax + ay * ay) * (bx - mx) + (mx * mx + my * my) * (ax - bx) + (bx * bx + by * by) * (mx - ax)) / d
+            r = math.hypot(ax - cx, ay - cy)
+            t0, tm, t1 = (math.atan2(p[1] - cy, p[0] - cx) for p in (a, mpt, b))
+            sweep = (t1 - t0) % (2 * math.pi)
+            if not (0 < (tm - t0) % (2 * math.pi) < sweep):          # the arc runs the other way round
+                sweep -= 2 * math.pi
+            out += [(cx + r * math.cos(t0 + sweep * j / n), cy + r * math.sin(t0 + sweep * j / n)) for j in range(1, n)]
     return out
 
 
-def corner_cut(c, inward, r, n=6, e=0.6):
+def rounded_polygon(corners, radii):
+    """Convex polygon (u, v) with each corner filleted by a true arc (radius 0, or a corner that barely turns, = sharp)."""
+    import math
+    out, m = [], len(corners)
+    for i, (P, r) in enumerate(zip(corners, radii)):
+        A, B = corners[i - 1], corners[(i + 1) % m]
+        u1, u2 = _unit(A[0] - P[0], A[1] - P[1]), _unit(B[0] - P[0], B[1] - P[1])
+        half = math.acos(max(-1.0, min(1.0, u1[0] * u2[0] + u1[1] * u2[1]))) / 2
+        if r <= 0 or math.pi - 2 * half < math.radians(8):
+            out.append(P)
+            continue
+        d, bis = r / math.tan(half), _unit(u1[0] + u2[0], u1[1] + u2[1])
+        cu, cv = P[0] + bis[0] * r / math.sin(half), P[1] + bis[1] * r / math.sin(half)
+        t1 = (round(P[0] + u1[0] * d, 4), round(P[1] + u1[1] * d, 4))
+        t2 = (round(P[0] + u2[0] * d, 4), round(P[1] + u2[1] * d, 4))
+        mid = (round(cu - bis[0] * r, 4), round(cv - bis[1] * r, 4))
+        out += [t1, ("arc", mid), t2]
+    return out
+
+
+def corner_cut(c, inward, r, e=0.6):
     """Profile of the material outside a fillet of radius r at the solid's corner c; inward = (+-1, +-1) into the solid."""
     import math
     (uc, vc), (du, dv) = c, inward
     cu, cv = uc + du * r, vc + dv * r
-    arc = [(round(cu - du * r * math.sin(math.pi / 2 * k / n), 3), round(cv - dv * r * math.cos(math.pi / 2 * k / n), 3))
-           for k in range(n + 1)]
-    return [(uc - du * e, vc - dv * e), (uc + du * r, vc - dv * e)] + arc + [(uc - du * e, vc + dv * r)]
+    mid = (round(cu - du * r * math.sin(math.pi / 4), 4), round(cv - dv * r * math.cos(math.pi / 4), 4))
+    return [(uc - du * e, vc - dv * e), (uc + du * r, vc - dv * e), (uc + du * r, vc), ("arc", mid), (uc, vc + dv * r),
+            (uc - du * e, vc + dv * r)]
 
 
 def chamfer_cut(c, inward, ch, e=0.6):
@@ -415,7 +449,7 @@ def bbox(prims):
             others = [i for i in range(3) if i != ia]
             lo[ia], hi[ia] = min(lo[ia], s[0]), max(hi[ia], s[1])
             for j, i in enumerate(others):
-                vals = [q[j] for q in pts]
+                vals = [q[j] for q in path_points(pts, 64)]
                 lo[i], hi[i] = min(lo[i], min(vals)), max(hi[i], max(vals))
         elif k0 == "cyl":
             _, axis, c, r, s = p

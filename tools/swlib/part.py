@@ -133,6 +133,45 @@ class Sketch:
             self.locate(pt, pts[i][0], pts[i][1], nm, gv)
         return lines
 
+    def profile(self, entries):
+        """Closed contour of lines and true arcs. entries: vertices (u, v), and ("arc", (um, vm)) between two vertices =
+        a 3-point arc from the previous vertex through (um, vm) to the next one. Shared endpoints are merged so the
+        contour is closed (not dimensioned: the profile is driven by the generating script)."""
+        pts, mids = [], {}
+        for e in entries:
+            if isinstance(e, tuple) and len(e) == 2 and e[0] == "arc":
+                mids[len(pts) - 1] = e[1]
+            else:
+                pts.append(e)
+        m = len(pts)
+        segs = []
+        for k in range(m):
+            (u1, v1), (u2, v2) = pts[k], pts[(k + 1) % m]
+            if k in mids:
+                um, vm = mids[k]
+                seg = self.sm.Create3PointArc(u1, v1, 0, u2, v2, 0, um, vm, 0)
+                if seg is None:
+                    raise RuntimeError("Create3PointArc failed")
+            else:
+                seg = self.sm.CreateLine(u1, v1, 0, u2, v2, 0)
+                if seg is None:
+                    raise RuntimeError("CreateLine failed")
+            seg = typed(seg, "ISketchSegment")
+            geo = typed(seg, "ISketchArc" if k in mids else "ISketchLine")
+            segs.append([typed(geo.GetStartPoint2(), "ISketchPoint"), typed(geo.GetEndPoint2(), "ISketchPoint")])
+
+        def nearest(ends, uv):
+            return min(ends, key=lambda p: (p.X - uv[0]) ** 2 + (p.Y - uv[1]) ** 2)
+        for k in range(m):
+            shared = pts[(k + 1) % m]
+            a, b = nearest(segs[k], shared), nearest(segs[(k + 1) % m], shared)
+            self.doc.ClearSelection2(True)
+            a.Select4(False, None)
+            b.Select4(True, None)
+            self.doc.SketchAddConstraints("sgMERGEPOINTS")
+        self.doc.ClearSelection2(True)
+        return segs
+
     def rect(self, u1, v1, u2, v2, names=None, gvs=None):
         return self.polygon([(u1, v1), (u2, v1), (u2, v2), (u1, v2)], names, gvs)
 
