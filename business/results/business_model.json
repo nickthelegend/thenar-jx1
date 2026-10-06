@@ -1,0 +1,187 @@
+{
+  "learning_rate_per_doubling": 0.8335118609237098,
+  "floor_unit_cost": 11356.8,
+  "china_cogs_central": 11356.8,
+  "rs04_landed_china_distributor": 24091.460977584004,
+  "stages": [
+    {
+      "name": "0. Bootstrap / prototypes",
+      "months": 9,
+      "units": 12,
+      "asp": 0,
+      "team": 2,
+      "salary": 0,
+      "other": 1500000,
+      "capex": 1122000,
+      "buyers": "none yet: build JXA-120 v1/v2, test, show a walking leg",
+      "unit_cost": 30291.885117526017,
+      "revenue_per_yr": 0,
+      "cogs_per_yr": 363502.6214103122,
+      "opex_per_yr": 1500000,
+      "gross_margin": null,
+      "ebitda_per_yr": -1863502.6214103121,
+      "working_capital": 149384.63893574473,
+      "burn_over_stage": 1397626.966057734,
+      "capital_to_raise": 3419011.604993479,
+      "assembly_lines_needed": 9.615384615384615e-05,
+      "breakeven_units": null
+    },
+    {
+      "name": "1. Seed: first customers",
+      "months": 18,
+      "units": 600,
+      "asp": 42000,
+      "team": 9,
+      "salary": 1400000,
+      "other": 4000000,
+      "capex": 4572000,
+      "buyers": "Indian university labs, robotics startups, defence R&D (iDEX), cobot/exoskeleton makers",
+      "unit_cost": 18000.000000000007,
+      "revenue_per_yr": 25200000,
+      "cogs_per_yr": 10800000.000000004,
+      "opex_per_yr": 16600000,
+      "gross_margin": 0.5714285714285713,
+      "ebitda_per_yr": -2200000.0000000037,
+      "working_capital": 4438356.164383563,
+      "burn_over_stage": 3300000.0000000056,
+      "capital_to_raise": 20610356.164383568,
+      "assembly_lines_needed": 0.004807692307692308,
+      "breakeven_units": 691.6666666666669
+    },
+    {
+      "name": "2. Series A: product line",
+      "months": 24,
+      "units": 6000,
+      "asp": 30000,
+      "team": 35,
+      "salary": 1600000,
+      "other": 30000000,
+      "capex": 40000000,
+      "buyers": "Indian humanoid/quadruped/AMR makers, defence programmes, export to non-China-sourcing buyers",
+      "unit_cost": 11356.8,
+      "revenue_per_yr": 180000000,
+      "cogs_per_yr": 68140800.0,
+      "opex_per_yr": 86000000,
+      "gross_margin": 0.62144,
+      "ebitda_per_yr": 25859200.0,
+      "working_capital": 28003068.49315069,
+      "burn_over_stage": 0.0,
+      "capital_to_raise": 111003068.49315068,
+      "assembly_lines_needed": 0.04807692307692308,
+      "breakeven_units": 4612.941984208719
+    },
+    {
+      "name": "3. Series B: volume plant",
+      "months": 24,
+      "units": 60000,
+      "asp": 21000,
+      "team": 140,
+      "salary": 1700000,
+      "other": 150000000,
+      "capex": 450000000,
+      "buyers": "humanoid OEMs at volume (India + export), industrial automation",
+      "unit_cost": 11356.8,
+      "revenue_per_yr": 1260000000,
+      "cogs_per_yr": 681408000.0,
+      "opex_per_yr": 388000000,
+      "gross_margin": 0.4592,
+      "ebitda_per_yr": 190592000.0,
+      "working_capital": 280030684.9315068,
+      "burn_over_stage": 0.0,
+      "capital_to_raise": 924030684.9315069,
+      "assembly_lines_needed": 0.4807692307692308,
+      "breakeven_units": 40235.606437697024
+    }
+  ],
+  "curve": [
+    {
+      "units_per_year": 25,
+      "unit_cost": 30291.885117526017
+    },
+    {
+      "units_per_year": 100,
+      "unit_cost": 24139.023350537213
+    },
+    {
+      "units_per_year": 300,
+      "unit_cost": 20163.95911719983
+    },
+    {
+      "units_per_year": 1000,
+      "unit_cost": 11492.764396366923
+    },
+    {
+      "units_per_year": 3000,
+      "unit_cost": 11356.8
+    },
+    {
+      "units_per_year": 10000,
+      "unit_cost": 11356.8
+    },
+    {
+      "units_per_year": 30000,
+      "unit_cost": 11356.8
+    },
+    {
+      "units_per_year": 100000,
+      "unit_cost": 11356.8
+    },
+    {
+      "units_per_year": 300000,
+      "unit_cost": 11356.8
+    }
+  ],
+  "mc_check": [
+    {
+      "humanoids_per_year": 100000.0,
+      "our_share": 0.01,
+      "actuators_per_year": 28000.0,
+      "revenue_usd": 7000000.0,
+      "market_cap_usd_at_4x": 28000000.0
+    },
+    {
+      "humanoids_per_year": 100000.0,
+      "our_share": 0.05,
+      "actuators_per_year": 140000.0,
+      "revenue_usd": 35000000.0,
+      "market_cap_usd_at_4x": 140000000.0
+    },
+    {
+      "humanoids_per_year": 1000000.0,
+      "our_share": 0.01,
+      "actuators_per_year": 280000.0,
+      "revenue_usd": 70000000.0,
+      "market_cap_usd_at_4x": 280000000.0
+    },
+    {
+      "humanoids_per_year": 1000000.0,
+      "our_share": 0.05,
+      "actuators_per_year": 1400000.0,
+      "revenue_usd": 350000000.0,
+      "market_cap_usd_at_4x": 1400000000.0
+    },
+    {
+      "humanoids_per_year": 10000000.0,
+      "our_share": 0.01,
+      "actuators_per_year": 2800000.0,
+      "revenue_usd": 700000000.0,
+      "market_cap_usd_at_4x": 2800000000.0
+    },
+    {
+      "humanoids_per_year": 10000000.0,
+      "our_share": 0.05,
+      "actuators_per_year": 14000000.0,
+      "revenue_usd": 3500000000.0,
+      "market_cap_usd_at_4x": 14000000000.0
+    }
+  ],
+  "total_capital_all_stages": 1059063121.1940346,
+  "assumptions": {
+    "inventory_days": 120,
+    "receivable_days": 60,
+    "payable_days": 30,
+    "takt_s": 90,
+    "oee": 0.65,
+    "shift_seconds_per_year": 17280000
+  }
+}
