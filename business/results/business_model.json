@@ -131,50 +131,49 @@
       "unit_cost": 11356.8
     }
   ],
-  "mc_check": [
-    {
-      "humanoids_per_year": 100000.0,
-      "our_share": 0.01,
-      "actuators_per_year": 28000.0,
-      "revenue_usd": 7000000.0,
-      "market_cap_usd_at_4x": 28000000.0
+  "mc_check": {
+    "markets_usd": {
+      "2030 (BofA: 1.2 M humanoids x US$17k x 51 %)": 10400000000.0,
+      "2035 low (Goldman: 30-35 % of US$138 bn)": 41000000000.0,
+      "2035 high (BofA: 10 M x US$13-17k x 51 %)": 87000000000.0
     },
-    {
-      "humanoids_per_year": 100000.0,
-      "our_share": 0.05,
-      "actuators_per_year": 140000.0,
-      "revenue_usd": 35000000.0,
-      "market_cap_usd_at_4x": 140000000.0
-    },
-    {
-      "humanoids_per_year": 1000000.0,
-      "our_share": 0.01,
-      "actuators_per_year": 280000.0,
-      "revenue_usd": 70000000.0,
-      "market_cap_usd_at_4x": 280000000.0
-    },
-    {
-      "humanoids_per_year": 1000000.0,
-      "our_share": 0.05,
-      "actuators_per_year": 1400000.0,
-      "revenue_usd": 350000000.0,
-      "market_cap_usd_at_4x": 1400000000.0
-    },
-    {
-      "humanoids_per_year": 10000000.0,
-      "our_share": 0.01,
-      "actuators_per_year": 2800000.0,
-      "revenue_usd": 700000000.0,
-      "market_cap_usd_at_4x": 2800000000.0
-    },
-    {
-      "humanoids_per_year": 10000000.0,
-      "our_share": 0.05,
-      "actuators_per_year": 14000000.0,
-      "revenue_usd": 3500000000.0,
-      "market_cap_usd_at_4x": 14000000000.0
+    "for_10bn_market_cap": [
+      {
+        "ev_to_sales": 2,
+        "revenue_needed_usd": 5000000000.0,
+        "share_needed": {
+          "2030 (BofA: 1.2 M humanoids x US$17k x 51 %)": 0.4807692307692308,
+          "2035 low (Goldman: 30-35 % of US$138 bn)": 0.12195121951219512,
+          "2035 high (BofA: 10 M x US$13-17k x 51 %)": 0.05747126436781609
+        },
+        "actuators_per_year_at_usd250": 20000000.0
+      },
+      {
+        "ev_to_sales": 4,
+        "revenue_needed_usd": 2500000000.0,
+        "share_needed": {
+          "2030 (BofA: 1.2 M humanoids x US$17k x 51 %)": 0.2403846153846154,
+          "2035 low (Goldman: 30-35 % of US$138 bn)": 0.06097560975609756,
+          "2035 high (BofA: 10 M x US$13-17k x 51 %)": 0.028735632183908046
+        },
+        "actuators_per_year_at_usd250": 10000000.0
+      },
+      {
+        "ev_to_sales": 10,
+        "revenue_needed_usd": 1000000000.0,
+        "share_needed": {
+          "2030 (BofA: 1.2 M humanoids x US$17k x 51 %)": 0.09615384615384616,
+          "2035 low (Goldman: 30-35 % of US$138 bn)": 0.024390243902439025,
+          "2035 high (BofA: 10 M x US$13-17k x 51 %)": 0.011494252873563218
+        },
+        "actuators_per_year_at_usd250": 4000000.0
+      }
+    ],
+    "one_percent_of_2030_market": {
+      "revenue_usd": 104000000.0,
+      "market_cap_at_4x_usd": 416000000.0
     }
-  ],
+  },
   "total_capital_all_stages": 1059063121.1940346,
   "assumptions": {
     "inventory_days": 120,

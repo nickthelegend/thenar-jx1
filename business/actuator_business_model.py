@@ -88,14 +88,17 @@ def stage_economics(s: dict) -> dict:
 # ---------------------------------------------------------------------------------------------------------------------
 # 3. market-cap reality check: what does "1 % of a trillion-dollar market" need?
 def mc_check():
+    """What share of the humanoid-actuator market does a US$10 bn market cap need? (market sizes: market_outlook_2030_copper_raw.md)"""
+    markets = {"2030 (BofA: 1.2 M humanoids x US$17k x 51 %)": 10.4e9, "2035 low (Goldman: 30-35 % of US$138 bn)": 41e9,
+               "2035 high (BofA: 10 M x US$13-17k x 51 %)": 87e9}
     out = []
-    for robots in (1e5, 1e6, 1e7):                         # humanoids built worldwide per year
-        for share in (0.01, 0.05):
-            acts = robots * 28 * share
-            rev_usd = acts * 250                             # US$ per actuator, RobStride-like ASP
-            out.append({"humanoids_per_year": robots, "our_share": share, "actuators_per_year": acts,
-                        "revenue_usd": rev_usd, "market_cap_usd_at_4x": 4 * rev_usd})
-    return out
+    for mult in (2, 4, 10):
+        rev = 10e9 / mult
+        out.append({"ev_to_sales": mult, "revenue_needed_usd": rev,
+                    "share_needed": {k: rev / v for k, v in markets.items()},
+                    "actuators_per_year_at_usd250": rev / 250})
+    return {"markets_usd": markets, "for_10bn_market_cap": out,
+            "one_percent_of_2030_market": {"revenue_usd": 0.01 * 10.4e9, "market_cap_at_4x_usd": 4 * 0.01 * 10.4e9}}
 
 
 def main():

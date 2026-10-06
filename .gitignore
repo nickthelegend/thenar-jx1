@@ -48,3 +48,5 @@ media/reference.mp4
 
 # in-house actuator paper build files (HTML, page previews)
 actuators/inhouse/.paper_build/
+# business report build files
+business/.report_build/
