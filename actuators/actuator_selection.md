@@ -62,3 +62,11 @@ Evidence: [`../research/raw/actuator_technology_raw.md`](../research/raw/actuato
 The [Modular Actuator Interface](modular_actuator_interface.md) keeps the leg structure independent of the actuator make. A
 locally built module (Indian BLDC + laser-cut steel cycloid + STM32G431 FOC board, ₹572 MCU at Evelta) must match the MAI
 envelope, bolt patterns, 48 V / CAN protocol and the torque–speed table above to be a drop-in replacement.
+
+**Study, 2026-10-06:** [`inhouse/`](inhouse/README.md) worked this path out in detail. Its
+[research paper](inhouse/JXA_inhouse_actuator_research_paper.pdf) gives:
+- the design of three classes: JXA-40, which replaces RS06; JXA-120, which replaces RS04/RS03; and JXA-360, a full-size knee;
+- winding data and a build procedure;
+- a make-vs-buy cost model.
+
+Its conclusion is to keep buying RobStride for V1 and develop JXA in parallel. In-house units cost more than imports below about 900–1,000 units a year.

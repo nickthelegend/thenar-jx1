@@ -84,7 +84,7 @@ with the ring gear fixed is</p>
 <h3>2.7 The 48 V speed limit and the torque–speed curve</h3>
 <p>The inverter can put at most about V<sub>dc</sub>/√3 ≈ 26 V (peak, per phase) across a winding. As speed rises, back-EMF
 uses up that voltage until no current, and so no torque, can be pushed in: that is the no-load speed. Below it, the current
-limit sets the flat "peak torque" line (Fig. 3). Field weakening (negative d-axis current) can stretch the top speed by 20–40 %
+limit sets the flat "peak torque" line (Fig. 2). Field weakening (negative d-axis current) can stretch the top speed by 20–40 %
 at the cost of heat. The same trade-off explains every datasheet: RS04 (120 N·m, 21 rad/s) and RS06 (36 N·m, 50 rad/s) use
 different turns on similar hardware.</p>
 """
@@ -93,7 +93,7 @@ WINDING = r"""
 <h2 id="winding">6. Winding the stator: a procedure you can hand to a technician</h2>
 <p class="lead">This is the step people fear most. On a tooth-coil outrunner stator it is slow but simple, and a careful person
 can learn it on scrap drone stators in one weekend. Any motor-rewinding shop (ceiling-fan, pump or e-rickshaw hub-motor
-rewinders exist in every Indian city) already knows the skills; give them this page, the layout in Fig. 2 and the table below.</p>
+rewinders exist in every Indian city) already knows the skills; give them this page, the layout in Fig. 3 and the table below.</p>
 
 <table class="small">
 <tr><th>Class</th><th>Teeth</th><th>Turns / tooth</th><th>Wire (bare), strands in hand</th><th>Parallel groups</th><th>Wire per stator</th>
@@ -109,7 +109,7 @@ build). Buy a few hundred grams per stator; budget 1.5× the calculated mass for
 a fluidised-bed epoxy kit), or 0.13–0.18 mm Nomex/DMD slot liners cut to shape. Never wind onto bare laminations: the
 sharp edges cut the enamel.</li>
 <li>A winding jig: the stator clamped on a mandrel in a bench vice or lathe, plus a turn counter. For production, a
-manual or semi-automatic <b>needle winder</b> for outrunner stators (§8.3 gives prices).</li>
+manual or semi-automatic <b>needle winder</b> for outrunner stators (§6.3 gives prices).</li>
 <li>Wire tensioner (a felt-pad tensioner or simple drag spool), plastic or brass tamping tool (never steel), flat-nose
 pliers with smooth jaws, PTFE sleeving, Kapton tape, class-H varnish (single-component polyester-imide dip varnish or
 epoxy trickle resin), an oven that reaches 150 °C, a milliohm meter or 4-wire LCR meter, a 500 V–1 kV insulation tester,
@@ -120,7 +120,7 @@ and a 0–60 V bench supply.</li>
 <ol class="steps">
 <li><b>Prepare the stack.</b> Deburr the laminations (fine stone, then blow clean). Check the stack is square and tight
 (bonded, welded or riveted). Powder-coat or fit slot liners. Check with the insulation tester that the coating holds 500 V.</li>
-<li><b>Mark tooth 1</b> with paint and number the teeth clockwise as in Fig. 2. Write the pattern on a card and tick off each
+<li><b>Mark tooth 1</b> with paint and number the teeth clockwise as in Fig. 3. Write the pattern on a card and tick off each
 tooth as you go.</li>
 <li><b>Plan the paths.</b> For one parallel group, phase A's teeth are wound one after the other with one continuous wire,
 following the pattern: capital letter = wind clockwise (looking at the tooth tip), small letter = anticlockwise. Going from
@@ -196,7 +196,7 @@ structural epoxy or anaerobic magnet adhesive (e.g. Loctite AA 3342 / Araldite 2
 non-magnetic (printed or aluminium) spacer comb so they stay equally spaced. Check polarity with a compass or a gauss
 meter as you go; one reversed magnet ruins the motor. Optionally wrap with glass-fibre/epoxy or Kevlar for retention.
 Balance the rotor on a simple knife-edge or by drilling the end plate.</li>
-<li><b>Gears.</b> Order sun, planets and ring from a gear job shop with the tooth data from Table 5 (module, teeth,
+<li><b>Gears.</b> Order sun, planets and ring from a gear job shop with the tooth data from Table 6 (module, teeth,
 pressure angle 20°, profile shift +0.3 on the 12-tooth sun, quality DIN 7 or better, case-carburised 0.4–0.6 mm).
 Check the planet bores and pins for a sliding H7/g6 fit; use needle bearings or bronze bushes in the planets.</li>
 <li><b>Housings.</b> CNC job work in 6061-T6, anodised. Tolerances that matter: bearing seats (±0.01 mm), ring-gear seat

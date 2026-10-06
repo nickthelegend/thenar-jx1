@@ -1,0 +1,373 @@
+{
+  "assumptions": {
+    "INR_USD": 95.96,
+    "INR_CNY": 13.52,
+    "landed_factor": 1.415396,
+    "amort_years": 3,
+    "magnet_inr_per_kg": {
+      "P": 33000,
+      "B": 15000,
+      "F": 6000
+    },
+    "copper_inr_per_kg": {
+      "P": 6000,
+      "B": 2000,
+      "F": 1700
+    },
+    "labour_inr_per_h": {
+      "P": 500,
+      "B": 300,
+      "F": 220
+    },
+    "overhead_per_year": {
+      "P": 0,
+      "B": 1200000,
+      "F": 6000000
+    }
+  },
+  "classes": {
+    "JXA-40": {
+      "unit": {
+        "P": {
+          "lines": {
+            "magnets (NdFeB SH)": 1746.4614252634826,
+            "copper wire (class 200)": 405.4579536743216,
+            "stator core (laminations)": 2500,
+            "insulation + varnish": 500,
+            "rotor can + end plate": 2000,
+            "gear set (sun, 3 planets, ring), carburised": 9000,
+            "housing, hub, carrier (CNC Al)": 6500,
+            "bearings (output + rotor + planets)": 3800,
+            "driver PCB + 2 encoders": 5500,
+            "fasteners, connectors, grease, adhesive": 1000,
+            "labour (winding, assembly, calibration)": 13000,
+            "test + scrap allowance": 6892.78790684067
+          },
+          "total": 52844.70728577847,
+          "hours": 26
+        },
+        "B": {
+          "lines": {
+            "magnets (NdFeB SH)": 793.8461023924921,
+            "copper wire (class 200)": 135.15265122477385,
+            "stator core (laminations)": 800,
+            "insulation + varnish": 200,
+            "rotor can + end plate": 800,
+            "gear set (sun, 3 planets, ring), carburised": 3300,
+            "housing, hub, carrier (CNC Al)": 2800,
+            "bearings (output + rotor + planets)": 2400,
+            "driver PCB + 2 encoders": 3800,
+            "fasteners, connectors, grease, adhesive": 550,
+            "labour (winding, assembly, calibration)": 2400,
+            "test + scrap allowance": 1797.8998753617268
+          },
+          "total": 19776.898628978994,
+          "hours": 8
+        },
+        "F": {
+          "lines": {
+            "magnets (NdFeB SH)": 317.5384409569968,
+            "copper wire (class 200)": 114.87975354105777,
+            "stator core (laminations)": 180,
+            "insulation + varnish": 60,
+            "rotor can + end plate": 260,
+            "gear set (sun, 3 planets, ring), carburised": 1100,
+            "housing, hub, carrier (CNC Al)": 1000,
+            "bearings (output + rotor + planets)": 1200,
+            "driver PCB + 2 encoders": 2200,
+            "fasteners, connectors, grease, adhesive": 250,
+            "labour (winding, assembly, calibration)": 440.0,
+            "test + scrap allowance": 356.12090972490273
+          },
+          "total": 7478.539104222958,
+          "hours": 2.0
+        }
+      },
+      "buy": {
+        "ref": "RobStride RS06 (36 N\u00b7m)",
+        "usd_landed": 28522.4940336,
+        "china_distributor": 17058.924411984,
+        "china_cogs": {
+          "low": 6354.4,
+          "central": 8112.0,
+          "high": 13520.0
+        },
+        "china_cogs_split": {
+          "reducer": 2190.24,
+          "motor (stator, magnets, rotor)": 1622.3999999999999,
+          "encoders": 1622.3999999999999,
+          "driver": 1379.0400000000002,
+          "structure + bearings": 1297.92
+        }
+      },
+      "peak_Nm": 41.367699691759945,
+      "loaded": {
+        "P": 70733.59617466736,
+        "B": 42763.56529564566,
+        "F": 11153.205770889625
+      },
+      "per_Nm": {
+        "P": 1709.8750160564723,
+        "B": 1033.7428867035544,
+        "F": 269.61145661940776
+      }
+    },
+    "JXA-120": {
+      "unit": {
+        "P": {
+          "lines": {
+            "magnets (NdFeB SH)": 4128.05981540046,
+            "copper wire (class 200)": 935.0596631612347,
+            "stator core (laminations)": 3000,
+            "insulation + varnish": 600,
+            "rotor can + end plate": 3000,
+            "gear set (sun, 3 planets, ring), carburised": 15000,
+            "housing, hub, carrier (CNC Al)": 10000,
+            "bearings (output + rotor + planets)": 6100,
+            "driver PCB + 2 encoders": 7000,
+            "fasteners, connectors, grease, adhesive": 1500,
+            "labour (winding, assembly, calibration)": 16000,
+            "test + scrap allowance": 10089.467921784255
+          },
+          "total": 77352.58740034595,
+          "hours": 32
+        },
+        "B": {
+          "lines": {
+            "magnets (NdFeB SH)": 1876.3908251820271,
+            "copper wire (class 200)": 311.6865543870782,
+            "stator core (laminations)": 1200,
+            "insulation + varnish": 250,
+            "rotor can + end plate": 1200,
+            "gear set (sun, 3 planets, ring), carburised": 5500,
+            "housing, hub, carrier (CNC Al)": 4500,
+            "bearings (output + rotor + planets)": 4400,
+            "driver PCB + 2 encoders": 4500,
+            "fasteners, connectors, grease, adhesive": 800,
+            "labour (winding, assembly, calibration)": 3000,
+            "test + scrap allowance": 2753.807737956911
+          },
+          "total": 30291.885117526017,
+          "hours": 10
+        },
+        "F": {
+          "lines": {
+            "magnets (NdFeB SH)": 750.5563300728109,
+            "copper wire (class 200)": 264.9335712290165,
+            "stator core (laminations)": 300,
+            "insulation + varnish": 80,
+            "rotor can + end plate": 400,
+            "gear set (sun, 3 planets, ring), carburised": 1800,
+            "housing, hub, carrier (CNC Al)": 1600,
+            "bearings (output + rotor + planets)": 2250,
+            "driver PCB + 2 encoders": 2600,
+            "fasteners, connectors, grease, adhesive": 350,
+            "labour (winding, assembly, calibration)": 550.0,
+            "test + scrap allowance": 547.2744950650914
+          },
+          "total": 11492.76439636692,
+          "hours": 2.5
+        }
+      },
+      "buy": {
+        "ref": "RobStride RS04 (120 N\u00b7m)",
+        "usd_landed": 34634.4570408,
+        "china_distributor": 24091.460977584004,
+        "china_cogs": {
+          "low": 8923.199999999999,
+          "central": 11356.8,
+          "high": 20280.0
+        },
+        "china_cogs_split": {
+          "reducer": 3066.3360000000002,
+          "motor (stator, magnets, rotor)": 2271.36,
+          "encoders": 2271.36,
+          "driver": 1930.6560000000002,
+          "structure + bearings": 1817.088
+        }
+      },
+      "peak_Nm": 124.97722052348462,
+      "loaded": {
+        "P": 95241.47628923484,
+        "B": 53278.551784192685,
+        "F": 15167.431063033586
+      },
+      "per_Nm": {
+        "P": 762.0706868843982,
+        "B": 426.30610251234583,
+        "F": 121.3615649276138
+      }
+    },
+    "JXA-360": {
+      "unit": {
+        "P": {
+          "lines": {
+            "magnets (NdFeB SH)": 9372.13657032785,
+            "copper wire (class 200)": 2074.4000090488216,
+            "stator core (laminations)": 9000,
+            "insulation + varnish": 1000,
+            "rotor can + end plate": 6500,
+            "gear set (sun, 3 planets, ring), carburised": 32000,
+            "housing, hub, carrier (CNC Al)": 21000,
+            "bearings (output + rotor + planets)": 12000,
+            "driver PCB + 2 encoders": 12000,
+            "fasteners, connectors, grease, adhesive": 2500,
+            "labour (winding, assembly, calibration)": 20000,
+            "test + scrap allowance": 19116.9804869065
+          },
+          "total": 146563.51706628318,
+          "hours": 40
+        },
+        "B": {
+          "lines": {
+            "magnets (NdFeB SH)": 4260.0620774217505,
+            "copper wire (class 200)": 691.4666696829406,
+            "stator core (laminations)": 3500,
+            "insulation + varnish": 450,
+            "rotor can + end plate": 2700,
+            "gear set (sun, 3 planets, ring), carburised": 12500,
+            "housing, hub, carrier (CNC Al)": 10000,
+            "bearings (output + rotor + planets)": 8500,
+            "driver PCB + 2 encoders": 8000,
+            "fasteners, connectors, grease, adhesive": 1400,
+            "labour (winding, assembly, calibration)": 4200,
+            "test + scrap allowance": 5620.152874710469
+          },
+          "total": 61821.68162181516,
+          "hours": 14
+        },
+        "F": {
+          "lines": {
+            "magnets (NdFeB SH)": 1704.0248309687001,
+            "copper wire (class 200)": 587.7466692304995,
+            "stator core (laminations)": 800,
+            "insulation + varnish": 150,
+            "rotor can + end plate": 900,
+            "gear set (sun, 3 planets, ring), carburised": 4100,
+            "housing, hub, carrier (CNC Al)": 3600,
+            "bearings (output + rotor + planets)": 4500,
+            "driver PCB + 2 encoders": 4500,
+            "fasteners, connectors, grease, adhesive": 600,
+            "labour (winding, assembly, calibration)": 770.0,
+            "test + scrap allowance": 1110.58857500996
+          },
+          "total": 23322.36007520916,
+          "hours": 3.5
+        }
+      },
+      "buy": {
+        "ref": "Damiao DM-J10422P (400 N\u00b7m)",
+        "usd_landed": 65194.2720768,
+        "china_distributor": null,
+        "china_cogs": {
+          "low": 20280.0,
+          "central": 27040.0,
+          "high": 40560.0
+        },
+        "china_cogs_split": {
+          "reducer": 7300.8,
+          "motor (stator, magnets, rotor)": 5408.0,
+          "encoders": 5408.0,
+          "driver": 4596.8,
+          "structure + bearings": 4326.4
+        }
+      },
+      "peak_Nm": 371.08130493862257,
+      "loaded": {
+        "P": 164452.40595517206,
+        "B": 84808.34828848182,
+        "F": 26997.026741875827
+      },
+      "per_Nm": {
+        "P": 443.17081935014954,
+        "B": 228.5438451352575,
+        "F": 72.75232242255152
+      }
+    }
+  },
+  "nre": {
+    "P": {
+      "items": {
+        "winding jig + turn counter": 5000,
+        "LCR meter (TH2830 class)": 45000,
+        "insulation (hipot) tester": 15000,
+        "4-wire milliohm meter": 10000,
+        "bench supply 60 V / 15 A": 18000,
+        "curing oven (used)": 15000,
+        "oscilloscope": 35000,
+        "dyno bench: hysteresis brake + DYN-200 torque sensor + frame": 140000,
+        "USB-CAN adapters": 6000,
+        "printed assembly fixtures, rotor guide sleeves": 8000,
+        "hand tools, consumables": 25000
+      },
+      "total": 322000
+    },
+    "B": {
+      "items": {
+        "semi-automatic needle winder (US$5-8k + duty)": 700000,
+        "surge (impulse) tester": 100000,
+        "second dyno + thermal chamber": 150000,
+        "assembly + magnet-bonding fixtures": 150000,
+        "simple rotor balancer": 50000,
+        "inspection: bore gauges, height gauge, gear-roll tester": 100000
+      },
+      "total": 1250000
+    },
+    "F": {
+      "items": {
+        "CNC needle winders x2": 4000000,
+        "stator stamping dies, 3 classes (no quote found)": 2400000,
+        "gear tooling (hobs, PM dies for sun/planets)": 1500000,
+        "end-of-line test stations x2": 2000000,
+        "dynamic balancing machine": 600000,
+        "varnish/cure line": 500000,
+        "ESD assembly line + fixtures": 1500000,
+        "quality lab": 1000000
+      },
+      "total": 13500000
+    }
+  },
+  "nre_cumulative": {
+    "P": 322000,
+    "B": 1572000,
+    "F": 15072000
+  },
+  "scenario_jx1": {
+    "buy_usd_route": 399310,
+    "buy_china_distributor": 255040,
+    "inhouse_parts_and_labour": 370258.38485451404,
+    "inhouse_prototype_rounds": 520789.1787444977,
+    "inhouse_garage_equipment": 322000,
+    "inhouse_total_first_set": 1213047.5635990119,
+    "inhouse_marginal_next_set": 320189.60110800905,
+    "note": "JX1 buys 13 leg/waist actuators; in-house builds 15 (1 spare per class); arms keep RS02/RS00"
+  },
+  "scenario_fullsize": {
+    "mix": {
+      "JXA-360": 4,
+      "JXA-120": 14,
+      "JXA-40": 10
+    },
+    "buy_usd_route": 1030884.4272143999,
+    "buy_china_distributor": 768646.7861132161,
+    "inhouse_P": 2197637.3647277607,
+    "inhouse_B": 869142.1044224148,
+    "inhouse_F": 328973.5328922031,
+    "loaded_P": 2698526.2536166497,
+    "loaded_B": 1512768.7710890817,
+    "loaded_F": 431864.19955886976,
+    "china_cogs_central": 348275.19999999995
+  },
+  "breakeven_jxa120_vs_rs04_china": {
+    "B": {
+      "margin_per_unit": -6200.424139942013,
+      "fixed_per_year": 1724000.0,
+      "breakeven_units_per_year": null
+    },
+    "F": {
+      "margin_per_unit": 12598.696581217084,
+      "fixed_per_year": 11024000.0,
+      "breakeven_units_per_year": 875.0111512674463
+    }
+  }
+}

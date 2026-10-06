@@ -1,0 +1,88 @@
+[
+  {
+    "label": "JXA-120 on a bought 10020 core (100 x 20 mm, 36N42P, US$19-31)",
+    "performance": {
+      "gear_ratio": 9.0,
+      "peak_out_Nm": 124.01831649584307,
+      "cont_out_Nm": 44.41405370538496,
+      "noload_out_rad_s": 23.7593984962406,
+      "noload_out_rpm": 226.8855429340102,
+      "air_gap_shear_peak_kPa": 45.66733774086296,
+      "P_iron_cont_W": 12.208282404878439,
+      "I_cont_Arms": 19.833175856042516,
+      "reflected_inertia_kgm2": 0.07301729236735592,
+      "mass_kg": 1.8945772445808486,
+      "torque_density_Nm_per_kg": 65.45962528082647,
+      "meets_peak": true,
+      "meets_cont": true,
+      "meets_speed": true
+    },
+    "winding": {
+      "kw": 0.9330127018922196,
+      "turns_per_coil": 14,
+      "parallel_paths": 3,
+      "strands_in_hand": 3,
+      "wire_bare_mm": 0.4,
+      "layout_str": "A a c C B b a A C c b B A a c C B b a A C c b B A a c C B b a A C c b B"
+    },
+    "electrical": {
+      "R_phase_20C_mohm": 47.39030232618049,
+      "R_phase_100C_mohm": 62.28981337753163,
+      "L_phase_uH": 82.01556951246441,
+      "Kt_motor_Nm_per_Apk": 0.18520258244156987,
+      "Kt_motor_Nm_per_Arms": 0.2619160038753894,
+      "Kt_output_Nm_per_Arms": 2.239381833134579,
+      "Ke_LL_Vrms_per_krpm_motor": 15.835436043731601,
+      "Km_Nm_per_sqrtW_hot": 0.6058887570555062,
+      "Km_output_Nm_per_sqrtW": 5.1803488728245775,
+      "i_peak_A": 88,
+      "J_peak_A_per_mm2": 77.80908328937106,
+      "J_cont_Arms_per_mm2": 17.53637763722222,
+      "P_cu_at_peak_W": 723.5584721934073,
+      "seconds_at_peak_adiabatic": 2.1724864298017748
+    }
+  },
+  {
+    "label": "JXA-360 on three stacked 13710 cores (137 x 30 mm, 36N42P, US$74 each)",
+    "performance": {
+      "gear_ratio": 10.0,
+      "peak_out_Nm": 371.6514514302039,
+      "cont_out_Nm": 146.94907313073847,
+      "noload_out_rad_s": 17.969924812030076,
+      "noload_out_rpm": 171.6001416494571,
+      "air_gap_shear_peak_kPa": 43.846428962901356,
+      "P_iron_cont_W": 21.13672386368115,
+      "I_cont_Arms": 49.76637668060339,
+      "reflected_inertia_kgm2": 0.4255488180632102,
+      "mass_kg": 4.39375807799931,
+      "torque_density_Nm_per_kg": 84.58623457016431,
+      "meets_peak": true,
+      "meets_cont": true,
+      "meets_speed": true
+    },
+    "winding": {
+      "kw": 0.9330127018922196,
+      "turns_per_coil": 8,
+      "parallel_paths": 3,
+      "strands_in_hand": 6,
+      "wire_bare_mm": 0.5,
+      "layout_str": "A a c C B b a A C c b B A a c C B b a A C c b B A a c C B b a A C c b B"
+    },
+    "electrical": {
+      "R_phase_20C_mohm": 12.699507170848674,
+      "R_phase_100C_mohm": 16.692232225363497,
+      "L_phase_uH": 31.606406892632823,
+      "Kt_motor_Nm_per_Apk": 0.21978205288598693,
+      "Kt_motor_Nm_per_Arms": 0.3108187599575636,
+      "Kt_output_Nm_per_Arms": 2.952778219596854,
+      "Ke_LL_Vrms_per_krpm_motor": 18.79209564010322,
+      "Km_Nm_per_sqrtW_hot": 1.3889588748115425,
+      "Km_output_Nm_per_sqrtW": 13.195109310709654,
+      "i_peak_A": 200,
+      "J_peak_A_per_mm2": 56.588424210451684,
+      "J_cont_Arms_per_mm2": 14.081004175095575,
+      "P_cu_at_peak_W": 1001.5339335218094,
+      "seconds_at_peak_adiabatic": 4.107357156343982
+    }
+  }
+]

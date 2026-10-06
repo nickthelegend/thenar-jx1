@@ -45,3 +45,6 @@ jx0/bom/.report_build/
 
 # the reference robot video (a friend's robot): kept local, not published
 media/reference.mp4
+
+# in-house actuator paper build files (HTML, page previews)
+actuators/inhouse/.paper_build/

@@ -400,7 +400,7 @@ def plots(results):
     colors = {"A": "#c0392b", "B": "#2e7d32", "C": "#1f5fa8"}
     ref = {"JXA-40": [("RS06", 36, 50.3), ("Damiao J8009P", 40, 35.1)],
            "JXA-120": [("RS04", 120, 20.9), ("Damiao J10010L", 120, 20.9), ("CubeMars AK10-9", 48, 10.5)],
-           "JXA-360": [("Damiao J10422P", 400, 12.6)]}
+           "JXA-360": [("Unitree H1 knee (max speed)", 360, 14.0), ("Damiao J10422P", 400, 12.6)]}
 
     # 1. torque-speed envelopes
     fig, axes = plt.subplots(1, 3, figsize=(10.5, 3.2))
@@ -501,6 +501,17 @@ def main():
         print(f"   mass g: {json.dumps({k: round(v) for k, v in r['masses_g'].items()})}")
         print(f"   layout: {w['layout_str']}  balanced {w['balanced']} sym {w['symmetric_no_ump']} lcm {w['lcm']}")
         print(f"   t_peak {e['seconds_at_peak_adiabatic']:.1f} s  Pcu_peak {e['P_cu_at_peak_W']:.0f} W  Pfe {p['P_iron_cont_W']:.1f} W")
+    # prototype shortcut: wind off-the-shelf Chinese stator cores (research/raw/india_motor_materials_raw.md section 3.4)
+    variants = []
+    for base, label, kw in [(SPECS[1], "JXA-120 on a bought 10020 core (100 x 20 mm, 36N42P, US$19-31)", dict(poles=42)),
+                            (SPECS[2], "JXA-360 on three stacked 13710 cores (137 x 30 mm, 36N42P, US$74 each)",
+                             dict(slots=36, poles=42, stator_od_mm=137, stack_mm=30))]:
+        import dataclasses
+        rv = design(dataclasses.replace(base, **kw))
+        variants.append({"label": label, "performance": rv["performance"], "winding": {k: rv["winding"][k] for k in
+                         ("kw", "turns_per_coil", "parallel_paths", "strands_in_hand", "wire_bare_mm", "layout_str")},
+                         "electrical": rv["electrical"]})
+    (OUT / "variants.json").write_text(json.dumps(variants, indent=2, default=float))
     (OUT / "design.json").write_text(json.dumps(slim, indent=2, default=float))
     (OUT / "curves.json").write_text(json.dumps([{"name": r["spec"]["name"], **r["curve"]} for r in results]))
     plots(results)
