@@ -1,11 +1,11 @@
 # In-house actuators (JXA family): research paper and design tools
 
-**[JXA_inhouse_actuator_research_paper.pdf](JXA_inhouse_actuator_research_paper.pdf)** (18 pages, 6 Oct 2026) covers:
+**[JXA_inhouse_actuator_research_paper.pdf](JXA_inhouse_actuator_research_paper.pdf)** (20 pages, 6 Oct 2026) covers:
 - how a permanent-magnet motor makes torque, starting from magnetism;
 - what is inside RobStride, Damiao, Unitree and other actuators;
 - how much torque JX1 and full-size humanoids need;
 - a three-class actuator family you can build;
-- a step-by-step winding and build procedure;
+- a step-by-step winding and build procedure, including which parts to cast or mould (sand casting, die casting, lost-PLA, injection moulding, sintered gears);
 - the costs of making them in India vs buying from China.
 
 | Class | Peak / continuous | No-load at 48 V | Mass (est.) | Replaces | Batch cost (25/yr) | Buy (landed, China distributor) |

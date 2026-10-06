@@ -101,6 +101,32 @@ OVERHEAD_PER_YEAR = {"P": 0, "B": 1200000, "F": 6000000}   # B: 1 engineer + spa
 AMORT_YEARS = 3
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# housing routes for a JXA-120 housing (≈ 350 g finished, Ø120 × 70 mm): research/raw/india_casting_moulding_raw.md
+# cost per part = one-time cost / lot size + per-part blank cost + machining hours × shop rate   (all ESTIMATED)
+BILLET_H = 0.92                        # ≈ 35-76 min from billet; two set-ups + bearing seats
+HOUSING_ROUTES = {
+    # name: (one-time ₹, blank ₹/part, machining fraction of billet time, note)
+    "CNC from billet (6061-T6)": (6000, 660, 1.00, "Ø125 × 75 bar ≈ 2.5 kg for a 350 g part"),
+    "Sand casting (LM25) + finish machining": (5000 + 8000, 270, 0.72, "printed pattern ₹5k (100-500 moulds) + fixture ₹8k; casting ₹250-420/kg"),
+    "Gravity die casting + finish machining": (120000 + 8000, 400, 0.65, "steel die ₹0.45-2 lakh; ₹310-600/kg"),
+    "High-pressure die casting + finish machining": (400000 + 8000, 200, 0.50, "die ₹2-6 lakh, pays off at 5-10k pcs; no T6"),
+    "Metal 3D printing (AlSi10Mg) + finish machining": (3000, 10200, 0.40, "₹15-30/g, ≈ 455 g printed incl. supports/stock"),
+}
+
+
+def shop_rate(lot: int) -> float:
+    """₹/h of CNC time: small lots pay set-up-heavy rates (export shops ₹1.9-3.6k/h), volume runs local rates (₹400/h)."""
+    return 2500 if lot <= 5 else 1200 if lot <= 50 else 600 if lot <= 500 else 400
+
+
+def housing_routes(lots=(2, 25, 200, 1000, 10000)):
+    out = {}
+    for name, (fixed, blank, mfrac, note) in HOUSING_ROUTES.items():
+        out[name] = {"note": note, "per_part": {n: fixed / n + blank + BILLET_H * mfrac * shop_rate(n) for n in lots}}
+    return out
+
+
 def unit_cost(cls: str, tier: str) -> dict:
     d = design[cls]
     i = TIERS.index(tier)
@@ -182,6 +208,7 @@ def main():
         fixed = nre_cum[t] / AMORT_YEARS + OVERHEAD_PER_YEAR[t]
         gaps[t] = {"margin_per_unit": margin, "fixed_per_year": fixed, "breakeven_units_per_year": fixed / margin if margin > 0 else None}
     res["breakeven_jxa120_vs_rs04_china"] = gaps
+    res["housing_routes_jxa120"] = housing_routes()
 
     OUT.mkdir(exist_ok=True)
     (OUT / "cost.json").write_text(json.dumps(res, indent=2, default=float))
@@ -193,6 +220,8 @@ def main():
     print("JX1", {k: (round(v) if isinstance(v, (int, float)) else v) for k, v in res["scenario_jx1"].items()})
     print("FULL", {k: (round(v) if isinstance(v, (int, float)) else v) for k, v in res["scenario_fullsize"].items()})
     print("BE", gaps)
+    for k, v in res["housing_routes_jxa120"].items():
+        print(f"{k:50s}", {n: round(c) for n, c in v["per_part"].items()})
     plots(res)
 
 
@@ -251,6 +280,17 @@ def plots(res):
     ax.text(left_c + 0.8, 3, f"₹{left_c:.1f}k", va="center", fontsize=7)
     ax.grid(axis="x", alpha=0.25)
     fig.tight_layout(); fig.savefig(FIG / "cost_breakdown_jxa120.png", dpi=200); plt.close(fig)
+
+    # 3. housing routes vs lot size
+    fig, ax = plt.subplots(figsize=(6.8, 3.4))
+    cols = ["#1f2a44", "#d98c3a", "#2e7d32", "#7b1fa2", "#9e9e9e"]
+    for (name, v), col in zip(res["housing_routes_jxa120"].items(), cols):
+        n = [int(k) for k in v["per_part"]]; c = list(v["per_part"].values())
+        ax.plot(n, c, "-o", ms=3.5, lw=1.8, color=col, label=name)
+    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_ylim(300, 30000)
+    ax.set_xlabel("housings made (lot size)"); ax.set_ylabel("₹ per finished housing (log)")
+    ax.grid(alpha=0.25, which="both"); ax.legend(fontsize=6.8, frameon=False, loc="upper right")
+    fig.tight_layout(); fig.savefig(FIG / "housing_routes.png", dpi=200); plt.close(fig)
 
 
 if __name__ == "__main__":

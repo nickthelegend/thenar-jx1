@@ -177,7 +177,7 @@ lamination varnish or weld 3 seams; anneal if possible</td><td>progressive stamp
 <tr><td>Rotor can</td><td>EN3/EN8 (1018/1045) mild steel tube or bar</td><td>CNC lathe job work</td><td>CNC lathe / deep-drawn cup</td></tr>
 <tr><td>Sun, planets</td><td>EN353 or 20MnCr5, carburised 58–62 HRC case</td><td>gear-hobbing job shop (+ heat treat) or wire-EDM from pre-hardened blanks</td><td>hobbing + grinding, or powder metallurgy</td></tr>
 <tr><td>Ring gear</td><td>EN19/42CrMo4 nitrided, or EN353 carburised</td><td>wire-EDM the internal teeth (easiest), or shaping</td><td>broaching / power skiving</td></tr>
-<tr><td>Carrier, housing, hub</td><td>Al 6061-T6 / 7075-T6 (or printed AlSi10Mg)</td><td>CNC milling/turning job work (or metal 3D printing, §8.5)</td><td>CNC or pressure die-casting</td></tr>
+<tr><td>Carrier, housing, hub</td><td>Al 6061-T6 / 7075-T6 (or printed AlSi10Mg)</td><td>CNC milling/turning job work</td><td>sand casting (≥ 20 pcs) or die casting (≥ 5–10k/yr) + finish machining (§7.4)</td></tr>
 <tr><td>Output bearing</td><td>crossed-roller (CRBH/RU) or two thin-section 68xx/69xx</td><td>buy</td><td>buy</td></tr>
 <tr><td>Encoders</td><td>MT6835/MA600 on the rotor, MT6701/AS5047P on the output, diametric magnets</td><td>on the driver PCB</td><td>same</td></tr>
 <tr><td>Driver</td><td>STM32G4 + 3-phase gate driver + 6 × 80–100 V MOSFETs + shunts + CAN transceiver</td><td>PCB + assembly at Lion Circuits / JLCPCB</td><td>same, panelised</td></tr>
@@ -199,7 +199,7 @@ Balance the rotor on a simple knife-edge or by drilling the end plate.</li>
 <li><b>Gears.</b> Order sun, planets and ring from a gear job shop with the tooth data from Table 6 (module, teeth,
 pressure angle 20°, profile shift +0.3 on the 12-tooth sun, quality DIN 7 or better, case-carburised 0.4–0.6 mm).
 Check the planet bores and pins for a sliding H7/g6 fit; use needle bearings or bronze bushes in the planets.</li>
-<li><b>Housings.</b> CNC job work in 6061-T6, anodised. Tolerances that matter: bearing seats (±0.01 mm), ring-gear seat
+<li><b>Housings.</b> CNC job work in 6061-T6, anodised (from ≈ 20 pieces, a sand-cast LM25 blank finish-machined is cheaper: §7.4). Tolerances that matter: bearing seats (±0.01 mm), ring-gear seat
 concentric to the output bearing seat (≤0.02 mm), and the stator hub concentric to the rotor bearings (the air gap is only
 $airgap_mm mm).</li>
 <li><b>Driver PCB.</b> Two encoders, the FOC microcontroller and the power stage go on one round board on the back of the
@@ -222,4 +222,67 @@ keepers. Machine or grind them only wet: the dust burns.</li>
 supply first.</li>
 <li>Varnish and epoxy fumes: work in ventilation, and use the oven only for curing, never for food.</li>
 </ul>
+"""
+
+CASTING = r"""
+<h3>7.4 Casting and moulding: which process for which part</h3>
+<p class="lead">"Moulding" and "casting" mean making a part by filling a hollow shape (a mould) with liquid material that then
+hardens. The process you choose depends on the material, how many parts you need and how precise they must be. Data:
+<code>research/raw/india_casting_moulding_raw.md</code> (IndiaMART/TradeIndia listings, vendor pages, 6 Oct 2026; ESTIMATED unless quoted).</p>
+
+<h4>What does not work, and why</h4>
+<ul>
+<li><b>Molten aluminium into a silicone mould.</b> Aluminium melts at 660 °C and is poured at 700–750 °C; the best heat-resistant
+silicones survive ≈ 300 °C (Mold Max 60 ≈ 294 °C). The rubber burns and gasses. Silicone moulds are for resin (urethane casting,
+≈ 20–25 parts per mould) or low-melting metals (pewter ≈ 170–230 °C, Field's metal ≈ 62 °C), which are too soft for an actuator.</li>
+<li><b>Molten metal into cement or concrete.</b> Cement always holds water; water touching molten metal flashes to steam ≈ 1,600× its
+volume and throws metal metres away. Never pour into cement, damp sand, wet scrap or onto a bare concrete floor.</li>
+<li><b>"Injection moulding" of metal housings.</b> Injection moulding pushes hot <i>plastic</i> into a steel mould (₹1.5–15 lakh for a part this
+size). A glass-filled nylon or PPS housing costs only ₹50–280 a part, but plastic cannot hold a ±0.01 mm bearing seat or carry motor heat,
+so it needs metal inserts and only makes sense for covers or for very large volumes.</li>
+</ul>
+
+<h4>The processes that do work</h4>
+<table class="small">
+<tr><th>Process</th><th>How it works (plain words)</th><th>One-time cost</th><th>Per part (raw)</th><th>Tolerance</th><th>Use it for</th></tr>
+<tr><td><b>Sand casting</b></td><td>a pattern (3D-printed PLA/PETG is fine) is pressed into packed sand; molten aluminium (LM25/LM6) fills the cavity</td>
+<td>pattern ₹100–5,000 (lasts 10–500 moulds)</td><td>₹250–420/kg → ₹150–380 per housing</td><td>±0.5–1 mm, rough surface</td><td>housings from ≈ 20 pieces</td></tr>
+<tr><td><b>Investment (lost-wax / lost-PLA)</b></td><td>a wax or PLA copy is covered in a plaster-silica shell, burnt out in a kiln, then metal is poured in the hollow</td>
+<td>wax die ₹10–45k (or none with printed PLA)</td><td>Al ≈ ₹350/kg; steel ₹250–650/kg</td><td>±0.2–0.5 mm, fine detail</td><td>complex housings, brackets, small batches</td></tr>
+<tr><td><b>Gravity die casting</b></td><td>molten metal poured into a reusable steel mould</td><td>₹0.45–2 lakh</td><td>₹310–600/kg</td><td>±0.3 mm</td><td>500–5,000 / yr</td></tr>
+<tr><td><b>High-pressure die casting</b></td><td>molten aluminium injected at high pressure into a hardened steel die</td><td>₹2–6 lakh</td><td>₹200–450/kg</td><td>±0.14 mm; no T6 heat treat</td><td>≥ 5–10k / yr</td></tr>
+<tr><td><b>Urethane / vacuum casting</b></td><td>liquid resin poured into a silicone mould made from a printed master</td><td>₹1.6–7.6k of silicone per mould</td><td>₹1,000–5,000 per part (service)</td><td>±0.2 mm</td><td>plastic covers, 10–25 parts</td></tr>
+<tr><td><b>Plastic injection moulding</b></td><td>hot plastic injected into a steel/aluminium mould</td><td>₹1.5–15 lakh</td><td>₹50–280 (PA66-GF30 / PPS)</td><td>±0.05–0.1 mm</td><td>covers, cable parts at ≥ 5k / yr</td></tr>
+<tr><td><b>Metal injection moulding (MIM)</b></td><td>metal powder + binder moulded, then sintered</td><td>mould ₹2.3–2.8 lakh</td><td>₹20–150</td><td>±0.3–0.5 %</td><td>small parts &lt; 50 g, e.g. planets, at ≥ 5k / yr</td></tr>
+<tr><td><b>Powder metallurgy (sintered) gears</b></td><td>steel powder pressed in a die and sintered (7.0–7.3 g/cm³)</td><td>die (no Indian quote found)</td><td>₹5–100 per gear</td><td>DIN 8–9</td><td>planets/sun of light-duty classes at ≥ 10k / yr</td></tr>
+</table>
+
+$housing_table
+$housing_fig
+
+<h4>What this means for the JXA actuators</h4>
+<ul>
+<li><b>Housings:</b> machine from billet for the first 5–10 (the design will change). From ≈ 20–25 pieces, a <b>sand-cast LM25 housing from a 3D-printed
+pattern, then finish-machined</b>, is the cheapest route; at 10,000 a year high-pressure die casting wins. Always leave 1–2 mm of machining stock on the
+bearing seats, the ring-gear bore and the mounting faces, and ask the foundry for vacuum impregnation if the housing must be sealed.</li>
+<li><b>The saving is small:</b> ≈ ₹400–500 per housing at 25–200 pieces, about 1.5–2 % of a batch-built JXA-120. Casting cuts the waste metal ≈ 6×,
+but machine time only ≈ 25–30 %, because the bearing seats and the two set-ups dominate either way. Do it for weight and shape freedom
+(fins, bosses, ribs), not as the main cost lever.</li>
+<li><b>Gears are the bigger lever at volume:</b> a hobbed, carburised gear set costs ₹1,800–5,500, while sintered or MIM planets cost ₹20–150 each once
+tooling is paid (≥ 5–10k / yr). Sintered steel has lower fatigue strength than wrought steel, so keep the 12-tooth sun (≈ 1,400 MPa contact stress)
+hobbed and case-hardened, and try sintered planets first on JXA-40. RobStride's budget EduLite series already uses sintered gears.</li>
+<li><b>Never</b> cast gears, shafts or the stator.</li>
+</ul>
+
+<h4>If you want to cast aluminium yourself (lost-PLA)</h4>
+<ol class="steps">
+<li>Print the housing in PLA with 1–2 mm extra stock on machined faces; add a sprue (pouring channel) and vents.</li>
+<li>Invest it in a proper casting investment (Plasticast / Ultravest / SRS class, ≈ ₹3,200 per 22.5 kg bag), not plain plaster of Paris, which cracks.</li>
+<li>Burn out in a programmable kiln (₹24.5–55k): slowly to ≈ 150 °C, then 400–730 °C over 5–12 hours, until no PLA ash is left.</li>
+<li>Melt clean aluminium (LM25 ingot, not random scrap) in a crucible furnace (≈ ₹18k for 5 kg, 1,200 °C), degas, pour into the <b>hot</b> mould.</li>
+<li>Break out, cut the sprue, then send it for finish machining.</li>
+</ol>
+<p><b>Safety first:</b> face shield, leather or aluminised apron and gloves, leather boots, cotton clothes (no synthetics), a dry sand floor,
+preheated tools and moulds, and a respirator when mixing silica investment. Start with a foundry; learn to cast yourself only after the
+design is frozen.</p>
 """

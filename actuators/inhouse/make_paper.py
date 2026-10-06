@@ -87,8 +87,19 @@ def fill_fixed():
         "cnc_winder": "₹15–30 lakh (US$15–30k)",
         "airgap_mm": f"{D['JXA-120']['spec']['airgap_mm']:.2f}",
     }
+    hr = C["housing_routes_jxa120"]
+    lots = list(next(iter(hr.values()))["per_part"].keys())
+    rows = []
+    for name, v in hr.items():
+        best = {n: min(hr, key=lambda k: hr[k]["per_part"][n]) for n in lots}
+        rows.append([f"{name}<br><span class='muted'>{v['note']}</span>"] +
+                    [(f"<b>{inr(v['per_part'][n])}</b>" if best[n] == name else inr(v["per_part"][n])) for n in lots])
+    sub["housing_table"] = table(["JXA-120 housing route (finished, ESTIMATED)"] + [f"{int(n):,} pcs" for n in lots], rows) + \
+        '<p class="caption">Table 7b. Cost per finished JXA-120 housing by route and lot size (cost_model.py; cheapest in bold). '\
+        'Machining rate falls from ₹2,500/h for tiny lots to ₹400/h at volume.</p>'
+    sub["housing_fig"] = fig("housing_routes.png", "Figure 3b. Finished-housing cost vs lot size. Billet CNC wins below ≈ 10 pieces, sand casting from ≈ 20, high-pressure die casting only near 10,000.", "80%")
     return (Template(T.PHYSICS).safe_substitute(sub), Template(T.WINDING).safe_substitute(sub),
-            Template(T.BUILD).safe_substitute(sub))
+            Template(T.BUILD + T.CASTING).safe_substitute(sub))
 
 
 # ----------------------------------------------------------------------------------------------------------------------

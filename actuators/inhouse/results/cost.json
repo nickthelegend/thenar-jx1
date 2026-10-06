@@ -369,5 +369,57 @@
       "fixed_per_year": 11024000.0,
       "breakeven_units_per_year": 875.0111512674463
     }
+  },
+  "housing_routes_jxa120": {
+    "CNC from billet (6061-T6)": {
+      "note": "\u00d8125 \u00d7 75 bar \u2248 2.5 kg for a 350 g part",
+      "per_part": {
+        "2": 5960.0,
+        "25": 2004.0,
+        "200": 1242.0,
+        "1000": 1034.0,
+        "10000": 1028.6
+      }
+    },
+    "Sand casting (LM25) + finish machining": {
+      "note": "printed pattern \u20b95k (100-500 moulds) + fixture \u20b98k; casting \u20b9250-420/kg",
+      "per_part": {
+        "2": 8426.0,
+        "25": 1584.88,
+        "200": 732.44,
+        "1000": 547.96,
+        "10000": 536.26
+      }
+    },
+    "Gravity die casting + finish machining": {
+      "note": "steel die \u20b90.45-2 lakh; \u20b9310-600/kg",
+      "per_part": {
+        "2": 65895.0,
+        "25": 6237.6,
+        "200": 1398.8000000000002,
+        "1000": 767.2,
+        "10000": 652.0
+      }
+    },
+    "High-pressure die casting + finish machining": {
+      "note": "die \u20b92-6 lakh, pays off at 5-10k pcs; no T6",
+      "per_part": {
+        "2": 205350.0,
+        "25": 17072.0,
+        "200": 2516.0,
+        "1000": 792.0,
+        "10000": 424.8
+      }
+    },
+    "Metal 3D printing (AlSi10Mg) + finish machining": {
+      "note": "\u20b915-30/g, \u2248 455 g printed incl. supports/stock",
+      "per_part": {
+        "2": 12620.0,
+        "25": 10761.6,
+        "200": 10435.8,
+        "1000": 10350.2,
+        "10000": 10347.5
+      }
+    }
   }
 }
