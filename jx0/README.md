@@ -5,8 +5,8 @@
 <h1 align="center">JX0: a walking, talking STS3215 humanoid you can build at home</h1>
 
 <p align="center">
-  <b>46 cm · 2.85 kg · 17 joints, every one a Feetech STS3215 12 V · double-sided leg joints · walks with its arms
-  swinging · talks (Claude) · ₹58,234 in parts</b><br>
+  <b>46 cm · 2.88 kg · 17 joints, every one a Feetech STS3215 12 V · double-sided leg joints · walks with its arms
+  swinging · talks (Claude) · ₹58,283 in parts</b><br>
   3D-printed in pastel green, styled after a friend's working STS3215 robot. Full SolidWorks CAD, a verified walking
   simulation, a strength check of every leg part, the robot program and a parts list with Indian suppliers are all in
   this folder.
@@ -15,7 +15,8 @@
 <p align="center">
   <a href="docs/build_guide.md"><b>Build guide</b></a> ·
   <a href="bom/jx0_bom.csv"><b>Parts list</b></a> ·
-  <a href="bom/JX0_cost_estimate.pdf"><b>Cost estimate (PDF)</b></a> ·
+  <a href="bom/JX0_cost_estimate.pdf"><b>Cost estimate (8-page PDF)</b></a> ·
+  <a href="../media/jx0_assembly.mp4"><b>Assembly film</b></a> ·
   <a href="docs/wiring.md"><b>Wiring</b></a> ·
   <a href="docs/bringup.md"><b>Bring-up</b></a> ·
   <a href="docs/software_setup.md"><b>Software</b></a> ·
@@ -34,6 +35,17 @@
   <a href="results/verification.md">verification</a> it stays up through all 48 such shoves, timed across a whole
   step), and bumps a plastic bottle out of its way. The robot's own program (<code>software/jx0bot</code>, the same code that runs
   on the Pi) drives the SolidWorks robot in MuJoCo; the push and the bottle are plain physics.</sub>
+</p>
+
+## Watch it go together
+
+<p align="center">
+  <a href="../media/jx0_assembly.mp4"><img src="docs/images/jx0_assembly.webp" alt="Animated assembly of JX0: its 39 parts fly into place in build order, then the robot walks" width="800"></a><br>
+  <sub><b><a href="../media/jx0_assembly.mp4">Assembly film (MP4, 67 s)</a></b>: every SolidWorks part of JX0 flies into
+  place in the order of the <a href="docs/build_guide.md">build guide</a>, 13 steps from the pelvis to the head, then the
+  finished robot walks its verified gait. Rendered from the real part meshes (<code>tools/media/assembly_film_jx0.py</code>,
+  MuJoCo) with HyperFrames titles (<code>media/jx0-assembly-film</code>), like the JX1 film. A still of every step:
+  <code>docs/assembly/</code>.</sub>
 </p>
 
 <p align="center">
@@ -64,16 +76,28 @@ The check (`verify/verify_strength.py`, `verify/verify_fea.py`) uses the loads f
 | | v0.3 single-sided plates | v0.4 U-brackets |
 |---|---|---|
 | Printed plate stress, walking | 30–85 MPa | 2–5 MPa |
-| Fatigue safety factor (PETG ~15 MPa at 10⁶ cycles, ASSUMED) | **0.18–0.51: would crack** | **4.7–8.0** (beam model) |
-| Servo output shaft bending (worst) | 2.3–3.6 N·m at every joint | none, except the hip yaw |
-| Finite elements, every printed leg part | — | fatigue safety factor **2.3 or more**, strength **3.0 or more** |
+| Fatigue safety factor (PETG ~15 MPa at 10⁶ cycles, ASSUMED) | **0.21–0.48: would crack** | **4.4–7.5** (beam model) |
+| Servo output shaft bending (worst) | 2.3–3.6 N·m at every joint | none at the U-brackets; 0.55 N·m at the hip yaw (keeper) |
+| Finite elements, every printed leg part | — | fatigue safety factor **2.1 or more**, strength **3.0 or more** |
 
-The **hip yaw** is the one joint that stays single-sided, as on the reference robot: the yaw servo stands under the
-body, and there is no room for a second support. Its 7–9 mm disc rides under a thrust ring in the pelvis, which takes
-the leg's weight and part of the bending. The yaw servo's shaft still carries the rest: about 1.2 N·m in normal
-walking, up to 2.6 N·m in the hardest pushes. Feetech does not publish a rating for that, so check the yaw horns for
-play after the first hours of walking ([verification](results/verification.md), honest limits). The upgrade, if they
-loosen: a retainer lip under the yaw disc, so the pelvis holds the disc from above and below.
+The **hip yaw** cannot be a U-bracket: its servo stands under the body, as on the reference robot, with the hip-roll
+servo right below it. So the pelvis holds the yaw disc from both sides instead:
+- a **thrust ring** above the disc;
+- a printed **keeper** below it, one per leg, whose lip runs under the disc's 3 mm flange. Four M2 screws clamp it to a
+  boss on the pelvis.
+
+The ring and the keeper take the leg's weight and bending as two pushes on the disc's rim, instant by instant
+(`robustness.keeper_split`). The yaw servo's shaft is left with:
+
+| | Normal walking | Hardest pushes |
+|---|---|---|
+| Thrust ring alone | 1.2 N·m | 2.6 N·m |
+| Thrust ring + keeper | **0.10 N·m** | **0.55 N·m** |
+
+This assumes the keeper has no play: layers of PTFE tape under the flange set it at assembly
+([build guide](docs/build_guide.md), step 2). The keeper, the disc and the pelvis passed their own finite-element
+checks (fatigue / strength: keeper 2.1 / 5.2, disc 2.4 / 3.6, pelvis 2.4 / 5.1). The hip yaw turns ±12°, more than
+twice what the gaits use.
 
 ## The reference robot
 
@@ -99,23 +123,23 @@ takes a shove, and knocks over a bottle on the way. JX0 matches that:
 
 | | Status |
 |---|---|
-| SolidWorks CAD: 20 printed parts + all 17 servos in the assembly | **done**, every part rebuilt by script, one body each, no errors |
+| SolidWorks CAD: 22 printed parts + all 17 servos in the assembly | **done**, every part rebuilt by script, one body each, no errors |
 | Parts colliding, standing or in motion (every gait frame and action, 1,373 poses; every joint over its full range) | **none** |
-| Servo sizing (every leg joint, 5 gaits + 8 static cases), 2.85 kg robot | **passes**; the tightest is hip roll with a 1.47× margin |
-| Strength of every printed leg part, finite elements under the simulated loads | **passes**: fatigue safety factor 2.3 or more, strength 3.0 or more (PETG data ASSUMED) |
+| Servo sizing (every leg joint, 5 gaits + 8 static cases), 2.88 kg robot | **passes**; the tightest is hip roll with a 1.46× margin |
+| Strength of every printed leg part, finite elements under the simulated loads | **passes**: fatigue safety factor 2.1 or more, strength 3.0 or more (PETG data ASSUMED) |
 | Walking in simulation, on the CAD masses and a servo model | **14 of 14 gaits pass** with arm swing (forward 0.05 m/s, backward, turns, side-steps) |
-| Walking when the real robot differs from the model (servo stiffness, latency, backlash, IMU noise, mass, friction, slope) | **139 of 140** random walks pass (latency up to 20 ms) and **all 140 stay up**; with 40 ms latency 121 pass, all stay up |
+| Walking when the real robot differs from the model (servo stiffness, latency, backlash, IMU noise, mass, friction, slope) | **138 of 140** random walks pass (latency up to 20 ms) and **all 140 stay up**; with 40 ms latency 123 pass, all 140 stay up |
 | The whole robot program, an 8-action mission, random realistic errors | **24 of 24** completed without a fall |
-| Pushes mid-walk (48 timings each) | stays up through **every** push up to 0.96 N·s; 88 % at 1.2 N·s, 44 % at 1.44 N·s |
+| Pushes mid-walk (48 timings each) | stays up through **every** push up to 0.96 N·s; 90 % at 1.2 N·s, 44 % at 1.44 N·s |
 | Robot program (voice, Claude brain, walking, gestures) | **written, unit-tested (21 tests) and run in simulation**; not yet on hardware |
-| Parts list | ₹58,234; STS3215 price and stock checked 2026-10-04 |
+| Parts list | ₹58,283; STS3215 price and stock checked 2026-10-04 ([8-page cost estimate](bom/JX0_cost_estimate.pdf)) |
 | Physical robot | **not built yet**: this is what the funding is for |
 
 All of it is in the **[verification report](results/verification.md)**: what was checked, what it found and fixed, and
 the honest limits (`python jx0/verify/run_all.py` re-runs everything in about 45 minutes). Unverified until the robot
 is built, and the first things to check: a test U-bracket on a servo (the rear hub's screw pattern is ASSUMED equal to
 the horn's), the M2 screw fit in the printed holes, the servo stiffness setting and the I2S audio overlay. Battery life
-is about 73 minutes of walking (CALCULATED: 1.44 A average for the servos and the Pi).
+is about 73 minutes of walking (CALCULATED: 1.45 A average for the servos and the Pi).
 
 ## What it can do
 
@@ -131,11 +155,11 @@ is about 73 minutes of walking (CALCULATED: 1.44 A average for the servos and th
 
 | | |
 |---|---|
-| Height, mass | 46.0 cm, 2.85 kg (CAD) |
+| Height, mass | 46.0 cm, 2.88 kg (CAD) |
 | Joints | 17 Feetech STS3215 12 V serial bus servos: 6 per leg, shoulder pitch and elbow per arm, neck yaw |
 | Brain | Raspberry Pi 4 (2 GB): gaits and balance at 100 Hz, MPU6050 IMU, Vosk speech recognition, Piper voice, Claude over Wi-Fi |
 | Power | 3S 2200 mAh LiPo straight to the servo bus (12 V servos); a 5 V UBEC for the Pi; or a 12.6 V bench supply |
-| Structure | 20 printed parts, 823 g: pelvis and leg parts in PETG, printed near-solid (528 g); body, head and arms in PLA (295 g) |
+| Structure | 22 printed parts, 847 g: pelvis and leg parts in PETG, printed near-solid (554 g); body, head and arms in PLA (293 g) |
 
 ## What it costs
 
@@ -143,14 +167,14 @@ is about 73 minutes of walking (CALCULATED: 1.44 A average for the servos and th
 |---|---|
 | Servos: 17 × STS3215 | 41,123 |
 | Electronics: Pi 4, microSD, servo driver, button, wiring | 9,219 |
-| Structure: PLA and PETG filament, screws, inserts, rubber, PTFE tape | 4,074 |
+| Structure: PLA and PETG filament, screws, inserts, rubber, PTFE tape | 4,123 |
 | Power: LiPo, charger, UBEC, switch, wire, alarm | 3,122 |
 | Voice: microphone, amplifier, speaker | 569 |
 | Sensors: IMU | 127 |
-| **Total** | **58,234** |
+| **Total** | **58,283** |
 
 Line by line with store links: [bom/jx0_bom.csv](bom/jx0_bom.csv). The 17 servos are 71 % of the cost. JX0 is
-₹8,234 over the original ₹50,000 target because every joint is an STS3215, as on the reference robot. The walking
+₹8,283 over the original ₹50,000 target because every joint is an STS3215, as on the reference robot. The walking
 needs 2.0 N·m at the hip roll (with the 1.25–1.5× margins), which rules out MG996R-class hobby servos, and the serial
 bus servos also report their position, which the calibration and the balance loop use.
 
@@ -192,12 +216,12 @@ It needs an `ANTHROPIC_API_KEY`. Without one, you can still run these:
 |---|---|---|
 | Design point: sizes, masses, joint ranges | [design_point.yaml](design_point.yaml) | every value labelled VERIFIED / CALCULATED / ESTIMATED / ASSUMED |
 | Servo sizing | [analysis/sizing.py](analysis/sizing.py) → [results/sizing.md](results/sizing.md) | peak ×1.5 ≤ stall, RMS ×1.3 ≤ rated, inside the torque-speed line: **all pass** |
-| CAD | [cad/geometry.py](cad/geometry.py) → SolidWorks by script | 20 printed parts, assembly with all 17 servos, masses fed back into the design point |
+| CAD | [cad/geometry.py](cad/geometry.py) → SolidWorks by script | 22 printed parts, assembly with all 17 servos, masses fed back into the design point |
 | Walking | [sim/walk_jx0.py](sim/walk_jx0.py) → [results/walking.json](results/walking.json) | 14/14 gaits with arm swing at 100 Hz: tilt ≤ 1.4°, final position error ≤ 10 mm, servo peaks ≤ 55 % of stall |
-| Collisions | [verify/verify_cad.py](verify/verify_cad.py) | 0 clashes in 666 part pairs and 1,373 moving poses; every joint limit inside its collision-free range |
+| Collisions | [verify/verify_cad.py](verify/verify_cad.py) | 0 clashes in 741 part pairs and 1,373 moving poses; every joint limit inside its collision-free range |
 | Robustness | [verify/robustness.py](verify/robustness.py) | 140/140 random-error walks stay up (139 pass); 24/24 whole-program missions; pushes up to 0.96 N·s: 100 % stay up |
 | Joint strength | [verify/verify_strength.py](verify/verify_strength.py) | single-sided plates would crack (fatigue SF 0.18–0.51); U-brackets 4.7–8.0 |
-| Leg parts, finite elements | [verify/verify_fea.py](verify/verify_fea.py) | every printed leg part: fatigue SF ≥ 2.3, strength SF ≥ 3.0 ([stress maps](results/images)) |
+| Leg parts, finite elements | [verify/verify_fea.py](verify/verify_fea.py) | every printed leg part: fatigue SF ≥ 2.1, strength SF ≥ 3.0 ([stress maps](results/images)) |
 | Power and timing | [verify/verify_power.py](verify/verify_power.py) | 1.44 A walking (≈ 73 min per charge), 2.5 A peak; the 100 Hz loop uses ~2 of 10 ms on a Pi 4 |
 | Software | [software/tests](software/tests/test_jx0bot.py) | 21 unit tests: servo protocol bytes vs the Feetech manual, config, gait files, kinematics vs the model, Claude tool loop |
 | Whole robot program | [sim/demo_jx0.py](sim/demo_jx0.py) | every action runs on the simulated robot; it takes a hard side push and bumps a bottle out of its way |

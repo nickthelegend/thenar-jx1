@@ -12,9 +12,11 @@ cycles ~15 MPa ~ 30 % of static; JX0 walks ~1,500 steps an hour):
   double-sided joint (v0.4 U-bracket): the arms on the horn and on the rear hub, d = 42.75 mm apart, carry the moment
     as a force couple F = M / d, in the plane of each arm: sigma = F / (b t), plus half the radial force bending the arm
     over its length L, sigma = 6 (F_r / 2) L / (t b^2). The output shaft carries radial force only, no bending moment;
-  hip yaw (v0.4): single-sided on the yaw horn, plus the thrust ring under the pelvis. The ring carries the axial force,
-    and the bending moment up to (axial force x ring radius) while the leg presses the disc into it; the yaw servo's
-    shaft takes the rest (yaw_shaft_residual_nm, tracked instant by instant).
+  hip yaw (v0.4): the yaw disc on the servo's horn, held by the pelvis from above (thrust ring) and below (the keeper's
+    lip, on an arc). Instant by instant (robustness.keeper_split) the ring and the lip carry the axial force and the
+    bending as a pair of pushes on the disc rim; the yaw servo's shaft takes only what they cannot (yaw_shaft_residual_nm).
+    For comparison: the ring alone (v0.4 before the keeper), which carries bending only up to axial force x ring radius
+    (yaw_shaft_ring_only_nm). The disc, the keeper and the pelvis under these pushes: verify_fea.
 The STS3215's output bearing ratings are not published: the shaft numbers are compared, not checked against a rating.
 
     python jx0/verify/verify_strength.py      -> jx0/results/verify_strength.json
@@ -70,10 +72,10 @@ def _stress(j, pk):
     m_h, m_c, fr = pk["bending_horn_nm"] * 1000, pk["bending_centre_nm"] * 1000, pk["radial_n"]   # N·mm, N
     b3, t3 = V03_PLATE[j]
     s3 = 6 * m_h / (b3 * t3 ** 2)
-    if j == "hip_yaw":
-        b4, t4 = YAW_DISC
-        res = pk["yaw_shaft_residual_nm"] * 1000
-        return s3, m_h / 1000, 6 * res / (b4 * t4 ** 2), res / 1000, {}
+    if j == "hip_yaw":                       # the disc's stresses: verify_fea (ring and keeper pushes on its rim)
+        return s3, m_h / 1000, None, pk["yaw_shaft_residual_nm"], {
+            "shaft_bending_ring_only_nm": round(pk["yaw_shaft_ring_only_nm"], 2),
+            "keeper_lip_n": round(pk["yaw_keeper_lip_n"], 1), "ring_n": round(pk["yaw_ring_n"], 1)}
     b, t, L = V04_ARM[j]
     fc = m_c / ARM_D
     s4 = fc / (b * t) + 6 * (fr / 2) * L / (t * b ** 2)
@@ -89,17 +91,19 @@ def evaluate(walk, push):
         w3, ws3, w4, ws4, wx = _stress(j, walk[j])
         worst = {k: max(walk[j][k], push[j][k]) for k in walk[j]}
         p3, ps3, p4, ps4, px = _stress(j, worst)
+        if j == "hip_yaw":
+            px = {"walking": wx, "worst": px}
         rows[j] = {"loads_walking": {k: round(v, 3) for k, v in walk[j].items()},
                    "loads_worst_with_pushes": {k: round(v, 3) for k, v in worst.items()},
                    "v03_single_sided": {"walking_mpa": round(w3, 1), "worst_mpa": round(p3, 1),
                                         "shaft_bending_walking_nm": round(ws3, 2), "shaft_bending_worst_nm": round(ps3, 2),
                                         "fatigue_safety": round(STRENGTH["fatigue_1e6_mpa"] / w3, 2),
                                         "static_safety": round(STRENGTH["along_layers_mpa"] / p3, 2)},
-                   "v04": {"design": "single-sided + thrust ring" if j == "hip_yaw" else "double-sided U-bracket",
-                           "walking_mpa": round(w4, 1), "worst_mpa": round(p4, 1),
+                   "v04": {"design": "disc held from both sides: thrust ring + keeper" if j == "hip_yaw" else "double-sided U-bracket",
+                           "walking_mpa": None if w4 is None else round(w4, 1), "worst_mpa": None if p4 is None else round(p4, 1),
                            "shaft_bending_walking_nm": round(ws4, 2), "shaft_bending_worst_nm": round(ps4, 2),
-                           "fatigue_safety": round(STRENGTH["fatigue_1e6_mpa"] / max(w4, 1e-6), 1),
-                           "static_safety": round(STRENGTH["along_layers_mpa"] / max(p4, 1e-6), 1), **px}}
+                           "fatigue_safety": None if w4 is None else round(STRENGTH["fatigue_1e6_mpa"] / max(w4, 1e-6), 1),
+                           "static_safety": None if p4 is None else round(STRENGTH["along_layers_mpa"] / max(p4, 1e-6), 1), **px}}
     return rows
 
 
@@ -114,6 +118,7 @@ def main():
     nominal = _peaks([r for s, r in ok if s.get("push") is None and "seed" not in s])
     rows = evaluate(walk, push)
     rows["hip_yaw"]["v04"]["shaft_bending_nominal_walking_nm"] = round(nominal["hip_yaw"]["yaw_shaft_residual_nm"], 2)
+    rows["hip_yaw"]["v04"]["shaft_bending_ring_only_nominal_walking_nm"] = round(nominal["hip_yaw"]["yaw_shaft_ring_only_nm"], 2)
     ok = [r for s, r in ok]
     fell = len(res) - len(ok)
     out = {"generated_by": "jx0/verify/verify_strength.py",
@@ -125,11 +130,17 @@ def main():
     OUT.write_text(json.dumps(out, indent=1), encoding="utf-8")
     print(f"{'joint':12s} | v0.3 single-sided: walk MPa  worst MPa  fatigue SF  static SF  shaft N.m | "
           f"v0.4: walk MPa  worst MPa  fatigue SF  static SF  shaft N.m (worst)")
+    def f(v, w, d):
+        return f"{'FEA':>{w}s}" if v is None else f"{v:{w}.{d}f}"
     for j, r in rows.items():
         a, b = r["v03_single_sided"], r["v04"]
         print(f"{j:12s} | {a['walking_mpa']:22.1f} {a['worst_mpa']:10.1f} {a['fatigue_safety']:11.2f} {a['static_safety']:10.2f} "
-              f"{a['shaft_bending_worst_nm']:10.2f} | {b['walking_mpa']:14.1f} {b['worst_mpa']:10.1f} {b['fatigue_safety']:11.1f} "
-              f"{b['static_safety']:10.1f} {b['shaft_bending_worst_nm']:10.2f}")
+              f"{a['shaft_bending_worst_nm']:10.2f} | {f(b['walking_mpa'], 14, 1)} {f(b['worst_mpa'], 10, 1)} "
+              f"{f(b['fatigue_safety'], 11, 1)} {f(b['static_safety'], 10, 1)} {b['shaft_bending_worst_nm']:10.2f}")
+    y = rows["hip_yaw"]["v04"]
+    print(f"hip yaw shaft bending, ring alone -> ring + keeper: walking {y['walking']['shaft_bending_ring_only_nm']} -> "
+          f"{y['shaft_bending_walking_nm']} N m, worst {y['worst']['shaft_bending_ring_only_nm']} -> {y['shaft_bending_worst_nm']} N m; "
+          f"keeper lip up to {y['worst']['keeper_lip_n']} N, ring up to {y['worst']['ring_n']} N")
     print(f"{fell} of {len(res)} runs fell;  {time.time() - t0:.0f} s -> {OUT.relative_to(ROOT)}")
 
 

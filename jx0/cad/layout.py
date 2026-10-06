@@ -42,7 +42,8 @@ def components():
     for side, sg in (("L", 1), ("R", -1)):
         hip = np.array([0.0, sg * G.HIP_Y, 0.0])
         knee, ankle = hip + [0, 0, -G.THIGH], hip + [0, 0, -G.THIGH - G.SHIN]
-        comps += [(f"hip_yaw_{side}", f"JX0_HipYawBracket_{side}", pose(p=hip)),
+        comps += [(f"keeper_{side}", f"JX0_YawKeeper_{side}", pose(p=hip)),
+                  (f"hip_yaw_{side}", f"JX0_HipYawBracket_{side}", pose(p=hip)),
                   (f"hip_roll_{side}", f"JX0_HipRollBracket_{side}", pose(p=hip)),
                   (f"thigh_{side}", f"JX0_Thigh_{side}", pose(p=hip)),
                   (f"shin_{side}", f"JX0_Shin_{side}", pose(p=knee)),
@@ -77,7 +78,7 @@ def link_of(key):
     base = key[:-2] if side else key
     table = {"pelvis": ("pelvis", (0, 0, 0)), "torso": ("torso", (0, 0, 0)), "chest_cap": ("torso", (0, 0, 0)),
              "servo_neck": ("torso", (0, 0, 0)), "head": ("head", (0, 0, G.NECK_Z)),
-             "servo_hip_yaw": ("pelvis", (0, 0, 0)),
+             "servo_hip_yaw": ("pelvis", (0, 0, 0)), "keeper": ("pelvis", (0, 0, 0)),
              "hip_yaw": (f"{s}_hip_yaw_link", hip), "servo_hip_roll": (f"{s}_hip_yaw_link", hip),
              "hip_roll": (f"{s}_hip_roll_link", hip), "servo_hip_pitch": (f"{s}_hip_roll_link", hip),
              "thigh": (f"{s}_thigh", hip), "servo_knee": (f"{s}_thigh", hip),

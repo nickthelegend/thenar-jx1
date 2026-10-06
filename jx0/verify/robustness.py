@@ -213,6 +213,64 @@ def joint_wrench_series(m, d, series):
 
 
 YAW_RING_R = 0.016           # m: effective radius of the hip-yaw thrust ring's contact (11.5..19 mm ring)
+KEEP_R, KEEP_CAP = 0.0175, 100.0   # m: radius of the ring's and the keeper lip's contact on the disc rim; N: the most the
+                                   # keeper's lip is designed for (verify_fea); beyond it the yaw servo's shaft takes the rest
+
+
+def keeper_arc(side):
+    """The keeper's arc (degrees, pelvis frame) for the left ('l') or right ('r') leg."""
+    sys.path.insert(0, str(ROOT / "jx0" / "cad"))
+    import geometry as G
+    a0, a1 = G.KEEP_ARC
+    return (a0, a1) if side == "l" else (-a1, -a0)
+
+
+def keeper_split(M, C, arc, cap=KEEP_CAP, R=KEEP_R, n=49):
+    """How the hip-yaw disc's load is shared, instant by instant (vectorised over T instants).
+    M (T, 2): bending moment the pelvis passes to the leg at the disc (N m, pelvis frame); C (T,): the disc's
+    compression into the thrust ring (N, minus the axial force). The thrust ring (a full circle) can only push the disc
+    down, the keeper's lip (only on its arc) only up. Least-force contact pair that carries C and M; if none exists
+    within `cap`, the yaw servo's shaft takes the smallest leftover bending.
+    Returns lip force L, ring force N (T,), shaft bending (T,) N m, lip angle, ring angle (T,) degrees."""
+    M = np.atleast_2d(np.asarray(M, float))
+    C = np.atleast_1d(np.asarray(C, float))
+    th = np.radians(np.linspace(arc[0], arc[1], n))
+    v = np.stack([np.sin(th), -np.cos(th)], 1)                # moment direction of a lip push at each arc point
+    a = M / R
+    m = np.linalg.norm(a, axis=1)
+    den = a @ v.T + C[:, None]
+    with np.errstate(divide="ignore", invalid="ignore"):
+        L = (m[:, None] ** 2 - C[:, None] ** 2) / (2 * den)
+    N = C[:, None] + L
+    good = (den > 1e-9) & (L >= 0) & (N >= 0) & (L <= cap)
+    score = np.where(good, np.maximum(L, N), np.inf)
+    k = score.argmin(1)
+    feasible = np.isfinite(score.min(1))
+    ring_only = (C > 0) & (m <= C)
+    # no contact pair within the cap (mostly the swing leg hanging from the disc): the least lip force that leaves the
+    # shaft within 0.01 N m of the smallest bending it can be left with
+    idx = np.arange(len(C))
+    Lc, kc, shaft_c = np.zeros(len(C)), np.zeros(len(C), int), np.zeros(len(C))
+    bad = np.nonzero(~feasible & ~ring_only)[0]
+    if len(bad):
+        Ls = np.array([0.0, 2.0, 5.0, 10.0, 20.0, 35.0, 50.0, 70.0, cap])
+        ab = a[bad][:, None, None, :]
+        lv = Ls[None, :, None, None] * v[None, None, :, :]
+        lift = np.maximum(0.0, Ls[None, :, None] + C[bad][:, None, None])            # the ring cannot pull
+        ex = np.maximum(0.0, np.linalg.norm(ab - lv, axis=3) - lift) * R               # (nb, nL, ntheta)
+        best_th = ex.argmin(2)
+        ex_l = np.take_along_axis(ex, best_th[:, :, None], 2)[:, :, 0]                # (nb, nL)
+        pick = (ex_l <= ex_l.min(1, keepdims=True) + 0.01).argmax(1)
+        Lc[bad], kc[bad] = Ls[pick], best_th[np.arange(len(bad)), pick]
+        shaft_c[bad] = ex_l[np.arange(len(bad)), pick]
+    k = np.where(feasible, k, kc)
+    Lk = np.where(ring_only, 0.0, np.where(feasible, L[idx, k], Lc))
+    Nk = np.where(ring_only, np.maximum(C, 0.0), np.maximum(C + Lk, 0.0))
+    shaft = np.where(ring_only | feasible, 0.0, shaft_c)
+    th_l = np.degrees(th[k])
+    u = a - Lk[:, None] * v[k]                                  # ring force direction: N u_N = M/R - L v_L
+    th_n = np.degrees(np.arctan2(-u[:, 0], u[:, 1]))
+    return Lk, Nk, shaft, th_l, th_n
 
 
 def joint_loads(m, d, peaks):
@@ -239,8 +297,16 @@ def joint_loads(m, d, peaks):
             return float(np.linalg.norm(tq - (tq @ a) * a))
         vals = {"torque_nm": abs(t_ax), "bending_horn_nm": bend(horn), "bending_centre_nm": bend(centre),
                 "axial_n": abs(f_ax), "radial_n": float(np.linalg.norm(f - f_ax * a))}
-        if n.endswith("hip_yaw"):        # the thrust ring takes the bending while the leg presses the disc up into it
-            vals["yaw_shaft_residual_nm"] = max(0.0, vals["bending_horn_nm"] - max(0.0, -f_ax) * YAW_RING_R)
+        if n.endswith("hip_yaw"):
+            # the thrust ring alone (v0.4 before the keeper): it takes the bending only while the leg presses the disc
+            # up into it; with the keeper, the ring and the keeper's lip hold the disc from both sides
+            vals["yaw_shaft_ring_only_nm"] = max(0.0, vals["bending_horn_nm"] - max(0.0, -f_ax) * YAW_RING_R)
+            Rp = d.xmat[m.body_parentid[b]].reshape(3, 3)
+            q = p + a * horn
+            Mp, fp = Rp.T @ (tau_c + np.cross(c - q, f)), Rp.T @ f
+            L, N, shaft, _, _ = keeper_split(Mp[None, :2], np.array([-fp[2]]), keeper_arc(n[0]))
+            vals.update({"yaw_shaft_residual_nm": float(shaft[0]), "yaw_keeper_lip_n": float(L[0]),
+                         "yaw_ring_n": float(N[0])})
         pk = peaks.setdefault(n, {k: 0.0 for k in vals})
         for k, v in vals.items():
             pk[k] = max(pk[k], v)

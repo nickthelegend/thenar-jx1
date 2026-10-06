@@ -87,15 +87,20 @@ def main():
               "servo only *drives* the torque about its axis; the bending moment about the other two axes is what the "
               "structure carries. On a single-sided joint it all goes through one printed plate and the servo's output shaft. "
               "In a U-bracket it becomes a pair of forces in the two arms, 42.75 mm apart, and the output shaft sees no bending "
-              f"at all. PETG ASSUMED: {st['petg_strength']['along_layers_mpa']:.0f} MPa static, "
+              "at all. The hip-yaw disc is held by the pelvis from both sides instead (thrust ring above, keeper below): its "
+              "stresses are in the finite-element table. "
+              f"PETG ASSUMED: {st['petg_strength']['along_layers_mpa']:.0f} MPa static, "
               f"{st['petg_strength']['fatigue_1e6_mpa']:.0f} MPa fatigue (10^6 cycles, about 700 hours of walking).", "",
               "| Joint | Torque N·m | Bending at the horn N·m | v0.3 plate MPa (fatigue SF) | v0.4 MPa (fatigue SF) | Servo shaft bending N·m, v0.3 → v0.4 |",
               "|---|---|---|---|---|---|"]
         for k, r in st["joints"].items():
             a, b, lw = r["v03_single_sided"], r["v04"], r["loads_worst_with_pushes"]
+            v4 = (f"ring + keeper: {b['worst']['ring_n']:.0f} / {b['worst']['keeper_lip_n']:.0f} N pushes on the disc rim (FEA below)"
+                  if k == "hip_yaw" else f"{b['walking_mpa']} ({b['fatigue_safety']})")
+            sh = (f"{a['shaft_bending_worst_nm']} → {b['worst']['shaft_bending_ring_only_nm']} (ring only) → {b['shaft_bending_worst_nm']}"
+                  if k == "hip_yaw" else f"{a['shaft_bending_worst_nm']} → {b['shaft_bending_worst_nm']}")
             L.append(f"| {k.replace('_', ' ')} | {lw['torque_nm']:.2f} | {lw['bending_horn_nm']:.2f} | {a['walking_mpa']} ({a['fatigue_safety']}) | "
-                     f"{b['walking_mpa']} ({b['fatigue_safety']}){' — single-sided + thrust ring' if k == 'hip_yaw' else ''} | "
-                     f"{a['shaft_bending_worst_nm']} → {b['shaft_bending_worst_nm']} |")
+                     f"{v4} | {sh} |")
     if fea:
         L += ["", "## Printed leg brackets: finite elements", "",
               "Voxel FEA (`calculations/structural/voxel_fea.py`, 0.7 mm hexahedra with bending modes). Each bracket is held "
@@ -109,6 +114,9 @@ def main():
         L += ["", "Stress maps: `images/fea_*.png`."]
 
     jj = st.get("joints", {})
+    yw = jj.get("hip_yaw", {}).get("v04", {})
+    yw_ro_n = yw.get("shaft_bending_ring_only_nominal_walking_nm", float("nan"))
+    yw_ro_w = yw.get("worst", {}).get("shaft_bending_ring_only_nm", float("nan"))
     v3w = (min((r["v03_single_sided"]["walking_mpa"] for r in jj.values()), default=0),
            max((r["v03_single_sided"]["walking_mpa"] for r in jj.values()), default=0))
     v3s = max((r["v03_single_sided"]["shaft_bending_worst_nm"] for r in jj.values()), default=0)
@@ -130,6 +138,14 @@ def main():
           "shin's plate is now 4 mm everywhere the ankle bracket's boss does not slide, with a 20 mm hub hole and that one "
           "screw left out; the ankle bracket's inboard arm reaches 4.5 mm lower (the foot's bracket only comes within 12 mm "
           "below the axis there): shin 2.5 / 3.2, ankle bracket 2.4 / 3.0.",
+          "- **The hip-yaw servo's shaft still carried the leg's bending** (the builder asked for the retainer lip): a thrust "
+          f"ring alone left it {yw_ro_n:.1f} N·m in normal walking and {yw_ro_w:.1f} N·m in the hardest pushes. Now the "
+          "pelvis holds the yaw disc from both sides: a printed keeper (one per leg, 4 M2 screws into a new boss on the "
+          "pelvis) puts a lip under the disc's 3 mm flange on the arc where the load needs it. The first keeper failed its "
+          "own check (fatigue SF 0.5: a 2.2 mm lip, then notches at its ends), so it became a solid C-section clamped to the "
+          "boss; the pelvis's yaw cages got 5 mm front and back walls to carry its pull (SF 1.3 → 2.5). The hip-yaw range is "
+          "now ±12° (the gaits use ±5°): over ±30° the hip-roll bracket would reach the keeper, and the legs touched each "
+          "other beyond 18°.",
           "- **Assembly**: plates that cover a cage would have locked the servo out. The knee cage is open at the front and "
           "the ankle cage at the bottom (the servos slide in there), with screwdriver holes through the arms for the far "
           "case screws.",
@@ -151,15 +167,12 @@ def main():
         L.append("- **Pushes**: " + ", ".join(f"{k} stays up {100 * v['stayed_up_rate']:.0f} %" for k, v in pu.items() if "stayed_up_rate" in v)
                  + " of 48 timed pushes mid-walk. Harder shoves need a step to a new place; the gait player does not re-plan "
                  "its steps (a capture-point stepper is in `jx0bot/stepper.py`, not yet enabled).")
-    yw = jj.get("hip_yaw", {}).get("v04", {})
-    L += ["- **The hip-yaw joint is still single-sided**, as on the reference robot (its yaw servo stands under the body): "
-          "there is no room for a second support between the yaw servo and the hip-roll servo. A thrust ring under the "
-          "pelvis carries the leg's axial load and part of the bending; the yaw servo's output shaft and its two bearings "
-          f"carry the rest: about {yw.get('shaft_bending_nominal_walking_nm', float('nan')):.1f} N·m in normal walking, "
-          f"{yw.get('shaft_bending_walking_nm', float('nan')):.1f} N·m on a randomly wrong robot, "
-          f"{yw.get('shaft_bending_worst_nm', float('nan')):.1f} N·m in the hardest pushes (Feetech publishes no rating for "
-          "it). Check the yaw horns for play after the first hours of walking; a retainer lip under the yaw disc (so the "
-          "pelvis holds it from above and below) is the upgrade path.",
+    L += ["- **The hip-yaw keeper only works without play**: the analysis assumes the ring and the keeper's lip touch the "
+          "yaw disc (PTFE tape on the flange, added until the leg turns freely with no wobble). With the keeper, the yaw "
+          f"servo's shaft is left about {yw.get('shaft_bending_nominal_walking_nm', float('nan')):.2f} N·m in normal walking "
+          f"and {yw.get('shaft_bending_worst_nm', float('nan')):.2f} N·m in the hardest pushes (ring alone: "
+          f"{yw_ro_n:.1f} / {yw_ro_w:.1f}); if the play is left in, the shaft takes the bending until it closes. Feetech "
+          "publishes no bending rating for the STS3215. The yaw range is ±12°.",
           "- **Material and servo data are assumed**: PETG strengths (50 / 15 MPa), the STS3215's rear hub screw pattern "
           "(assumed equal to the horn's), and the servo stiffness (60 N·m/rad, 0.6–1.4x tested). Print a test U-bracket and "
           "fit-check a servo before printing the rest; measure the servo stiffness (bringup.md step 5).",

@@ -36,7 +36,7 @@ ankle_type: serial   # one servo per ankle axis (JX1 uses a two-motor parallel a
 # Joint order per leg: hip_yaw (z) -> hip_roll (x) -> hip_pitch (y) -> knee (y) -> ankle_pitch (y) -> ankle_roll (x).
 # LEFT leg ranges in degrees; the right leg mirrors roll/yaw. Limits are set by the printed brackets (ASSUMED).
 joint_ranges_deg:
-  hip_yaw:     {min: -30,  max: 30,  label: CALCULATED, note: "+ = toes out (left leg); CAD own-limb clear to +-40 (verify_cad)"}
+  hip_yaw:     {min: -12,  max: 12,  label: CALCULATED, note: "+ = toes out (left leg); the yaw keeper and the hip-roll bracket are clear over +-12 deg (geometry.YAW_LIMIT, verify_cad); the gaits use +-5"}
   hip_roll:    {min: -20,  max: 22,  label: CALCULATED, note: "+ = abduction (left leg); CAD own-limb clear -22..25 (the roll U-bracket and the thigh meet the yaw disc)"}
   hip_pitch:   {min: -70,  max: 8,   label: CALCULATED, note: "- = flexion (leg forward); CAD clear -75 (thigh meets the hip-roll bracket) .. +12 (the hip-yaw bracket)"}
   knee:        {min: 0,    max: 84,  label: CALCULATED, note: "+ = flexion; CAD clear to 87 from the walking stance (75 with the hip straight: no action does that)"}
@@ -93,15 +93,15 @@ layout:
 # Mass budget per link (printed structure + mounted servos, via `carries`). COM in the link frame (m).
 mass_budget:
   pelvis:
-    structure_kg: {value: 0.063, label: ESTIMATED, note: "v0.4 SolidWorks: JX0_Pelvis 55.0 g printed (PETG, near-solid: 6 walls, 40 % gyroid) + screws and inserts"}
+    structure_kg: {value: 0.095, label: ESTIMATED, note: "v0.4 SolidWorks: JX0_Pelvis 77.9 g printed (PETG, near-solid: 6 walls, 40 % gyroid; 5 mm yaw-cage walls, keeper bosses) + the 2 hip-yaw keepers 5.6 g + screws and inserts 11 g"}
     carries: [hip_yaw, hip_yaw]
-    com_m: [0.001, 0.0, 0.056]
+    com_m: [0.002, 0.0, 0.050]
   upper_body:
-    mass_kg: {value: 1.182, label: ESTIMATED, note: "v0.4: CAD printed torso with skirt 106 g + chest cap 46 g + head 67 g + arms 76 g (hood/elbow box 22.7 + blade 15.3 g per side); 5 STS3215 (neck, 2 shoulder, 2 elbow: the shoulder and elbow servos ride in the arms) 445 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, servo driver + UBEC 30 g, IMU/mic/amp/speaker/button 20 g, switch 10 g, wiring 70 g, screws 25 g"}
+    mass_kg: {value: 1.180, label: ESTIMATED, note: "v0.4: CAD printed torso with skirt 103 g + chest cap 46 g + head 67 g + arms 76 g (hood/elbow box 22.7 + blade 15.3 g per side); 5 STS3215 (neck, 2 shoulder, 2 elbow: the shoulder and elbow servos ride in the arms) 445 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, servo driver + UBEC 30 g, IMU/mic/amp/speaker/button 20 g, switch 10 g, wiring 70 g, screws 25 g"}
     com_m: [0.005, 0.0, 0.143]
     inertia_box_m: [0.08, 0.17, 0.20]
   hip_yaw_link:
-    structure_kg: {value: 0.056, label: ESTIMATED, note: "v0.4 SolidWorks: hip-yaw bracket 51.0 g printed (9 mm disc, keel, solid block, roll-servo cage) + screws"}
+    structure_kg: {value: 0.055, label: ESTIMATED, note: "v0.4 SolidWorks: hip-yaw bracket 50.0 g printed (disc with the keeper's groove under its rim, keel, solid block, roll-servo cage) + screws"}
     carries: [hip_roll]
     com_m: [-0.028, -0.010, 0.015]
   hip_roll_link:

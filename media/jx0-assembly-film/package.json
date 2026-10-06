@@ -1,0 +1,11 @@
+{
+  "name": "jx0-assembly-film",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@0.8.136 preview",
+    "check": "npx --yes hyperframes@0.8.136 check",
+    "render": "npx --yes hyperframes@0.8.136 render",
+    "publish": "npx --yes hyperframes@0.8.136 publish"
+  }
+}

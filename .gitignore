@@ -35,6 +35,13 @@ media/assembly-film/assets/*.mp4
 media/assembly-film/renders/
 media/assembly-film/snapshots/
 media/assembly-film/node_modules/
+# JX0 assembly film, the same way (tools/media/assembly_film_jx0.py, build_assembly_composition.py --robot jx0);
+# the web copy media/jx0_assembly.mp4 is committed
+media/jx0_assembly/footage*.mp4
+media/jx0-assembly-film/assets/*.mp4
+media/jx0-assembly-film/renders/
+media/jx0-assembly-film/snapshots/
+media/jx0-assembly-film/node_modules/
 
 # cost-report build files (HTML, page previews, headless browser profile)
 bom/.report_build/

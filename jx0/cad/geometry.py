@@ -18,7 +18,9 @@ Every joint (12 leg, 4 arm, 1 neck) is the same 12 V STS3215.
 v0.4 — legs like the reference robot (media/reference.mp4): every leg pitch and roll joint is DOUBLE-SIDED. The servo's
 case sits in a cage on one link (four walls + a rear plate screwed to the case); the next link is a U-bracket that grabs
 the servo on both sides, the output horn and the rear hub, so the joint's load passes through both faces instead of
-bending the output shaft. Each hip-yaw servo carries its leg through a thrust ring under the pelvis. Short legs (62 mm
+bending the output shaft. The hip-yaw disc is held by the pelvis from both sides: a thrust ring above it and a printed
+keeper whose lip runs in a groove under the disc's rim, so the leg's bending reaches the pelvis without going through
+the yaw servo's shaft. Short legs (62 mm
 thigh, 58 mm shin, ankle 33 mm above the floor, as measured on the reference) under a tall torso whose skirt hides the
 hip-yaw servos; the knee servo lies forward, which gives the thigh the reference's dog-leg plate. Arms: the shoulder
 servo hangs outside the chest in a hood (its horn bolted to a pad on the chest wall), the elbow servo in a box under it,
@@ -40,6 +42,20 @@ TU = 4.5           # U-bracket arm plate (verify_fea)
 BOSS_H, BOSS_R = 2.0, 9.0     # U-bracket boss on the rear hub (keeps the arm 2 mm clear of the cage's rear plate)
 ZY = 30.0          # hip-yaw horn face above the hip centre
 YAW_DISC_T = 9.0   # hip-yaw bracket disc on the yaw horn (rides under the thrust ring); 9 mm: verify_fea
+# hip-yaw keeper: the pelvis holds the yaw disc from above (thrust ring, 0.1 mm over the disc) and below (a printed
+# keeper's lip under the disc's 3 mm flange, 0.05 mm below it; the keeper is clamped flat against a boss on the pelvis
+# by 4 screws). The play left is taken up with PTFE tape on the flange. Arc (left leg, pelvis frame, degrees from +x
+# toward +y): where the lip is needed (verify_strength), clear of the hip-yaw bracket and the hip-roll bracket over the
+# whole hip-yaw range (+-12 deg; the gaits use +-5)
+YAW_LIMIT = 12.0
+KEEP_ARC = (-45.0, 104.0)
+KEEP_R = (15.6, 19.6, 24.6)            # lip inner radius, wall inner radius, outer radius
+KEEP_Z = (24.6, 26.95, 30.2)           # wall bottom, lip top (0.05 under the flange), top (clamped to the boss)
+KEEP_LIP = (22.0, 23.4)                # the keeper is solid from z 22.0 up out to r 23.4: a C round the disc's rim
+KEEP_SCREWS, KEEP_SCREW_R = (-25.0, 15.0, 55.0, 88.0), 22.0
+KEEP_BOSS_TO = 150.0                   # the pelvis boss wraps round the cage's outboard end to its back wall
+FLANGE_Z, GROOVE = 27.0, (15.3, 20.9)  # disc flange bottom; under it (the lip's room): inner radius, bottom
+BOSS_TOP = 36.6                        # pelvis boss the keeper screws into (the torso skirt starts above it)
 THIGH, SHIN = 62.0, 58.0
 HIP_Y = 45.0       # half hip spacing
 XR = -14.01        # hip-roll horn face (servo behind the hip centre, horn facing +x); its U-bracket's front arm is the
@@ -49,7 +65,7 @@ SOLE_TO_ANKLE, SOLE_T, FOOT_X, FOOT_W = 33.0, 5.0, (-68.0, 56.0), 70.0
 # torso: octagonal prism, half depth TD (x) and half width TW (y), vertical edges chamfered TCH, split at TZS into the
 # lower shell and the chest cap; walls TWALL. TZB: bottom of the skirt that hides the hip-yaw servos; TZ0: the floor
 TD, TW, TCH, TWALL = 42.0, 60.0, 16.0, 2.5
-TZB, TZ0, TZS, TZT, TOP_CH = 33.0, 68.625, 168.0, 210.0, 8.0
+TZB, TZ0, TZS, TZT, TOP_CH = 37.0, 68.625, 168.0, 210.0, 8.0
 # shoulder pitch: the servo hangs outside the chest; its horn bolts to a pad on the chest side wall (horn face y = 63)
 SHOULDER = (12.5, TW + 3.0, 186.0)
 UA_L = 52.0                                                         # shoulder pitch axis to elbow axis
@@ -58,7 +74,8 @@ BLADE_L, BLADE_T = 100.0, 6.0
 # printed mass / solid mass. Body parts: 3 walls + 25 % gyroid. Pelvis and leg brackets (PETG): 6 walls, 6 top and
 # bottom layers, 40 % gyroid, so their 2.4-4.5 mm plates print solid, as the finite-element check assumes (verify_fea)
 FILL_BODY, FILL_LEG = 0.55, 0.80
-LEG_PARTS = ("JX0_Pelvis", "JX0_HipYawBracket", "JX0_HipRollBracket", "JX0_Thigh", "JX0_Shin", "JX0_AnkleBracket", "JX0_Foot")
+LEG_PARTS = ("JX0_Pelvis", "JX0_YawKeeper", "JX0_HipYawBracket", "JX0_HipRollBracket", "JX0_Thigh", "JX0_Shin",
+             "JX0_AnkleBracket", "JX0_Foot")
 
 
 def fill(name):
@@ -317,6 +334,18 @@ def rect(u0, u1, v0, v1, r=0.0):
     return rounded_polygon(pts, [r] * 4) if r > 0 else pts
 
 
+def polar(r, deg, c=(0.0, 0.0)):
+    import math
+    return (c[0] + r * math.cos(math.radians(deg)), c[1] + r * math.sin(math.radians(deg)))
+
+
+def sector(r_in, r_out, a0, a1, c=(0.0, 0.0)):
+    """Annular sector profile from angle a0 to a1 (degrees, a0 < a1, less than 360 apart) around c, true arcs."""
+    am = (a0 + a1) / 2
+    return [polar(r_out, a0, c), ("arc", polar(r_out, am, c)), polar(r_out, a1, c),
+            polar(r_in, a1, c), ("arc", polar(r_in, am, c)), polar(r_in, a0, c)]
+
+
 # ------------------------------------------------------------------------------------------------ the servos (left leg)
 def yaw_servo(sy=1):                       # pelvis frame: horn down, case toward the robot's middle
     return Servo((0.0, sy * HIP_Y, ZY + HF), "z", -1, ("y", -sy))
@@ -345,17 +374,28 @@ def ankle_roll_servo():                    # ankle frame: behind the ankle centr
 # ------------------------------------------------------------------------------------------------ legs (left side)
 def pelvis():
     """Inside the torso skirt: the two hip-yaw servo cages hang from a plate bolted under the torso floor, each with a
-    thrust ring under it. The hip-yaw bracket rides 0.3 mm under the ring, so the leg's load in stance goes into the
-    pelvis through the ring, not through the yaw servo's output shaft (PTFE tape or grease on the ring)."""
+    thrust ring under it and, around the cage's outboard end and front, a boss the yaw keeper screws into. The hip-yaw
+    disc rides 0.1 mm under the ring and the keeper's lip under its rim, so the leg's load and bending go into the
+    pelvis through the ring and the keeper, not through the yaw servo's output shaft (PTFE tape on both faces)."""
     zr = ZY + HF + HC                                                         # yaw case top (rear face) = 64.625
     plate = [(28.0, -50.0), (28.0, 50.0), (21.0, 57.0), (-24.0, 57.0), (-24.0, -57.0), (21.0, -57.0)]
     p = [("prism", "z", plate, (zr, TZ0)),
          ("box", (24.5, 28.0), (-45.0, 45.0), (zr - 14.0, zr + 0.5)),                       # front rib
          ("box", (-24.0, -20.5), (-45.0, 45.0), (zr - 14.0, zr + 0.5))]                     # rear rib
     for sy in (1, -1):
-        p += cage(yaw_servo(sy), rp=TZ0 - zr, thin={"l1": 1.2} if sy > 0 else {"l0": 1.2}, counterbore=True)
-        p += [("cyl", "z", (0.0, sy * HIP_Y), 19.0, (ZY + 0.3, ZY + HF - HC)),             # thrust ring
-              ("hole", "z", (0.0, sy * HIP_Y), 23.0, (ZY + 0.2, ZY + HF - HC + 0.1))]
+        # outboard end wall 1.2 mm (inside the skirt); front and back walls 5 mm: they carry the keeper's pull up to
+        # the plate (verify_fea)
+        p += cage(yaw_servo(sy), rp=TZ0 - zr, thin={"l1" if sy > 0 else "l0": 1.2, "w0": 5.0, "w1": 5.0},
+                  counterbore=True)
+        c = (0.0, sy * HIP_Y)
+        a0, a1 = (KEEP_ARC[0] - 4.0, KEEP_BOSS_TO) if sy > 0 else (-KEEP_BOSS_TO, 4.0 - KEEP_ARC[0])
+        y_case = sorted((sy * (HIP_Y - ST["LB"] - C), sy * (HIP_Y + ST["LA"] + C)))          # the case's space
+        p += [("cyl", "z", c, 19.0, (ZY + 0.1, ZY + HF - HC)),                             # thrust ring
+              ("prism", "z", sector(11.0, KEEP_R[2], a0, a1, c), (ZY + 0.2, BOSS_TOP)),   # keeper boss
+              ("cut", (-HW - C, HW + C), tuple(y_case), (ZY + HF - HC, BOSS_TOP + 0.1)),
+              ("hole", "z", c, 23.0, (ZY + 0.1, ZY + HF - HC + 0.1))]
+        for a in KEEP_SCREWS:                                                               # keeper screws (M2 x 10)
+            p.append(("hole", "z", polar(KEEP_SCREW_R, sy * a, c), 1.8, (ZY + 0.1, BOSS_TOP - 0.8)))
     for x in (-20.0, 24.0):                                                                 # bolts to the torso floor
         for y in (-25.0, 25.0):
             p.append(("hole", "z", (x, y), 3.2, (zr - 0.1, TZ0 + 0.1)))
@@ -363,22 +403,42 @@ def pelvis():
 
 
 def hip_yaw_bracket():
-    """A 7 mm disc on the hip-yaw horn (it rides under the thrust ring), a keel under its centre, and a solid block
-    down onto the cage of the hip-roll servo behind the hip (verify_fea: the load path from the disc to the cage)."""
+    """A 7 mm disc on the hip-yaw horn (it rides under the thrust ring; a groove under its rim takes the keeper's lip,
+    leaving a 3 mm flange), a keel under its centre, and a solid block down onto the cage of the hip-roll servo behind
+    the hip (verify_fea: the load path from the disc to the cage)."""
     zd = ZY - YAW_DISC_T                                     # the roll bracket's top corners swing up to z 20.7
     xc = (19.0 ** 2 - 11.0 ** 2) ** 0.5
     middle = [(-xc, -11.0), (xc, -11.0), ("arc", (19.0, 0.0)), (xc, 11.0), (-xc, 11.0), ("arc", (-19.0, 0.0))]
     p = [("cyl", "z", (0.0, 0.0), 19.0, (ZY - 7.0, ZY)),                                   # disc on the yaw horn: 7 mm,
          ("prism", "z", middle, (zd, ZY - 6.9)),                                            # 9 across the middle (the
          # thigh's arms swing under its sides when the hip rolls)
-         ("box", (-14.5, 14.0), (-5.0, 5.0), (19.6, zd + 0.1)),                            # keel (clear of the roll
+         ("box", (-14.2, 14.0), (-5.0, 5.0), (19.6, zd + 0.1)),                            # keel (clear of the roll
          ("box", (-50.0, -14.6), (-35.0, 12.0), (HW + C + 3.0 - 0.1, ZY))]                 # bracket); solid block
     p += cage(roll_servo(), wall=3.0, omit=-1)                 # (the roll U slides on from below)
+    # room under the disc's rim for the keeper's lip: the keeper's arc + the yaw range + 2 deg
+    p.append(("pcut", "z", sector(GROOVE[0], 19.6, KEEP_ARC[0] - YAW_LIMIT - 2.0, KEEP_ARC[1] + YAW_LIMIT + 2.0),
+              (GROOVE[1], FLANGE_Z)))
     p += horn_holes("z", (0.0, 0.0), (19.5, ZY + 0.1))
     for k in range(4):                                                                      # counterbores from below:
         import math                                                                         # M2 x 10 horn screws
         a = math.radians(90 * k)
         p.append(("hole", "z", (7.0 * math.cos(a), 7.0 * math.sin(a)), 4.6, (19.5, ZY - 6.0)))
+    return p
+
+
+def yaw_keeper():
+    """The hip-yaw keeper (frame: the yaw axis at the origin, pelvis z): a C-section ring segment round the yaw disc's
+    rim; its 4.95 mm lip slides sideways under the disc's flange, and 4 M2 x 10 screws from below clamp its top flat
+    against the pelvis's boss. Outer bottom edge stepped: clear of the hip-roll bracket's arm at full roll."""
+    a0, a1 = KEEP_ARC
+    r_lip, r_wall, r_out = KEEP_R
+    zb, zl, zt = KEEP_Z
+    p = [("prism", "z", sector(r_wall, r_out, a0, a1), (zb, zt)),
+         ("prism", "z", sector(r_lip, KEEP_LIP[1], a0 + 0.07, a1 - 0.07), (KEEP_LIP[0], zl)),
+         ("pcut", "z", sector(KEEP_LIP[1], r_out + 0.2, a0 - 1.0, a1 + 1.0), (zb - 0.1, zb + 1.0))]
+    for a in KEEP_SCREWS:
+        cxy = polar(KEEP_SCREW_R, a)
+        p += [("hole", "z", cxy, 2.4, (KEEP_LIP[0] - 0.1, zt + 0.1)), ("hole", "z", cxy, 4.0, (KEEP_LIP[0] - 0.1, zb))]
     return p
 
 
@@ -618,6 +678,8 @@ def arm_blade():
 # name -> (primitives, colour, quantity). Right-side parts are generated by mirroring the left ones.
 PARTS = {
     "JX0_Pelvis": (pelvis(), "sage", 1),
+    "JX0_YawKeeper_L": (yaw_keeper(), "sage", 1),
+    "JX0_YawKeeper_R": (mirror_y(yaw_keeper()), "sage", 1),
     "JX0_HipYawBracket_L": (hip_yaw_bracket(), "sage", 1),
     "JX0_HipYawBracket_R": (mirror_y(hip_yaw_bracket()), "sage", 1),
     "JX0_HipRollBracket_L": (hip_roll_bracket(), "sage", 1),

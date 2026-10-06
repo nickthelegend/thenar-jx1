@@ -10,6 +10,12 @@ combination of forces and moments, not peaks of different moments added up:
   fatigue: the 14 verified gaits on the nominal robot (what every step does), against PETG's ~15 MPa at 10^6 cycles;
   strength: 42 walks with random model errors + 48 mid-walk sideways pushes of 0.96 N·s (24 moments x 2 directions,
     runs that fell excluded: the model has no body collisions), against 50 MPa along the print layers.
+Hip yaw (the keeper): the pelvis holds the yaw disc from above (thrust ring) and below (the keeper's lip), so the
+hip-yaw load is split instant by instant (robustness.keeper_split): the ring's push and the lip's push (each at its
+angle on the disc rim) carry the axial force and the bending, the servo case only the radial force, the torque and any
+leftover bending. The pelvis gets all three (case plate, ring face, keeper screw bores); the hip-yaw bracket gets the
+roll cage's load plus the ring's and the lip's pushes on its disc (the lip on a 30 deg patch that follows the contact
+angle); the keeper is held at its 4 screw heads and loaded by the disc on the same moving patch.
 Stress = 99.9th percentile of each element's highest von Mises over time, away from the supports and loads (voxel
 steps make single-voxel peaks meaningless). PETG isotropic E = 2.0 GPa, nu = 0.38 (ASSUMED). Label: CALCULATED.
 
@@ -65,8 +71,53 @@ def cage_load(axis, centre, hs=1):
     return lambda m: m.face_annulus(i, c[i] - hs * HC / 1000, c, 0.0114, 0.040)
 
 
-def parts():
-    """part -> (primitives, support, load nodes, load point (mm, part frame = link frame), joint, which side's frame)."""
+LIP_BINS = 8                                                       # the lip's contact patch: 8 positions on the arc
+
+
+def yaw_split(Wy):
+    """Left hip-yaw joint, parent (pelvis) frame load series (T, 6: force, moment about the servo centre) -> the
+    keeper's sharing, as wrenches of the pelvis on the leg about the yaw axis at the disc's top face (horn face):
+    case path (Fx, Fy, 0, shaft's leftover bending, torque), ring push (Fz, Mx, My), lip push (Fz, Mx, My), and the
+    lip force with its angle (degrees)."""
+    f, mc = Wy[:, :3], Wy[:, 3:]
+    mh = mc + np.cross(np.array([0.0, 0.0, HF / 1000]), f)
+    L, N, shaft, th_l, th_n = RB.keeper_split(mh[:, :2], -f[:, 2], RB.keeper_arc("l"))
+    R, tl, tn = RB.KEEP_R, np.radians(th_l), np.radians(th_n)
+    d = mh[:, :2] / np.maximum(np.linalg.norm(mh[:, :2], axis=1, keepdims=True), 1e-9)
+    case = np.column_stack([f[:, 0], f[:, 1], np.zeros(len(f)), shaft * d[:, 0], shaft * d[:, 1], mh[:, 2]])
+    ring = np.column_stack([-N, -R * N * np.sin(tn), R * N * np.cos(tn)])
+    lip = np.column_stack([L, R * L * np.sin(tl), -R * L * np.cos(tl)])
+    return case, ring, lip, L, th_l
+
+
+def lip_bins():
+    a0, a1 = G.KEEP_ARC
+    return np.linspace(a0 + (a1 - a0) / (2 * LIP_BINS), a1 - (a1 - a0) / (2 * LIP_BINS), LIP_BINS)
+
+
+def lip_columns(L, th, sign):
+    """(T, LIP_BINS): the lip force in the column of the patch nearest its contact angle."""
+    b = lip_bins()
+    k = np.abs(th[:, None] - b[None, :]).argmin(1)
+    out = np.zeros((len(L), LIP_BINS))
+    out[np.arange(len(L)), k] = sign * L
+    return out
+
+
+def arc_face(axis_value, centre_mm, r_in, r_out, a_lo, a_hi):
+    """Nodes on the plane z == axis_value (mm) in an annular sector (mm, degrees) around centre (x, y) mm."""
+    def sel(m):
+        n = m.face_annulus(2, axis_value / 1000, (centre_mm[0] / 1000, centre_mm[1] / 1000, axis_value / 1000),
+                           r_in / 1000, r_out / 1000)
+        X = m.nodes[n]
+        ang = np.degrees(np.arctan2(X[:, 1] - centre_mm[1] / 1000, X[:, 0] - centre_mm[0] / 1000))
+        return n[(ang >= a_lo) & (ang <= a_hi)]
+    return sel
+
+
+def parts(series):
+    """part -> (primitives, support, load groups, what loads it). A load group: (nodes, point mm or None = the nodes'
+    centroid, wrench components used (0-5: Fx Fy Fz Mx My Mz), walking series (T, k), worst series (T', k))."""
     r, ra = G.roll_servo(), G.ankle_roll_servo()
     zs = -G.SOLE_TO_ANKLE
     y_s = G.yaw_servo(1)
@@ -82,18 +133,50 @@ def parts():
         inside = (np.abs(X[:, 0]) <= 0.0128) & (X[:, 1] >= 0.045 - 0.0355) & (X[:, 1] <= 0.045 + 0.0105)
         far = np.hypot(X[:, 0], X[:, 1] - 0.045) >= 0.0114
         return np.nonzero(sx & inside & far)[0]
+    def one(joint, frame, nodes, pt):
+        return [(nodes, pt, range(6), series["walking"][joint][frame], series["worst"][joint][frame])]
+
+    sp = {t: yaw_split(series[t]["l_hip_yaw"]["parent"]) for t in ("walking", "worst")}
+    zy, yaw_c = G.ZY, (0.0, G.HIP_Y)
+    a0, a1 = G.KEEP_ARC
+    zb, zl, _ = G.KEEP_Z
+
+    def bores(m):                                                            # the keeper's screws in the pelvis boss
+        return np.concatenate([m.bore(2, (*[v / 1000 for v in G.polar(G.KEEP_SCREW_R, a, yaw_c)], 0.0), 0.0009,
+                                      ((zy + 0.1) / 1000, (G.BOSS_TOP - 0.8) / 1000)) for a in G.KEEP_SCREWS])
+
+    def keeper_support(m):                                                   # its top, clamped to the pelvis's boss
+        return m.face_annulus(2, G.KEEP_Z[2] / 1000, (0.0, 0.0, 0.0), G.KEEP_R[1] / 1000, G.KEEP_R[2] / 1000)
+
+    def lip_groups(z_face, r_in, r_out, sign, centre=(0.0, 0.0)):
+        cols = {t: lip_columns(sp[t][3], sp[t][4], sign) for t in sp}
+        return [(arc_face(z_face, centre, r_in, r_out, b - 15.0, b + 15.0), None, [2], cols["walking"][:, [k]],
+                 cols["worst"][:, [k]]) for k, b in enumerate(lip_bins())]
+
+    pelvis_groups = [(pelvis_load, (0, G.HIP_Y, zy), range(6), sp["walking"][0], sp["worst"][0]),
+                     (lambda m: m.face_annulus(2, (zy + 0.1) / 1000, (0, G.HIP_Y / 1000, 0), 0.0115, 0.019), (0, G.HIP_Y, zy),
+                      [2, 3, 4], sp["walking"][1], sp["worst"][1]),
+                     (bores, (0, G.HIP_Y, zy), [2, 3, 4], sp["walking"][2], sp["worst"][2])]
+    yaw_groups = one("l_hip_roll", "parent", cage_load("x", (r.c["x"], 0, 0)), (r.c["x"], 0, 0))
+    yaw_groups += [(lambda m: m.face_annulus(2, zy / 1000, (0, 0, zy / 1000), 0.0115, 0.019), (0, 0, zy), [2, 3, 4],
+                    -sp["walking"][1], -sp["worst"][1])]
+    yaw_groups += lip_groups(G.FLANGE_Z, G.GROOVE[0] + 0.3, 19.0, -1.0)
     return {
-        "pelvis": (G.pelvis(), pelvis_support, pelvis_load, (0, G.HIP_Y, y_s.c["z"]), "l_hip_yaw", "parent"),
-        "hip_yaw_bracket": (G.hip_yaw_bracket(), lambda m: m.face_annulus(2, G.ZY / 1000, (0, 0, G.ZY / 1000), 0.0032, 0.0098),
-                            cage_load("x", (r.c["x"], 0, 0)), (r.c["x"], 0, 0), "l_hip_roll", "parent"),
-        "hip_roll_bracket": (G.hip_roll_bracket(), u_support("x", (r.c["x"], 0, 0)), cage_load("y", (0, 0, 0)), (0, 0, 0),
-                             "l_hip_pitch", "parent"),
-        "thigh": (G.thigh(), u_support("y", (0, 0, 0)), cage_load("y", (0, 0, -G.THIGH)), (0, 0, -G.THIGH), "l_knee", "parent"),
-        "shin": (G.shin(), u_support("y", (0, 0, 0)), cage_load("y", (0, 0, -G.SHIN)), (0, 0, -G.SHIN), "l_ankle_pitch", "parent"),
-        "ankle_bracket": (G.ankle_bracket(), u_support("y", (0, 0, 0)), cage_load("x", (ra.c["x"], 0, 0)), (ra.c["x"], 0, 0),
-                          "l_ankle_roll", "parent"),
-        "foot": (G.foot(), lambda m: m.face_annulus(2, zs / 1000, (0, 0, zs / 1000), 0.0, 0.2), u_support("x", (ra.c["x"], 0, 0)),
-                 (ra.c["x"], 0, 0), "l_ankle_roll", "child"),
+        "pelvis": (G.pelvis(), pelvis_support, pelvis_groups, "l_hip_yaw (parent frame), split by the keeper"),
+        "yaw_keeper": (G.yaw_keeper(), keeper_support, lip_groups(zl, G.KEEP_R[0], G.KEEP_R[1], -1.0),
+                       "l_hip_yaw: the disc on the keeper's lip"),
+        "hip_yaw_bracket": (G.hip_yaw_bracket(), lambda m: m.face_annulus(2, zy / 1000, (0, 0, zy / 1000), 0.0032, 0.0098),
+                            yaw_groups, "l_hip_roll (parent frame) + the ring's and the keeper's pushes on the disc"),
+        "hip_roll_bracket": (G.hip_roll_bracket(), u_support("x", (r.c["x"], 0, 0)),
+                             one("l_hip_pitch", "parent", cage_load("y", (0, 0, 0)), (0, 0, 0)), "l_hip_pitch (parent frame)"),
+        "thigh": (G.thigh(), u_support("y", (0, 0, 0)), one("l_knee", "parent", cage_load("y", (0, 0, -G.THIGH)), (0, 0, -G.THIGH)),
+                  "l_knee (parent frame)"),
+        "shin": (G.shin(), u_support("y", (0, 0, 0)), one("l_ankle_pitch", "parent", cage_load("y", (0, 0, -G.SHIN)), (0, 0, -G.SHIN)),
+                 "l_ankle_pitch (parent frame)"),
+        "ankle_bracket": (G.ankle_bracket(), u_support("y", (0, 0, 0)),
+                          one("l_ankle_roll", "parent", cage_load("x", (ra.c["x"], 0, 0)), (ra.c["x"], 0, 0)), "l_ankle_roll (parent frame)"),
+        "foot": (G.foot(), lambda m: m.face_annulus(2, zs / 1000, (0, 0, zs / 1000), 0.0, 0.2),
+                 one("l_ankle_roll", "child", u_support("x", (ra.c["x"], 0, 0)), (ra.c["x"], 0, 0)), "l_ankle_roll (child frame)"),
     }
 
 
@@ -123,8 +206,9 @@ def max_vm_over_time(sig_unit, W, far, chunk=400, n_inst=1500):
     """Each element's highest von Mises over the load history W (T, 6), exact for the elements and instants that can
     matter: per-component bounds pick the 1500 most severe instants and the top 3 % of elements (everything else keeps
     its bound, which only overestimates)."""
-    vm_k = np.stack([von_mises(sig_unit[k]).max(axis=1) for k in range(6)])  # (6, nel) per unit component
-    sens = np.array([vm_k[k][far].max() for k in range(6)])
+    nk = len(sig_unit)
+    vm_k = np.stack([von_mises(sig_unit[k]).max(axis=1) for k in range(nk)])  # (k, nel) per unit component
+    sens = np.array([vm_k[k][far].max() for k in range(nk)])
     proxy = np.abs(W) @ sens                                                # bound on the worst element at each instant
     if len(W) > n_inst:
         W = W[np.argsort(proxy)[-n_inst:]]
@@ -132,7 +216,7 @@ def max_vm_over_time(sig_unit, W, far, chunk=400, n_inst=1500):
     bound = mags @ vm_k                                                     # |sum| <= sum |.|: von Mises bound
     cand = np.nonzero(far & (bound >= np.percentile(bound[far], 97.0)))[0]
     exact = np.zeros(len(cand))
-    su = sig_unit[:, cand]                                                  # (6, nc, 8, 6)
+    su = sig_unit[:, cand]                                                  # (k, nc, 8, 6)
     for a in range(0, len(W), chunk):
         s = np.einsum("tk,keci->teci", W[a:a + chunk], su)
         exact = np.maximum(exact, von_mises(s).max(axis=(0, 2)))
@@ -141,23 +225,35 @@ def max_vm_over_time(sig_unit, W, far, chunk=400, n_inst=1500):
     return vm
 
 
-def analyse(name, prims, sup, lod, point_mm, W_walk, W_worst):
+def analyse(name, prims, sup, groups):
+    """groups: [(nodes, point mm or None, components, walking (T, k), worst (T', k))], all on the same instants."""
     t0 = time.time()
     mm = build(prims).to_mesh()
     mesh = trimesh.Trimesh(np.asarray(mm.vert_properties)[:, :3] / 1000, np.asarray(mm.tri_verts))
     model = VoxelModel.from_mesh(mesh, H, iso_D(E, NU)).build()
-    ns, nl = sup(model), lod(model)
-    if len(ns) < 6 or len(nl) < 6:
-        raise RuntimeError(f"{name}: support {len(ns)} / load {len(nl)} nodes")
+    ns = sup(model)
+    if len(ns) < 6:
+        raise RuntimeError(f"{name}: support {len(ns)} nodes")
     model.fix(ns)
     model.factorize()
-    U = model.solve(model.wrench_loads(nl, np.asarray(point_mm) / 1000))
-    sig = model.corner_stress(U)                                            # (6, nel, 8, 6) Pa per unit F (N) / M (N m)
+    F, loaded = [], []
+    for k, (nodes, pt, comps, _, _) in enumerate(groups):
+        nl = nodes(model)
+        if len(nl) < 6:
+            raise RuntimeError(f"{name}: load group {k}: {len(nl)} nodes")
+        pt = model.nodes[nl].mean(0) if pt is None else np.asarray(pt) / 1000
+        F.append(model.wrench_loads(nl, pt)[list(comps)])
+        loaded.append(nl)
+    U = model.solve(np.vstack(F))
+    sig = np.stack([model.corner_stress(U[k:k + 1])[0].astype(np.float32) for k in range(len(U))])   # (k, nel, 8, 6)
+    W_walk = np.hstack([g[3] for g in groups])
+    W_worst = np.hstack([g[4] for g in groups])
     from scipy.spatial import cKDTree
-    d, _ = cKDTree(model.nodes[np.concatenate([ns, nl])]).query(model.element_centres())
+    d, _ = cKDTree(model.nodes[np.concatenate([ns, *loaded])]).query(model.element_centres())
     far = d > 2.5 * H
     out = {"elements": int(len(model.elements)), "dof": int(model.ndof), "support_nodes": int(len(ns)),
-           "load_nodes": int(len(nl)), "instants": {"walking": int(len(W_walk)), "worst": int(len(W_worst))}}
+           "load_nodes": int(sum(len(n) for n in loaded)), "load_components": int(len(U)),
+           "instants": {"walking": int(len(W_walk)), "worst": int(len(W_worst))}}
     for tag, W in (("walking", W_walk), ("worst", W_worst)):
         vm = max_vm_over_time(sig, W, far) / 1e6
         out[f"{tag}_mpa_p99_9"] = round(float(np.percentile(vm[far], 99.9)), 2)
@@ -205,11 +301,11 @@ def main():
     only = sys.argv[1:]
     if only and OUT.exists():
         res = json.loads(OUT.read_text(encoding="utf-8"))["parts"]
-    for name, (prims, sup, lod, pt, joint, frame) in parts().items():
+    for name, (prims, sup, groups, what) in parts(series).items():
         if only and name not in only:
             continue
-        r = analyse(name, prims, sup, lod, pt, series["walking"][joint][frame], series["worst"][joint][frame])
-        res[name] = {"loaded_by": f"{joint} ({frame} frame)", **r}
+        r = analyse(name, prims, sup, groups)
+        res[name] = {"loaded_by": what, **r}
         print(f"{name:17s} {r['elements']:7d} el  walking {r['walking_mpa_p99_9']:5.2f} MPa (fatigue SF {r['fatigue_safety']:4.1f})  "
               f"worst {r['worst_mpa_p99_9']:5.2f} MPa (static SF {r['static_safety']:4.1f})  {r['seconds']} s", flush=True)
     OUT.write_text(json.dumps({"generated_by": "jx0/verify/verify_fea.py", "label": "CALCULATED (voxel FEA, PETG ASSUMED)",

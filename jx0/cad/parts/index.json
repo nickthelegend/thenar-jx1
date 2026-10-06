@@ -5,34 +5,34 @@
   "errors": [],
   "bbox_mm": [
    -24.0,
-   -64.0,
-   30.3,
+   -69.6,
+   30.1,
    28.0,
-   64.0,
+   69.6,
    68.62
   ],
   "bbox_expected_mm": [
    -24.0,
-   -64.0,
-   30.3,
+   -69.6,
+   30.1,
    28.0,
-   64.0,
+   69.6,
    68.62
   ],
   "bbox_ok": true,
-  "volume_cm3": 54.18,
-  "solid_mass_g_petg": 68.8,
-  "printed_mass_g": 55.0,
-  "features": 39,
-  "triangles": 3090,
+  "volume_cm3": 76.67,
+  "solid_mass_g_petg": 97.4,
+  "printed_mass_g": 77.9,
+  "print_fill": 0.8,
+  "features": 51,
+  "triangles": 4090,
   "com_mm": [
-   1.1,
+   1.29,
    0.0,
-   55.69
+   52.32
   ],
   "quantity": 1,
-  "build_s": 47.1,
-  "print_fill": 0.8
+  "build_s": 71.7
  },
  "JX0_HipYawBracket_L": {
   "part": "JX0_HipYawBracket_L",
@@ -55,19 +55,19 @@
    30.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 50.16,
-  "solid_mass_g_petg": 63.7,
-  "printed_mass_g": 51.0,
-  "features": 22,
-  "triangles": 1558,
+  "volume_cm3": 49.2,
+  "solid_mass_g_petg": 62.5,
+  "printed_mass_g": 50.0,
+  "print_fill": 0.8,
+  "features": 23,
+  "triangles": 1642,
   "com_mm": [
-   -27.71,
-   -10.11,
-   15.19
+   -28.46,
+   -10.4,
+   15.01
   ],
   "quantity": 1,
-  "build_s": 26.5,
-  "print_fill": 0.8
+  "build_s": 37.4
  },
  "JX0_HipYawBracket_R": {
   "part": "JX0_HipYawBracket_R",
@@ -90,19 +90,19 @@
    30.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 50.16,
-  "solid_mass_g_petg": 63.7,
-  "printed_mass_g": 51.0,
-  "features": 22,
-  "triangles": 1558,
+  "volume_cm3": 49.2,
+  "solid_mass_g_petg": 62.5,
+  "printed_mass_g": 50.0,
+  "print_fill": 0.8,
+  "features": 23,
+  "triangles": 1642,
   "com_mm": [
-   -27.71,
-   10.11,
-   15.19
+   -28.46,
+   10.4,
+   15.01
   ],
   "quantity": 1,
-  "build_s": 26.8,
-  "print_fill": 0.8
+  "build_s": 36.9
  },
  "JX0_HipRollBracket_L": {
   "part": "JX0_HipRollBracket_L",
@@ -426,7 +426,7 @@
   "bbox_mm": [
    -42.0,
    -60.0,
-   33.0,
+   37.0,
    42.0,
    60.0,
    173.0
@@ -434,25 +434,25 @@
   "bbox_expected_mm": [
    -42.0,
    -60.0,
-   33.0,
+   37.0,
    42.0,
    60.0,
    173.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 151.63,
-  "solid_mass_g_petg": 192.6,
-  "printed_mass_g": 105.9,
+  "volume_cm3": 148.01,
+  "solid_mass_g_petg": 188.0,
+  "printed_mass_g": 103.4,
+  "print_fill": 0.55,
   "features": 24,
   "triangles": 1882,
   "com_mm": [
    0.03,
-   0.0,
-   99.89
+   -0.0,
+   101.48
   ],
   "quantity": 1,
-  "build_s": 40.8,
-  "print_fill": 0.55
+  "build_s": 38.1
  },
  "JX0_Head": {
   "part": "JX0_Head",
@@ -698,5 +698,75 @@
   "quantity": 17,
   "build_s": 12.7,
   "print_fill": 0.55
+ },
+ "JX0_YawKeeper_L": {
+  "part": "JX0_YawKeeper_L",
+  "bodies": 1,
+  "errors": [],
+  "bbox_mm": [
+   -5.95,
+   -17.39,
+   22.0,
+   24.6,
+   24.6,
+   30.2
+  ],
+  "bbox_expected_mm": [
+   -5.95,
+   -17.39,
+   22.0,
+   24.6,
+   24.6,
+   30.2
+  ],
+  "bbox_ok": true,
+  "volume_cm3": 2.77,
+  "solid_mass_g_petg": 3.5,
+  "printed_mass_g": 2.8,
+  "print_fill": 0.8,
+  "features": 11,
+  "triangles": 1124,
+  "com_mm": [
+   13.31,
+   7.42,
+   25.87
+  ],
+  "quantity": 1,
+  "build_s": 14.2
+ },
+ "JX0_YawKeeper_R": {
+  "part": "JX0_YawKeeper_R",
+  "bodies": 1,
+  "errors": [],
+  "bbox_mm": [
+   -5.95,
+   -24.6,
+   22.0,
+   24.6,
+   17.39,
+   30.2
+  ],
+  "bbox_expected_mm": [
+   -5.95,
+   -24.6,
+   22.0,
+   24.6,
+   17.39,
+   30.2
+  ],
+  "bbox_ok": true,
+  "volume_cm3": 2.77,
+  "solid_mass_g_petg": 3.5,
+  "printed_mass_g": 2.8,
+  "print_fill": 0.8,
+  "features": 11,
+  "triangles": 1124,
+  "com_mm": [
+   13.31,
+   -7.42,
+   25.87
+  ],
+  "quantity": 1,
+  "build_s": 13.7
  }
 }

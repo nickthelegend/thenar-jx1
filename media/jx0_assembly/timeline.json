@@ -1,0 +1,166 @@
+{
+ "fps": 30,
+ "duration": 66.667,
+ "parts": 39,
+ "segments": [
+  {
+   "kind": "intro",
+   "start": 0.0,
+   "end": 5.0,
+   "title": "JX0",
+   "subtitle": "the walking, talking STS3215 humanoid you can build at home"
+  },
+  {
+   "kind": "explode",
+   "start": 5.0,
+   "end": 7.8,
+   "title": "39 parts",
+   "subtitle": "let's put it together"
+  },
+  {
+   "kind": "step",
+   "step": 1,
+   "of": 13,
+   "start": 7.8,
+   "end": 11.2,
+   "title": "Pelvis + hip-yaw servos",
+   "subtitle": "PETG, printed near-solid \u00b7 2 \u00d7 STS3215 in cages \u00b7 thrust rings + keeper bosses",
+   "parts": 3
+  },
+  {
+   "kind": "step",
+   "step": 2,
+   "of": 13,
+   "start": 11.2,
+   "end": 14.6,
+   "title": "Hip-yaw discs + keepers",
+   "subtitle": "disc on the yaw horn \u00b7 keeper lip under its rim \u00b7 held from both sides",
+   "parts": 4
+  },
+  {
+   "kind": "step",
+   "step": 3,
+   "of": 13,
+   "start": 14.6,
+   "end": 18.0,
+   "title": "Hip-roll servos",
+   "subtitle": "2 \u00d7 STS3215 \u00b7 caged behind the hip",
+   "parts": 2
+  },
+  {
+   "kind": "step",
+   "step": 4,
+   "of": 13,
+   "start": 18.0,
+   "end": 21.4,
+   "title": "Hip-roll U-brackets",
+   "subtitle": "on the horn and the rear hub \u00b7 double-sided",
+   "parts": 2
+  },
+  {
+   "kind": "step",
+   "step": 5,
+   "of": 13,
+   "start": 21.4,
+   "end": 24.8,
+   "title": "Hip-pitch servos",
+   "subtitle": "2 \u00d7 STS3215 \u00b7 axis through the hip centre",
+   "parts": 2
+  },
+  {
+   "kind": "step",
+   "step": 6,
+   "of": 13,
+   "start": 24.8,
+   "end": 28.2,
+   "title": "Thighs + knee servos",
+   "subtitle": "dog-leg U-bracket \u00b7 knee servo lying forward",
+   "parts": 4
+  },
+  {
+   "kind": "step",
+   "step": 7,
+   "of": 13,
+   "start": 28.2,
+   "end": 31.6,
+   "title": "Shins + ankle-pitch servos",
+   "subtitle": "U-bracket on the knee \u00b7 ankle servo caged below",
+   "parts": 4
+  },
+  {
+   "kind": "step",
+   "step": 8,
+   "of": 13,
+   "start": 31.6,
+   "end": 35.0,
+   "title": "Ankle brackets + roll servos",
+   "subtitle": "U-bracket on the ankle-pitch servo \u00b7 roll cage behind the ankle",
+   "parts": 4
+  },
+  {
+   "kind": "step",
+   "step": 9,
+   "of": 13,
+   "start": 35.0,
+   "end": 38.4,
+   "title": "Feet",
+   "subtitle": "chamfered 124 \u00d7 70 mm soles \u00b7 U-bracket on the roll servo",
+   "parts": 2
+  },
+  {
+   "kind": "step",
+   "step": 10,
+   "of": 13,
+   "start": 38.4,
+   "end": 41.8,
+   "title": "Torso",
+   "subtitle": "octagonal shell \u00b7 skirt over the hip-yaw servos \u00b7 Pi 4, battery, servo driver inside",
+   "parts": 1
+  },
+  {
+   "kind": "step",
+   "step": 11,
+   "of": 13,
+   "start": 41.8,
+   "end": 45.2,
+   "title": "Arms",
+   "subtitle": "shoulder servo in a hood \u00b7 elbow servo below \u00b7 6 mm paddle blades",
+   "parts": 8
+  },
+  {
+   "kind": "step",
+   "step": 12,
+   "of": 13,
+   "start": 45.2,
+   "end": 48.6,
+   "title": "Chest cap + neck servo",
+   "subtitle": "speaker grille \u00b7 vents \u00b7 neck STS3215 on top",
+   "parts": 2
+  },
+  {
+   "kind": "step",
+   "step": 13,
+   "of": 13,
+   "start": 48.6,
+   "end": 52.0,
+   "title": "Head",
+   "subtitle": "soft rounded head \u00b7 four holes for the microphone",
+   "parts": 1
+  },
+  {
+   "kind": "finale",
+   "start": 51.99999999999999,
+   "end": 55.99999999999999,
+   "title": "JX0 assembled",
+   "subtitle": "46 cm \u00b7 2.88 kg \u00b7 17 STS3215 joints"
+  },
+  {
+   "kind": "walk",
+   "start": 55.99999999999999,
+   "end": 66.66666666666666,
+   "title": "and it walks",
+   "subtitle": "MuJoCo simulation of the CAD model \u00b7 0.05 m/s"
+  }
+ ],
+ "mass_kg": 2.875
+}

@@ -1,28 +1,45 @@
-"""Build the HyperFrames composition for the JX1 assembly film from media/assembly/timeline.json.
+"""Build the HyperFrames composition for the JX1 or the JX0 assembly film from its timeline.json.
 
 The 3D footage (tools/media/assembly_film.py) carries the motion; this composition adds the titles in sync with it:
 opening title (waterfall-entry), the "87 parts" explode beat, one step card per assembly step (lower-third revealed
 with waterfall-entry, calm hold, quick fade), a build-progress bar (stat-bars-and-fills, scaleX fill), the finale and
 walking titles, and a held end card (titlecard-reveal). Fonts are the renderer's bundled League Gothic (titles) and
 IBM Plex Mono (specs/data).
-Writes media/assembly-film/index.html and re-encodes the footage (1 s GOP) to media/assembly-film/assets/footage.mp4.
-Usage: .venv/Scripts/python tools/media/build_assembly_composition.py
+Writes <project>/index.html and re-encodes the footage (1 s GOP) to <project>/assets/footage.mp4.
+  JX1: media/assembly/{footage.mp4,timeline.json} (tools/media/assembly_film.py) -> media/assembly-film/
+  JX0: media/jx0_assembly/{footage.mp4,timeline.json} (tools/media/assembly_film_jx0.py) -> media/jx0-assembly-film/
+Usage: .venv/Scripts/python tools/media/build_assembly_composition.py [--robot jx1|jx0]
 """
 from __future__ import annotations
 
+import argparse
 import html
 import json
 import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-TL = json.loads((ROOT / "media" / "assembly" / "timeline.json").read_text(encoding="utf-8"))
-PROJ = ROOT / "media" / "assembly-film"
-REPO_URL = "github.com/nickthelegend/thenar-jx1"
-
-
-def section(step):
-    return "LOWER BODY" if step <= 12 else ("TORSO + POWER" if step <= 15 else ("ARMS" if step <= 20 else "HEAD"))
+ROBOTS = {
+    "jx1": {"name": "JX1", "src": ROOT / "media" / "assembly", "proj": ROOT / "media" / "assembly-film",
+            "url": "github.com/nickthelegend/thenar-jx1",
+            "intro": ("A 1.23 M HUMANOID YOU CAN BUILD IN INDIA", "23 DOF · 33.6 KG · 21 ROBSTRIDE ACTUATORS · OPEN CAD, FEA, BOM, SIM"),
+            "parts": "87 PARTS.",
+            "section": lambda k: "LOWER BODY" if k <= 12 else ("TORSO + POWER" if k <= 15 else ("ARMS" if k <= 20 else "HEAD")),
+            "finale": ("1.23 m tall · 33.6 kg · 23 degrees of freedom", "12-DOF legs · 2-motor parallel ankles · 48 V CAN actuators",
+                       "Aluminium structure · every part FEA-checked"),
+            "walk": "MuJoCo simulation of the CAD model · ZMP gait · 0.52 m/s",
+            "end": "CAD &#183; FEA &#183; BOM &#183; SIMULATION &#183; RL &#8212; all open. Build one."},
+    "jx0": {"name": "JX0", "src": ROOT / "media" / "jx0_assembly", "proj": ROOT / "media" / "jx0-assembly-film",
+            "url": "github.com/nickthelegend/thenar-jx1/tree/main/jx0",
+            "intro": ("THE WALKING, TALKING STS3215 HUMANOID YOU CAN BUILD AT HOME",
+                      "46 CM · {mass} KG · 17 STS3215 JOINTS · 3D-PRINTED · ₹58K IN PARTS"),
+            "parts": None,                                       # from the timeline
+            "section": lambda k: "LEGS" if k <= 9 else ("BODY" if k <= 10 else ("ARMS" if k <= 11 else "HEAD")),
+            "finale": ("46 cm tall · {mass} kg · 17 STS3215 joints", "double-sided leg joints · the hip-yaw disc held from both sides",
+                       "every printed leg part FEA-checked · walks, talks (Claude)"),
+            "walk": None,                                        # from the timeline
+            "end": "CAD &#183; FEA &#183; BOM &#183; SIMULATION &#183; ROBOT CODE &#8212; all open. Build one."},
+}
 
 
 def esc(s):
@@ -35,6 +52,14 @@ def items(s):
 
 
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--robot", choices=sorted(ROBOTS), default="jx1")
+    cfg = ROBOTS[ap.parse_args().robot]
+    TL = json.loads((cfg["src"] / "timeline.json").read_text(encoding="utf-8"))
+    PROJ, name, section = cfg["proj"], cfg["name"], cfg["section"]
+    if "mass_kg" in TL:                                      # numbers that come from the film's model
+        fill = lambda v: tuple(x.replace("{mass}", f"{TL['mass_kg']:.2f}") for x in v)  # noqa: E731
+        cfg = {**cfg, "intro": fill(cfg["intro"]), "finale": fill(cfg["finale"])}
     segs = TL["segments"]
     dur = TL["duration"]
     steps = [s for s in segs if s["kind"] == "step"]
@@ -50,9 +75,9 @@ def main():
     d = intro["end"] - intro["start"]
     clips.append(f'''      <section id="intro" class="clip" data-start="{intro['start']}" data-duration="{d}" data-track-index="2">
         <div class="intro-wrap">
-          <div class="mark"><span class="brand-dot"></span><span id="intro-jx1" class="wordmark">JX1</span></div>
-          <p id="intro-l1" class="mono lead">A 1.23 M HUMANOID YOU CAN BUILD IN INDIA</p>
-          <p id="intro-l2" class="mono small">{items("23 DOF · 33.6 KG · 21 ROBSTRIDE ACTUATORS · OPEN CAD, FEA, BOM, SIM")}</p>
+          <div class="mark"><span class="brand-dot"></span><span id="intro-jx1" class="wordmark">{name}</span></div>
+          <p id="intro-l1" class="mono lead">{esc(cfg["intro"][0])}</p>
+          <p id="intro-l2" class="mono small">{items(cfg["intro"][1])}</p>
         </div>
       </section>''')
     js.append(f'''      // intro — waterfall-entry (anchor wordmark, then two mono lines), fade out before the explode
@@ -68,7 +93,7 @@ def main():
     t = explode["start"]
     clips.append(f'''      <section id="explode" class="clip" data-start="{t}" data-duration="{d}" data-track-index="2">
         <div class="explode-wrap">
-          <p id="ex-1" class="display big">87 PARTS.</p>
+          <p id="ex-1" class="display big">{cfg["parts"] or f"{TL['parts']} PARTS."}</p>
           <p id="ex-2" class="display big accent">LET&#8217;S BUILD IT.</p>
         </div>
       </section>''')
@@ -109,10 +134,10 @@ def main():
     t, d = finale["start"], round(finale["end"] - finale["start"], 3)
     clips.append(f'''      <section id="finale" class="clip" data-start="{t}" data-duration="{d}" data-track-index="2">
         <div class="finale-wrap">
-          <p id="fi-1" class="display huge">JX1 &#8212; ASSEMBLED</p>
-          <p id="fi-2" class="mono lead">{items("1.23 m tall · 33.6 kg · 23 degrees of freedom")}</p>
-          <p id="fi-3" class="mono lead">{items("12-DOF legs · 2-motor parallel ankles · 48 V CAN actuators")}</p>
-          <p id="fi-4" class="mono lead">{items("Aluminium structure · every part FEA-checked")}</p>
+          <p id="fi-1" class="display huge">{name} &#8212; ASSEMBLED</p>
+          <p id="fi-2" class="mono lead">{items(cfg["finale"][0])}</p>
+          <p id="fi-3" class="mono lead">{items(cfg["finale"][1])}</p>
+          <p id="fi-4" class="mono lead">{items(cfg["finale"][2])}</p>
         </div>
       </section>''')
     js.append(f'''      // finale — waterfall-entry, fade before the walk
@@ -131,7 +156,7 @@ def main():
         clips.append(f'''      <section id="walk" class="clip" data-start="{t}" data-duration="{d}" data-track-index="2">
         <div class="walk-wrap">
           <p id="wa-1" class="display big accent">AND IT WALKS.</p>
-          <p id="wa-2" class="mono spec">{items("MuJoCo simulation of the CAD model · ZMP gait · 0.52 m/s")}</p>
+          <p id="wa-2" class="mono spec">{items(cfg["walk"] or walk["subtitle"])}</p>
         </div>
       </section>''')
         js.append(f'''      // walk title — waterfall-entry
@@ -143,9 +168,9 @@ def main():
     clips.append(f'''      <section id="endcard" class="clip" data-start="{end_card}" data-duration="{round(dur - end_card, 3)}" data-track-index="5">
         <div id="end-bg" class="end-bg"></div>
         <div class="end-wrap">
-          <div class="mark center"><span class="brand-dot"></span><span id="end-jx1" class="wordmark">JX1</span></div>
-          <p id="end-url" class="mono url">{REPO_URL}</p>
-          <p id="end-sub" class="mono small">CAD &#183; FEA &#183; BOM &#183; SIMULATION &#183; RL &#8212; all open. Build one.</p>
+          <div class="mark center"><span class="brand-dot"></span><span id="end-jx1" class="wordmark">{name}</span></div>
+          <p id="end-url" class="mono url">{cfg["url"]}</p>
+          <p id="end-sub" class="mono small">{cfg["end"]}</p>
         </div>
       </section>''')
     js.append(f'''      // end card — titlecard-reveal: one restrained move (slide-up crossfade), then a still hold
@@ -157,7 +182,7 @@ def main():
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1920, height=1080" />
-    <title>JX1 assembly</title>
+    <title>{name} assembly</title>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
       * {{ margin: 0; padding: 0; box-sizing: border-box; }}
@@ -218,7 +243,7 @@ def main():
 '''
     (PROJ / "index.html").write_text(doc, encoding="utf-8")
     (PROJ / "assets").mkdir(exist_ok=True)
-    src = ROOT / "media" / "assembly" / "footage.mp4"
+    src = cfg["src"] / "footage.mp4"
     dst = PROJ / "assets" / "footage.mp4"
     if not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime:
         # re-encode with a 1 s GOP: HyperFrames seeks the footage frame by frame (sparse keyframes freeze on seek)

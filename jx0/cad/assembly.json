@@ -137,6 +137,33 @@
    ]
   },
   {
+   "key": "keeper_L",
+   "part": "JX0_YawKeeper_L",
+   "name": "JX0_YawKeeper_L-1",
+   "pose_mm": [
+    0.0,
+    45.0,
+    0.0
+   ],
+   "R": [
+    [
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     1.0
+    ]
+   ]
+  },
+  {
    "key": "hip_yaw_L",
    "part": "JX0_HipYawBracket_L",
    "name": "JX0_HipYawBracket_L-1",
@@ -565,6 +592,33 @@
      0.0,
      -1.0,
      0.0
+    ]
+   ]
+  },
+  {
+   "key": "keeper_R",
+   "part": "JX0_YawKeeper_R",
+   "name": "JX0_YawKeeper_R-1",
+   "pose_mm": [
+    0.0,
+    -45.0,
+    0.0
+   ],
+   "R": [
+    [
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     1.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     1.0
     ]
    ]
   },

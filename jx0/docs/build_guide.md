@@ -1,7 +1,7 @@
 # JX0 build guide
 
-JX0 is 20 printed parts, 17 Feetech STS3215 servos (every joint, like the reference robot), a Raspberry Pi and a
-handful of small modules. Everything is in the [parts list](../bom/jx0_bom.csv): ₹58,234 from Indian online stores,
+JX0 is 22 printed parts, 17 Feetech STS3215 servos (every joint, like the reference robot), a Raspberry Pi and a
+handful of small modules. Everything is in the [parts list](../bom/jx0_bom.csv): ₹58,283 from Indian online stores,
 with prices checked 2026-10-04. Budget two weekends for printing and one for assembly and bring-up.
 
 Order of work: **buy → print → servo IDs → assemble → wire → bring-up → software**.
@@ -17,9 +17,17 @@ Every leg pitch and roll joint is **double-sided**, like the reference robot. Th
 
 So the joint's load goes through both ends of the servo instead of bending its output shaft. With the simulated
 walking loads, a one-plate joint (v0.3) would stress its plate past PETG's fatigue strength at every leg joint; the
-U-brackets keep every printed leg part at a fatigue safety factor of 2.3 or more (finite elements:
-[verification](../results/verification.md)). The hip-yaw joint is the one that stays single-sided: a thrust ring
-under the pelvis carries the leg's weight there.
+U-brackets keep every printed leg part at a fatigue safety factor of 2.1 or more (finite elements:
+[verification](../results/verification.md)).
+
+The **hip yaw** cannot be a U-bracket: its servo stands under the body with the hip-roll servo right below it. Instead
+the pelvis holds the yaw disc from both sides:
+- a **thrust ring** above it, part of the pelvis;
+- a **keeper** below it, a small printed C-shaped part whose lip runs under the disc's 3 mm flange. Four screws clamp
+  it to a boss on the pelvis.
+
+So the leg's bending goes from the disc into the pelvis, and the yaw servo's shaft is left with almost none of it. The
+hip yaw turns ±12°, more than twice what the gaits use.
 
 ## 1. Print
 
@@ -45,19 +53,20 @@ Neither is published for the STS3215.
 
 | Part | Qty | Printed mass | Size (mm) | Material, print tip |
 |---|---|---|---|---|
-| JX0_Pelvis (two hip-yaw cages, thrust rings) | 1 | 55.0 g | 52 × 128 × 38 | PETG near-solid; top plate down |
-| JX0_HipYawBracket_L / _R | 1 + 1 | 51.0 g each | 70 × 58 × 46 | PETG near-solid; disc face down |
+| JX0_Pelvis (two hip-yaw cages, thrust rings, keeper bosses) | 1 | 77.9 g | 52 × 139 × 39 | PETG near-solid; top plate down |
+| JX0_YawKeeper_L / _R | 1 + 1 | 2.8 g each | 31 × 42 × 8 | PETG near-solid; flat top down |
+| JX0_HipYawBracket_L / _R | 1 + 1 | 50.0 g each | 70 × 58 × 46 | PETG near-solid; disc face down, supports in the groove |
 | JX0_HipRollBracket_L / _R | 1 + 1 | 29.0 g each | 96 × 54 × 31 | PETG near-solid; rear arm down |
 | JX0_Thigh_L / _R | 1 + 1 | 44.3 g each | 52 × 48 × 92 | PETG near-solid; outer arm down |
 | JX0_Shin_L / _R | 1 + 1 | 25.2 g each | 31 × 48 × 84 | PETG near-solid; outer arm down |
 | JX0_AnkleBracket_L / _R | 1 + 1 | 35.9 g each | 72 × 61 × 33 | PETG near-solid; outer arm down |
 | JX0_Foot | 2 | 51.1 g each | 124 × 70 × 46 | PETG near-solid; sole down |
-| JX0_Torso (lower shell with the skirt) | 1 | 105.9 g | 84 × 120 × 140 | PLA; floor down |
+| JX0_Torso (lower shell with the skirt) | 1 | 103.4 g | 84 × 120 × 136 | PLA; floor down |
 | JX0_ChestCap | 1 | 46.4 g | 84 × 126 × 42 | PLA; upside down (top face on the bed), chamfers 45° |
 | JX0_Head | 1 | 66.8 g | 66 × 78 × 62 | PLA; upright on its floor, tree supports inside the rounded top |
 | JX0_UpperArm_L / _R (shoulder hood + elbow box) | 1 + 1 | 22.7 g each | 53 × 35 × 84 | PLA; outer plate down |
 | JX0_ArmBlade_L / _R | 1 + 1 | 15.3 g each | 36 × 8 × 116 | PLA; lying flat |
-| **Total** | **20** | **823 g** | | 528 g PETG + 295 g PLA |
+| **Total** | **22** | **847 g** | | 555 g PETG + 293 g PLA |
 
 ## 2. Before assembly: servo IDs and centring
 
@@ -81,9 +90,15 @@ Legs, top down (left shown; the right is the mirror image):
 
 1. **Pelvis.** Slide each hip-yaw servo into its pelvis cage from below, horn end down, and screw it through the top
    plate (4 × M2 × 6, heads sunk). Fit the yaw horn.
-2. **Hip-yaw bracket.** Slide the hip-roll servo into the bracket's cage from the front, horn off, and screw it through
-   the back plate. Put one layer of PTFE tape on the top of the disc. Bolt the disc to the yaw horn from below
-   (4 × M2 × 10 through the sunk holes). The disc now rides 0.3 mm under the pelvis's thrust ring.
+2. **Hip-yaw bracket and keeper.**
+   - Slide the hip-roll servo into the bracket's cage from the front, horn off, and screw it through the back plate.
+   - Put one layer of PTFE tape on the top of the disc and one under its flange (the rim above the groove).
+   - Bolt the disc to the yaw horn from below (4 × M2 × 10 through the sunk holes). It rides 0.1 mm under the
+     pelvis's thrust ring.
+   - Slide the **keeper** in sideways from the outer front of the hip, its lip into the groove under the disc's
+     flange, and clamp it flat against the pelvis's boss with 4 × M2 × 10 from below.
+   - Turn the leg by hand: it must turn freely through ±12° with no up-and-down wobble at the disc's rim. If it wobbles,
+     add a layer of PTFE tape under the flange; if it binds, take one off. Do this before fitting anything below.
 3. **Hip-roll bracket.** First fit it to the hip-roll servo, horn on:
    - slide it on from below, rear boss over the cage's back plate;
    - put the 4 horn screws in from inside its empty pitch cage (heads sunk), then 4 × M2 × 10 into the hub.
@@ -142,9 +157,9 @@ part's orientation is unclear.
 |---|---|---|
 | M2 × 6 socket screws (66) | servo cases (3 or 4 per servo), hip-roll horns | size ASSUMED: fit-check on the first bracket |
 | M2 × 8 (36) | U-bracket horn arms, head | |
-| M2 × 10 (56) | U-bracket hub arms through the boss, hip-yaw discs, shoulder pads | |
+| M2 × 10 (64) | U-bracket hub arms through the boss, hip-yaw discs, hip-yaw keepers, shoulder pads | |
 | M2 × 12 (8) | arm blades | |
 | M3 × 8 socket screws (8) + M3 heat-set inserts | torso to pelvis, chest cap to torso | |
-| PTFE thread-seal tape | top of each hip-yaw disc (or silicone grease) | |
+| PTFE thread-seal tape | top of each hip-yaw disc and under its flange: layers set the keeper's play (or silicone grease) | |
 | 1 mm rubber sheet | foot soles | any thin anti-slip mat works |
 | Hot glue, zip ties, double-sided foam tape | microphone, battery, wiring | |

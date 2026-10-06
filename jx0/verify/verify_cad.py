@@ -1,7 +1,7 @@
 """JX0 mechanical verification on the exact CAD geometry (geometry.py built with manifold3d, the same solids SolidWorks
 builds), no SolidWorks needed:
 
-1. static interference: every pair of the 37 components (20 printed parts + 17 STS3215) at the zero pose and in the
+1. static interference: every pair of the 39 components (22 printed parts + 17 STS3215) at the zero pose and in the
    walking stance, as an intersection volume;
 2. motion interference: the robot posed at every 0.1 s of all 14 verified gaits (legs + arm swing, as exported to the
    robot) and through every action (wave, nod, look), checking every pair of components on different links;
