@@ -1,6 +1,6 @@
 # In-house actuators (JXA family): research paper and design tools
 
-**[JXA_inhouse_actuator_research_paper.pdf](JXA_inhouse_actuator_research_paper.pdf)** (20 pages, 6 Oct 2026) covers:
+**[JXA_inhouse_actuator_research_paper.pdf](JXA_inhouse_actuator_research_paper.pdf)** is an IEEE-style two-column research paper (8 pages, LaTeX, Oct 2026). It covers:
 - how a permanent-magnet motor makes torque, starting from magnetism;
 - what is inside RobStride, Damiao, Unitree and other actuators;
 - how much torque JX1 and full-size humanoids need;
@@ -28,8 +28,8 @@ built yet. The model reproduces the RobStride RS04 datasheet within 3–20 % (K<
 |---|---|
 | `qdd_design.py` | Motor + gearbox + thermal design of the three classes → `results/design.json`, `results/variants.json`, `figures/torque_speed.png`, `figures/winding_layouts.png`, `figures/jxa120_section.png` |
 | `cost_model.py` | Make-vs-buy cost at prototype / batch / 1,000-per-year scale, equipment budgets, scenarios, break-even → `results/cost.json`, `figures/cost_*.png` |
-| `paper_text.py` | Fixed text of the paper (physics primer, winding procedure, build sequence) |
-| `make_paper.py` | Builds the PDF from the results (HTML printed with headless Chromium) |
+| `make_paper.py` | Writes the LaTeX source from the results and compiles the PDF (IEEEtran) |
+| `latex_tools.py` | Small LaTeX helpers shared with `business/make_business_report.py` |
 
 Run them in this order:
 
@@ -39,7 +39,7 @@ python actuators/inhouse/cost_model.py
 python actuators/inhouse/make_paper.py
 ```
 
-Requirements: numpy, matplotlib, and a Chromium or Chrome binary.
+Requirements: numpy, matplotlib, and TeX Live with IEEEtran (`apt-get install texlive-latex-extra texlive-publishers texlive-science lmodern latexmk`).
 
 ## Research logs used
 

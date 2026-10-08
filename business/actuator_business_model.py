@@ -127,7 +127,7 @@ def plots(res):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8.5, "axes.spines.top": False, "axes.spines.right": False})
+    plt.rcParams.update({"font.family": "serif", "font.serif": ["STIXGeneral", "DejaVu Serif"], "mathtext.fontset": "stix", "font.size": 8.5, "axes.spines.top": False, "axes.spines.right": False})
     fig, ax = plt.subplots(figsize=(6.8, 3.3))
     v = [c["units_per_year"] for c in res["curve"]]; y = [c["unit_cost"] / 1000 for c in res["curve"]]
     ax.plot(v, y, "-o", color="#14213d", lw=2, ms=4, label="JXA-120 direct cost in India (ESTIMATED)")
@@ -136,7 +136,7 @@ def plots(res):
     for s in res["stages"][1:]:
         ax.axvline(s["units"], color="#c9a227", lw=0.8, alpha=0.7)
         ax.text(s["units"], max(y) * 0.92, s["name"].split(":")[0], rotation=90, va="top", ha="right", fontsize=7, color="#8a6d00")
-    ax.set_xscale("log"); ax.set_xlabel("units per year"); ax.set_ylabel("₹ thousand per actuator")
+    ax.set_xscale("log"); ax.set_xlabel("units per year"); ax.set_ylabel("INR thousand per actuator")
     ax.grid(alpha=0.25); ax.legend(fontsize=7, frameon=False, loc="upper right")
     fig.tight_layout(); fig.savefig(FIG / "learning_curve.png", dpi=200); plt.close(fig)
 
@@ -145,13 +145,13 @@ def plots(res):
     raise_ = [s["capital_to_raise"] / 1e7 for s in res["stages"]]
     rev = [s["revenue_per_yr"] / 1e7 for s in res["stages"]]
     x = range(len(names))
-    ax.bar([i - 0.2 for i in x], raise_, width=0.4, color="#b0413e", label="capital to raise (₹ crore)")
-    ax.bar([i + 0.2 for i in x], rev, width=0.4, color="#14213d", label="revenue per year at end of stage (₹ crore)")
+    ax.bar([i - 0.2 for i in x], raise_, width=0.4, color="#b0413e", label="capital to raise (INR crore)")
+    ax.bar([i + 0.2 for i in x], rev, width=0.4, color="#14213d", label="revenue per year at end of stage (INR crore)")
     for i, (a, b) in enumerate(zip(raise_, rev)):
         ax.text(i - 0.2, a, f"{a:.1f}", ha="center", va="bottom", fontsize=7)
         ax.text(i + 0.2, b, f"{b:.1f}", ha="center", va="bottom", fontsize=7)
     ax.set_xticks(list(x)); ax.set_xticklabels(names, fontsize=7.5); ax.set_yscale("symlog", linthresh=1)
-    ax.set_ylabel("₹ crore (log scale)"); ax.legend(fontsize=7, frameon=False); ax.grid(axis="y", alpha=0.25)
+    ax.set_ylabel("INR crore (log scale)"); ax.legend(fontsize=7, frameon=False); ax.grid(axis="y", alpha=0.25)
     fig.tight_layout(); fig.savefig(FIG / "capital_plan.png", dpi=200); plt.close(fig)
 
 

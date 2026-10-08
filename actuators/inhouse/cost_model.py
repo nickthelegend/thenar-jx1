@@ -230,7 +230,7 @@ def plots(res):
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     import numpy as np
-    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8.5, "axes.spines.top": False, "axes.spines.right": False})
+    plt.rcParams.update({"font.family": "serif", "font.serif": ["STIXGeneral", "DejaVu Serif"], "mathtext.fontset": "stix", "font.size": 8.5, "axes.spines.top": False, "axes.spines.right": False})
 
     # 1. per-unit cost: in-house tiers vs buy options, per class (log scale is avoided so the gap is honest)
     fig, axes = plt.subplots(1, 3, figsize=(10.5, 3.6))
@@ -250,7 +250,7 @@ def plots(res):
                 ax.text(b_.get_x() + b_.get_width() / 2, v / 1000 + 1, f"{v / 1000:.0f}k", ha="center", fontsize=7)
         ax.set_xticks(range(6)); ax.set_xticklabels(labels, fontsize=7)
         ax.set_title(f"{cls} vs {c['buy']['ref']}", fontsize=8.5, fontweight="bold")
-        ax.set_ylabel("₹ thousand per actuator"); ax.grid(axis="y", alpha=0.25)
+        ax.set_ylabel("INR thousand per actuator"); ax.grid(axis="y", alpha=0.25)
         top = max(max(vals), max(loaded))
         ax.set_ylim(0, top / 1000 * 1.1)
     axes[0].legend(fontsize=6.5, frameon=False, loc="upper right")
@@ -259,11 +259,11 @@ def plots(res):
     # 2. cost breakdown of a JXA-120 at the three tiers (stacked)
     c = res["classes"]["JXA-120"]
     keys = list(c["unit"]["P"]["lines"].keys())
-    fig, ax = plt.subplots(figsize=(7.6, 3.5))
+    fig, ax = plt.subplots(figsize=(4.2, 4.6))
     cmap = plt.get_cmap("tab20")
     left = np.zeros(4)
     rows = [c["unit"][t]["lines"] for t in TIERS] + [None]
-    names = [TIER_NAME[t] for t in TIERS] + ["China maker COGS (est.)"]
+    names = ["Prototype", "Batch 25/yr", "1,000/yr", "China COGS"]
     cogs = c["buy"]["china_cogs_split"]
     for j, k in enumerate(keys):
         v = np.array([r[k] for r in rows[:3]] + [0]) / 1000
@@ -273,11 +273,11 @@ def plots(res):
     for j, (k, v) in enumerate(cogs.items()):
         ax.barh(names[3], v / 1000, left=left_c, color=plt.get_cmap("Greys")(0.35 + 0.12 * j), height=0.6)
         left_c += v / 1000
-    ax.invert_yaxis(); ax.set_xlabel("₹ thousand per JXA-120 / RS04-class actuator")
-    ax.legend(fontsize=6, frameon=False, loc="center left", bbox_to_anchor=(1.0, 0.5))
+    ax.invert_yaxis(); ax.set_xlabel("INR thousand per JXA-120 / RS04-class actuator")
+    ax.legend(fontsize=6.5, frameon=False, loc="upper center", bbox_to_anchor=(0.45, -0.17), ncol=2)
     for y, t in enumerate(TIERS):
-        ax.text(c["unit"][t]["total"] / 1000 + 0.8, y, f"₹{c['unit'][t]['total'] / 1000:.1f}k", va="center", fontsize=7)
-    ax.text(left_c + 0.8, 3, f"₹{left_c:.1f}k", va="center", fontsize=7)
+        ax.text(c["unit"][t]["total"] / 1000 + 0.8, y, f"INR {c['unit'][t]['total'] / 1000:.1f}k", va="center", fontsize=7)
+    ax.text(left_c + 0.8, 3, f"INR {left_c:.1f}k", va="center", fontsize=7)
     ax.grid(axis="x", alpha=0.25)
     fig.tight_layout(); fig.savefig(FIG / "cost_breakdown_jxa120.png", dpi=200); plt.close(fig)
 
@@ -288,7 +288,7 @@ def plots(res):
         n = [int(k) for k in v["per_part"]]; c = list(v["per_part"].values())
         ax.plot(n, c, "-o", ms=3.5, lw=1.8, color=col, label=name)
     ax.set_xscale("log"); ax.set_yscale("log"); ax.set_ylim(300, 30000)
-    ax.set_xlabel("housings made (lot size)"); ax.set_ylabel("₹ per finished housing (log)")
+    ax.set_xlabel("housings made (lot size)"); ax.set_ylabel("INR per finished housing (log)")
     ax.grid(alpha=0.25, which="both"); ax.legend(fontsize=6.8, frameon=False, loc="upper right")
     fig.tight_layout(); fig.savefig(FIG / "housing_routes.png", dpi=200); plt.close(fig)
 

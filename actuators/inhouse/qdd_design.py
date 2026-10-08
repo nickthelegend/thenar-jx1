@@ -395,7 +395,7 @@ def plots(results):
     import matplotlib.pyplot as plt
     from matplotlib.patches import Wedge, Circle, Rectangle, FancyArrowPatch
 
-    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 9, "axes.spines.top": False,
+    plt.rcParams.update({"font.family": "serif", "font.serif": ["STIXGeneral", "DejaVu Serif"], "mathtext.fontset": "stix", "font.size": 9, "axes.spines.top": False,
                          "axes.spines.right": False, "axes.grid": True, "grid.alpha": 0.25})
     colors = {"A": "#c0392b", "B": "#2e7d32", "C": "#1f5fa8"}
     ref = {"JXA-40": [("RS06", 36, 50.3), ("Damiao J8009P", 40, 35.1)],
@@ -463,7 +463,7 @@ def plots(results):
         ("ring gear (fixed)", "#ffb300", [(xg, rr, b, Rh - rr)]),
         ("output carrier", "#78909c", [(xg - 1.8, 4, 1.2, ac + 4), (xg + b + 0.6, 4, 1.2, ac + 6), (xg + b + 1.8, 4, 5, 6)]),
     ]
-    fig, ax = plt.subplots(figsize=(7.4, 4.6)); ax.set_aspect("equal"); ax.axis("off")
+    fig, ax = plt.subplots(figsize=(4.0, 4.9)); ax.set_aspect("equal"); ax.axis("off")
     handles = []
     from matplotlib.patches import Patch
     for lab, col, rects in parts:
@@ -476,9 +476,9 @@ def plots(results):
     ax.text((xg + b - 3) / 2, -Rh - 10, f"≈ {xg + b + 31:.0f} mm", ha="center", fontsize=7)
     ax.annotate("", xy=(xg + b + 16, Rh + 2.2), xytext=(xg + b + 16, -Rh - 2.2), arrowprops=dict(arrowstyle="<->", lw=0.6))
     ax.text(xg + b + 18, 0, f"Ø {2 * Rh + 4.4:.0f} mm", rotation=90, va="center", fontsize=7)
-    ax.legend(handles=handles, loc="center left", bbox_to_anchor=(1.0, 0.5), fontsize=6.8, frameon=False)
+    ax.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.5, 0.0), ncol=2, fontsize=7, frameon=False)
     ax.set_xlim(-27, xg + b + 22); ax.set_ylim(-Rh - 13, Rh + 5)
-    ax.set_title("JXA-120 section (to scale): outer-rotor motor + single-stage 9:1 planetary", fontsize=9, fontweight="bold")
+    ax.set_title("JXA-120 section (to scale)", fontsize=9, fontweight="bold")
     fig.tight_layout(); fig.savefig(FIG / "jxa120_section.png", dpi=220); plt.close(fig)
 
 
