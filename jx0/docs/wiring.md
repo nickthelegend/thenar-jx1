@@ -30,14 +30,18 @@ flowchart LR
 
 ## The servo bus
 
-Every STS3215 has two identical 3-pin connectors, so the servos chain one into the next. Use three chains from the
-driver board:
+Every STS3215 has two identical 3-pin connectors, so the servos chain one into the next, and every servo on the bus
+has its own ID, so one driver board runs all 17. The board has two servo ports (both are the same bus), so use two
+chains:
 
-| Chain | Servos (bus ID) |
+| Port | Chain (bus ID) |
 |---|---|
-| Left leg | hip yaw 1 → hip roll 2 → hip pitch 3 → knee 4 → ankle pitch 5 → ankle roll 6 |
-| Right leg | hip yaw 7 → hip roll 8 → hip pitch 9 → knee 10 → ankle pitch 11 → ankle roll 12 |
-| Arms and neck | left shoulder 13 → left elbow 14 → neck 17 → right shoulder 15 → right elbow 16 |
+| 1 | left leg: hip yaw 1 → hip roll 2 → hip pitch 3 → knee 4 → ankle pitch 5 → ankle roll 6 |
+| 2 | arms and neck, then the right leg: left shoulder 13 → left elbow 14 → neck 17 → right shoulder 15 → right elbow 16 → (a servo extension down through the torso floor) → right hip yaw 7 → hip roll 8 → hip pitch 9 → knee 10 → ankle pitch 11 → ankle roll 12 |
+
+Feed the board's power through its green screw terminal with the 16 AWG wire, not the 5.5 × 2.1 mm barrel jack: in
+simulation the 17 servos draw about 1 A on average while walking and about 2 A in short peaks, more when they push
+hard.
 
 The IDs are in `jx0/software/jx0bot/config.yaml`. Every servo ships as ID 1, so set them with `calibrate.py set-id`,
 **one servo at a time** (see [bringup.md](bringup.md)). Connect the driver board to the Pi by USB; the Pi sees it as

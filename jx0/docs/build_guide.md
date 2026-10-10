@@ -1,7 +1,7 @@
 # JX0 build guide
 
 JX0 is 22 printed parts, 17 Feetech STS3215 servos (every joint, like the reference robot), a Raspberry Pi and a
-handful of small modules. Everything is in the [parts list](../bom/jx0_bom.csv): ₹58,283 from Indian online stores,
+handful of small modules. Everything is in the [parts list](../bom/jx0_bom.csv): ₹58,215 from Indian online stores,
 with prices checked 2026-10-04. Budget two weekends for printing and one for assembly and bring-up.
 
 Order of work: **buy → print → servo IDs → assemble → wire → bring-up → software**.

@@ -30,7 +30,7 @@
 JX1's parts cost about ₹7 lakh. **[JX0](jx0/README.md)** is the small version you can build now: 46 cm tall, printed
 in pastel green, **every one of its 17 joints a Feetech STS3215 12 V servo**, styled after a friend's working robot,
 with the same **double-sided leg joints** (every leg servo held on its horn and its rear hub by a U-bracket). It
-**walks with its arms swinging, stays up through hard pushes, and talks (Claude)**, for **₹58,283** in parts. It uses
+**walks with its arms swinging, stays up through hard pushes, and talks (Claude)**, for **₹58,215** in parts. It uses
 the same design pipeline as JX1:
 - the SolidWorks CAD is built by script;
 - the servo sizing passes;

@@ -6,7 +6,7 @@
 
 <p align="center">
   <b>46 cm · 2.88 kg · 17 joints, every one a Feetech STS3215 12 V · double-sided leg joints · walks with its arms
-  swinging · talks (Claude) · ₹58,283 in parts</b><br>
+  swinging · talks (Claude) · ₹58,215 in parts</b><br>
   3D-printed in pastel green, styled after a friend's working STS3215 robot. Full SolidWorks CAD, a verified walking
   simulation, a strength check of every leg part, the robot program and a parts list with Indian suppliers are all in
   this folder.
@@ -132,7 +132,7 @@ takes a shove, and knocks over a bottle on the way. JX0 matches that:
 | The whole robot program, an 8-action mission, random realistic errors | **24 of 24** completed without a fall |
 | Pushes mid-walk (48 timings each) | stays up through **every** push up to 0.96 N·s; 90 % at 1.2 N·s, 44 % at 1.44 N·s |
 | Robot program (voice, Claude brain, walking, gestures) | **written, unit-tested (21 tests) and run in simulation**; not yet on hardware |
-| Parts list | ₹58,283; STS3215 price and stock checked 2026-10-04 ([8-page cost estimate](bom/JX0_cost_estimate.pdf)) |
+| Parts list | ₹58,215; STS3215 price and stock checked 2026-10-04 ([8-page cost estimate](bom/JX0_cost_estimate.pdf)) |
 | Physical robot | **not built yet**: this is what the funding is for |
 
 All of it is in the **[verification report](results/verification.md)**: what was checked, what it found and fixed, and
@@ -166,15 +166,15 @@ is about 73 minutes of walking (CALCULATED: 1.45 A average for the servos and th
 | Group | ₹ |
 |---|---|
 | Servos: 17 × STS3215 | 41,123 |
-| Electronics: Pi 4, microSD, servo driver, button, wiring | 9,219 |
+| Electronics: Pi 4, microSD, servo driver, button, wiring | 9,151 |
 | Structure: PLA and PETG filament, screws, inserts, rubber, PTFE tape | 4,123 |
 | Power: LiPo, charger, UBEC, switch, wire, alarm | 3,122 |
 | Voice: microphone, amplifier, speaker | 569 |
 | Sensors: IMU | 127 |
-| **Total** | **58,283** |
+| **Total** | **58,215** |
 
 Line by line with store links: [bom/jx0_bom.csv](bom/jx0_bom.csv). The 17 servos are 71 % of the cost. JX0 is
-₹8,283 over the original ₹50,000 target because every joint is an STS3215, as on the reference robot. The walking
+₹8,215 over the original ₹50,000 target because every joint is an STS3215, as on the reference robot. The walking
 needs 2.0 N·m at the hip roll (with the 1.25–1.5× margins), which rules out MG996R-class hobby servos, and the serial
 bus servos also report their position, which the calibration and the balance loop use.
 
