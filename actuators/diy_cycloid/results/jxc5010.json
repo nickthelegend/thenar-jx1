@@ -1,0 +1,193 @@
+{
+  "cycloid": {
+    "n_pins": 21,
+    "r_pin_circle": 32.0,
+    "d_pin": 4.0,
+    "ecc": 1.0,
+    "disc_t": 7.0,
+    "clearance": 0.1,
+    "n_out": 6,
+    "r_out": 21.0,
+    "d_out_pin": 4.0,
+    "d_out_roller": 7.0,
+    "roller_w": 5.0,
+    "ecc_bearing": [
+      17.0,
+      26.0,
+      5.0
+    ],
+    "out_bearing": [
+      50.0,
+      65.0,
+      7.0
+    ],
+    "housing_od": 82.0
+  },
+  "ratio": 20,
+  "v_bus": 24.0,
+  "eta": 0.85,
+  "gear_limit_Nm": 10.0,
+  "gear_cont_Nm": 4.0,
+  "options": [
+    {
+      "motor": "5010 360KV (Robu, your pick)",
+      "driver": "SimpleFOCmini (your pick)",
+      "kt": 0.02297222222222222,
+      "i_peak": 2.5,
+      "i_cont": 2.0,
+      "peak_Nm_motor_limited": 0.9763194444444443,
+      "cont_Nm": 0.7810555555555555,
+      "noload_rad_s": 45.23893421169302,
+      "price_motor_driver": 2968
+    },
+    {
+      "motor": "5010 360KV (Robu, your pick)",
+      "driver": "ST B-G431B-ESC1",
+      "kt": 0.02297222222222222,
+      "i_peak": 20,
+      "i_cont": 10,
+      "peak_Nm_motor_limited": 7.810555555555554,
+      "cont_Nm": 3.905277777777777,
+      "noload_rad_s": 45.23893421169302,
+      "price_motor_driver": 5039
+    },
+    {
+      "motor": "5010 360KV (Robu, your pick)",
+      "driver": "Flipsky ODESC V4.2",
+      "kt": 0.02297222222222222,
+      "i_peak": 20,
+      "i_cont": 10,
+      "peak_Nm_motor_limited": 7.810555555555554,
+      "cont_Nm": 3.905277777777777,
+      "noload_rad_s": 45.23893421169302,
+      "price_motor_driver": 9589
+    },
+    {
+      "motor": "Tarot 5010 130KV (Robu)",
+      "driver": "SimpleFOCmini (your pick)",
+      "kt": 0.06361538461538462,
+      "i_peak": 2.5,
+      "i_cont": 2.0,
+      "peak_Nm_motor_limited": 2.703653846153846,
+      "cont_Nm": 2.162923076923077,
+      "noload_rad_s": 16.336281798666924,
+      "price_motor_driver": 5508
+    },
+    {
+      "motor": "Tarot 5010 130KV (Robu)",
+      "driver": "ST B-G431B-ESC1",
+      "kt": 0.06361538461538462,
+      "i_peak": 15,
+      "i_cont": 7,
+      "peak_Nm_motor_limited": 16.221923076923076,
+      "cont_Nm": 7.570230769230768,
+      "noload_rad_s": 16.336281798666924,
+      "price_motor_driver": 7579
+    },
+    {
+      "motor": "Tarot 5010 130KV (Robu)",
+      "driver": "Flipsky ODESC V4.2",
+      "kt": 0.06361538461538462,
+      "i_peak": 15,
+      "i_cont": 7,
+      "peak_Nm_motor_limited": 16.221923076923076,
+      "cont_Nm": 7.570230769230768,
+      "noload_rad_s": 16.336281798666924,
+      "price_motor_driver": 12129
+    }
+  ],
+  "checks": {
+    "4.0": {
+      "ratio": 20,
+      "lambda_short_amplitude": 0.65625,
+      "profile_simple_no_self_intersection": true,
+      "min_concave_radius_mm": 3.3380211747474635,
+      "disc_r_max_mm": 30.900000000000002,
+      "disc_r_min_mm": 28.9,
+      "output_hole_d_mm": 9.0,
+      "wall_hole_to_bore_mm": 3.5,
+      "wall_hole_to_root_mm": 3.3999999999999986,
+      "pin_pitch_mm": 9.574377610940322,
+      "torque_per_disc_Nm": 2.2,
+      "ring_pin_force_max_N": 20.952380952380953,
+      "output_pin_force_max_N": 69.84126984126985,
+      "contact_pressure_ring_pin_MPa": {
+        "PLA/PETG": 43.65236042130991,
+        "PA-CF": 53.4630045501365
+      },
+      "contact_pressure_output_roller_MPa": {
+        "PLA/PETG": 33.60360272000779,
+        "PA-CF": 41.155840091609996
+      },
+      "output_pin_bending_MPa": 127.82920826110959
+    },
+    "8.0": {
+      "ratio": 20,
+      "lambda_short_amplitude": 0.65625,
+      "profile_simple_no_self_intersection": true,
+      "min_concave_radius_mm": 3.3380211747474635,
+      "disc_r_max_mm": 30.900000000000002,
+      "disc_r_min_mm": 28.9,
+      "output_hole_d_mm": 9.0,
+      "wall_hole_to_bore_mm": 3.5,
+      "wall_hole_to_root_mm": 3.3999999999999986,
+      "pin_pitch_mm": 9.574377610940322,
+      "torque_per_disc_Nm": 4.4,
+      "ring_pin_force_max_N": 41.904761904761905,
+      "output_pin_force_max_N": 139.6825396825397,
+      "contact_pressure_ring_pin_MPa": {
+        "PLA/PETG": 61.73376013741499,
+        "PA-CF": 75.60810612001752
+      },
+      "contact_pressure_output_roller_MPa": {
+        "PLA/PETG": 47.52267071123244,
+        "PA-CF": 58.203147228413215
+      },
+      "output_pin_bending_MPa": 255.65841652221917
+    },
+    "10.0": {
+      "ratio": 20,
+      "lambda_short_amplitude": 0.65625,
+      "profile_simple_no_self_intersection": true,
+      "min_concave_radius_mm": 3.3380211747474635,
+      "disc_r_max_mm": 30.900000000000002,
+      "disc_r_min_mm": 28.9,
+      "output_hole_d_mm": 9.0,
+      "wall_hole_to_bore_mm": 3.5,
+      "wall_hole_to_root_mm": 3.3999999999999986,
+      "pin_pitch_mm": 9.574377610940322,
+      "torque_per_disc_Nm": 5.5,
+      "ring_pin_force_max_N": 52.38095238095237,
+      "output_pin_force_max_N": 174.6031746031746,
+      "contact_pressure_ring_pin_MPa": {
+        "PLA/PETG": 69.02044208696333,
+        "PA-CF": 84.53243246718853
+      },
+      "contact_pressure_output_roller_MPa": {
+        "PLA/PETG": 53.131961091327014,
+        "PA-CF": 65.07309685358021
+      },
+      "output_pin_bending_MPa": 319.57302065277395
+    }
+  },
+  "cad": {
+    "files": [
+      "cycloid_disc_x2.dxf",
+      "cycloid_disc_x2.stl",
+      "eccentric_cam_MEASURE_FIRST.dxf",
+      "eccentric_cam_MEASURE_FIRST.stl",
+      "motor_adapter_MEASURE_FIRST.dxf",
+      "motor_adapter_MEASURE_FIRST.stl",
+      "motor_spacer_ring.dxf",
+      "motor_spacer_ring.stl",
+      "output_carrier.dxf",
+      "output_carrier.stl",
+      "output_retainer_ring.dxf",
+      "output_retainer_ring.stl",
+      "ring_pin_housing.dxf",
+      "ring_pin_housing.stl"
+    ],
+    "motor_bolt_pcd_assumed_mm": 25.0,
+    "prop_pcd_assumed_mm": 16.0
+  }
+}
