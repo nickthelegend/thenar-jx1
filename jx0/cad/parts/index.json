@@ -20,19 +20,19 @@
    68.62
   ],
   "bbox_ok": true,
-  "volume_cm3": 76.67,
-  "solid_mass_g_petg": 97.4,
-  "printed_mass_g": 77.9,
+  "volume_cm3": 76.59,
+  "solid_mass_g_petg": 97.3,
+  "printed_mass_g": 77.8,
   "print_fill": 0.8,
   "features": 51,
   "triangles": 4090,
   "com_mm": [
    1.29,
    0.0,
-   52.32
+   52.3
   ],
   "quantity": 1,
-  "build_s": 71.7
+  "build_s": 289.7
  },
  "JX0_HipYawBracket_L": {
   "part": "JX0_HipYawBracket_L",

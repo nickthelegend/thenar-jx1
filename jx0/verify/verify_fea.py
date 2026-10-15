@@ -123,8 +123,8 @@ def parts(series):
     y_s = G.yaw_servo(1)
     z_in = (y_s.c["z"] + G.HC) / 1000                                       # yaw case's rear face (plate underside)
 
-    def pelvis_support(m):                                                  # the 4 bolts into the torso floor
-        return np.concatenate([m.face_annulus(2, G.TZ0 / 1000, (x / 1000, y / 1000, G.TZ0 / 1000), 0.0016, 0.0045)
+    def pelvis_support(m):                                                  # the 4 screws from the torso floor
+        return np.concatenate([m.face_annulus(2, G.TZ0 / 1000, (x / 1000, y / 1000, G.TZ0 / 1000), 0.0020, 0.0045)
                                for x in (-20.0, 24.0) for y in (-25.0, 25.0)])
 
     def pelvis_load(m):                                                     # the left yaw servo's case, on its plate

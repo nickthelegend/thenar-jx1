@@ -396,9 +396,9 @@ def pelvis():
               ("hole", "z", c, 23.0, (ZY + 0.1, ZY + HF - HC + 0.1))]
         for a in KEEP_SCREWS:                                                               # keeper screws (M2 x 10)
             p.append(("hole", "z", polar(KEEP_SCREW_R, sy * a, c), 1.8, (ZY + 0.1, BOSS_TOP - 0.8)))
-    for x in (-20.0, 24.0):                                                                 # bolts to the torso floor
-        for y in (-25.0, 25.0):
-            p.append(("hole", "z", (x, y), 3.2, (zr - 0.1, TZ0 + 0.1)))
+    for x in (-20.0, 24.0):                                                                 # the torso floor's 4 M3 x 8
+        for y in (-25.0, 25.0):                                                             # screws: M3 x 4 heat-set
+            p.append(("hole", "z", (x, y), 4.0, (zr - 0.1, TZ0 + 0.1)))                    # inserts in the 4 mm plate
     return p
 
 

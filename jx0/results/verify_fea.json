@@ -16,9 +16,9 @@
  "parts": {
   "pelvis": {
    "loaded_by": "l_hip_yaw (parent frame), split by the keeper",
-   "elements": 224820,
-   "dof": 808269,
-   "support_nodes": 456,
+   "elements": 224640,
+   "dof": 807801,
+   "support_nodes": 408,
    "load_nodes": 5217,
    "load_components": 12,
    "instants": {
@@ -31,7 +31,7 @@
    "worst_mpa_max": 49.84,
    "fatigue_safety": 2.4,
    "static_safety": 5.1,
-   "seconds": 289.6
+   "seconds": 488.1
   },
   "yaw_keeper": {
    "loaded_by": "l_hip_yaw: the disc on the keeper's lip",
@@ -167,5 +167,5 @@
    "seconds": 50.9
   }
  },
- "seconds": 613.2
+ "seconds": 573.6
 }

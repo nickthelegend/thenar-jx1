@@ -138,7 +138,8 @@ Body, arms and head:
     - Fit the speaker under the round grille.
     - Bolt each **shoulder horn** to its pad on the cap's side wall from inside the cap (4 × M2 × 10); the arm now
       hangs from the pad.
-    - Slide the cap over the torso lip and fix it with 4 screws through the cap wall, front and back.
+    - Slide the cap over the torso lip and fix it with 4 × M3 × 8 through the cap wall, front and back (they cut
+      their own thread in the lip's 2.5 mm holes; do not overtighten).
 11. **Head** onto the neck horn (centre screw + 4 horn screws). Glue the microphone behind the four face holes and take
     its cable down through the hole in the head floor, with slack for ±80° of head turn.
 
@@ -159,7 +160,9 @@ part's orientation is unclear.
 | M2 × 8 (36) | U-bracket horn arms, head | |
 | M2 × 10 (64) | U-bracket hub arms through the boss, hip-yaw discs, hip-yaw keepers, shoulder pads | |
 | M2 × 12 (8) | arm blades | |
-| M3 × 8 socket screws (8) + M3 heat-set inserts | torso to pelvis, chest cap to torso | |
+| M3 × 8 socket screws (8) | torso floor to the pelvis (4, into the inserts); chest cap to the torso lip (4, they cut their own thread in its 2.5 mm holes) | |
+| M3 × 4 brass heat-set inserts (4) | the pelvis plate's four 4.0 mm holes | press in with a soldering iron at about 220 °C |
+| Nuts, washers | none needed | every screw goes into a printed thread, an insert or a servo horn |
 | PTFE thread-seal tape | top of each hip-yaw disc and under its flange: layers set the keeper's play (or silicone grease) | |
 | 1 mm rubber sheet | foot soles | any thin anti-slip mat works |
 | Hot glue, zip ties, double-sided foam tape | microphone, battery, wiring | |
