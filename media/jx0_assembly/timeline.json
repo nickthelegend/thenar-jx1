@@ -1,7 +1,8 @@
 {
  "fps": 30,
  "duration": 66.667,
- "parts": 39,
+ "parts": 42,
+ "mass_kg": 2.875,
  "segments": [
   {
    "kind": "intro",
@@ -14,7 +15,7 @@
    "kind": "explode",
    "start": 5.0,
    "end": 7.8,
-   "title": "39 parts",
+   "title": "42 parts",
    "subtitle": "let's put it together"
   },
   {
@@ -24,8 +25,8 @@
    "start": 7.8,
    "end": 11.2,
    "title": "Pelvis + hip-yaw servos",
-   "subtitle": "PETG, printed near-solid \u00b7 2 \u00d7 STS3215 in cages \u00b7 thrust rings + keeper bosses",
-   "parts": 3
+   "subtitle": "PETG, printed near-solid \u00b7 2 \u00d7 STS3215 up into their cages \u00b7 thrust rings + inserts",
+   "parts": 5
   },
   {
    "kind": "step",
@@ -54,7 +55,7 @@
    "start": 18.0,
    "end": 21.4,
    "title": "Hip-roll U-brackets",
-   "subtitle": "on the horn and the rear hub \u00b7 double-sided",
+   "subtitle": "on the drive horn and the passive horn \u00b7 double-sided",
    "parts": 2
   },
   {
@@ -144,8 +145,8 @@
    "start": 48.6,
    "end": 52.0,
    "title": "Head",
-   "subtitle": "soft rounded head \u00b7 four holes for the microphone",
-   "parts": 1
+   "subtitle": "neck hub on the neck horn \u00b7 soft rounded head slides over it",
+   "parts": 2
   },
   {
    "kind": "finale",
@@ -161,6 +162,5 @@
    "title": "and it walks",
    "subtitle": "MuJoCo simulation of the CAD model \u00b7 0.05 m/s"
   }
- ],
- "mass_kg": 2.875
+ ]
 }

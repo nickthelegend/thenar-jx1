@@ -1,7 +1,7 @@
 """Animated assembly film of JX0, rendered from its SolidWorks part meshes (jx0/cad/stl), like the JX1 film
 (tools/media/assembly_film.py).
 
-Every one of the 39 components (22 printed parts, the 2 feet included, and 17 STS3215 servos) is the exported
+Every one of the 42 components (25 printed parts, the 2 feet included, and 17 STS3215 servos) is the exported
 SolidWorks mesh, placed with the same layout as the SolidWorks assembly and the simulation (jx0/cad/layout.py). The film:
   intro   : the finished robot on a turntable, then it explodes into parts
   steps   : 13 assembly steps in the order of the build guide (jx0/docs/build_guide.md); each step's parts fly in from
@@ -96,7 +96,7 @@ STEPS = [
     ("Arms", "shoulder servo in a hood · elbow servo below · 6 mm paddle blades",
      LR("upper_arm", "servo_shoulder_pitch", "servo_elbow", "blade"), "out", 0.12, "arm"),
     ("Chest cap + neck servo", "speaker grille · vents · neck STS3215 on top", ["chest_cap", "servo_neck"], "up", 0.12, "torso"),
-    ("Head", "soft rounded head · four holes for the microphone", ["head"], "up", 0.10, "head"),
+    ("Head", "neck hub on the neck horn · soft rounded head slides over it", ["neck_hub", "head"], "up", 0.10, "head"),
 ]
 STEP_AZ = [200, 160, 330, 200, 240, 215, 190, 320, 200, 160, 230, 200, 170]   # 180 = in front of the robot
 AZ_DRIFT = 2.0

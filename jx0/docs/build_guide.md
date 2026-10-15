@@ -122,7 +122,7 @@ Every STS3215 ships as ID 1. Set the IDs one servo at a time and write each on i
 | 35.95 – 36.35 mm | 1 |
 | less than 35.95 mm | 2 |
 
-Use the same count on the chest pads, the blades and the head. The hip-yaw discs are the exception: they hang
+Use the same count on the chest pads, the blades and the neck hub. The hip-yaw discs are the exception: they hang
 under the pelvis's ring, so their shims are set by feel (step 3). The passive horn needs no screw of its own: it sits
 on the rear boss and the bracket's 4 screws hold it.
 
@@ -165,13 +165,14 @@ All three hip axes meet at the hip centre and both ankle axes at the ankle centr
      PTFE tape takes it up.
 4. **Keeper.**
    - Slide it in sideways from the outer front of the hip, its lip into the groove under the disc's flange.
-   - Clamp it flat against the pelvis's boss with 4 × M2 × 10 from below.
+   - Clamp it flat against the pelvis's boss with 4 × M2 × 10 CSK from below.
    - Turn the leg by hand: it must turn freely through ±12° with no up-and-down wobble at the disc's rim. The lip
      sits up to 0.5 mm under the flange: add layers of PTFE tape under the flange (and on the insert's top) until the
      wobble is gone; if it binds, take one off.
 5. **Hip-roll bracket** onto the hip-roll servo from below (the rules above). The 4 roll-horn screws go in from inside
-   its empty pitch cage: a long PH1 screwdriver through the 4 holes in the cage's front wall. Use pan or cheese heads
-   no taller than 2.4 mm: they sink into the arm, 0.5 mm from where the pitch servo will sit.
+   its empty pitch cage: a long PH1 screwdriver through the 4 holes in the cage's front wall. Their heads sink into
+   the arm, 0.5 mm from where the pitch servo will sit, so they must be no taller than 2.4 mm: measure one of the
+   servo bag's screws first.
 6. **Hip-pitch servo** into the hip-roll bracket's pitch cage from the outer side, horn side first, both horns on (no
    centre screw yet). Screw it through the inner plate: 3 × M2 × 6 CSK. On the second leg the first leg is in the
    way: a PH1 bit turned by hand (50 mm of room).

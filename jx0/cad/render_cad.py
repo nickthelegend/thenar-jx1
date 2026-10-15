@@ -17,7 +17,7 @@ from swlib.core import C, Session, set_view, typed  # noqa: E402
 ASM = ROOT / "jx0" / "cad" / "JX0_Robot.SLDASM"
 IMG = ROOT / "jx0" / "cad" / "images"
 VIEWS = {"front": (1.0, -0.8, 0.45), "back": (-1.0, 0.8, 0.45), "side": (0.0, -1.0, 0.25), "legs": (0.9, -1.0, 0.1)}
-UPPER_BODY = ("torso", "chest", "head", "arm", "blade")      # hidden in the legs view, with the 5 upper servos
+UPPER_BODY = ("torso", "chest", "head", "neckhub", "arm", "blade")   # hidden in the legs view, with the 5 upper servos
 
 
 def export_views():
