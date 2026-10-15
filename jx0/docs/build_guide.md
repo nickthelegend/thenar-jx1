@@ -97,11 +97,11 @@ If your printer prints holes or pockets small, set its hole compensation now, be
 | JX0_HornShim (0.4 mm, under a horn arm) | 40 | 0.1 g each | Ø19.6 | PETG; two 0.2 mm layers, flat |
 | JX0_Torso (lower shell with the skirt) | 1 | 103.0 g | 84 × 120 × 136 | PLA; floor down |
 | JX0_ChestCap | 1 | 45.3 g | 84 × 126 × 42 | PLA; upside down (top face on the bed), chamfers 45° |
-| JX0_Head | 1 | 60.2 g | 66 × 78 × 61 | PLA; upright on its open bottom, tree supports inside the rounded top |
+| JX0_Head | 1 | 62.6 g | 66 × 78 × 62 | PLA; upright on the flat rim of its open bottom, tree supports inside the rounded top |
 | JX0_NeckHub (on the neck horn, the head slides over it) | 1 | 10.7 g | 52 × 48 × 12 | PLA; flat plate down |
-| JX0_UpperArm_L / _R (shoulder hood + elbow box) | 1 + 1 | 21.5 g each | 54 × 35 × 85 | PLA; outer plate down |
+| JX0_UpperArm_L / _R (shoulder hood + elbow box) | 1 + 1 | 21.5 g each | 54 × 35 × 85 | PLA; inner side (the shoulder horn's) down: on the outer plate it would tip |
 | JX0_ArmBlade_L / _R | 1 + 1 | 14.8 g each | 36 × 8 × 116 | PLA; lying flat |
-| **Total** | **25 + 40 shims** | **846 g** | | 554 g PETG + 292 g PLA |
+| **Total** | **25 + 40 shims** | **848 g** | | 554 g PETG + 294 g PLA |
 
 ## 2. Before assembly: servo IDs, centring, horn height
 

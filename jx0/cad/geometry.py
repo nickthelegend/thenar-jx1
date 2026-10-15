@@ -843,10 +843,12 @@ def head():
     2 M2 x 10 CSK through its back wall hold it there; the hub's shape carries the turning."""
     hx, hy, hz = 33.0, 39.0, 62.0
     front = rounded_polygon([(-28.0, 0.0), (28.0, 0.0), (hy, 36.0), (hy, hz), (-hy, hz), (-hy, 36.0)],
-                            [10.0, 10.0, 26.0, 20.0, 20.0, 26.0])
+                            [4.0, 4.0, 26.0, 20.0, 20.0, 26.0])
     p = [("prism", "x", front, (-hx, hx))]
-    for xc, zc, du, dv, r in ((hx, hz, -1, -1, 22.0), (-hx, hz, 1, -1, 22.0), (hx, 0.0, -1, 1, 12.0), (-hx, 0.0, 1, 1, 12.0)):
-        p.append(("pcut", "y", corner_cut((xc, zc), (du, dv), r), (-hy - 1.0, hy + 1.0)))   # rounded top / chin edges
+    # rounded top / chin edges; the chin and bottom-corner radii (5, 4) leave a flat rim of 365 mm^2 on the open bottom
+    # for the head to print standing on (with 12 / 10 it stood on rounded edges)
+    for xc, zc, du, dv, r in ((hx, hz, -1, -1, 22.0), (-hx, hz, 1, -1, 22.0), (hx, 0.0, -1, 1, 5.0), (-hx, 0.0, 1, 1, 5.0)):
+        p.append(("pcut", "y", corner_cut((xc, zc), (du, dv), r), (-hy - 1.0, hy + 1.0)))
     for xc, yc, du, dv in ((hx, hy, -1, -1), (hx, -hy, -1, 1), (-hx, hy, 1, -1), (-hx, -hy, 1, 1)):
         p.append(("pcut", "z", corner_cut((xc, yc), (du, dv), 20.0), (-0.1, hz + 0.1)))     # rounded vertical edges
     p += [("cut", (-26.0, 26.0), (-24.0, 24.0), (-0.1, 16.1)),                               # hollow, in steps; open

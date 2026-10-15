@@ -38,7 +38,7 @@ DOWN = {"JX0_Pelvis": (0, 0, 1), "JX0_YawKeeper_L": (0, 0, 1), "JX0_YawKeeper_R"
         "JX0_Thigh_L": (0, 1, 0), "JX0_Thigh_R": (0, -1, 0), "JX0_Shin_L": (0, 1, 0), "JX0_Shin_R": (0, -1, 0),
         "JX0_AnkleBracket_L": (0, 1, 0), "JX0_AnkleBracket_R": (0, -1, 0), "JX0_Foot": (0, 0, -1),
         "JX0_HornShim": (0, 0, -1), "JX0_Torso": (0, 0, -1), "JX0_ChestCap": (0, 0, 1), "JX0_Head": (0, 0, -1),
-        "JX0_NeckHub": (0, 0, -1), "JX0_UpperArm_L": (0, 1, 0), "JX0_UpperArm_R": (0, -1, 0),
+        "JX0_NeckHub": (0, 0, -1), "JX0_UpperArm_L": (0, -1, 0), "JX0_UpperArm_R": (0, 1, 0),
         "JX0_ArmBlade_L": (0, -1, 0), "JX0_ArmBlade_R": (0, 1, 0)}
 
 # plate -> (printer, material, [(part, count)])
@@ -132,15 +132,16 @@ FILAMENT = {"PETG": {"nozzle_temperature": ["240"], "nozzle_temperature_initial_
 
 
 def resolve(path: Path, kind_dir: Path) -> dict:
-    """A system profile with its whole 'inherits' chain merged (the parent first)."""
+    """A system profile with its whole 'inherits' chain merged (the parent first), then its 'include' templates (the
+    Bambu printers' real start / end / layer-change G-code lives in those), then its own keys."""
     d = json.loads(path.read_text(encoding="utf-8"))
     parent = d.get("inherits")
-    if parent:
-        base = resolve(kind_dir / f"{parent}.json", kind_dir)
-        base.update({k: v for k, v in d.items() if k != "inherits"})
-        d = base
-    d.pop("inherits", None)
-    return d
+    base = resolve(kind_dir / f"{parent}.json", kind_dir) if parent else {}
+    for inc in d.get("include", []):
+        base.update({k: v for k, v in resolve(kind_dir / f"{inc}.json", kind_dir).items()
+                     if k not in ("name", "instantiation")})
+    base.update({k: v for k, v in d.items() if k not in ("inherits", "include")})
+    return base
 
 
 def settings(printer, material, work: Path, plate=""):

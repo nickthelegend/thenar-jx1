@@ -31,7 +31,7 @@ ARM_JOINTS = ["shoulder_pitch", "elbow"]
 # forearm = the blade
 ARM_MASS = {"upper_arm": 0.204, "forearm": 0.016}
 ARM_COM = {"upper_arm": (0.0064, 0.0198, -0.0326), "forearm": (0.0008, 0.0032, -0.0382)}   # left arm, link frames
-HEAD_MASS = 0.077                                    # CAD head 60.2 g + neck hub 10.7 g + microphone + screws (ESTIMATED)
+HEAD_MASS = 0.077                                    # CAD head 60.2 g + neck hub 10.7 g + microphone + screws (ESTIMATED; the head is 62.6 g since its flat print rim)
 
 
 def _f(x):

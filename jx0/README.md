@@ -161,7 +161,7 @@ is about 73 minutes of walking (CALCULATED: 1.45 A average for the servos and th
 | Joints | 17 Feetech STS3215 12 V serial bus servos: 6 per leg, shoulder pitch and elbow per arm, neck yaw |
 | Brain | Raspberry Pi 4 (2 GB): gaits and balance at 100 Hz, MPU6050 IMU, Vosk speech recognition, Piper voice, Claude over Wi-Fi |
 | Power | 3S 2200 mAh LiPo straight to the servo bus (12 V servos); a 5 V UBEC for the Pi; or a 12.6 V bench supply |
-| Structure | 25 printed parts and 40 horn shims, 846 g: pelvis and leg parts in PETG, printed near-solid (554 g); body, head and arms in PLA (292 g) |
+| Structure | 25 printed parts and 40 horn shims, 848 g: pelvis and leg parts in PETG, printed near-solid (554 g); body, head and arms in PLA (294 g) |
 
 ## What it costs
 

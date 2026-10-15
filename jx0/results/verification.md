@@ -26,8 +26,8 @@ Generated 2026-10-15 by `jx0/verify/run_all.py` from the CAD geometry, the MuJoC
 | Sideways push of 1.44 N.s mid-walk (24 moments × 2 directions): stayed up | 21/48 (44 %) |
 | Whole robot program, 8-step mission, random realistic errors | **24/24 (100 %)** |
 | Battery current walking (servos + Pi) | 1.45 A average, 2.52 A peak → about 73 min walking per charge |
-| 100 Hz control loop on a Raspberry Pi 4 (estimated) | 1.79 ms of 10 ms |
-| Software unit tests | Ran 21 tests in 5.877s: OK |
+| 100 Hz control loop on a Raspberry Pi 4 (estimated) | 1.9 ms of 10 ms |
+| Software unit tests | Ran 21 tests in 5.870s: OK |
 
 ## Leg joints: why double-sided
 

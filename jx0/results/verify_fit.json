@@ -4233,6 +4233,3189 @@
   }
  ],
  "screw_heads": [],
- "seconds": 3.2,
+ "assembly_sweeps": [
+  {
+   "step": "pelvis",
+   "moving": [],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "hip-yaw servo up into the pelvis (L)",
+   "moving": [
+    "servo_hip_yaw_L"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "yaw ring insert up around the yaw horn (L)",
+   "moving": [
+    "yaw_ring_L"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "hip-roll servo into the hip-yaw bracket (L)",
+   "moving": [
+    "servo_hip_roll_L"
+   ],
+   "direction": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "servo_hip_roll_L",
+    "hip_yaw_L"
+   ],
+   "at_mm": 0.0,
+   "ok": true
+  },
+  {
+   "step": "hip-yaw bracket onto the yaw horn (L)",
+   "moving": [
+    "hip_yaw_L",
+    "servo_hip_roll_L"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "keeper under the disc's rim (L)",
+   "moving": [
+    "keeper_L"
+   ],
+   "direction": [
+    -0.866,
+    -0.5,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "keeper_L",
+    "pelvis"
+   ],
+   "at_mm": 0.0,
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (L)",
+   "moving": [
+    "hip_roll_L"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "hip_roll_L",
+    "servo_hip_roll_L"
+   ],
+   "at_mm": 5.0,
+   "ok": true
+  },
+  {
+   "step": "hip-pitch servo into the hip-roll bracket (L)",
+   "moving": [
+    "servo_hip_pitch_L"
+   ],
+   "direction": [
+    0.0,
+    -1.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "servo_hip_pitch_L",
+    "hip_roll_L"
+   ],
+   "at_mm": 0.0,
+   "ok": true
+  },
+  {
+   "step": "hip-yaw servo up into the pelvis (R)",
+   "moving": [
+    "servo_hip_yaw_R"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "yaw ring insert up around the yaw horn (R)",
+   "moving": [
+    "yaw_ring_R"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "hip-roll servo into the hip-yaw bracket (R)",
+   "moving": [
+    "servo_hip_roll_R"
+   ],
+   "direction": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "hip-yaw bracket onto the yaw horn (R)",
+   "moving": [
+    "hip_yaw_R",
+    "servo_hip_roll_R"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "keeper under the disc's rim (R)",
+   "moving": [
+    "keeper_R"
+   ],
+   "direction": [
+    -0.866,
+    0.5,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "keeper_R",
+    "pelvis"
+   ],
+   "at_mm": 0.0,
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (R)",
+   "moving": [
+    "hip_roll_R"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "hip_roll_R",
+    "servo_hip_roll_R"
+   ],
+   "at_mm": 7.0,
+   "ok": true
+  },
+  {
+   "step": "hip-pitch servo into the hip-roll bracket (R)",
+   "moving": [
+    "servo_hip_pitch_R"
+   ],
+   "direction": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "servo_hip_pitch_R",
+    "hip_roll_R"
+   ],
+   "at_mm": 0.0,
+   "ok": true
+  },
+  {
+   "step": "knee servo into the thigh (L)",
+   "moving": [
+    "servo_knee_L"
+   ],
+   "direction": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "servo_knee_L",
+    "thigh_L"
+   ],
+   "at_mm": 7.0,
+   "ok": true
+  },
+  {
+   "step": "ankle-pitch servo up into the shin (L)",
+   "moving": [
+    "servo_ankle_pitch_L"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "servo_ankle_pitch_L",
+    "shin_L"
+   ],
+   "at_mm": 11.0,
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (L)",
+   "moving": [
+    "shin_L",
+    "servo_ankle_pitch_L"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "shin_L",
+    "servo_knee_L"
+   ],
+   "at_mm": 2.0,
+   "ok": true
+  },
+  {
+   "step": "ankle-roll servo into the ankle bracket (L)",
+   "moving": [
+    "servo_ankle_roll_L"
+   ],
+   "direction": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "servo_ankle_roll_L",
+    "ankle_L"
+   ],
+   "at_mm": 4.0,
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (L)",
+   "moving": [
+    "foot_L"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "foot_L",
+    "servo_ankle_roll_L"
+   ],
+   "at_mm": 2.0,
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (L)",
+   "moving": [
+    "ankle_L",
+    "servo_ankle_roll_L",
+    "foot_L"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "ankle_L",
+    "servo_ankle_pitch_L"
+   ],
+   "at_mm": 1.0,
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (L)",
+   "moving": [
+    "thigh_L",
+    "servo_knee_L",
+    "shin_L",
+    "servo_ankle_pitch_L",
+    "ankle_L",
+    "servo_ankle_roll_L",
+    "foot_L"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "thigh_L",
+    "servo_hip_pitch_L"
+   ],
+   "at_mm": 0.0,
+   "ok": true
+  },
+  {
+   "step": "knee servo into the thigh (R)",
+   "moving": [
+    "servo_knee_R"
+   ],
+   "direction": [
+    -1.0,
+    0.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "servo_knee_R",
+    "thigh_R"
+   ],
+   "at_mm": 4.0,
+   "ok": true
+  },
+  {
+   "step": "ankle-pitch servo up into the shin (R)",
+   "moving": [
+    "servo_ankle_pitch_R"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "servo_ankle_pitch_R",
+    "shin_R"
+   ],
+   "at_mm": 6.0,
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (R)",
+   "moving": [
+    "shin_R",
+    "servo_ankle_pitch_R"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "shin_R",
+    "servo_knee_R"
+   ],
+   "at_mm": 2.0,
+   "ok": true
+  },
+  {
+   "step": "ankle-roll servo into the ankle bracket (R)",
+   "moving": [
+    "servo_ankle_roll_R"
+   ],
+   "direction": [
+    0.0,
+    -1.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "servo_ankle_roll_R",
+    "ankle_R"
+   ],
+   "at_mm": 7.0,
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (R)",
+   "moving": [
+    "foot_R"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "foot_R",
+    "servo_ankle_roll_R"
+   ],
+   "at_mm": 0.0,
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (R)",
+   "moving": [
+    "ankle_R",
+    "servo_ankle_roll_R",
+    "foot_R"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "ankle_R",
+    "servo_ankle_pitch_R"
+   ],
+   "at_mm": 1.0,
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (R)",
+   "moving": [
+    "thigh_R",
+    "servo_knee_R",
+    "shin_R",
+    "servo_ankle_pitch_R",
+    "ankle_R",
+    "servo_ankle_roll_R",
+    "foot_R"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "thigh_R",
+    "servo_hip_pitch_R"
+   ],
+   "at_mm": 1.0,
+   "ok": true
+  },
+  {
+   "step": "lower torso onto the pelvis",
+   "moving": [
+    "torso"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "torso",
+    "pelvis"
+   ],
+   "at_mm": 0.0,
+   "ok": true
+  },
+  {
+   "step": "shoulder servo into the upper arm (L)",
+   "moving": [
+    "servo_shoulder_pitch_L"
+   ],
+   "direction": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "elbow servo into the upper arm (L)",
+   "moving": [
+    "servo_elbow_L"
+   ],
+   "direction": [
+    0.0,
+    -1.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "blade onto the elbow horn (L)",
+   "moving": [
+    "blade_L"
+   ],
+   "direction": [
+    0.0,
+    -1.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "shoulder servo into the upper arm (R)",
+   "moving": [
+    "servo_shoulder_pitch_R"
+   ],
+   "direction": [
+    0.0,
+    -1.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "elbow servo into the upper arm (R)",
+   "moving": [
+    "servo_elbow_R"
+   ],
+   "direction": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "blade onto the elbow horn (R)",
+   "moving": [
+    "blade_R"
+   ],
+   "direction": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "neck servo onto the chest cap",
+   "moving": [
+    "servo_neck"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "arm onto the chest cap's pad (L)",
+   "moving": [
+    "upper_arm_L",
+    "servo_shoulder_pitch_L",
+    "servo_elbow_L",
+    "blade_L"
+   ],
+   "direction": [
+    0.0,
+    -1.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "arm onto the chest cap's pad (R)",
+   "moving": [
+    "upper_arm_R",
+    "servo_shoulder_pitch_R",
+    "servo_elbow_R",
+    "blade_R"
+   ],
+   "direction": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "chest cap onto the torso",
+   "moving": [
+    "chest_cap",
+    "servo_neck",
+    "upper_arm_L",
+    "servo_shoulder_pitch_L",
+    "servo_elbow_L",
+    "blade_L",
+    "upper_arm_R",
+    "servo_shoulder_pitch_R",
+    "servo_elbow_R",
+    "blade_R"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "neck hub onto the neck horn",
+   "moving": [
+    "neck_hub"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  },
+  {
+   "step": "head down over the neck hub",
+   "moving": [
+    "head"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": null,
+   "at_mm": null,
+   "ok": true
+  }
+ ],
+ "screwdriver_access": [
+  {
+   "step": "hip-yaw servo up into the pelvis (L)",
+   "part": "pelvis",
+   "index": 0,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-yaw servo up into the pelvis (L)",
+   "part": "pelvis",
+   "index": 1,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-yaw servo up into the pelvis (L)",
+   "part": "pelvis",
+   "index": 2,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-yaw servo up into the pelvis (L)",
+   "part": "pelvis",
+   "index": 3,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll servo into the hip-yaw bracket (L)",
+   "part": "hip_yaw_L",
+   "index": 0,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll servo into the hip-yaw bracket (L)",
+   "part": "hip_yaw_L",
+   "index": 1,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll servo into the hip-yaw bracket (L)",
+   "part": "hip_yaw_L",
+   "index": 2,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-yaw bracket onto the yaw horn (L)",
+   "part": "hip_yaw_L",
+   "index": 3,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-yaw bracket onto the yaw horn (L)",
+   "part": "hip_yaw_L",
+   "index": 4,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-yaw bracket onto the yaw horn (L)",
+   "part": "hip_yaw_L",
+   "index": 5,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-yaw bracket onto the yaw horn (L)",
+   "part": "hip_yaw_L",
+   "index": 6,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "keeper under the disc's rim (L)",
+   "part": "keeper_L",
+   "index": 0,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "keeper under the disc's rim (L)",
+   "part": "keeper_L",
+   "index": 1,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "keeper under the disc's rim (L)",
+   "part": "keeper_L",
+   "index": 2,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "keeper under the disc's rim (L)",
+   "part": "keeper_L",
+   "index": 3,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (L)",
+   "part": "hip_roll_L",
+   "index": 0,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (L)",
+   "part": "hip_roll_L",
+   "index": 1,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (L)",
+   "part": "hip_roll_L",
+   "index": 2,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (L)",
+   "part": "hip_roll_L",
+   "index": 3,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (L)",
+   "part": "hip_roll_L",
+   "index": 4,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (L)",
+   "part": "hip_roll_L",
+   "index": 5,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (L)",
+   "part": "hip_roll_L",
+   "index": 6,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (L)",
+   "part": "hip_roll_L",
+   "index": 7,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-pitch servo into the hip-roll bracket (L)",
+   "part": "hip_roll_L",
+   "index": 8,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-pitch servo into the hip-roll bracket (L)",
+   "part": "hip_roll_L",
+   "index": 9,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-pitch servo into the hip-roll bracket (L)",
+   "part": "hip_roll_L",
+   "index": 10,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-yaw servo up into the pelvis (R)",
+   "part": "pelvis",
+   "index": 4,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-yaw servo up into the pelvis (R)",
+   "part": "pelvis",
+   "index": 5,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-yaw servo up into the pelvis (R)",
+   "part": "pelvis",
+   "index": 6,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-yaw servo up into the pelvis (R)",
+   "part": "pelvis",
+   "index": 7,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll servo into the hip-yaw bracket (R)",
+   "part": "hip_yaw_R",
+   "index": 0,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll servo into the hip-yaw bracket (R)",
+   "part": "hip_yaw_R",
+   "index": 1,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll servo into the hip-yaw bracket (R)",
+   "part": "hip_yaw_R",
+   "index": 2,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-yaw bracket onto the yaw horn (R)",
+   "part": "hip_yaw_R",
+   "index": 3,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-yaw bracket onto the yaw horn (R)",
+   "part": "hip_yaw_R",
+   "index": 4,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-yaw bracket onto the yaw horn (R)",
+   "part": "hip_yaw_R",
+   "index": 5,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-yaw bracket onto the yaw horn (R)",
+   "part": "hip_yaw_R",
+   "index": 6,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "keeper under the disc's rim (R)",
+   "part": "keeper_R",
+   "index": 0,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "keeper under the disc's rim (R)",
+   "part": "keeper_R",
+   "index": 1,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "keeper under the disc's rim (R)",
+   "part": "keeper_R",
+   "index": 2,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "keeper under the disc's rim (R)",
+   "part": "keeper_R",
+   "index": 3,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (R)",
+   "part": "hip_roll_R",
+   "index": 0,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (R)",
+   "part": "hip_roll_R",
+   "index": 1,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (R)",
+   "part": "hip_roll_R",
+   "index": 2,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (R)",
+   "part": "hip_roll_R",
+   "index": 3,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (R)",
+   "part": "hip_roll_R",
+   "index": 4,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (R)",
+   "part": "hip_roll_R",
+   "index": 5,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (R)",
+   "part": "hip_roll_R",
+   "index": 6,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-roll bracket onto the roll servo (R)",
+   "part": "hip_roll_R",
+   "index": 7,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "hip-pitch servo into the hip-roll bracket (R)",
+   "part": "hip_roll_R",
+   "index": 8,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 50.9,
+   "straight_driver_blocked_by": [
+    [
+     "hip_roll_L",
+     36.0
+    ],
+    [
+     "servo_hip_pitch_L",
+     90.1
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "step": "hip-pitch servo into the hip-roll bracket (R)",
+   "part": "hip_roll_R",
+   "index": 9,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 50.9,
+   "straight_driver_blocked_by": [
+    [
+     "hip_roll_L",
+     35.3
+    ],
+    [
+     "servo_hip_pitch_L",
+     90.1
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "step": "hip-pitch servo into the hip-roll bracket (R)",
+   "part": "hip_roll_R",
+   "index": 10,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 50.9,
+   "straight_driver_blocked_by": [
+    [
+     "hip_roll_L",
+     35.3
+    ],
+    [
+     "servo_hip_pitch_L",
+     90.1
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "step": "knee servo into the thigh (L)",
+   "part": "thigh_L",
+   "index": 8,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "knee servo into the thigh (L)",
+   "part": "thigh_L",
+   "index": 9,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "knee servo into the thigh (L)",
+   "part": "thigh_L",
+   "index": 10,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle-pitch servo up into the shin (L)",
+   "part": "shin_L",
+   "index": 8,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle-pitch servo up into the shin (L)",
+   "part": "shin_L",
+   "index": 9,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (L)",
+   "part": "shin_L",
+   "index": 0,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (L)",
+   "part": "shin_L",
+   "index": 1,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (L)",
+   "part": "shin_L",
+   "index": 2,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (L)",
+   "part": "shin_L",
+   "index": 3,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (L)",
+   "part": "shin_L",
+   "index": 4,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (L)",
+   "part": "shin_L",
+   "index": 5,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (L)",
+   "part": "shin_L",
+   "index": 6,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (L)",
+   "part": "shin_L",
+   "index": 7,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle-roll servo into the ankle bracket (L)",
+   "part": "ankle_L",
+   "index": 8,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle-roll servo into the ankle bracket (L)",
+   "part": "ankle_L",
+   "index": 9,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle-roll servo into the ankle bracket (L)",
+   "part": "ankle_L",
+   "index": 10,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (L)",
+   "part": "foot_L",
+   "index": 0,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (L)",
+   "part": "foot_L",
+   "index": 1,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (L)",
+   "part": "foot_L",
+   "index": 2,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (L)",
+   "part": "foot_L",
+   "index": 3,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (L)",
+   "part": "foot_L",
+   "index": 4,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (L)",
+   "part": "foot_L",
+   "index": 5,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (L)",
+   "part": "foot_L",
+   "index": 6,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (L)",
+   "part": "foot_L",
+   "index": 7,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (L)",
+   "part": "ankle_L",
+   "index": 0,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (L)",
+   "part": "ankle_L",
+   "index": 1,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (L)",
+   "part": "ankle_L",
+   "index": 2,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (L)",
+   "part": "ankle_L",
+   "index": 3,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (L)",
+   "part": "ankle_L",
+   "index": 4,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (L)",
+   "part": "ankle_L",
+   "index": 5,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (L)",
+   "part": "ankle_L",
+   "index": 6,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (L)",
+   "part": "ankle_L",
+   "index": 7,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (L)",
+   "part": "thigh_L",
+   "index": 0,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (L)",
+   "part": "thigh_L",
+   "index": 1,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (L)",
+   "part": "thigh_L",
+   "index": 2,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (L)",
+   "part": "thigh_L",
+   "index": 3,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (L)",
+   "part": "thigh_L",
+   "index": 4,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 45.5,
+   "straight_driver_blocked_by": [
+    [
+     "servo_hip_pitch_R",
+     340.4
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (L)",
+   "part": "thigh_L",
+   "index": 5,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 45.5,
+   "straight_driver_blocked_by": [
+    [
+     "servo_hip_pitch_R",
+     316.2
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (L)",
+   "part": "thigh_L",
+   "index": 6,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 45.5,
+   "straight_driver_blocked_by": [
+    [
+     "servo_hip_pitch_R",
+     316.2
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (L)",
+   "part": "thigh_L",
+   "index": 7,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 45.5,
+   "straight_driver_blocked_by": [
+    [
+     "servo_hip_pitch_R",
+     316.2
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "step": "knee servo into the thigh (R)",
+   "part": "thigh_R",
+   "index": 8,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "knee servo into the thigh (R)",
+   "part": "thigh_R",
+   "index": 9,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "knee servo into the thigh (R)",
+   "part": "thigh_R",
+   "index": 10,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle-pitch servo up into the shin (R)",
+   "part": "shin_R",
+   "index": 8,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle-pitch servo up into the shin (R)",
+   "part": "shin_R",
+   "index": 9,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (R)",
+   "part": "shin_R",
+   "index": 0,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (R)",
+   "part": "shin_R",
+   "index": 1,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (R)",
+   "part": "shin_R",
+   "index": 2,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (R)",
+   "part": "shin_R",
+   "index": 3,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (R)",
+   "part": "shin_R",
+   "index": 4,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (R)",
+   "part": "shin_R",
+   "index": 5,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (R)",
+   "part": "shin_R",
+   "index": 6,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shin onto the knee servo (R)",
+   "part": "shin_R",
+   "index": 7,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle-roll servo into the ankle bracket (R)",
+   "part": "ankle_R",
+   "index": 8,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle-roll servo into the ankle bracket (R)",
+   "part": "ankle_R",
+   "index": 9,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle-roll servo into the ankle bracket (R)",
+   "part": "ankle_R",
+   "index": 10,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (R)",
+   "part": "foot_R",
+   "index": 0,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (R)",
+   "part": "foot_R",
+   "index": 1,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (R)",
+   "part": "foot_R",
+   "index": 2,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (R)",
+   "part": "foot_R",
+   "index": 3,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (R)",
+   "part": "foot_R",
+   "index": 4,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (R)",
+   "part": "foot_R",
+   "index": 5,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (R)",
+   "part": "foot_R",
+   "index": 6,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "foot onto the ankle-roll servo (R)",
+   "part": "foot_R",
+   "index": 7,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (R)",
+   "part": "ankle_R",
+   "index": 0,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (R)",
+   "part": "ankle_R",
+   "index": 1,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (R)",
+   "part": "ankle_R",
+   "index": 2,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (R)",
+   "part": "ankle_R",
+   "index": 3,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (R)",
+   "part": "ankle_R",
+   "index": 4,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (R)",
+   "part": "ankle_R",
+   "index": 5,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (R)",
+   "part": "ankle_R",
+   "index": 6,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "ankle bracket and foot onto the ankle-pitch servo (R)",
+   "part": "ankle_R",
+   "index": 7,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (R)",
+   "part": "thigh_R",
+   "index": 0,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (R)",
+   "part": "thigh_R",
+   "index": 1,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (R)",
+   "part": "thigh_R",
+   "index": 2,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (R)",
+   "part": "thigh_R",
+   "index": 3,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (R)",
+   "part": "thigh_R",
+   "index": 4,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 39.6,
+   "straight_driver_blocked_by": [
+    [
+     "servo_hip_pitch_L",
+     340.4
+    ],
+    [
+     "thigh_L",
+     85.9
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (R)",
+   "part": "thigh_R",
+   "index": 5,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 39.6,
+   "straight_driver_blocked_by": [
+    [
+     "servo_hip_pitch_L",
+     316.2
+    ],
+    [
+     "thigh_L",
+     72.6
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (R)",
+   "part": "thigh_R",
+   "index": 6,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 39.6,
+   "straight_driver_blocked_by": [
+    [
+     "servo_hip_pitch_L",
+     316.2
+    ],
+    [
+     "thigh_L",
+     85.9
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "step": "lower leg onto the hip-pitch servo (R)",
+   "part": "thigh_R",
+   "index": 7,
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 39.6,
+   "straight_driver_blocked_by": [
+    [
+     "servo_hip_pitch_L",
+     316.2
+    ],
+    [
+     "thigh_L",
+     85.9
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "step": "lower torso onto the pelvis",
+   "part": "torso",
+   "index": 0,
+   "size": "M3",
+   "length": 8.0,
+   "into": "insert",
+   "note": "M3 x 8 socket head, into the pelvis plate's M3 x 4 heat-set insert; its tip goes on into the hole through the rib below",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "lower torso onto the pelvis",
+   "part": "torso",
+   "index": 1,
+   "size": "M3",
+   "length": 8.0,
+   "into": "insert",
+   "note": "M3 x 8 socket head, into the pelvis plate's M3 x 4 heat-set insert; its tip goes on into the hole through the rib below",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "lower torso onto the pelvis",
+   "part": "torso",
+   "index": 2,
+   "size": "M3",
+   "length": 8.0,
+   "into": "insert",
+   "note": "M3 x 8 socket head, into the pelvis plate's M3 x 4 heat-set insert; its tip goes on into the hole through the rib below",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "lower torso onto the pelvis",
+   "part": "torso",
+   "index": 3,
+   "size": "M3",
+   "length": 8.0,
+   "into": "insert",
+   "note": "M3 x 8 socket head, into the pelvis plate's M3 x 4 heat-set insert; its tip goes on into the hole through the rib below",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shoulder servo into the upper arm (L)",
+   "part": "upper_arm_L",
+   "index": 0,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shoulder servo into the upper arm (L)",
+   "part": "upper_arm_L",
+   "index": 1,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shoulder servo into the upper arm (L)",
+   "part": "upper_arm_L",
+   "index": 2,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shoulder servo into the upper arm (L)",
+   "part": "upper_arm_L",
+   "index": 3,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "elbow servo into the upper arm (L)",
+   "part": "upper_arm_L",
+   "index": 4,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "elbow servo into the upper arm (L)",
+   "part": "upper_arm_L",
+   "index": 5,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "elbow servo into the upper arm (L)",
+   "part": "upper_arm_L",
+   "index": 6,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "elbow servo into the upper arm (L)",
+   "part": "upper_arm_L",
+   "index": 7,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "blade onto the elbow horn (L)",
+   "part": "blade_L",
+   "index": 0,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "blade onto the elbow horn (L)",
+   "part": "blade_L",
+   "index": 1,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "blade onto the elbow horn (L)",
+   "part": "blade_L",
+   "index": 2,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "blade onto the elbow horn (L)",
+   "part": "blade_L",
+   "index": 3,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shoulder servo into the upper arm (R)",
+   "part": "upper_arm_R",
+   "index": 0,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shoulder servo into the upper arm (R)",
+   "part": "upper_arm_R",
+   "index": 1,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shoulder servo into the upper arm (R)",
+   "part": "upper_arm_R",
+   "index": 2,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "shoulder servo into the upper arm (R)",
+   "part": "upper_arm_R",
+   "index": 3,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "elbow servo into the upper arm (R)",
+   "part": "upper_arm_R",
+   "index": 4,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "elbow servo into the upper arm (R)",
+   "part": "upper_arm_R",
+   "index": 5,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "elbow servo into the upper arm (R)",
+   "part": "upper_arm_R",
+   "index": 6,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "elbow servo into the upper arm (R)",
+   "part": "upper_arm_R",
+   "index": 7,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "blade onto the elbow horn (R)",
+   "part": "blade_R",
+   "index": 0,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "blade onto the elbow horn (R)",
+   "part": "blade_R",
+   "index": 1,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "blade onto the elbow horn (R)",
+   "part": "blade_R",
+   "index": 2,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "blade onto the elbow horn (R)",
+   "part": "blade_R",
+   "index": 3,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "neck servo onto the chest cap",
+   "part": "chest_cap",
+   "index": 12,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "neck servo onto the chest cap",
+   "part": "chest_cap",
+   "index": 13,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "neck servo onto the chest cap",
+   "part": "chest_cap",
+   "index": 14,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "neck servo onto the chest cap",
+   "part": "chest_cap",
+   "index": 15,
+   "size": "M2",
+   "length": 5.2,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "arm onto the chest cap's pad (L)",
+   "part": "chest_cap",
+   "index": 0,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "arm onto the chest cap's pad (L)",
+   "part": "chest_cap",
+   "index": 1,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "arm onto the chest cap's pad (L)",
+   "part": "chest_cap",
+   "index": 2,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "arm onto the chest cap's pad (L)",
+   "part": "chest_cap",
+   "index": 3,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "arm onto the chest cap's pad (R)",
+   "part": "chest_cap",
+   "index": 4,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "arm onto the chest cap's pad (R)",
+   "part": "chest_cap",
+   "index": 5,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "arm onto the chest cap's pad (R)",
+   "part": "chest_cap",
+   "index": 6,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "arm onto the chest cap's pad (R)",
+   "part": "chest_cap",
+   "index": 7,
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "chest cap onto the torso",
+   "part": "chest_cap",
+   "index": 8,
+   "size": "M2",
+   "length": 7.3,
+   "into": "printed",
+   "note": "M2 x 8 CSK, cuts its thread in the torso lip's 1.8 mm hole",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "chest cap onto the torso",
+   "part": "chest_cap",
+   "index": 9,
+   "size": "M2",
+   "length": 7.3,
+   "into": "printed",
+   "note": "M2 x 8 CSK, cuts its thread in the torso lip's 1.8 mm hole",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "chest cap onto the torso",
+   "part": "chest_cap",
+   "index": 10,
+   "size": "M2",
+   "length": 7.3,
+   "into": "printed",
+   "note": "M2 x 8 CSK, cuts its thread in the torso lip's 1.8 mm hole",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "chest cap onto the torso",
+   "part": "chest_cap",
+   "index": 11,
+   "size": "M2",
+   "length": 7.3,
+   "into": "printed",
+   "note": "M2 x 8 CSK, cuts its thread in the torso lip's 1.8 mm hole",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "neck hub onto the neck horn",
+   "part": "neck_hub",
+   "index": 0,
+   "size": "M3",
+   "length": 8.0,
+   "into": "drive",
+   "note": "M3 x 8 pan head, from above before the head goes on",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "neck hub onto the neck horn",
+   "part": "neck_hub",
+   "index": 1,
+   "size": "M3",
+   "length": 8.0,
+   "into": "drive",
+   "note": "M3 x 8 pan head, from above before the head goes on",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "neck hub onto the neck horn",
+   "part": "neck_hub",
+   "index": 2,
+   "size": "M3",
+   "length": 8.0,
+   "into": "drive",
+   "note": "M3 x 8 pan head, from above before the head goes on",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "neck hub onto the neck horn",
+   "part": "neck_hub",
+   "index": 3,
+   "size": "M3",
+   "length": 8.0,
+   "into": "drive",
+   "note": "M3 x 8 pan head, from above before the head goes on",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "head down over the neck hub",
+   "part": "head",
+   "index": 0,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK through the head's back wall into the neck hub",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "head down over the neck hub",
+   "part": "head",
+   "index": 1,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK through the head's back wall into the neck hub",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  }
+ ],
+ "screws_never_reached": [],
+ "seconds": 8.6,
  "pass": true
 }
