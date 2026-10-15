@@ -38,11 +38,13 @@ def components():
     hf = G.ST["HORN_FACE"]
     comps = [("pelvis", "JX0_Pelvis", pose()), ("torso", "JX0_Torso", pose()), ("chest_cap", "JX0_ChestCap", pose()),
              ("head", "JX0_Head", pose(p=(0, 0, G.NECK_Z))),
+             ("neck_hub", "JX0_NeckHub", pose(p=(0, 0, G.NECK_Z))),
              ("servo_neck", ST, pose(servo_axes((0, 1, 0), (0, 0, 1)), (0, 0, G.NECK_Z - hf)))]
     for side, sg in (("L", 1), ("R", -1)):
         hip = np.array([0.0, sg * G.HIP_Y, 0.0])
         knee, ankle = hip + [0, 0, -G.THIGH], hip + [0, 0, -G.THIGH - G.SHIN]
         comps += [(f"keeper_{side}", f"JX0_YawKeeper_{side}", pose(p=hip)),
+                  (f"yaw_ring_{side}", f"JX0_YawRing_{side}", pose(p=hip)),
                   (f"hip_yaw_{side}", f"JX0_HipYawBracket_{side}", pose(p=hip)),
                   (f"hip_roll_{side}", f"JX0_HipRollBracket_{side}", pose(p=hip)),
                   (f"thigh_{side}", f"JX0_Thigh_{side}", pose(p=hip)),
@@ -50,7 +52,7 @@ def components():
                   (f"ankle_{side}", f"JX0_AnkleBracket_{side}", pose(p=ankle)),
                   (f"foot_{side}", "JX0_Foot", pose(p=ankle))]
         comps += [
-            (f"servo_hip_yaw_{side}", ST, pose(servo_axes((0, -sg, 0), (0, 0, -1)), hip + [0, 0, G.ZY + hf])),
+            (f"servo_hip_yaw_{side}", ST, pose(servo_axes((0, -sg, 0), (0, 0, -1)), hip + [0, 0, G.ZY + hf + G.YAW_SEAT])),
             (f"servo_hip_roll_{side}", ST, pose(servo_axes((0, -sg, 0), (1, 0, 0)), hip + [G.XR - hf, 0, 0])),
             (f"servo_hip_pitch_{side}", ST, pose(servo_axes((1, 0, 0), (0, sg, 0)), hip)),
             (f"servo_knee_{side}", ST, pose(servo_axes((1, 0, 0), (0, sg, 0)), knee)),          # lying forward
@@ -77,8 +79,8 @@ def link_of(key):
     sh, el = arm_points(sg)
     base = key[:-2] if side else key
     table = {"pelvis": ("pelvis", (0, 0, 0)), "torso": ("torso", (0, 0, 0)), "chest_cap": ("torso", (0, 0, 0)),
-             "servo_neck": ("torso", (0, 0, 0)), "head": ("head", (0, 0, G.NECK_Z)),
-             "servo_hip_yaw": ("pelvis", (0, 0, 0)), "keeper": ("pelvis", (0, 0, 0)),
+             "servo_neck": ("torso", (0, 0, 0)), "head": ("head", (0, 0, G.NECK_Z)), "neck_hub": ("head", (0, 0, G.NECK_Z)),
+             "servo_hip_yaw": ("pelvis", (0, 0, 0)), "keeper": ("pelvis", (0, 0, 0)), "yaw_ring": ("pelvis", (0, 0, 0)),
              "hip_yaw": (f"{s}_hip_yaw_link", hip), "servo_hip_roll": (f"{s}_hip_yaw_link", hip),
              "hip_roll": (f"{s}_hip_roll_link", hip), "servo_hip_pitch": (f"{s}_hip_roll_link", hip),
              "thigh": (f"{s}_thigh", hip), "servo_knee": (f"{s}_thigh", hip),
@@ -89,3 +91,39 @@ def link_of(key):
              "servo_elbow": (f"{s}_upper_arm", sh), "blade": (f"{s}_forearm", el)}
     link, origin = table[base]
     return link, np.asarray(origin, float)
+
+
+# how each servo's cables leave it (geometry.servo_cables): "straight" out of the rear face through the plate it stands
+# on (the hip-yaw servos up through the pelvis plate and the torso floor, the neck servo down into the chest, the
+# shoulder servos out through the arm's outer plate); "back": bent along the rear face over the label block, then out
+# through the cage plate's window (the ankle-roll servos: the other foot passes their inboard end in side steps);
+# every other servo's cables are bent flat along its rear face and leave past the far end of its cage ("bent")
+CABLE_MODE = {"servo_hip_yaw": "straight", "servo_neck": "straight", "servo_shoulder_pitch": "straight",
+              "servo_ankle_roll": "back"}
+
+
+def cable_mode(key):
+    return CABLE_MODE.get(base(key), "bent")
+
+
+# the part bolted to each servo's horns (the next link); the servo's case sits in a cage on its own link
+HORN_PART = {"servo_hip_yaw": "hip_yaw", "servo_hip_roll": "hip_roll", "servo_hip_pitch": "thigh", "servo_knee": "shin",
+             "servo_ankle_pitch": "ankle", "servo_ankle_roll": "foot", "servo_shoulder_pitch": "chest_cap",
+             "servo_elbow": "blade", "servo_neck": "neck_hub"}
+
+
+def base(key):
+    return key[:-2] if key[-2:] in ("_L", "_R") else key
+
+
+def keepouts():
+    """Volumes that must stay free (not built, checked by verify_cad / verify_fit): (key, primitives, 4x4 pose in the
+    pelvis frame (m), the component they move with). Each servo's cables, and the head of every screw."""
+    out = []
+    comps = components()
+    for key, part, M in comps:
+        if part == ST:
+            out.append((f"cables:{key}", G.servo_cables(cable_mode(key)), M, key))
+        elif G.SCREWS.get(part):
+            out.append((f"screws:{key}", [q for s in G.SCREWS[part] for q in G.screw_head(s)], M, key))
+    return out

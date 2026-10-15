@@ -167,6 +167,17 @@ class VoxelModel:
         m.parity_errors = bad
         return m
 
+    def keep_face_connected(self):
+        """Drop voxels not joined face-to-face to the largest solid (single voxels that touch the part only at an
+        edge or a corner, left where a CAD face falls just on a voxel boundary: each is a free mechanism)."""
+        from scipy import ndimage
+        lab, n = ndimage.label(self.occ)                    # 6-connectivity: shared faces only
+        if n > 1:
+            sizes = ndimage.sum(self.occ, lab, range(1, n + 1))
+            self.occ = lab == (1 + int(np.argmax(sizes)))
+        self.dropped_voxels = int(n - 1)
+        return self
+
     def build(self):
         occ = self.occ
         nx, ny, nz = occ.shape

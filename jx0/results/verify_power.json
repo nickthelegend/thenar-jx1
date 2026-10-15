@@ -2,7 +2,7 @@
  "walking_forward": {
   "joints": {
    "l_hip_yaw": {
-    "peak_nm": 0.247,
+    "peak_nm": 0.246,
     "rms_nm": 0.063,
     "peak_of_stall": 0.08,
     "rms_of_rated": 0.06
@@ -14,8 +14,8 @@
     "rms_of_rated": 0.65
    },
    "l_hip_pitch": {
-    "peak_nm": 1.096,
-    "rms_nm": 0.224,
+    "peak_nm": 1.095,
+    "rms_nm": 0.223,
     "peak_of_stall": 0.37,
     "rms_of_rated": 0.23
    },
@@ -26,10 +26,10 @@
     "rms_of_rated": 0.41
    },
    "l_ankle_pitch": {
-    "peak_nm": 1.236,
-    "rms_nm": 0.251,
+    "peak_nm": 1.235,
+    "rms_nm": 0.249,
     "peak_of_stall": 0.42,
-    "rms_of_rated": 0.26
+    "rms_of_rated": 0.25
    },
    "l_ankle_roll": {
     "peak_nm": 1.119,
@@ -38,7 +38,7 @@
     "rms_of_rated": 0.37
    },
    "r_hip_yaw": {
-    "peak_nm": 0.248,
+    "peak_nm": 0.246,
     "rms_nm": 0.063,
     "peak_of_stall": 0.08,
     "rms_of_rated": 0.06
@@ -50,7 +50,7 @@
     "rms_of_rated": 0.65
    },
    "r_hip_pitch": {
-    "peak_nm": 1.097,
+    "peak_nm": 1.095,
     "rms_nm": 0.228,
     "peak_of_stall": 0.37,
     "rms_of_rated": 0.23
@@ -62,19 +62,19 @@
     "rms_of_rated": 0.42
    },
    "r_ankle_pitch": {
-    "peak_nm": 1.236,
-    "rms_nm": 0.249,
+    "peak_nm": 1.235,
+    "rms_nm": 0.248,
     "peak_of_stall": 0.42,
     "rms_of_rated": 0.25
    },
    "r_ankle_roll": {
-    "peak_nm": 1.137,
-    "rms_nm": 0.364,
+    "peak_nm": 1.138,
+    "rms_nm": 0.365,
     "peak_of_stall": 0.39,
     "rms_of_rated": 0.37
    },
    "l_shoulder_pitch": {
-    "peak_nm": 1.396,
+    "peak_nm": 1.394,
     "rms_nm": 0.221,
     "peak_of_stall": 0.47,
     "rms_of_rated": 0.23
@@ -86,7 +86,7 @@
     "rms_of_rated": 0.0
    },
    "r_shoulder_pitch": {
-    "peak_nm": 1.395,
+    "peak_nm": 1.393,
     "rms_nm": 0.228,
     "peak_of_stall": 0.47,
     "rms_of_rated": 0.23
@@ -137,24 +137,24 @@
  },
  "arm_neck_holding": {
   "arm_straight_out_nm": {
-   "l_shoulder_pitch": 0.08,
+   "l_shoulder_pitch": 0.079,
    "l_elbow": 0.006,
-   "r_shoulder_pitch": 0.08,
+   "r_shoulder_pitch": 0.079,
    "r_elbow": 0.006
   },
   "stall_nm": 2.94,
   "rated_nm": 0.98
  },
  "realtime": {
-  "python_ms_per_frame_pc": 0.027,
-  "python_ms_per_frame_pi4_est": 0.13,
+  "python_ms_per_frame_pc": 0.025,
+  "python_ms_per_frame_pi4_est": 0.12,
   "bus_bytes_per_frame": 127,
   "bus_ms_per_frame": 1.27,
   "imu_read_ms_est": 0.4,
   "frame_ms": 10.0,
-  "frame_used_ms_pi4_est": 1.8,
+  "frame_used_ms_pi4_est": 1.79,
   "ok": true
  },
  "pass": true,
- "seconds": 5.3
+ "seconds": 5.4
 }

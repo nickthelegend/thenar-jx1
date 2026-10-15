@@ -2,8 +2,9 @@
 
     python jx0/verify/run_all.py          -> jx0/results/verification.md
 
-Order: servo sizing, the 14 gaits (exports the robot's gait files), CAD interference, robustness (model errors,
-pushes, whole-program missions), joint strength and bracket FEA, power and timing, the software unit tests, then the report.
+Order: servo sizing, the 14 gaits (exports the robot's gait files), the fit to the real servo, CAD interference,
+robustness (model errors, pushes, whole-program missions), joint strength and bracket FEA, power and timing, the
+software unit tests, then the report.
 """
 from __future__ import annotations
 
@@ -16,6 +17,7 @@ PY = sys.executable
 STEPS = [
     ("servo sizing", [PY, "jx0/analysis/sizing.py"]),
     ("gaits", [PY, "jx0/sim/walk_jx0.py", "--no-render"]),
+    ("fit to the real servo: parts, cables, screws, assembly order", [PY, "jx0/verify/verify_fit.py"]),
     ("CAD interference", [PY, "jx0/verify/verify_cad.py"]),
     ("robustness: model errors and pushes", [PY, "jx0/verify/robustness.py", "final"]),
     ("robustness: whole-program missions", [PY, "jx0/verify/robustness.py", "mission"]),

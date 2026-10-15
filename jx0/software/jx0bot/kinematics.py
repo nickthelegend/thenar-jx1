@@ -70,13 +70,13 @@ def leg_dict(q, side):
 # masses (kg) and centres of mass (left leg link frames, m) from jx0/design_point.yaml via jx0/sim/jx0_model.py (v0.4;
 # checked against the MuJoCo model by tests/test_jx0bot.py). The legs are a third of the robot, so the centre of mass
 # moves with every step and is computed from both legs' joint angles.
-UPPER_MASS, UPPER_COM = 1.4530, np.array([0.0083, 0.0, 0.1340])   # pelvis + torso + head + arms (arms at rest)
+UPPER_MASS, UPPER_COM = 1.4490, np.array([0.0083, 0.0, 0.1345])   # pelvis + torso + head + arms (arms at rest)
 LINKS = {
-    "hip_yaw_link": (0.1440, (-0.0308, -0.0115, 0.0057)),
-    "hip_roll_link": (0.1220, (0.0059, 0.0019, 0.0005)),
-    "thigh": (0.1370, (0.0123, -0.0007, -0.0553)),
-    "shin": (0.1180, (0.0005, -0.0007, -0.0405)),
-    "ankle_cross": (0.1290, (-0.0376, -0.0083, 0.0000)),
+    "hip_yaw_link": (0.1450, (-0.0308, -0.0115, 0.0058)),
+    "hip_roll_link": (0.1240, (0.0056, 0.0020, 0.0006)),
+    "thigh": (0.1350, (0.0123, -0.0007, -0.0555)),
+    "shin": (0.1170, (0.0005, -0.0007, -0.0406)),
+    "ankle_cross": (0.1310, (-0.0375, -0.0082, 0.0000)),
     "foot": (0.0610, (-0.0140, 0.0000, -0.0260)),
 }
 LEG_MASS = sum(m for m, _ in LINKS.values())

@@ -47,19 +47,19 @@ IMG = ROOT / "jx0" / "results" / "images"
 E, NU = 2.0e9, 0.38
 ALLOW = {"static_mpa": 50.0, "fatigue_mpa": 15.0}
 H = 0.0007                                                         # voxel pitch (m)
-HF, HC = G.HF, G.HC
+HF, HI, HR = G.HF, G.HI, G.HR                                      # horn arm, boss, cage plate faces
 GAITS = ["forward", "forward_slow", "backward", "turn_left", "turn_right", "side_left", "forward_2", "forward_4",
          "backward_2", "backward_4", "turn_left_2", "turn_right_2", "side_left_2", "side_right_2"]
 
 
 def u_support(axis, centre, hs=1):
-    """Node sets of a U-bracket's two interfaces on servo (axis, centre): horn face and hub face annuli."""
+    """Node sets of a U-bracket's two interfaces on servo (axis, centre): horn face and boss face annuli."""
     c = np.asarray(centre, float) / 1000
     i = "xyz".index(axis)
 
     def sel(m):
         a = m.face_annulus(i, c[i] + hs * HF / 1000, c, 0.0032, 0.0098)
-        b = m.face_annulus(i, c[i] - hs * HF / 1000, c, 0.0032, 0.0092)
+        b = m.face_annulus(i, c[i] - hs * HI / 1000, c, 0.0032, 0.0094)
         return np.concatenate([a, b])
     return sel
 
@@ -68,7 +68,7 @@ def cage_load(axis, centre, hs=1):
     """Nodes of a cage's rear plate where the next servo's case sits (its inner face, around the hub hole)."""
     c = np.asarray(centre, float) / 1000
     i = "xyz".index(axis)
-    return lambda m: m.face_annulus(i, c[i] - hs * HC / 1000, c, 0.0114, 0.040)
+    return lambda m: m.face_annulus(i, c[i] - hs * HR / 1000, c, 0.0114, 0.040)
 
 
 LIP_BINS = 8                                                       # the lip's contact patch: 8 positions on the arc
@@ -87,7 +87,15 @@ def yaw_split(Wy):
     case = np.column_stack([f[:, 0], f[:, 1], np.zeros(len(f)), shaft * d[:, 0], shaft * d[:, 1], mh[:, 2]])
     ring = np.column_stack([-N, -R * N * np.sin(tn), R * N * np.cos(tn)])
     lip = np.column_stack([L, R * L * np.sin(tl), -R * L * np.cos(tl)])
-    return case, ring, lip, L, th_l
+    return case, ring, lip, L, th_l, th_n
+
+
+def on_insert(th_n):
+    """True where the ring's push is on the yaw ring insert (under the yaw case: it goes through the case into the
+    pelvis plate), not on the pelvis's own ring."""
+    R = RB.KEEP_R * 1000
+    x, y = R * np.cos(np.radians(th_n)), R * np.sin(np.radians(th_n))
+    return (np.abs(x) <= G.HW + G.C - 0.15) & (y <= G.ST["LA"] + G.C - 0.15)
 
 
 def lip_bins():
@@ -121,7 +129,7 @@ def parts(series):
     r, ra = G.roll_servo(), G.ankle_roll_servo()
     zs = -G.SOLE_TO_ANKLE
     y_s = G.yaw_servo(1)
-    z_in = (y_s.c["z"] + G.HC) / 1000                                       # yaw case's rear face (plate underside)
+    z_in = (y_s.c["z"] + G.HR) / 1000                                       # yaw case's rear face (plate underside)
 
     def pelvis_support(m):                                                  # the 4 screws from the torso floor
         return np.concatenate([m.face_annulus(2, G.TZ0 / 1000, (x / 1000, y / 1000, G.TZ0 / 1000), 0.0020, 0.0045)
@@ -153,9 +161,12 @@ def parts(series):
         return [(arc_face(z_face, centre, r_in, r_out, b - 15.0, b + 15.0), None, [2], cols["walking"][:, [k]],
                  cols["worst"][:, [k]]) for k, b in enumerate(lip_bins())]
 
+    ins = {t: on_insert(sp[t][5])[:, None] for t in sp}
     pelvis_groups = [(pelvis_load, (0, G.HIP_Y, zy), range(6), sp["walking"][0], sp["worst"][0]),
                      (lambda m: m.face_annulus(2, (zy + 0.1) / 1000, (0, G.HIP_Y / 1000, 0), 0.0115, 0.019), (0, G.HIP_Y, zy),
-                      [2, 3, 4], sp["walking"][1], sp["worst"][1]),
+                      [2, 3, 4], sp["walking"][1] * ~ins["walking"], sp["worst"][1] * ~ins["worst"]),
+                     (pelvis_load, (0, G.HIP_Y, zy), [2, 3, 4], sp["walking"][1] * ins["walking"],
+                      sp["worst"][1] * ins["worst"]),                        # via the insert and the case onto the plate
                      (bores, (0, G.HIP_Y, zy), [2, 3, 4], sp["walking"][2], sp["worst"][2])]
     yaw_groups = one("l_hip_roll", "parent", cage_load("x", (r.c["x"], 0, 0)), (r.c["x"], 0, 0))
     yaw_groups += [(lambda m: m.face_annulus(2, zy / 1000, (0, 0, zy / 1000), 0.0115, 0.019), (0, 0, zy), [2, 3, 4],
@@ -230,7 +241,7 @@ def analyse(name, prims, sup, groups):
     t0 = time.time()
     mm = build(prims).to_mesh()
     mesh = trimesh.Trimesh(np.asarray(mm.vert_properties)[:, :3] / 1000, np.asarray(mm.tri_verts))
-    model = VoxelModel.from_mesh(mesh, H, iso_D(E, NU)).build()
+    model = VoxelModel.from_mesh(mesh, H, iso_D(E, NU)).keep_face_connected().build()
     ns = sup(model)
     if len(ns) < 6:
         raise RuntimeError(f"{name}: support {len(ns)} nodes")

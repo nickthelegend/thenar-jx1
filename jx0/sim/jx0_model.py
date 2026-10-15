@@ -29,9 +29,9 @@ ARM_JOINTS = ["shoulder_pitch", "elbow"]
 # each side (ESTIMATED from the CAD printed masses in jx0/cad/parts/index.json + 89 g per STS3215 + screws), v0.4:
 # upper arm = hood + elbow box + the shoulder AND elbow STS3215 (the shoulder servo hangs outside the chest, in the arm);
 # forearm = the blade
-ARM_MASS = {"upper_arm": 0.205, "forearm": 0.016}
+ARM_MASS = {"upper_arm": 0.204, "forearm": 0.016}
 ARM_COM = {"upper_arm": (0.0064, 0.0198, -0.0326), "forearm": (0.0008, 0.0032, -0.0382)}   # left arm, link frames
-HEAD_MASS = 0.073                                    # CAD head 66.8 g + microphone + screws (ESTIMATED)
+HEAD_MASS = 0.077                                    # CAD head 60.2 g + neck hub 10.7 g + microphone + screws (ESTIMATED)
 
 
 def _f(x):

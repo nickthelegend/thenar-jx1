@@ -45,7 +45,7 @@ V03_PLATE = {"hip_yaw": (32.0, 3.0), "hip_roll": (35.0, 3.0), "hip_pitch": (30.0
 V04_ARM = {"hip_roll": (26.0, G.TU, 30.0), "hip_pitch": (26.0, G.TU, 50.0), "knee": (18.0, G.TU, 22.0),
            "ankle_pitch": (26.0, G.TU, 40.0), "ankle_roll": (26.0, G.TU, 30.0)}
 YAW_DISC = (38.0, G.YAW_DISC_T)                                              # v0.4 hip-yaw disc: width, thickness (mm)
-ARM_D = (G.HF + G.TU / 2) + (G.HF + G.BOSS_H + G.TU / 2)                     # 42.75 mm between the arms' mid-planes
+ARM_D = (G.HF + G.TU / 2) + (G.HUB + G.TU / 2)                              # 44.25 mm between the arms' mid-planes
 JOINTS = ("hip_yaw", "hip_roll", "hip_pitch", "knee", "ankle_pitch", "ankle_roll")
 
 

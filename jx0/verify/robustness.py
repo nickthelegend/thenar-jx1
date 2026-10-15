@@ -183,7 +183,7 @@ def _servo_points():
     sys.path.insert(0, str(ROOT / "jx0" / "cad"))
     import geometry as G
     hf = G.HF / 1000
-    return {"hip_yaw": (G.ZY / 1000, (G.ZY + G.HF) / 1000), "hip_roll": (G.XR / 1000, (G.XR - G.HF) / 1000),
+    return {"hip_yaw": (G.ZY / 1000, G.yaw_servo(1).c["z"] / 1000), "hip_roll": (G.XR / 1000, (G.XR - G.HF) / 1000),
             "hip_pitch": (hf, 0.0), "knee": (hf, 0.0), "ankle_pitch": (hf, 0.0),
             "ankle_roll": (G.XA / 1000, (G.XA - G.HF) / 1000)}
 

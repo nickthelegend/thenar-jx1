@@ -43,7 +43,8 @@ ALTERNATIVES = [
     ("Feetech STS3215 12 V (chosen)", 30.0, "at 12 V", "position, load, temperature", (2419, 2419), "Evelta"),
     ("Waveshare ST3025", 40.0, "listing", "position, load, temperature", (10299, 10299), "Robocraze"),
 ]
-PART_NAMES = {"JX0_Pelvis": "Pelvis", "JX0_YawKeeper": "Hip-yaw keeper", "JX0_HipYawBracket": "Hip-yaw bracket (disc)",
+PART_NAMES = {"JX0_Pelvis": "Pelvis", "JX0_YawKeeper": "Hip-yaw keeper", "JX0_YawRing": "Hip-yaw ring insert",
+              "JX0_HipYawBracket": "Hip-yaw bracket (disc)", "JX0_HornShim": "Horn shim, 0.4 mm",
               "JX0_HipRollBracket": "Hip-roll U-bracket", "JX0_Thigh": "Thigh", "JX0_Shin": "Shin",
               "JX0_AnkleBracket": "Ankle bracket", "JX0_Foot": "Foot", "JX0_Torso": "Torso (lower shell, skirt)",
               "JX0_ChestCap": "Chest cap", "JX0_Head": "Head", "JX0_UpperArm": "Upper arm (hood + elbow box)",
@@ -127,7 +128,7 @@ def build(rows):
     margin = min(j["peak_margin"] for j in json.loads((ROOT / "jx0" / "results" / "sizing.json").read_text(encoding="utf-8"))["joints"])
     spec = [("Height / mass", f"{SPEC['height']} / {SPEC['mass']} (CAD, all parts)"),
             ("Joints", "17, every one a Feetech STS3215 12 V serial bus servo (30 kg·cm stall, position feedback), like the reference robot"),
-            ("Legs", "6 joints each; every pitch and roll joint double-sided (a U-bracket on the servo's horn and rear hub, the body in a cage), like the reference robot; the hip-yaw disc held from both sides"),
+            ("Legs", "6 joints each; every pitch and roll joint double-sided (a U-bracket on the servo's drive horn and passive horn, the body in a cage), like the reference robot; the hip-yaw disc held from both sides; every part fitted to the real STS3215"),
             ("Arms and head", "shoulder pitch and elbow per arm, a paddle blade; neck yaw under a soft rounded head"),
             ("Brain", "Raspberry Pi 4: 100 Hz gait playback with arm swing, IMU balance, offline speech recognition and voice"),
             ("Talking", "Claude over Wi-Fi writes the replies and calls the robot's actions (walk, turn, wave, nod, look)"),
@@ -270,8 +271,17 @@ the price.</p>'''))
                      inr(g * rate[r["fill"]]), sf])
     g_tot = used[G.FILL_LEG] + used[G.FILL_BODY]
     hw_rows, hw_tot = group_rows({"Structure"})
+    screws = [r for r in rows if r["ID"].startswith(("JX0-22", "JX0-23"))]       # one line for all the screws
+    keep = [hr for hr in hw_rows if not any(f'>{e(r["ID"][4:])}<' in hr[0] for r in screws)]
+    first = next(i for i, hr in enumerate(hw_rows) if hr not in keep)
+    keep.insert(first, ['<span class="id">22–23</span>',
+                        '<b>Screws</b><br><span class="sub">M2 CSK 6 / 8 / 10 / 12 mm, M3 × 8 socket and pan head (verify_fit)</span>',
+                        f'<span class="sub">{e(screws[0]["Store"])}</span>', str(sum(r["qty"] for r in screws)), "—",
+                        f'<b>{inr(sum(r["total"] for r in screws))}</b>'])
+    hw_rows = keep
     pages.append(page(5, "4. Printed structure and hardware", f'''
-<p class="lead">{sum(r["qty"] for r in parts.values())} printed parts. The pelvis and every leg part carry the robot's
+<p class="lead">{sum(r["qty"] for b, r in parts.items() if b != "JX0_HornShim")} printed parts and
+{parts.get("JX0_HornShim", {}).get("qty", 0)} thin horn shims. The pelvis and every leg part carry the robot's
 weight at every step, so they are PETG printed near-solid (6 walls, 6 top and bottom layers, 40 % gyroid); the body, head
 and arms are matte PLA in the reference robot's pastel green.</p>
 {table([("Part", ""), ("Qty", "r"), ("Material", ""), ("Each", "r"), ("All", "r"), ("Filament ₹", "r"), ("FEA SF fatigue / static", "r")],
@@ -338,7 +348,7 @@ speaks through a small amplifier and speaker.</p>
 <h2>Not included in this estimate</h2>
 <div class="excl">
   <div>A 3D printer (or a print service), and the time to print about {g_tot / 1000:.1f} kg of parts</div>
-  <div>Tools: M2 / M3 hex keys, a small screwdriver, a soldering iron for the heat-set inserts</div>
+  <div>Tools: PH0 / PH1 screwdrivers (one stubby), 1.5–2.5 mm hex L-keys, calipers, a soldering iron for the inserts</div>
   <div>Shipping and delivery charges from the stores</div>
   <div>A spare STS3215 ({inr(servo["unit"])}) and a second battery, recommended</div>
   <div>Claude API usage (pay per use) and Wi-Fi</div>

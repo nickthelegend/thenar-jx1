@@ -1,8 +1,9 @@
 """JX0 mechanical verification on the exact CAD geometry (geometry.py built with manifold3d, the same solids SolidWorks
 builds), no SolidWorks needed:
 
-1. static interference: every pair of the 39 components (22 printed parts + 17 STS3215) at the zero pose and in the
-   walking stance, as an intersection volume;
+1. static interference: every pair of the 41 components (24 printed parts + 17 STS3215, the real servo's shape:
+   geometry.servo_st) and the keep-outs that move with them (each servo's cables, every screw head) at the zero pose
+   and in the walking stance, as an intersection volume;
 2. motion interference: the robot posed at every 0.1 s of all 14 verified gaits (legs + arm swing, as exported to the
    robot) and through every action (wave, nod, look), checking every pair of components on different links;
 3. joint range sweep: each joint driven through its configured limits (config.yaml) from the walking stance, 2° steps,
@@ -29,7 +30,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "jx0" / "cad"))
 sys.path.insert(0, str(ROOT / "jx0" / "sim"))
 import geometry as G  # noqa: E402
-from layout import components, link_of  # noqa: E402
+from layout import components, keepouts, link_of  # noqa: E402
 from preview import build as build_solid  # noqa: E402
 from jx0_model import build as build_model  # noqa: E402
 from jx1calc.design import Design  # noqa: E402
@@ -55,6 +56,15 @@ class Robot:
             local[:3, :3] = M[:3, :3]
             local[:3, 3] = M[:3, 3] * 1000 - origin
             self.items.append((key, mujoco.mj_name2id(self.m, mujoco.mjtObj.mjOBJ_BODY, link), local, solids[part]))
+        # keep-outs that move with a component: each servo's cables and every screw head (layout.keepouts)
+        owner = {key: (link_of(key), M) for key, _, M in components()}
+        for key, prims, M, comp in keepouts():
+            (link, origin), _ = owner[comp]
+            local = np.eye(4)
+            local[:3, :3] = M[:3, :3]
+            local[:3, 3] = M[:3, 3] * 1000 - origin
+            self.items.append((key, mujoco.mj_name2id(self.m, mujoco.mjtObj.mjOBJ_BODY, link), local, build_solid(prims)))
+        self.owner = {key: comp for key, _, _, comp in keepouts()}
         self.jadr = {mujoco.mj_id2name(self.m, mujoco.mjtObj.mjOBJ_JOINT, j): self.m.jnt_qposadr[j]
                      for j in range(self.m.njnt) if self.m.jnt_type[j] != mujoco.mjtJoint.mjJNT_FREE}
 
@@ -76,14 +86,18 @@ class Robot:
             placed.append((key, body, s, np.array(lo), np.array(hi)))
         return placed
 
-    @staticmethod
-    def clashes(placed, cross_link_only=True, skip=()):
+    def clashes(self, placed, cross_link_only=True, skip=()):
         out = []
         for (ka, ba, sa, loa, hia), (kb, bb, sb, lob, hib) in itertools.combinations(placed, 2):
             if cross_link_only and ba == bb:
                 continue
             if (ka, kb) in skip or (kb, ka) in skip:
                 continue
+            oa, ob = self.owner.get(ka), self.owner.get(kb)
+            if oa is not None and ob is not None:                  # two keep-outs: cables may cross cables
+                continue
+            if oa == kb or ob == ka:                                # a keep-out on its own component (a screw head in
+                continue                                            # its part, cables against their own servo)
             if np.any(hia < lob) or np.any(hib < loa):          # bounding boxes apart
                 continue
             v = (sa ^ sb).volume()

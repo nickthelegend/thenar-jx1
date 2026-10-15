@@ -1,28 +1,60 @@
 # JX0 build guide
 
-JX0 is 22 printed parts, 17 Feetech STS3215 servos (every joint, like the reference robot), a Raspberry Pi and a
-handful of small modules. Everything is in the [parts list](../bom/jx0_bom.csv): ₹58,215 from Indian online stores,
-with prices checked 2026-10-04. Budget two weekends for printing and one for assembly and bring-up.
+JX0 is 25 printed parts (plus 40 thin horn shims), 17 Feetech STS3215 servos (every joint, like the reference robot), a
+Raspberry Pi and a handful of small modules. Everything is in the [parts list](../bom/jx0_bom.csv): ₹57,878 from
+Indian online stores and a local fastener supplier, with prices checked 2026-10-04. Budget two weekends for printing
+and one for assembly and bring-up.
 
 Order of work: **buy → print → servo IDs → assemble → wire → bring-up → software**.
+
+## Fitted to the real servo
+
+Every part is built around the STS3215 as it really is, not a box. The CAD's servo model is the larger of two
+measured models: Feetech's own factory model (the STEP Waveshare distributes) and TheRobotStudio's SO-ARM100 model,
+which thousands of SO-101 arms are printed against. It includes:
+
+- the 45.4 × 24.8 mm case and the pad on its rear face that the cage presses on;
+- the raised label block on that rear face;
+- the opening of the two cable sockets;
+- the passive horn on its Ø6 rear boss;
+- the raised strip on the output face;
+- the drive horn, with the head of its centre screw.
+
+`python jx0/verify/verify_fit.py` checks, before anything is printed:
+
+- **The servo in its place:** each of the 17 servos, as both models, against every printed part, including the cables
+  leaving each servo.
+- **Every screw** (182 of them): the plate under its head, the thread length it gets in the horn, case or insert, that
+  it doesn't bottom out, that it lines up with a real hole, and that its head has room.
+- **The assembly order below:** every servo sliding into its cage, every bracket sliding onto its servo, and a
+  screwdriver reaching every screw at the step where it goes in.
+
+`jx0/verify/verify_cad.py` then checks the same servo shape, its cables and every screw head through all the gaits and
+every joint's full range ([verification](../results/verification.md)).
+
+What the CAD cannot know is your servos' exact horn height: the two models and the datasheet differ by up to 0.65 mm.
+**Measure it** (step 2) and use the printed 0.4 mm shims.
 
 ## How the legs are built (v0.4)
 
 Every leg pitch and roll joint is **double-sided**, like the reference robot. The STS3215 is a dual-shaft servo
-(Evelta sells it as "ST3215-C018 … Dual Shaft"): the output horn on one face and a passive hub on the other.
+(Evelta sells it as "ST3215-C018 … Dual Shaft"): the drive horn on one face and a passive horn, on the Ø6 rear boss,
+on the other.
 
-- The servo's **body sits in a cage** on one part (four walls and a plate the case is screwed to).
-- The **next part is a U-bracket** that bolts to both faces: 4 screws into the horn, and 4 screws through a raised
-  boss into the rear hub.
+- The servo's **body sits in a cage** on one part: four walls, and a plate the case is screwed to. The plate has a
+  window over the label block and the cable sockets. The cables are plugged in first and lie flat along the rear face,
+  out through the far end of the cage.
+- The **next part is a U-bracket** that bolts to both horns: 4 × M3 × 6 into the drive horn, and 4 × M3 × 8 through
+  a 3.2 mm boss into the passive horn. The boss carries the arm over the cage's plate, its screw heads and the cables.
 
-So the joint's load goes through both ends of the servo instead of bending its output shaft. With the simulated
-walking loads, a one-plate joint (v0.3) would stress its plate past PETG's fatigue strength at every leg joint; the
-U-brackets keep every printed leg part at a fatigue safety factor of 2.1 or more (finite elements:
-[verification](../results/verification.md)).
+So the joint's load goes through both ends of the servo instead of bending its output shaft. FEA check:
+[verification](../results/verification.md).
 
 The **hip yaw** cannot be a U-bracket: its servo stands under the body with the hip-roll servo right below it. Instead
 the pelvis holds the yaw disc from both sides:
-- a **thrust ring** above it, part of the pelvis;
+- a **thrust ring** above it, part of the pelvis. Under the yaw servo's case it is a separate printed **yaw ring
+  insert**, because the servo goes into the pelvis from below. The disc's inboard side, where the gaits push hardest,
+  bears through the insert onto the servo's case.
 - a **keeper** below it, a small printed C-shaped part whose lip runs under the disc's 3 mm flange. Four screws clamp
   it to a boss on the pelvis.
 
@@ -36,133 +68,204 @@ generated from `jx0/cad/geometry.py`, so a change there rebuilds every part. To 
 SolidWorks, run `python jx0/cad/preview.py`.
 
 **Leg parts and pelvis: PETG, near-solid.** These carry every step:
-- 0.2 mm layers, **6 walls, 6 top and 6 bottom layers, 40 % gyroid**, so their 2.4–4.5 mm plates print solid, as
-  the strength check assumes;
+- 0.2 mm layers, **6 walls, 6 top and 6 bottom layers, 40 % gyroid**, so their 2–5 mm plates print solid, as the
+  strength check assumes;
 - 235–245 °C nozzle, 75–85 °C bed;
 - print each U-bracket lying on one of its arms, with tree supports under the other arm.
 
 **Body, head and arms: PLA.** The reference robot's pastel green is closest to eSun PLA-Matte Mint Green. Use
 0.2 mm layers, 3 walls, 25 % gyroid, 205–215 °C nozzle and a 60 °C bed.
 
-**Print one U-bracket first** (a shin is the smallest) and fit a servo:
-- the horn and hub must sit flat on the bracket's arms;
-- the boss must slide over the cage's plate.
+**Print one shin first** (the smallest U-bracket with a cage), before anything else, and fit a servo to it:
+- the servo must slide up into its cage;
+- its two far case screws must pull it flat onto the plate;
+- the shin must slide onto a second servo's horns and sit flat on both.
 
-The screw holes are sized for M2 self-tapping screws, and the hub's 4-hole pattern is ASSUMED equal to the horn's.
-Neither is published for the STS3215.
+If your printer prints holes or pockets small, set its hole compensation now, before printing the rest.
 
 | Part | Qty | Printed mass | Size (mm) | Material, print tip |
 |---|---|---|---|---|
-| JX0_Pelvis (two hip-yaw cages, thrust rings, keeper bosses) | 1 | 77.9 g | 52 × 139 × 39 | PETG near-solid; top plate down |
-| JX0_YawKeeper_L / _R | 1 + 1 | 2.8 g each | 31 × 42 × 8 | PETG near-solid; flat top down |
-| JX0_HipYawBracket_L / _R | 1 + 1 | 50.0 g each | 70 × 58 × 46 | PETG near-solid; disc face down, supports in the groove |
-| JX0_HipRollBracket_L / _R | 1 + 1 | 29.0 g each | 96 × 54 × 31 | PETG near-solid; rear arm down |
-| JX0_Thigh_L / _R | 1 + 1 | 44.3 g each | 52 × 48 × 92 | PETG near-solid; outer arm down |
-| JX0_Shin_L / _R | 1 + 1 | 25.2 g each | 31 × 48 × 84 | PETG near-solid; outer arm down |
-| JX0_AnkleBracket_L / _R | 1 + 1 | 35.9 g each | 72 × 61 × 33 | PETG near-solid; outer arm down |
-| JX0_Foot | 2 | 51.1 g each | 124 × 70 × 46 | PETG near-solid; sole down |
-| JX0_Torso (lower shell with the skirt) | 1 | 103.4 g | 84 × 120 × 136 | PLA; floor down |
-| JX0_ChestCap | 1 | 46.4 g | 84 × 126 × 42 | PLA; upside down (top face on the bed), chamfers 45° |
-| JX0_Head | 1 | 66.8 g | 66 × 78 × 62 | PLA; upright on its floor, tree supports inside the rounded top |
-| JX0_UpperArm_L / _R (shoulder hood + elbow box) | 1 + 1 | 22.7 g each | 53 × 35 × 84 | PLA; outer plate down |
-| JX0_ArmBlade_L / _R | 1 + 1 | 15.3 g each | 36 × 8 × 116 | PLA; lying flat |
-| **Total** | **22** | **847 g** | | 555 g PETG + 293 g PLA |
+| JX0_Pelvis (two hip-yaw cages, thrust rings, keeper bosses) | 1 | 73.0 g | 52 × 139 × 39 | PETG near-solid; top plate down |
+| JX0_YawRing_L / _R (thrust ring insert under each yaw servo) | 1 + 1 | 0.7 g each | 26 × 30 × 3 | PETG near-solid; flat |
+| JX0_YawKeeper_L / _R | 1 + 1 | 2.9 g each | 31 × 42 × 9 | PETG near-solid; flat top down |
+| JX0_HipYawBracket_L / _R | 1 + 1 | 50.9 g each | 74 × 58 × 46 | PETG near-solid; disc face down, supports in the groove |
+| JX0_HipRollBracket_L / _R | 1 + 1 | 30.5 g each | 98 × 56 × 31 | PETG near-solid; rear arm down |
+| JX0_Thigh_L / _R | 1 + 1 | 42.0 g each | 52 × 49 × 92 | PETG near-solid; outer arm down |
+| JX0_Shin_L / _R | 1 + 1 | 23.7 g each | 31 × 49 × 84 | PETG near-solid; outer arm down |
+| JX0_AnkleBracket_L / _R | 1 + 1 | 37.7 g each | 74 × 62 × 39 | PETG near-solid; outer arm down |
+| JX0_Foot | 2 | 50.8 g each | 124 × 70 × 46 | PETG near-solid; sole down |
+| JX0_HornShim (0.4 mm, under a horn arm) | 40 | 0.1 g each | Ø19.6 | PETG; two 0.2 mm layers, flat |
+| JX0_Torso (lower shell with the skirt) | 1 | 103.0 g | 84 × 120 × 136 | PLA; floor down |
+| JX0_ChestCap | 1 | 45.3 g | 84 × 126 × 42 | PLA; upside down (top face on the bed), chamfers 45° |
+| JX0_Head | 1 | 60.2 g | 66 × 78 × 61 | PLA; upright on its open bottom, tree supports inside the rounded top |
+| JX0_NeckHub (on the neck horn, the head slides over it) | 1 | 10.7 g | 52 × 48 × 12 | PLA; flat plate down |
+| JX0_UpperArm_L / _R (shoulder hood + elbow box) | 1 + 1 | 21.5 g each | 54 × 35 × 85 | PLA; outer plate down |
+| JX0_ArmBlade_L / _R | 1 + 1 | 14.8 g each | 36 × 8 × 116 | PLA; lying flat |
+| **Total** | **25 + 40 shims** | **846 g** | | 554 g PETG + 292 g PLA |
 
-## 2. Before assembly: servo IDs and centring
+## 2. Before assembly: servo IDs, centring, horn height
 
 Every STS3215 ships as ID 1. Set the IDs one servo at a time and write each on its case. The table is in
 [wiring.md](wiring.md): legs 1–12, arms 13–16, neck 17. Then chain the servos, run
 `python -m jx0bot.calibrate center`, and fit every horn and bracket while the servos hold mid-travel.
 [bringup.md](bringup.md) has the commands.
 
+**Horn height, every servo.**
+1. Put the drive horn on its spline and the passive horn on the rear boss.
+2. Measure across the two horn faces with calipers.
+3. The brackets are built for 36.55 mm. Put the right number of 0.4 mm shims (JX0_HornShim) between the drive horn and
+   whatever bolts to it:
+
+| Measured across both horns | Shims under the drive horn's arm |
+|---|---|
+| 36.35 mm or more | none |
+| 35.95 – 36.35 mm | 1 |
+| less than 35.95 mm | 2 |
+
+Use the same count on the chest pads, the blades and the head. The hip-yaw discs are the exception: they hang
+under the pelvis's ring, so their shims are set by feel (step 3). The passive horn needs no screw of its own: it sits
+on the rear boss and the bracket's 4 screws hold it.
+
+**Cables first.** Plug both of a servo's cables in before it goes into its cage. Bend the wires flat against the rear
+face, toward the far end of the case (away from the horn). They lie in the cage plate's window and come out past the
+cage's end wall. Leave a loop at every joint for its full range.
+
 ## 3. Assemble
 
-Two rules at every leg joint:
-- **The servo goes into its cage from the open side** (with its horn off where a plate covers that side), and its
-  case screws go in through the cage's plate. The holes in a bracket's arm let a screwdriver reach the far ones.
-- **The U-bracket slides onto the servo from below**, its boss gliding over the cage's plate onto the rear hub. The
-  near case screw on that side is left out on purpose, so the boss can pass; three screws and the cage walls hold the
-  case. Then 4 screws go into the horn and 4 through the boss into the hub.
+Rules at every leg joint:
+- **Each servo goes into its cage the way the step says**, and its M2 × 6 CSK case screws go in through the cage's plate.
+  The heads sink flush.
+- **A U-bracket slides onto its servo from below.** Its boss glides over the cage's thin strip onto the passive horn,
+  and a groove in the boss lets the rear boss's tip through. The drive horn sits on its spline *without* its centre
+  screw while the bracket goes on. Then:
+  1. the shims;
+  2. 4 × M3 × 6 into the drive horn (the small screws from the servo's bag);
+  3. the horn's centre screw (M3 × 6, from the servo's bag) through the arm's centre hole;
+  4. 4 × M3 × 8 pan heads through the boss into the passive horn.
 
 All three hip axes meet at the hip centre and both ankle axes at the ankle centre, as the walking model assumes.
 
-Legs, top down (left shown; the right is the mirror image):
+**The hips, on the robot (both sides before the lower legs).** Left side shown; the right is the mirror image.
 
-1. **Pelvis.** Slide each hip-yaw servo into its pelvis cage from below, horn end down, and screw it through the top
-   plate (4 × M2 × 6, heads sunk). Fit the yaw horn.
-2. **Hip-yaw bracket and keeper.**
-   - Slide the hip-roll servo into the bracket's cage from the front, horn off, and screw it through the back plate.
+1. **Pelvis.**
+   - Press the 4 M3 heat-set inserts into the plate's 4.0 mm holes, flush with the top (soldering iron at about
+     220 °C).
+   - Fit each hip-yaw servo's drive horn with its centre screw. No passive horn on the yaw servos.
+   - Push the servo up into its cage from below, with its cables plugged in and fed up through the plate's window.
+   - Screw it through the top plate: 4 × M2 × 6 CSK, the heads sink below the surface.
+2. **Yaw ring insert.** Push it up around the yaw horn into the gap under the case, straight edges between the ends
+   of the pelvis's ring. Put one layer of PTFE tape on its underside.
+3. **Hip-yaw bracket.**
+   - On the bench, slide the hip-roll servo into the bracket's cage from the front, horn side first. Both horns go on
+     first, the drive horn without its centre screw.
+   - Screw it through the back plate: 3 × M2 × 6 CSK.
    - Put one layer of PTFE tape on the top of the disc and one under its flange (the rim above the groove).
-   - Bolt the disc to the yaw horn from below (4 × M2 × 10 through the sunk holes). It rides 0.1 mm under the
-     pelvis's thrust ring.
-   - Slide the **keeper** in sideways from the outer front of the hip, its lip into the groove under the disc's
-     flange, and clamp it flat against the pelvis's boss with 4 × M2 × 10 from below.
-   - Turn the leg by hand: it must turn freely through ±12° with no up-and-down wobble at the disc's rim. If it wobbles,
-     add a layer of PTFE tape under the flange; if it binds, take one off. Do this before fitting anything below.
-3. **Hip-roll bracket.** First fit it to the hip-roll servo, horn on:
-   - slide it on from below, rear boss over the cage's back plate;
-   - put the 4 horn screws in from inside its empty pitch cage (heads sunk), then 4 × M2 × 10 into the hub.
+   - Bolt the disc to the yaw horn from below with one shim, 4 × M3 × 6 through the sunk holes. It must turn freely
+     just under the pelvis's ring and the insert: if it rubs, add a shim (up to 3). Up to 0.5 mm of gap is fine; the
+     PTFE tape takes it up.
+4. **Keeper.**
+   - Slide it in sideways from the outer front of the hip, its lip into the groove under the disc's flange.
+   - Clamp it flat against the pelvis's boss with 4 × M2 × 10 from below.
+   - Turn the leg by hand: it must turn freely through ±12° with no up-and-down wobble at the disc's rim. The lip
+     sits up to 0.5 mm under the flange: add layers of PTFE tape under the flange (and on the insert's top) until the
+     wobble is gone; if it binds, take one off.
+5. **Hip-roll bracket** onto the hip-roll servo from below (the rules above). The 4 roll-horn screws go in from inside
+   its empty pitch cage: a long PH1 screwdriver through the 4 holes in the cage's front wall. Use pan or cheese heads
+   no taller than 2.4 mm: they sink into the arm, 0.5 mm from where the pitch servo will sit.
+6. **Hip-pitch servo** into the hip-roll bracket's pitch cage from the outer side, horn side first, both horns on (no
+   centre screw yet). Screw it through the inner plate: 3 × M2 × 6 CSK. On the second leg the first leg is in the
+   way: a PH1 bit turned by hand (50 mm of room).
 
-   Then slide the hip-pitch servo into the pitch cage from the outer side and screw it through the inner plate.
-4. **Thigh.**
-   - Slide the knee servo into the thigh's knee cage from the front (horn off). Put in its near case screw through the
-     inner plate, and the two far ones through the holes in the inner arm. Fit the knee horn.
-   - Slide the thigh onto the hip-pitch servo from below: 4 × M2 × 8 into the horn, 4 × M2 × 10 into the hub.
-5. **Shin.**
-   - Slide the ankle-pitch servo up into the shin's cage from below. The front near screw goes in sunk (the rear
-     one is left out on purpose: that corner has no side wall, and a hole there would weaken the plate beside the
-     hub); the far ones go through the holes in the inner arm.
-   - Slide the shin onto the knee servo from below.
-6. **Ankle bracket.**
-   - Slide the ankle-roll servo into its cage from the inboard end (horn off) and screw it through the back plate.
-   - Fit the roll horn through the rim's hole.
-   - Slide the bracket onto the ankle-pitch servo from below.
-7. **Foot** onto the ankle-roll servo from below, heel arm over the cage's back plate. Glue the 1 mm rubber sheet
-   under the sole (contact cement) and trim it flush.
+**Each lower leg on the bench, then onto its hip.**
+
+7. **Thigh and knee servo.**
+   - Slide the knee servo into the thigh's knee cage from the front, both horns off.
+   - Screw it with 3 × M2 × 6 CSK: the near one through the inner plate, the two far ones through the holes in the inner
+     arm.
+   - Fit the passive horn from the inner side, through the plate's hole, and the drive horn (no centre screw yet).
+8. **Shin and ankle-pitch servo.**
+   - Slide the ankle-pitch servo up into the shin's cage from below, drive horn on with its centre screw, no passive
+     horn. Its label block runs up the slot in the plate.
+   - Screw it with 2 × M2 × 6 CSK, the far ones, through the holes in the inner arm. The near ones would break into the
+     slot, so there are none.
+   - Fit the passive horn through the plate's slot. Take the drive horn's centre screw out again before the next
+     bracket.
+   - Slide the shin onto the knee servo from below (the rules above).
+9. **Ankle bracket and foot.**
+   - Slide the ankle-roll servo into the ankle bracket's cage from the inboard end, both horns off.
+   - Screw it through the back plate: 3 × M2 × 6 CSK.
+   - Fit its passive horn from behind and its drive horn.
+   - Slide the foot onto it from below (the rules above).
+   - Glue the 1 mm rubber sheet under the sole (contact cement) and trim it flush.
+   - Then slide the ankle bracket, with the foot, onto the ankle-pitch servo from below (the rules above).
+10. **Lower leg onto the hip-pitch servo** from below (the rules above). The 4 hub screws on the inside of the leg
+    face the other leg: a PH2 bit turned by hand or with a small spanner (40–45 mm of room).
 
 Body, arms and head:
 
-8. **Lower torso** onto the pelvis: 4 × M3 × 8 into heat-set inserts pressed into the pelvis (soldering iron at about
-   220 °C). Its skirt comes down around the two hip-yaw servos. Inside:
-   - the Raspberry Pi on the back-wall standoffs;
-   - the battery on the floor, with the servo driver and the UBEC beside it;
-   - the push-to-talk button in the back wall.
+11. **Lower torso** onto the pelvis:
+    - Feed the hip-yaw servos' cables up through the two openings in the floor and the leg cables through the rear
+      slot.
+    - Screw it down with 4 × M3 × 8 socket heads into the inserts (their tips go on into the holes in the pelvis's ribs).
 
-   The leg cables come up through the slot in the floor.
-9. **Arms**, each side:
-   - Shoulder servo into the hood, case down, screwed to the outer plate.
-   - Elbow servo into the box below, horn outward, screwed to the inner plate.
-   - Blade onto the elbow horn (4 × M2 × 12).
-10. **Chest cap**:
-    - Screw the **neck servo** onto the top by its rear face, horn up.
+    Inside:
+    - the Raspberry Pi on the back-wall standoffs (4 × M2 × 8 CSK, cutting their own thread);
+    - the battery on the floor, with the servo driver and the UBEC beside it;
+    - the push-to-talk button in the back wall.
+12. **Arms**, each side, on the bench:
+    - Shoulder servo into the hood from the chest side, horn side first. Its cables go out through the window in the
+      outer plate. Screw it to the outer plate: 4 × M2 × 6 CSK.
+    - Elbow servo into the box below from the outer side, horn side first. Its cables run along the inner plate to the
+      front. Screw it to the inner plate: 4 × M2 × 6 CSK.
+    - Blade onto the elbow horn: shims, 4 × M3 × 6 from the servo bag, heads down in the boss.
+13. **Chest cap**:
+    - Stand the **neck servo** on the top, its cables down through the window under it. Screw it from inside the cap:
+      4 × M2 × 6 CSK into the 0.5 mm pads.
     - Fit the speaker under the round grille.
-    - Bolt each **shoulder horn** to its pad on the cap's side wall from inside the cap (4 × M2 × 10); the arm now
-      hangs from the pad.
-    - Slide the cap over the torso lip and fix it with 4 × M3 × 8 through the cap wall, front and back (they cut
-      their own thread in the lip's 2.5 mm holes; do not overtighten).
-11. **Head** onto the neck horn (centre screw + 4 horn screws). Glue the microphone behind the four face holes and take
-    its cable down through the hole in the head floor, with slack for ±80° of head turn.
+    - Bolt each **shoulder horn** to its pad on the cap's side wall from inside the cap: shims, 4 × M3 × 6, the
+      shoulder horn's centre screw through the pad's centre hole. The arm now hangs from the pad.
+    - Slide the cap over the torso lip and fix it with 4 × M2 × 8 CSK through the cap wall, front and back (they cut
+      their own thread in the lip's 1.8 mm holes; do not overtighten).
+14. **Head**:
+    - Fit the neck horn's centre screw first.
+    - Bolt the **neck hub** to the neck horn from above: shims, then 4 × M3 × 8 pan heads, a normal screwdriver.
+    - Glue the microphone behind the four face holes and take its cable down through the hole in the hub, with slack
+      for ±80° of head turn.
+    - Slide the head down over the hub and fix it with 2 × M2 × 10 CSK through the back wall into the hub.
 
 Look at `jx0/cad/JX0_Robot.SLDASM` in SolidWorks, or the pictures in [../README.md](../README.md), whenever a
 part's orientation is unclear.
 
 ## 4. Wire, bring up, install the software
 
-- [wiring.md](wiring.md): power, the servo bus chains and IDs, the GPIO map.
+- [wiring.md](wiring.md): power, the servo bus chains and IDs, where every servo's cables go, the GPIO map.
 - [bringup.md](bringup.md): IDs, centring, zero pose, directions, stiffness, first stand and first steps.
 - [software_setup.md](software_setup.md): Raspberry Pi OS, audio, voice models, the Claude API key, start on boot.
 
-## Fasteners and small parts
+## Fasteners, tools and small parts
+
+Every screw below was checked against the servo's real holes (verify_fit): the plate under its head, its thread,
+that it doesn't bottom out. These are the screws bought on 2026-10-15; nothing else is needed.
 
 | Item | Where | Notes |
 |---|---|---|
-| M2 × 6 socket screws (66) | servo cases (3 or 4 per servo), hip-roll horns | size ASSUMED: fit-check on the first bracket |
-| M2 × 8 (36) | U-bracket horn arms, head | |
-| M2 × 10 (64) | U-bracket hub arms through the boss, hip-yaw discs, hip-yaw keepers, shoulder pads | |
-| M2 × 12 (8) | arm blades | |
-| M3 × 8 socket screws (8) | torso floor to the pelvis (4, into the inserts); chest cap to the torso lip (4, they cut their own thread in its 2.5 mm holes) | |
+| M2 × 6 CSK (56 of the 70 bought) | every servo case screw | the head bears on the hole's edge in the plate's recess, 2.2 mm into the case's Ø1.6 × 2.9 mm holes |
+| M2 × 10 CSK (10 of 70) | hip-yaw keepers (8), head into the neck hub (2) | into 1.8 mm printed pilots |
+| M2 × 8 CSK (8 of 40) | Raspberry Pi (4), chest cap into the torso lip (4) | into 1.8 mm printed pilots |
+| M3 × 6 horn screws from the servo bags (64) | U-bracket horn arms (40), hip-yaw discs (8), shoulder pads (8), arm blades (8) | 3.0 mm into the POM drive horn; on the hip-roll arms the heads must be 2.4 mm high or less |
+| M3 × 8 pan head (44 of 45) | through each U-bracket's boss into the passive horn (40), neck hub onto the neck horn (4) | 2.3 mm into the passive horn |
+| M3 × 8 socket head (4 of 10) | torso floor into the pelvis's inserts | the tips go on into holes in the ribs below |
 | M3 × 4 brass heat-set inserts (4) | the pelvis plate's four 4.0 mm holes | press in with a soldering iron at about 220 °C |
-| Nuts, washers | none needed | every screw goes into a printed thread, an insert or a servo horn |
-| PTFE thread-seal tape | top of each hip-yaw disc and under its flange: layers set the keeper's play (or silicone grease) | |
+| Nuts, washers | none needed | every screw goes into a servo hole, an insert or a printed hole |
+| 0.4 mm horn shims (40, printed) | between a drive horn and its arm | count from the horn-height table (step 2) |
+| PTFE thread-seal tape | top of each hip-yaw disc, under its flange and the yaw ring insert: layers set the play | (or silicone grease) |
 | 1 mm rubber sheet | foot soles | any thin anti-slip mat works |
+| Servo cables, 5264 3-pin, 30 cm (4) | hip-yaw servo down to the hip-roll servo, driver to the right leg, arms into the chest | the STS3215's sockets are 5264, not JR/Dupont |
 | Hot glue, zip ties, double-sided foam tape | microphone, battery, wiring | |
+
+**Tools:**
+- PH1 and PH2 screwdrivers, and a long PH1 (the roll-horn screws, through the pitch cage);
+- PH1 and PH2 bits (25 mm), turned by hand or with a small spanner, for the screws on the inside of the hips;
+- a 2.5 mm hex key (the 4 torso screws);
+- calipers (horn height);
+- a soldering iron (inserts).

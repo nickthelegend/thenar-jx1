@@ -48,11 +48,28 @@ The IDs are in `jx0/software/jx0bot/config.yaml`. Every servo ships as ID 1, so 
 `/dev/ttyUSB0` or `/dev/ttyACM0` (set `bus.port` in config.yaml). Set the board's mode jumper for USB/serial pass-through,
 as the Waveshare wiki for the board describes.
 
-Arm and neck cables: each shoulder servo hangs outside the chest in its arm's hood. Its cable and the elbow servo's run
-together from the hood into the chest cap through the gap under the cap's side chamfer, with enough slack for the arm
-to swing up in front (zip-tie them to the hood so the blade cannot catch them). The neck cable goes in through the gap
-next to the neck servo. Leg cables: up the back of each leg, zip-tied to the brackets, into the torso through the slot
-in its floor; leave a loop at every joint for its full range.
+### Where each servo's cables go
+
+The STS3215's two sockets are inside the case, under an opening in its rear face (the face opposite the drive horn),
+between the passive horn and the label. The plugs go in straight, and the wires come straight out of that face. **Plug
+both cables in before the servo goes into its cage.** The cage plates have a window there, and the CAD keeps a 4 mm
+deep path free for the wires (`verify_fit.py`, `verify_cad.py`):
+
+| Servos | How the wires leave |
+|---|---|
+| Hip yaw (1, 7) | straight up through the pelvis plate's window and the torso floor's opening above it. The second cable comes back down through the floor's rear slot to the hip-roll servo (a 30 cm cable) |
+| Hip roll, hip pitch, knee, ankle pitch (2–5, 8–11) | bent flat along the rear face, over the label block, out past the far end of the cage (away from the horn); then along the bracket to the next servo |
+| Ankle roll (6, 12), the last in each leg | bent along the rear face, then out through the back of the ankle bracket's cage (not the inboard end: the other foot passes there in side steps), up behind the ankle |
+| Shoulders (13, 15) | straight out through the window in the arm's outer plate, then down the outside of the hood to the elbow servo and into the chest |
+| Elbows (14, 16) | bent along the rear face (the arm's inner plate) to the front of the box |
+| Neck (17) | straight down through the window in the chest cap's top into the chest |
+
+Arm and neck cables: from each arm, zip-tie the cables to the hood and take them into the chest cap through the gap
+under the cap's side chamfer. Leave enough slack for the arm to swing up in front, and keep them clear of the blade.
+Leg cables: up the back of each leg, zip-tied to the brackets, into the torso through the slot in its floor. Leave a
+loop at every joint for its full range. The 15 cm cable in each servo's box covers servo to servo. The longer runs use
+the 30 cm 5264 cables in the parts list: each hip-yaw servo back down to its hip-roll servo, the driver to the right
+leg, and the arms into the chest.
 
 ## Raspberry Pi GPIO map (BCM numbers, physical pin in brackets)
 

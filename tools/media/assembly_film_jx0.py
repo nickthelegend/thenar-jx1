@@ -78,12 +78,12 @@ CAM = {  # lookat z, distance, elevation (deg); JX0 stands 0.46 m tall, its hip 
 }
 LR = lambda *keys: [f"{k}_{s}" for s in ("L", "R") for k in keys]  # noqa: E731
 STEPS = [
-    ("Pelvis + hip-yaw servos", "PETG, printed near-solid · 2 × STS3215 in cages · thrust rings + keeper bosses",
-     ["pelvis"] + LR("servo_hip_yaw"), "up", 0.10, "pelvis"),
+    ("Pelvis + hip-yaw servos", "PETG, printed near-solid · 2 × STS3215 up into their cages · thrust rings + inserts",
+     ["pelvis"] + LR("servo_hip_yaw", "yaw_ring"), "up", 0.10, "pelvis"),
     ("Hip-yaw discs + keepers", "disc on the yaw horn · keeper lip under its rim · held from both sides",
      LR("hip_yaw", "keeper"), "out_down", 0.10, "hip"),
     ("Hip-roll servos", "2 × STS3215 · caged behind the hip", LR("servo_hip_roll"), "back", 0.10, "hip"),
-    ("Hip-roll U-brackets", "on the horn and the rear hub · double-sided", LR("hip_roll"), "front", 0.10, "hip"),
+    ("Hip-roll U-brackets", "on the drive horn and the passive horn · double-sided", LR("hip_roll"), "front", 0.10, "hip"),
     ("Hip-pitch servos", "2 × STS3215 · axis through the hip centre", LR("servo_hip_pitch"), "out", 0.10, "hip"),
     ("Thighs + knee servos", "dog-leg U-bracket · knee servo lying forward", LR("thigh", "servo_knee"), "out_down", 0.12, "leg"),
     ("Shins + ankle-pitch servos", "U-bracket on the knee · ankle servo caged below", LR("shin", "servo_ankle_pitch"),

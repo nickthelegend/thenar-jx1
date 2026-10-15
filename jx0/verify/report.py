@@ -30,9 +30,9 @@ def pct(d, key="passed"):
 
 
 def main():
-    walk, cad, rob, pw, siz, st, fea = (load(n) for n in ("walking.json", "verify_cad.json", "verify_robustness.json",
-                                                            "verify_power.json", "sizing.json", "verify_strength.json",
-                                                            "verify_fea.json"))
+    walk, cad, rob, pw, siz, st, fea, fit = (load(n) for n in ("walking.json", "verify_cad.json", "verify_robustness.json",
+                                                                 "verify_power.json", "sizing.json", "verify_strength.json",
+                                                                 "verify_fea.json", "verify_fit.json"))
     gaits = walk.get("gaits", {})
     n_pass = sum(g["pass"] for g in gaits.values())
     fin, mis = rob.get("final", {}), rob.get("mission", {})
@@ -40,16 +40,27 @@ def main():
     peak = max((max(g["peak_torque_fraction_of_stall"].values()) for g in gaits.values()), default=0)
     L = ["# JX0 verification report", "",
          f"Generated {date.today().isoformat()} by `jx0/verify/run_all.py` from the CAD geometry, the MuJoCo model and the robot "
-         "software in this repository (design v0.4: double-sided legs like the reference robot). Everything here is "
+         "software in this repository (design v0.4: double-sided legs like the reference robot, every part fitted to the "
+         "real STS3215). Everything here is "
          "simulation and analysis: the physical robot is not built yet, so the numbers say the design should work, not that "
          "it has been seen working.", "",
          "## Summary", "",
          "| Check | Result |", "|---|---|"]
     L.append(f"| Servo sizing (every leg joint, 5 gaits + 8 static cases, 1.25–1.5x margins) | {'**ALL PASS**' if siz.get('all_pass') else 'FAIL'} |")
     L.append(f"| The 14 robot gaits, closed loop on the servo model (100 Hz) | **{n_pass}/{len(gaits)} pass**, peak servo load {peak:.0%} of stall |")
+    if fit:
+        sc, sr, sw_, dr = fit["servo_and_cables"], fit["screws"], fit.get("assembly_sweeps", []), fit.get("screwdriver_access", [])
+        L.append(f"| The real STS3215 (Feetech factory model and SO-ARM100 model) and its cables at all 17 joints, against "
+                 f"every printed part | {len(sc)} clashes |")
+        L.append(f"| Every screw ({len(sr)}): plate under the head, thread in the horn / case / insert, tip clear, on a real "
+                 f"hole, head room | {sum(1 for r in sr if r['problems'])} problems |")
+        if sw_:
+            L.append(f"| Assembly in the build guide's order: {len(sw_)} slide-in steps, a screwdriver on all {len(dr)} screws | "
+                     f"{sum(1 for x in sw_ if not x['ok'])} slides blocked, {sum(1 for x in dr if not x['ok'])} screws "
+                     f"unreachable ({sum(1 for x in dr if x['tool'] != 'screwdriver')} need a PH bit by hand) |")
     if cad:
         sw = cad["joint_sweeps"]
-        L.append(f"| Parts and servos colliding, standing (all {cad['static_zero_pose']['pairs_checked']} pairs) | "
+        L.append(f"| Parts, servos, cables and screw heads colliding, standing (all {cad['static_zero_pose']['pairs_checked']} pairs) | "
                  f"{len(cad['static_zero_pose']['clashes']) + len(cad['static_walking_stance']['clashes'])} clashes |")
         L.append(f"| Parts colliding in motion ({cad['motion']['poses_checked']} poses: every gait frame + every action) | "
                  f"{len(cad['motion']['clashes'])} clashes |")
@@ -86,7 +97,7 @@ def main():
               "it does to a single-sided joint (v0.3: one plate on the servo's horn) and to a U-bracket on both faces (v0.4). The "
               "servo only *drives* the torque about its axis; the bending moment about the other two axes is what the "
               "structure carries. On a single-sided joint it all goes through one printed plate and the servo's output shaft. "
-              "In a U-bracket it becomes a pair of forces in the two arms, 42.75 mm apart, and the output shaft sees no bending "
+              "In a U-bracket it becomes a pair of forces in the two arms, 44.25 mm apart, and the output shaft sees no bending "
               "at all. The hip-yaw disc is held by the pelvis from both sides instead (thrust ring above, keeper below): its "
               "stresses are in the finite-element table. "
               f"PETG ASSUMED: {st['petg_strength']['along_layers_mpa']:.0f} MPa static, "
@@ -104,7 +115,8 @@ def main():
     if fea:
         L += ["", "## Printed leg brackets: finite elements", "",
               "Voxel FEA (`calculations/structural/voxel_fea.py`, 0.7 mm hexahedra with bending modes). Each bracket is held "
-              "where it bolts to the servo above it (horn and rear hub) and loaded where the next servo is screwed into its cage, "
+              "where it bolts to the servo above it (drive horn and passive horn) and loaded where the next servo is screwed into "
+              "its cage, "
               "with that joint's actual 6-axis load every 10 ms of the simulation (all components at the same instant). "
               "Stress = 99.9th percentile of each element's worst von Mises, away from the bolted faces.", "",
               "| Bracket | Elements | Walking MPa (fatigue SF) | Worst with pushes MPa (strength SF) |", "|---|---|---|---|"]
@@ -122,7 +134,39 @@ def main():
     v3s = max((r["v03_single_sided"]["shaft_bending_worst_nm"] for r in jj.values()), default=0)
     knee_ts = next((f"{r['torque_speed_utilisation']:.0%}" for r in siz.get("joints", []) if r.get("joint") == "knee"), "n/a")
     L += ["", "## What the verification found and fixed", "",
-          "### v0.4 (double-sided legs, 2026-10-05)", "",
+          "### v0.4 fitted to the real servo (2026-10-15)", "",
+          "- **The CAD's servo was a box; the real STS3215 is not.** Measured on Feetech's factory model and the SO-ARM100 "
+          "model, its rear face has a 2.2 mm raised label block, the passive horn on a Ø6 boss whose tip stands 0.6 mm "
+          "proud, and the opening of the two cable sockets, whose wires come straight out of that face. Its output face has "
+          "a raised strip 1.55 mm high. Every cage collided with it (400–750 mm³ each) and 16 of the 17 left no way out for "
+          "the cables. Each cage plate now has a window over the label and the sockets that runs out past the case's far "
+          "end, the cables lie flat in it, and every plate over an output face clears the strip.",
+          "- **The screws were wrong.** The horn holes are Ø2.5 for M3 (not M2), and the case holes are Ø1.6 × 2.9 mm deep, so "
+          "an M2 × 6 through a 2.4 mm plate would have bottomed out. Now, with the screws bought for it: M2 × 6 CSK with 3 mm "
+          "of plate under the point where the head bears (2.2 mm of thread), M3 × 6 into the drive horn (3 mm), M3 × 8 "
+          "through a 3.2 mm boss into the passive horn (2.3 mm). Every "
+          "screw is listed with its part and measured against the real holes (`verify_fit.py`). The torso's M3 × 8 would "
+          "have hit the ribs under the pelvis plate: the ribs now have holes for their tips.",
+          "- **Assembly would have jammed.** The hip-yaw servo could not go into the pelvis: the thrust ring under it blocks "
+          "the case. Under the case the ring is now a separate insert, pushed up after the servo; the gaits push hardest on "
+          "exactly that side (up to 90 N), and the insert bears on the servo's case. The brackets could not slide onto their "
+          "servos: each boss now has a groove for the rear boss's tip, and the drive horn's centre screw goes in last. "
+          "The servos that slide in lengthwise needed the label window and the strip pocket out to the cage's end, and the "
+          "shin a slot for the label block. In the old order some screws were out of reach: the lower legs are now built on "
+          "the bench, the roll horn screws have holes through the pitch cage's front wall, the head slides over a neck hub bolted on "
+          "first, and 11 screws (the inside of the hips) need a PH bit turned by hand.",
+          "- **Horn heights differ by 0.65 mm** between the two models and the datasheet: brackets are built for the deepest "
+          "horn, with 0.4 mm printed shims for the rest. The hip-yaw keeper's lip now sits 0.45 mm under the disc's flange "
+          "(PTFE tape takes the play) so no servo can jam it.",
+          "- **Strength after the changes** (voxel FEA): the cage windows and the passive-horn screw pockets first left the "
+          "thigh and shin at fatigue SF 0.6 (their horn-side arms had come loose from the cages by 0.2 mm: every part is "
+          "now checked to be one solid piece), then the shin at 1.8 and the ankle bracket at 1.5. The shin's back wall now "
+          "comes down to 10 mm above the ankle axis (the ankle can toe down 5° instead of 15°; the gaits never toe down), "
+          "and the ankle bracket's arms rise 6 mm above the roll cage: every leg part is back at fatigue SF 2.1 or more.",
+          "- **Cables in motion**: the knee cage's back corner was rounded off (the shin's top and its ankle servo's cables "
+          "swing past it), and the ankle-roll servos' cables leave at the back, because in side steps the other foot passes "
+          "their inboard end. The hip-yaw and neck servos' cables go straight through the plates they stand on.",
+          "", "### v0.4 (double-sided legs, 2026-10-05)", "",
           "- **Single-sided joints would break** (the builder's own call, confirmed): with v0.4's loads, a v0.3-style joint's "
           f"printed plate sees {v3w[0]:.0f}–{v3w[1]:.0f} MPa every step, above PETG's fatigue strength at every leg joint, and "
           f"the servo's output shaft carries up to {v3s:.1f} N·m of bending. Every leg pitch and roll joint is now a U-bracket "
@@ -173,18 +217,20 @@ def main():
           f"and {yw.get('shaft_bending_worst_nm', float('nan')):.2f} N·m in the hardest pushes (ring alone: "
           f"{yw_ro_n:.1f} / {yw_ro_w:.1f}); if the play is left in, the shaft takes the bending until it closes. Feetech "
           "publishes no bending rating for the STS3215. The yaw range is ±12°.",
-          "- **Material and servo data are assumed**: PETG strengths (50 / 15 MPa), the STS3215's rear hub screw pattern "
-          "(assumed equal to the horn's), and the servo stiffness (60 N·m/rad, 0.6–1.4x tested). Print a test U-bracket and "
-          "fit-check a servo before printing the rest; measure the servo stiffness (bringup.md step 5).",
+          "- **Material and servo data are assumed**: PETG strengths (50 / 15 MPa) and the servo stiffness (60 N·m/rad, "
+          "0.6–1.4x tested). The servo's shape comes from two models that differ by up to 0.65 mm (horn height) and 0.3 mm "
+          "(its rear cover): the fit check uses the larger of them, the shims and PTFE tape take up the rest. The cables are "
+          "assumed to bend flat within 4 mm of the rear face. Printers make holes and pockets a little small: print the shin "
+          "first and fit a servo to it (build guide); measure the servo stiffness (bringup.md step 5).",
           "- **Speed**: about 5 cm/s. The short legs make the knee the speed limit of the STS3215 at 12 V.",
           "- **Latency**: the robot needs its control loop to react within about 20 ms (estimate on the Pi: about 8 ms). At "
           "40 ms, long walks often fail; 2- and 4-step blocks mostly survive.",
           "- **Not tested here**: falls (the model has no body collisions, so a fall's impact on the brackets is not "
-          "simulated), carpet or very slippery floors (friction below 0.5), stairs, the I2S audio overlay on the Pi, screw "
-          "fit in the printed holes, long-term servo heating."]
+          "simulated), carpet or very slippery floors (friction below 0.5), stairs, the I2S audio overlay on the Pi, "
+          "long-term servo heating."]
     L += ["", "## Re-run", "", "```bash", "python jx0/verify/run_all.py", "```", "",
-          "Detailed results in this folder: `walking.json`, `verify_cad.json`, `verify_robustness.json`, `verify_strength.json`, "
-          "`verify_fea.json`, `verify_power.json`, `sizing.json`."]
+          "Detailed results in this folder: `walking.json`, `verify_fit.json`, `verify_cad.json`, `verify_robustness.json`, "
+          "`verify_strength.json`, `verify_fea.json`, `verify_power.json`, `sizing.json`."]
     (RES / "verification.md").write_text("\n".join(L) + "\n", encoding="utf-8")
     print("wrote", (RES / "verification.md").relative_to(ROOT))
 

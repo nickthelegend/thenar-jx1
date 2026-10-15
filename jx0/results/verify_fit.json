@@ -1,0 +1,4238 @@
+{
+ "clash_threshold_mm3": 0.5,
+ "parts_in_pieces": {},
+ "so_arm_seating": {
+  "so_arm_seated_on_cage_dz_mm": 0.3,
+  "so_arm_seated_on_horns_dz_mm": -0.05
+ },
+ "servo_and_cables": [],
+ "screws": [
+  {
+   "part": "pelvis",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_L",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 0
+  },
+  {
+   "part": "pelvis",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_L",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 1
+  },
+  {
+   "part": "pelvis",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_L",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 2
+  },
+  {
+   "part": "pelvis",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_L",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 3
+  },
+  {
+   "part": "pelvis",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_R",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 4
+  },
+  {
+   "part": "pelvis",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_R",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 5
+  },
+  {
+   "part": "pelvis",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_R",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 6
+  },
+  {
+   "part": "pelvis",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_R",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 7
+  },
+  {
+   "part": "torso",
+   "size": "M3",
+   "length": 8.0,
+   "into": "insert",
+   "note": "M3 x 8 socket head, into the pelvis plate's M3 x 4 heat-set insert; its tip goes on into the hole through the rib below",
+   "under_head_mm": 2.5,
+   "seat_error_mm": 0.0,
+   "target": "pelvis",
+   "gap_mm": -0.0,
+   "engagement_mm": 5.5,
+   "problems": [],
+   "hole_depth_mm": 38.93,
+   "thread_in_part_mm": 0.0,
+   "index": 0
+  },
+  {
+   "part": "torso",
+   "size": "M3",
+   "length": 8.0,
+   "into": "insert",
+   "note": "M3 x 8 socket head, into the pelvis plate's M3 x 4 heat-set insert; its tip goes on into the hole through the rib below",
+   "under_head_mm": 2.5,
+   "seat_error_mm": 0.0,
+   "target": "pelvis",
+   "gap_mm": -0.0,
+   "engagement_mm": 5.5,
+   "problems": [],
+   "hole_depth_mm": 38.93,
+   "thread_in_part_mm": 0.0,
+   "index": 1
+  },
+  {
+   "part": "torso",
+   "size": "M3",
+   "length": 8.0,
+   "into": "insert",
+   "note": "M3 x 8 socket head, into the pelvis plate's M3 x 4 heat-set insert; its tip goes on into the hole through the rib below",
+   "under_head_mm": 2.5,
+   "seat_error_mm": 0.0,
+   "target": "pelvis",
+   "gap_mm": -0.0,
+   "engagement_mm": 5.5,
+   "problems": [],
+   "hole_depth_mm": 53.53,
+   "thread_in_part_mm": 0.0,
+   "index": 2
+  },
+  {
+   "part": "torso",
+   "size": "M3",
+   "length": 8.0,
+   "into": "insert",
+   "note": "M3 x 8 socket head, into the pelvis plate's M3 x 4 heat-set insert; its tip goes on into the hole through the rib below",
+   "under_head_mm": 2.5,
+   "seat_error_mm": 0.0,
+   "target": "pelvis",
+   "gap_mm": -0.0,
+   "engagement_mm": 5.5,
+   "problems": [],
+   "hole_depth_mm": 53.53,
+   "thread_in_part_mm": 0.0,
+   "index": 3
+  },
+  {
+   "part": "chest_cap",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 0
+  },
+  {
+   "part": "chest_cap",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 1
+  },
+  {
+   "part": "chest_cap",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 2
+  },
+  {
+   "part": "chest_cap",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  },
+  {
+   "part": "chest_cap",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 4
+  },
+  {
+   "part": "chest_cap",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 5
+  },
+  {
+   "part": "chest_cap",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 6
+  },
+  {
+   "part": "chest_cap",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 7
+  },
+  {
+   "part": "chest_cap",
+   "size": "M2",
+   "length": 8.0,
+   "into": "printed",
+   "note": "M2 x 8 CSK, cuts its thread in the torso lip's 1.8 mm hole",
+   "under_head_mm": 2.5,
+   "seat_error_mm": 0.0,
+   "target": "torso",
+   "gap_mm": 0.2,
+   "engagement_mm": 4.6,
+   "problems": [],
+   "hole_depth_mm": 99.0,
+   "thread_in_part_mm": 2.0,
+   "index": 8
+  },
+  {
+   "part": "chest_cap",
+   "size": "M2",
+   "length": 8.0,
+   "into": "printed",
+   "note": "M2 x 8 CSK, cuts its thread in the torso lip's 1.8 mm hole",
+   "under_head_mm": 2.5,
+   "seat_error_mm": 0.0,
+   "target": "torso",
+   "gap_mm": 0.2,
+   "engagement_mm": 4.6,
+   "problems": [],
+   "hole_depth_mm": 99.0,
+   "thread_in_part_mm": 2.0,
+   "index": 9
+  },
+  {
+   "part": "chest_cap",
+   "size": "M2",
+   "length": 8.0,
+   "into": "printed",
+   "note": "M2 x 8 CSK, cuts its thread in the torso lip's 1.8 mm hole",
+   "under_head_mm": 2.5,
+   "seat_error_mm": 0.0,
+   "target": "torso",
+   "gap_mm": 0.2,
+   "engagement_mm": 4.6,
+   "problems": [],
+   "hole_depth_mm": 99.0,
+   "thread_in_part_mm": 2.0,
+   "index": 10
+  },
+  {
+   "part": "chest_cap",
+   "size": "M2",
+   "length": 8.0,
+   "into": "printed",
+   "note": "M2 x 8 CSK, cuts its thread in the torso lip's 1.8 mm hole",
+   "under_head_mm": 2.5,
+   "seat_error_mm": 0.0,
+   "target": "torso",
+   "gap_mm": 0.2,
+   "engagement_mm": 4.6,
+   "problems": [],
+   "hole_depth_mm": 99.0,
+   "thread_in_part_mm": 2.0,
+   "index": 11
+  },
+  {
+   "part": "chest_cap",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_neck",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 12
+  },
+  {
+   "part": "chest_cap",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_neck",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 13
+  },
+  {
+   "part": "chest_cap",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_neck",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 14
+  },
+  {
+   "part": "chest_cap",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_neck",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 15
+  },
+  {
+   "part": "head",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK through the head's back wall into the neck hub",
+   "under_head_mm": 5.1,
+   "seat_error_mm": 0.0,
+   "target": "neck_hub",
+   "gap_mm": 0.1,
+   "engagement_mm": 4.1,
+   "problems": [],
+   "hole_depth_mm": 6.0,
+   "thread_in_part_mm": 4.1,
+   "index": 0
+  },
+  {
+   "part": "head",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK through the head's back wall into the neck hub",
+   "under_head_mm": 5.1,
+   "seat_error_mm": 0.0,
+   "target": "neck_hub",
+   "gap_mm": 0.1,
+   "engagement_mm": 4.1,
+   "problems": [],
+   "hole_depth_mm": 6.0,
+   "thread_in_part_mm": 4.1,
+   "index": 1
+  },
+  {
+   "part": "neck_hub",
+   "size": "M3",
+   "length": 8.0,
+   "into": "drive",
+   "note": "M3 x 8 pan head, from above before the head goes on",
+   "under_head_mm": 5.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_neck",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 0
+  },
+  {
+   "part": "neck_hub",
+   "size": "M3",
+   "length": 8.0,
+   "into": "drive",
+   "note": "M3 x 8 pan head, from above before the head goes on",
+   "under_head_mm": 5.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_neck",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 1
+  },
+  {
+   "part": "neck_hub",
+   "size": "M3",
+   "length": 8.0,
+   "into": "drive",
+   "note": "M3 x 8 pan head, from above before the head goes on",
+   "under_head_mm": 5.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_neck",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 2
+  },
+  {
+   "part": "neck_hub",
+   "size": "M3",
+   "length": 8.0,
+   "into": "drive",
+   "note": "M3 x 8 pan head, from above before the head goes on",
+   "under_head_mm": 5.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_neck",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  },
+  {
+   "part": "keeper_L",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "under_head_mm": 5.6,
+   "seat_error_mm": 0.0,
+   "target": "pelvis",
+   "gap_mm": 0.0,
+   "engagement_mm": 3.7,
+   "problems": [],
+   "hole_depth_mm": 5.6,
+   "thread_in_part_mm": 3.7,
+   "index": 0
+  },
+  {
+   "part": "keeper_L",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "under_head_mm": 5.6,
+   "seat_error_mm": 0.0,
+   "target": "pelvis",
+   "gap_mm": 0.0,
+   "engagement_mm": 3.7,
+   "problems": [],
+   "hole_depth_mm": 5.6,
+   "thread_in_part_mm": 3.7,
+   "index": 1
+  },
+  {
+   "part": "keeper_L",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "under_head_mm": 5.6,
+   "seat_error_mm": 0.0,
+   "target": "pelvis",
+   "gap_mm": 0.0,
+   "engagement_mm": 3.7,
+   "problems": [],
+   "hole_depth_mm": 5.6,
+   "thread_in_part_mm": 3.7,
+   "index": 2
+  },
+  {
+   "part": "keeper_L",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "under_head_mm": 5.6,
+   "seat_error_mm": 0.0,
+   "target": "pelvis",
+   "gap_mm": 0.0,
+   "engagement_mm": 3.7,
+   "problems": [],
+   "hole_depth_mm": 5.6,
+   "thread_in_part_mm": 3.7,
+   "index": 3
+  },
+  {
+   "part": "hip_yaw_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_L",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 0
+  },
+  {
+   "part": "hip_yaw_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_L",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 1
+  },
+  {
+   "part": "hip_yaw_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_L",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 2
+  },
+  {
+   "part": "hip_yaw_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_L",
+   "gap_mm": 0.35,
+   "engagement_mm": 2.65,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  },
+  {
+   "part": "hip_yaw_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_L",
+   "gap_mm": 0.35,
+   "engagement_mm": 2.65,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 4
+  },
+  {
+   "part": "hip_yaw_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_L",
+   "gap_mm": 0.35,
+   "engagement_mm": 2.65,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 5
+  },
+  {
+   "part": "hip_yaw_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_L",
+   "gap_mm": 0.35,
+   "engagement_mm": 2.65,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 6
+  },
+  {
+   "part": "hip_roll_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "under_head_mm": 2.6,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 3.35,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 0
+  },
+  {
+   "part": "hip_roll_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "under_head_mm": 2.6,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 3.35,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 1
+  },
+  {
+   "part": "hip_roll_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "under_head_mm": 2.6,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 3.35,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 2
+  },
+  {
+   "part": "hip_roll_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "under_head_mm": 2.6,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 3.35,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  },
+  {
+   "part": "hip_roll_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 4
+  },
+  {
+   "part": "hip_roll_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 4.8,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_L",
+   "gap_mm": 0.9,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 5
+  },
+  {
+   "part": "hip_roll_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 6
+  },
+  {
+   "part": "hip_roll_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 7
+  },
+  {
+   "part": "hip_roll_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 8
+  },
+  {
+   "part": "hip_roll_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 9
+  },
+  {
+   "part": "hip_roll_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 10
+  },
+  {
+   "part": "thigh_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 0
+  },
+  {
+   "part": "thigh_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 1
+  },
+  {
+   "part": "thigh_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 2
+  },
+  {
+   "part": "thigh_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  },
+  {
+   "part": "thigh_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 4
+  },
+  {
+   "part": "thigh_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 4.8,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_L",
+   "gap_mm": 0.9,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 5
+  },
+  {
+   "part": "thigh_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 6
+  },
+  {
+   "part": "thigh_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 7
+  },
+  {
+   "part": "thigh_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 8
+  },
+  {
+   "part": "thigh_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 9
+  },
+  {
+   "part": "thigh_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 10
+  },
+  {
+   "part": "shin_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 0
+  },
+  {
+   "part": "shin_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 1
+  },
+  {
+   "part": "shin_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 2
+  },
+  {
+   "part": "shin_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  },
+  {
+   "part": "shin_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 4
+  },
+  {
+   "part": "shin_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 4.8,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_L",
+   "gap_mm": 0.9,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 5
+  },
+  {
+   "part": "shin_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 6
+  },
+  {
+   "part": "shin_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 7
+  },
+  {
+   "part": "shin_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 8
+  },
+  {
+   "part": "shin_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 9
+  },
+  {
+   "part": "ankle_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 0
+  },
+  {
+   "part": "ankle_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 1
+  },
+  {
+   "part": "ankle_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 2
+  },
+  {
+   "part": "ankle_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  },
+  {
+   "part": "ankle_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 4
+  },
+  {
+   "part": "ankle_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 4.8,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_L",
+   "gap_mm": 0.9,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 5
+  },
+  {
+   "part": "ankle_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 6
+  },
+  {
+   "part": "ankle_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 7
+  },
+  {
+   "part": "ankle_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 8
+  },
+  {
+   "part": "ankle_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 9
+  },
+  {
+   "part": "ankle_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 10
+  },
+  {
+   "part": "foot_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 0
+  },
+  {
+   "part": "foot_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 1
+  },
+  {
+   "part": "foot_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 2
+  },
+  {
+   "part": "foot_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  },
+  {
+   "part": "foot_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 4
+  },
+  {
+   "part": "foot_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 4.8,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_L",
+   "gap_mm": 0.9,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 5
+  },
+  {
+   "part": "foot_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 6
+  },
+  {
+   "part": "foot_L",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 7
+  },
+  {
+   "part": "upper_arm_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 0
+  },
+  {
+   "part": "upper_arm_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 1
+  },
+  {
+   "part": "upper_arm_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 2
+  },
+  {
+   "part": "upper_arm_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 3
+  },
+  {
+   "part": "upper_arm_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 4
+  },
+  {
+   "part": "upper_arm_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 5
+  },
+  {
+   "part": "upper_arm_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 6
+  },
+  {
+   "part": "upper_arm_L",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_L",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 7
+  },
+  {
+   "part": "blade_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 0
+  },
+  {
+   "part": "blade_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 1
+  },
+  {
+   "part": "blade_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 2
+  },
+  {
+   "part": "blade_L",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_L",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  },
+  {
+   "part": "keeper_R",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "under_head_mm": 5.6,
+   "seat_error_mm": 0.0,
+   "target": "pelvis",
+   "gap_mm": 0.0,
+   "engagement_mm": 3.7,
+   "problems": [],
+   "hole_depth_mm": 5.6,
+   "thread_in_part_mm": 3.7,
+   "index": 0
+  },
+  {
+   "part": "keeper_R",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "under_head_mm": 5.6,
+   "seat_error_mm": 0.0,
+   "target": "pelvis",
+   "gap_mm": 0.0,
+   "engagement_mm": 3.7,
+   "problems": [],
+   "hole_depth_mm": 5.6,
+   "thread_in_part_mm": 3.7,
+   "index": 1
+  },
+  {
+   "part": "keeper_R",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "under_head_mm": 5.6,
+   "seat_error_mm": 0.0,
+   "target": "pelvis",
+   "gap_mm": 0.0,
+   "engagement_mm": 3.7,
+   "problems": [],
+   "hole_depth_mm": 5.6,
+   "thread_in_part_mm": 3.7,
+   "index": 2
+  },
+  {
+   "part": "keeper_R",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "under_head_mm": 5.6,
+   "seat_error_mm": 0.0,
+   "target": "pelvis",
+   "gap_mm": 0.0,
+   "engagement_mm": 3.7,
+   "problems": [],
+   "hole_depth_mm": 5.6,
+   "thread_in_part_mm": 3.7,
+   "index": 3
+  },
+  {
+   "part": "hip_yaw_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_R",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 0
+  },
+  {
+   "part": "hip_yaw_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_R",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 1
+  },
+  {
+   "part": "hip_yaw_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_R",
+   "gap_mm": 0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 2
+  },
+  {
+   "part": "hip_yaw_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_R",
+   "gap_mm": 0.35,
+   "engagement_mm": 2.65,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  },
+  {
+   "part": "hip_yaw_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_R",
+   "gap_mm": 0.35,
+   "engagement_mm": 2.65,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 4
+  },
+  {
+   "part": "hip_yaw_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_R",
+   "gap_mm": 0.35,
+   "engagement_mm": 2.65,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 5
+  },
+  {
+   "part": "hip_yaw_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_yaw_R",
+   "gap_mm": 0.35,
+   "engagement_mm": 2.65,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 6
+  },
+  {
+   "part": "hip_roll_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "under_head_mm": 2.6,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 3.35,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 0
+  },
+  {
+   "part": "hip_roll_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "under_head_mm": 2.6,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 3.35,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 1
+  },
+  {
+   "part": "hip_roll_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "under_head_mm": 2.6,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 3.35,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 2
+  },
+  {
+   "part": "hip_roll_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "pan or cheese head (2.4 mm at most): sunk in the arm, the pitch case is 0.5 mm behind it",
+   "under_head_mm": 2.6,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 3.35,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  },
+  {
+   "part": "hip_roll_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 4
+  },
+  {
+   "part": "hip_roll_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 4.8,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_R",
+   "gap_mm": 0.9,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 5
+  },
+  {
+   "part": "hip_roll_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 6
+  },
+  {
+   "part": "hip_roll_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_roll_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 7
+  },
+  {
+   "part": "hip_roll_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 8
+  },
+  {
+   "part": "hip_roll_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 9
+  },
+  {
+   "part": "hip_roll_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 10
+  },
+  {
+   "part": "thigh_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 0
+  },
+  {
+   "part": "thigh_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 1
+  },
+  {
+   "part": "thigh_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 2
+  },
+  {
+   "part": "thigh_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  },
+  {
+   "part": "thigh_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 4
+  },
+  {
+   "part": "thigh_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 4.8,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_R",
+   "gap_mm": 0.9,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 5
+  },
+  {
+   "part": "thigh_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 6
+  },
+  {
+   "part": "thigh_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_hip_pitch_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 7
+  },
+  {
+   "part": "thigh_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 8
+  },
+  {
+   "part": "thigh_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 9
+  },
+  {
+   "part": "thigh_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 10
+  },
+  {
+   "part": "shin_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 0
+  },
+  {
+   "part": "shin_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 1
+  },
+  {
+   "part": "shin_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 2
+  },
+  {
+   "part": "shin_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  },
+  {
+   "part": "shin_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 4
+  },
+  {
+   "part": "shin_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 4.8,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_R",
+   "gap_mm": 0.9,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 5
+  },
+  {
+   "part": "shin_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 6
+  },
+  {
+   "part": "shin_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_knee_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 7
+  },
+  {
+   "part": "shin_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 8
+  },
+  {
+   "part": "shin_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 9
+  },
+  {
+   "part": "ankle_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 0
+  },
+  {
+   "part": "ankle_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 1
+  },
+  {
+   "part": "ankle_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 2
+  },
+  {
+   "part": "ankle_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  },
+  {
+   "part": "ankle_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 4
+  },
+  {
+   "part": "ankle_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 4.8,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_R",
+   "gap_mm": 0.9,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 5
+  },
+  {
+   "part": "ankle_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 6
+  },
+  {
+   "part": "ankle_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_pitch_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 7
+  },
+  {
+   "part": "ankle_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 8
+  },
+  {
+   "part": "ankle_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 9
+  },
+  {
+   "part": "ankle_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 10
+  },
+  {
+   "part": "foot_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 0
+  },
+  {
+   "part": "foot_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 1
+  },
+  {
+   "part": "foot_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 2
+  },
+  {
+   "part": "foot_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  },
+  {
+   "part": "foot_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 4
+  },
+  {
+   "part": "foot_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 4.8,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_R",
+   "gap_mm": 0.9,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 5
+  },
+  {
+   "part": "foot_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 6
+  },
+  {
+   "part": "foot_R",
+   "size": "M3",
+   "length": 8.0,
+   "into": "idler",
+   "note": "M3 x 8 socket head",
+   "under_head_mm": 5.7,
+   "seat_error_mm": 0.0,
+   "target": "servo_ankle_roll_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.3,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    -17.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.7,
+    3.05
+   ],
+   "index": 7
+  },
+  {
+   "part": "upper_arm_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 0
+  },
+  {
+   "part": "upper_arm_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 1
+  },
+  {
+   "part": "upper_arm_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 2
+  },
+  {
+   "part": "upper_arm_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_shoulder_pitch_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 3
+  },
+  {
+   "part": "upper_arm_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 4
+  },
+  {
+   "part": "upper_arm_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    8.3,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 5
+  },
+  {
+   "part": "upper_arm_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    -10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 6
+  },
+  {
+   "part": "upper_arm_R",
+   "size": "M2",
+   "length": 6.0,
+   "into": "case",
+   "note": "M2 x 6 CSK",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_R",
+   "gap_mm": -0.0,
+   "engagement_mm": 2.2,
+   "problems": [],
+   "servo_point": [
+    32.75,
+    10.25,
+    -15.6
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    1.8,
+    2.5
+   ],
+   "index": 7
+  },
+  {
+   "part": "blade_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 0
+  },
+  {
+   "part": "blade_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 1
+  },
+  {
+   "part": "blade_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    -7.0,
+    0.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 2
+  },
+  {
+   "part": "blade_R",
+   "size": "M3",
+   "length": 6.0,
+   "into": "drive",
+   "note": "the servo bag's M3 x 6, heads 5 mm down in the boss",
+   "under_head_mm": 3.0,
+   "seat_error_mm": 0.0,
+   "target": "servo_elbow_R",
+   "gap_mm": 0.05,
+   "engagement_mm": 2.95,
+   "problems": [],
+   "servo_point": [
+    0.0,
+    -7.0,
+    18.75
+   ],
+   "hole_offset_mm": 0.0,
+   "allowed_mm": [
+    2.5,
+    3.7
+   ],
+   "index": 3
+  }
+ ],
+ "screw_heads": [],
+ "seconds": 3.2,
+ "pass": true
+}

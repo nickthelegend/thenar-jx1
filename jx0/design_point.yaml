@@ -40,7 +40,7 @@ joint_ranges_deg:
   hip_roll:    {min: -20,  max: 22,  label: CALCULATED, note: "+ = abduction (left leg); CAD own-limb clear -22..25 (the roll U-bracket and the thigh meet the yaw disc)"}
   hip_pitch:   {min: -70,  max: 8,   label: CALCULATED, note: "- = flexion (leg forward); CAD clear -75 (thigh meets the hip-roll bracket) .. +12 (the hip-yaw bracket)"}
   knee:        {min: 0,    max: 84,  label: CALCULATED, note: "+ = flexion; CAD clear to 87 from the walking stance (75 with the hip straight: no action does that)"}
-  ankle_pitch: {min: -55,  max: 15,  label: CALCULATED, note: "- = dorsiflexion (toes up); CAD clear -75..17"}
+  ankle_pitch: {min: -55,  max: 5,   label: CALCULATED, note: "- = dorsiflexion (toes up); CAD clear -55..5 (beyond +5 the foot meets the shin cage's back wall; the gaits use -44..-10)"}
   ankle_roll:  {min: -20,  max: 20,  label: CALCULATED, note: "CAD own-limb clear -20..22 (the sole meets the roll servo's cage; the foot's bracket swings under the ankle bracket's arms)"}
 
 # One actuator class for all 17 joints (legs, arms, neck): the Feetech STS3215 12 V serial bus servo (Evelta sells it as
@@ -93,35 +93,35 @@ layout:
 # Mass budget per link (printed structure + mounted servos, via `carries`). COM in the link frame (m).
 mass_budget:
   pelvis:
-    structure_kg: {value: 0.095, label: ESTIMATED, note: "v0.4 SolidWorks: JX0_Pelvis 77.9 g printed (PETG, near-solid: 6 walls, 40 % gyroid; 5 mm yaw-cage walls, keeper bosses) + the 2 hip-yaw keepers 5.6 g + screws and inserts 11 g"}
+    structure_kg: {value: 0.091, label: ESTIMATED, note: "v0.4 fitted to the real STS3215: JX0_Pelvis 73.0 g printed (PETG, near-solid: 6 walls, 40 % gyroid; 5 mm yaw-cage walls, keeper bosses, cable windows) + the 2 hip-yaw keepers 5.6 g + the 2 yaw ring inserts 1.4 g + screws and inserts 11 g"}
     carries: [hip_yaw, hip_yaw]
     com_m: [0.002, 0.0, 0.050]
   upper_body:
-    mass_kg: {value: 1.180, label: ESTIMATED, note: "v0.4: CAD printed torso with skirt 103 g + chest cap 46 g + head 67 g + arms 76 g (hood/elbow box 22.7 + blade 15.3 g per side); 5 STS3215 (neck, 2 shoulder, 2 elbow: the shoulder and elbow servos ride in the arms) 445 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, servo driver + UBEC 30 g, IMU/mic/amp/speaker/button 20 g, switch 10 g, wiring 70 g, screws 25 g"}
+    mass_kg: {value: 1.180, label: ESTIMATED, note: "v0.4: CAD printed torso with skirt 103 g + chest cap 45 g + head 60 g + neck hub 11 g + arms 73 g (hood/elbow box 21.5 + blade 14.8 g per side); 5 STS3215 (neck, 2 shoulder, 2 elbow: the shoulder and elbow servos ride in the arms) 445 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, servo driver + UBEC 30 g, IMU/mic/amp/speaker/button 20 g, switch 10 g, wiring 70 g, screws 25 g"}
     com_m: [0.005, 0.0, 0.143]
     inertia_box_m: [0.08, 0.17, 0.20]
   hip_yaw_link:
-    structure_kg: {value: 0.055, label: ESTIMATED, note: "v0.4 SolidWorks: hip-yaw bracket 50.0 g printed (disc with the keeper's groove under its rim, keel, solid block, roll-servo cage) + screws"}
+    structure_kg: {value: 0.056, label: ESTIMATED, note: "v0.4 fitted to the real STS3215: hip-yaw bracket 50.9 g printed (disc with the keeper's groove under its rim, keel, solid block, roll-servo cage) + screws"}
     carries: [hip_roll]
     com_m: [-0.028, -0.010, 0.015]
   hip_roll_link:
-    structure_kg: {value: 0.033, label: ESTIMATED, note: "v0.4 SolidWorks: hip-roll U-bracket 29.0 g printed + screws"}
+    structure_kg: {value: 0.035, label: ESTIMATED, note: "v0.4 fitted to the real STS3215: hip-roll U-bracket 30.5 g printed + screws"}
     carries: [hip_pitch]
     com_m: [-0.012, 0.007, 0.002]
   thigh:
-    structure_kg: {value: 0.048, label: ESTIMATED, note: "v0.4 SolidWorks: thigh 44.3 g printed (dog-leg U-bracket + knee cage) + screws"}
+    structure_kg: {value: 0.046, label: ESTIMATED, note: "v0.4 fitted to the real STS3215: thigh 42.1 g printed (dog-leg U-bracket + knee cage) + screws"}
     carries: [knee]
     com_m: [0.012, -0.002, -0.043]
   shin:
-    structure_kg: {value: 0.029, label: ESTIMATED, note: "v0.4 SolidWorks: shin 25.2 g printed (knee U-bracket + ankle-pitch cage) + screws"}
+    structure_kg: {value: 0.028, label: ESTIMATED, note: "v0.4 fitted to the real STS3215: shin 23.7 g printed (knee U-bracket + ankle-pitch cage) + screws"}
     carries: [ankle_A]
     com_m: [0.002, -0.003, -0.025]
   ankle_cross:
-    structure_kg: {value: 0.040, label: ESTIMATED, note: "v0.4 SolidWorks: ankle bracket 35.9 g printed (U-bracket + closed roll cage) + screws; carries the ankle-roll servo (layout.ankle_roll_actuator_m)"}
+    structure_kg: {value: 0.042, label: ESTIMATED, note: "v0.4 fitted to the real STS3215: ankle bracket 37.7 g printed (U-bracket + closed roll cage) + screws; carries the ankle-roll servo (layout.ankle_roll_actuator_m)"}
     carries: [ankle_B]
     com_m: [-0.031, 0.001, 0.0]
   foot:
-    structure_kg: {value: 0.061, label: ESTIMATED, note: "v0.4 SolidWorks: foot 51.1 g printed (sole + roll U-bracket) + 1 mm rubber pad + screws"}
+    structure_kg: {value: 0.061, label: ESTIMATED, note: "v0.4 fitted to the real STS3215: foot 51.0 g printed (sole + roll U-bracket) + 1 mm rubber pad + screws"}
     carries: []
     com_m: [-0.014, 0.0, -0.026]
 
@@ -130,7 +130,7 @@ upper_body_geometry:
   shoulder_pitch_origin: {value: [0.0125, 0.063, 0.186], label: CALCULATED, note: "CAD v0.4: the shoulder servo's horn face on the chest-wall pad (the servo hangs outside, in the arm's hood)"}
   upper_arm_m: {value: 0.052, label: CALCULATED, note: "CAD: shoulder-pitch axis to elbow axis (hood + elbow box)"}
   forearm_m: {value: 0.100, label: CALCULATED, note: "CAD: elbow axis to blade tip"}
-  neck_yaw_origin: {value: [0.0, 0.0, 0.244625], label: CALCULATED, note: "CAD: neck STS3215 standing on the chest cap, horn face"}
+  neck_yaw_origin: {value: [0.0, 0.0, 0.2444], label: CALCULATED, note: "CAD: neck STS3215 standing on the chest cap by its rear face, horn face (geometry.NECK_Z)"}
   head_size_m: {value: [0.066, 0.078, 0.062], label: CALCULATED, note: "CAD head: soft block, four face holes"}
 
 upper_body_joint_ranges_deg:
