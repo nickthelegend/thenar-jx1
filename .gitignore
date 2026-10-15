@@ -52,3 +52,8 @@ jx0/bom/.report_build/
 
 # the reference robot video (a friend's robot): kept local, not published
 media/reference.mp4
+
+# sliced print plates (regenerate: python tools/print/make_plates.py)
+jx0/print/**/*.gcode
+jx0/print/**/*.gcode.3mf
+jx0/print/**/result.json
