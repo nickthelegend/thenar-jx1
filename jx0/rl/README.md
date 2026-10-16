@@ -43,7 +43,19 @@ rl/.venv/Scripts/python jx0/rl/sim2sim_jx0.py --policy jx0/rl/policies/jx0_walk_
 
 Checkpoints and `metrics.csv` go to `rl/runs/<run>/`. The export writes `policy.onnx`, `policy.pt` and `policy_io.yaml`, the same bundle format as JX1's.
 
-## Training status (2026-10-16)
+## Result: jx0_walk17_v5 passes the test suite
+
+The policy is 17 joint corrections at 50 Hz from 176 observations. On the verified model (servo torque-speed limit, 100 Hz bus) it passes:
+- **speeds:** 11/11 (forward 0.03–0.10 m/s, backward, sideways, turning, forward + turn);
+- **pushes:** 96/96, up to 0.72 N·s;
+- **endurance:** the 60 s run with pushes;
+- **latency:** 12 ms of extra delay.
+
+The robot's own gait program passes the same kind of tests in `jx0/verify` (walking, pushes, 60 s endurance on 12 robots with model errors). See `policies/jx0_walk17_v5/REPORT.md`.
+
+What made it work is the reference gait. Without one (runs v1–v3), the policies stood still or stepped in place. With the verified gaits as the reference and near-zero initial corrections, the robot walks from the first iteration, and the policy only learns balance, push recovery and the speeds in between.
+
+## Training history (2026-10-16)
 
 | Run | Change | Result |
 |---|---|---|

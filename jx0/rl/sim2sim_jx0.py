@@ -156,6 +156,7 @@ class JX0Sim:
         self.n_tau = 0
         self.limit_hits = 0
         self.over = {j: 0.0 for j in self.allj}                             # deg past the commanded limit, worst
+        self.meas = None                                                    # body-frame velocity average (speeds)
 
     # ---- the robot's sensors and its 50 Hz loop
     def _snapshot(self):
@@ -224,6 +225,13 @@ class JX0Sim:
             d.xfrc_applied[self.torso, :2] = self.push_f
         mujoco.mj_step(m, d)
         self.i += 1
+        if self.meas is not None:                                           # velocity in the robot's own heading frame
+            h = heading(d.qpos[3:7])
+            vx, vy = d.qvel[0], d.qvel[1]
+            dt = m.opt.timestep
+            self.meas["v"] += dt * np.array([math.cos(h) * vx + math.sin(h) * vy, -math.sin(h) * vx + math.cos(h) * vy])
+            self.meas["yaw"] += (h - self.meas["h"] + math.pi) % (2 * math.pi) - math.pi
+            self.meas["h"], self.meas["t"] = h, self.meas["t"] + dt
         if d.xpos[self.pelvis][2] < 0.08 or pio.projected_gravity(d.qpos[3:7])[2] > -0.5:     # down, or tilted > 60 deg
             self.fell = True
 
@@ -263,10 +271,10 @@ def speeds(pol, obs_ms=0.0, act_ms=0.0, cases=SPEEDS, rel=0.35, seconds=10.0, se
     for name, cmd in cases:
         sim = JX0Sim(pol, obs_ms, act_ms)
         up = sim.run(cmd, settle)
-        p0, h0, t0 = sim.pose()
+        sim.meas = {"v": np.zeros(2), "yaw": 0.0, "h": heading(sim.d.qpos[3:7]), "t": 0.0}
         up = up and sim.run(cmd, seconds - settle)
-        p1, h1, t1 = sim.pose()
-        v = velocity(p0, h0, t0, p1, h1, t1) if up else None
+        mt = sim.meas
+        v = np.array([*(mt["v"] / mt["t"]), mt["yaw"] / mt["t"]]) if up else None   # mean body-frame vx, vy and yaw rate
         ok = bool(up and tracked(cmd, v, rel))
         res[name] = {"command": list(cmd), "fell": not up, "achieved": None if v is None else [round(float(x), 3) for x in v],
                      "peak_torque_of_stall": round(sim.peak_tau / sim.st["stall_torque_nm"], 2),

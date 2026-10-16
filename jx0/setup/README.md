@@ -61,6 +61,10 @@ python jx0\rl\play_jx0.py --policy jx0\rl\policies\jx0_walk17_isaac
 | Task file | `jx0\rl\config\jx0_walk17.yaml`: rewards, randomisation (servo stiffness 0.7–1.3×, latency 2–12 ms, pushes, friction, mass) and PPO |
 | Robot | `jx0\description\urdf\jx0.urdf`, checked against the verified model by `jx0\description\check_description.py` |
 
+## What to expect
+
+The same task trained in MuJoCo on the design laptop gave `jx0_walk17_v5`, which passes the whole test suite at iteration 1500 (1024 robots). With 4096 robots, Isaac Lab sees 4× more data per iteration, so 1500–3000 iterations should be plenty. Isaac's physics differs from MuJoCo's, so check the `sim2sim.json` that `train_isaac.bat` writes. If it says FAIL, train longer (`train_isaac.bat 5000`).
+
 ## How long training takes (estimate)
 
 One iteration is 4096 robots × 24 steps, about 98,000 simulation steps. Isaac Lab runs legged-robot tasks on one RTX 4090 at roughly 70,000–150,000 steps/s. JX0 is a small robot (17 joints, 18 bodies), so it should be at the fast end of that range. These numbers are estimates: nothing has been run in Isaac Sim here.

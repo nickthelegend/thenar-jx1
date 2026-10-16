@@ -29,7 +29,7 @@
    "fell": false,
    "achieved": [
     0.036,
-    -0.001,
+    -0.0,
     -0.008
    ],
    "peak_torque_of_stall": 1.0,
@@ -45,7 +45,7 @@
    "fell": false,
    "achieved": [
     0.062,
-    -0.003,
+    -0.0,
     -0.011
    ],
    "peak_torque_of_stall": 1.0,
@@ -61,7 +61,7 @@
    "fell": false,
    "achieved": [
     0.079,
-    -0.004,
+    -0.0,
     -0.012
    ],
    "peak_torque_of_stall": 1.0,
@@ -76,8 +76,8 @@
    ],
    "fell": false,
    "achieved": [
-    0.097,
-    -0.003,
+    0.096,
+    0.0,
     -0.009
    ],
    "peak_torque_of_stall": 1.0,
@@ -92,7 +92,7 @@
    ],
    "fell": false,
    "achieved": [
-    -0.041,
+    -0.04,
     0.001,
     -0.003
    ],
@@ -108,7 +108,7 @@
    ],
    "fell": false,
    "achieved": [
-    0.001,
+    -0.001,
     0.026,
     -0.024
    ],
@@ -124,7 +124,7 @@
    ],
    "fell": false,
    "achieved": [
-    -0.001,
+    -0.002,
     -0.025,
     0.013
    ],
@@ -140,8 +140,8 @@
    ],
    "fell": false,
    "achieved": [
-    -0.002,
-    -0.001,
+    0.003,
+    0.002,
     0.281
    ],
    "peak_torque_of_stall": 1.0,
@@ -156,8 +156,8 @@
    ],
    "fell": false,
    "achieved": [
-    0.0,
-    -0.006,
+    0.002,
+    -0.003,
     -0.304
    ],
    "peak_torque_of_stall": 0.84,
@@ -172,13 +172,13 @@
    ],
    "fell": false,
    "achieved": [
-    0.036,
-    0.033,
+    0.056,
+    0.003,
     0.197
    ],
    "peak_torque_of_stall": 1.0,
    "peak_speed_of_no_load": 0.98,
-   "pass": false
+   "pass": true
   }
  },
  "pushes": [
@@ -866,7 +866,7 @@
   "worst_joint": "left_hip_roll_joint",
   "rated_torque_nm": 0.98,
   "peak_torque_of_stall": 1.0,
-  "real_time_factor": 1.94,
+  "real_time_factor": 2.13,
   "pass": true
  },
  "latency": {
@@ -879,7 +879,7 @@
    "fell": false,
    "achieved": [
     0.063,
-    -0.006,
+    0.003,
     -0.046
    ],
    "peak_torque_of_stall": 1.0,
@@ -894,8 +894,8 @@
    ],
    "fell": false,
    "achieved": [
-    0.003,
-    0.025,
+    -0.002,
+    0.026,
     -0.038
    ],
    "peak_torque_of_stall": 1.0,
@@ -910,8 +910,8 @@
    ],
    "fell": false,
    "achieved": [
-    0.001,
-    0.004,
+    0.006,
+    0.003,
     0.163
    ],
    "peak_torque_of_stall": 1.0,
@@ -928,11 +928,11 @@
   "standing 0.72": "16/16"
  },
  "verdict": {
-  "speeds": false,
+  "speeds": true,
   "pushes": true,
   "endurance": true,
   "latency": true
  },
- "pass": false,
- "wall_s": 553.7
+ "pass": true,
+ "wall_s": 509.2
 }
