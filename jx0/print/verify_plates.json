@@ -25,7 +25,7 @@
    "supported_mm2": 0.0,
    "height_mm": 8.0,
    "watertight": true,
-   "volume_cm3": 21.25,
+   "volume_cm3": 21.11,
    "problems": []
   },
   "JX0_ArmBlade_R": {
@@ -34,16 +34,16 @@
    "supported_mm2": 0.0,
    "height_mm": 8.0,
    "watertight": true,
-   "volume_cm3": 21.25,
+   "volume_cm3": 21.11,
    "problems": []
   },
   "JX0_ChestCap": {
    "contact_mm2": 5833.2,
    "com_over_contact": true,
-   "supported_mm2": 3942.4,
+   "supported_mm2": 3978.0,
    "height_mm": 42.0,
    "watertight": true,
-   "volume_cm3": 64.84,
+   "volume_cm3": 64.72,
    "problems": []
   },
   "JX0_Foot": {
@@ -166,10 +166,10 @@
   "JX0_Torso": {
    "contact_mm2": 905.6,
    "com_over_contact": true,
-   "supported_mm2": 9115.8,
+   "supported_mm2": 9286.1,
    "height_mm": 136.0,
    "watertight": true,
-   "volume_cm3": 147.45,
+   "volume_cm3": 146.16,
    "problems": []
   },
   "JX0_UpperArm_L": {
@@ -323,8 +323,8 @@
    "material": "PLA",
    "parts": 3,
    "bodies": 3,
-   "time": "10h 58m 2s",
-   "grams": 292.77,
+   "time": "11h 15m 35s",
+   "grams": 291.4,
    "nozzle": [
     210.0,
     215.0
@@ -342,8 +342,8 @@
    "material": "PLA",
    "parts": 5,
    "bodies": 5,
-   "time": "5h 32m 12s",
-   "grams": 169.39,
+   "time": "5h 35m 44s",
+   "grams": 169.67,
    "nozzle": [
     210.0,
     215.0
@@ -359,7 +359,7 @@
  },
  "filament_g": {
   "PETG": 654.4,
-  "PLA": 462.2
+  "PLA": 461.1
  },
  "problems": 0
 }

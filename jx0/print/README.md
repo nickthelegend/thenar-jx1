@@ -11,7 +11,15 @@ lays each plate out, and slices it. Settings: 0.2 mm layers, Textured PEI plate,
 - no two parts touch;
 - in the G-code: the printer's own start G-code, the print temperatures (PETG 240 / 80 °C, PLA 210 / 60 °C), walls, infill and supports, every move inside the bed, and every part printed from the bed to its top.
 
-Result: 0 problems (`verify_plates.json`). Filament: PETG 654 g, PLA 462 g.
+Result: 0 problems (`verify_plates.json`). Filament: PETG 654 g, PLA 461 g.
+
+The plates use the parts with their lettering (`jx0/cad/engrave.py`, 0.6 mm deep):
+- torso front: JX0 and JNTUH's 1st Humanoid Robot;
+- torso back: thenar.io and JX0;
+- chest band: thenar.io;
+- both arm blades: JX0.
+
+For contrast, fill the letters with an acrylic paint marker and wipe off the excess.
 
 The sliced files are not in git; re-run the script to make them. Each plate folder holds:
 - `<plate>.stl`: the laid-out plate.
@@ -24,9 +32,9 @@ The sliced files are not in git; re-run the script to make them. Each plate fold
 | 2 | P1S-1_pelvis_hip_yaw | P1S | PETG | 7.5 h | Pelvis, hip-yaw brackets, keepers, yaw rings |
 | 2 | i7-1_thighs_ankles | i7 | PETG | 10.2 h | Thighs, ankle brackets |
 | 3 | P1S-2_feet_hip_roll | P1S | PETG | 7.2 h | Feet, hip-roll brackets |
-| 3 | i7-2_torso_head | i7 | PLA | 11.0 h | Torso, head, neck hub |
+| 3 | i7-2_torso_head | i7 | PLA | 11.3 h | Torso, head, neck hub |
 | 4 | P1S-3_shin_shims | P1S | PETG | 2.3 h | Shin R, 40 horn shims |
-| 5 | P1S-4_chest_arms | P1S | PLA | 5.5 h | Chest cap, upper arms, arm blades |
+| 5 | P1S-4_chest_arms | P1S | PLA | 5.6 h | Chest cap, upper arms, arm blades |
 
 How to print on each printer:
 - **P1S:** open the `.gcode.3mf` in Bambu Studio, then Print plate.

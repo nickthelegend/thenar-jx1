@@ -3,7 +3,7 @@
     Bambu Lab P1S (256 x 256 mm, Bambu Studio)      -> jx0/print/P1S/<plate>.gcode.3mf
     Creality SPARKX i7 (260 x 260 mm, Creality Print) -> jx0/print/i7/<plate>.gcode (+ .3mf project)
 
-Every part is the SolidWorks STL (jx0/cad/stl), turned to the side the build guide prints it on. The slicer arranges
+Every part is the SolidWorks STL with its lettering (jx0/cad/stl_engraved, from jx0/cad/engrave.py), turned to the side the build guide prints it on. The slicer arranges
 each plate. Settings are the printer's own system profiles (inheritance resolved here, because the slicers' command
 lines do not resolve it) with the build guide's on top:
     PETG (pelvis, leg parts, shims): 0.2 mm layers, 6 walls, 6 top and 6 bottom layers, 40 % gyroid, 240 C / 80 C
@@ -25,7 +25,7 @@ import numpy as np
 import trimesh
 
 ROOT = Path(__file__).resolve().parents[2]
-STL = ROOT / "jx0" / "cad" / "stl"
+STL = ROOT / "jx0" / "cad" / "stl_engraved"          # the SolidWorks STLs with the lettering (jx0/cad/engrave.py)
 OUT = ROOT / "jx0" / "print"
 BAMBU = Path(r"D:\Program Files\Bambu Studio")
 CREALITY = Path(r"C:\Program Files\Creality\Creality Print 7.3")
