@@ -1,0 +1,139 @@
+{
+ "latency_ms": 0.0,
+ "seconds": 10.0,
+ "servo_model": "walk_jx0.ServoModel (torque-speed line)",
+ "physics_hz": 1000,
+ "bus_hz": 100,
+ "scenarios": {
+  "stand": {
+   "command": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fell": false,
+   "seconds": 10.0,
+   "peak_torque_of_stall": 1.0,
+   "peak_speed_of_no_load": 0.85,
+   "achieved": [
+    0.0,
+    0.0,
+    -0.0
+   ]
+  },
+  "forward": {
+   "command": [
+    0.05,
+    0.0,
+    0.0
+   ],
+   "fell": false,
+   "seconds": 10.0,
+   "peak_torque_of_stall": 1.0,
+   "peak_speed_of_no_load": 0.84,
+   "achieved": [
+    0.059,
+    -0.002,
+    0.001
+   ]
+  },
+  "forward_fast": {
+   "command": [
+    0.1,
+    0.0,
+    0.0
+   ],
+   "fell": false,
+   "seconds": 10.0,
+   "peak_torque_of_stall": 1.0,
+   "peak_speed_of_no_load": 0.91,
+   "achieved": [
+    0.091,
+    -0.007,
+    -0.032
+   ]
+  },
+  "backward": {
+   "command": [
+    -0.04,
+    0.0,
+    0.0
+   ],
+   "fell": false,
+   "seconds": 10.0,
+   "peak_torque_of_stall": 1.0,
+   "peak_speed_of_no_load": 0.88,
+   "achieved": [
+    -0.014,
+    0.002,
+    -0.032
+   ]
+  },
+  "left": {
+   "command": [
+    0.0,
+    0.04,
+    0.0
+   ],
+   "fell": false,
+   "seconds": 10.0,
+   "peak_torque_of_stall": 1.0,
+   "peak_speed_of_no_load": 0.92,
+   "achieved": [
+    -0.007,
+    0.001,
+    -0.019
+   ]
+  },
+  "right": {
+   "command": [
+    0.0,
+    -0.04,
+    0.0
+   ],
+   "fell": false,
+   "seconds": 10.0,
+   "peak_torque_of_stall": 1.0,
+   "peak_speed_of_no_load": 0.83,
+   "achieved": [
+    -0.004,
+    0.0,
+    -0.019
+   ]
+  },
+  "turn_left": {
+   "command": [
+    0.0,
+    0.0,
+    0.3
+   ],
+   "fell": false,
+   "seconds": 10.0,
+   "peak_torque_of_stall": 1.0,
+   "peak_speed_of_no_load": 0.88,
+   "achieved": [
+    -0.004,
+    -0.004,
+    -0.007
+   ]
+  },
+  "turn_right": {
+   "command": [
+    0.0,
+    0.0,
+    -0.3
+   ],
+   "fell": false,
+   "seconds": 10.0,
+   "peak_torque_of_stall": 1.0,
+   "peak_speed_of_no_load": 0.88,
+   "achieved": [
+    -0.009,
+    0.002,
+    -0.02
+   ]
+  }
+ },
+ "stayed_up": 8,
+ "of": 8
+}

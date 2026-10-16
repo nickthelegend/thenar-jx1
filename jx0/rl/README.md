@@ -32,7 +32,23 @@ rl/.venv/Scripts/python rl/train.py --config jx0/rl/config/jx0_walk.yaml --run j
 rl/.venv/Scripts/python rl/export.py --checkpoint rl/runs/jx0_walk_v1/model_2999.pt --out jx0/rl/policies/jx0_walk_v1
 ```
 
+Check the exported policy on the verified JX0 model rather than the training model. That model runs at 1 kHz with the STS3215's torque-speed line, the 100 Hz bus and jx0bot's clamps. Add `--latency-ms 10` to test with delay, or `--video walk.mp4` to film it:
+
+```bash
+rl/.venv/Scripts/python jx0/rl/sim2sim_jx0.py --policy jx0/rl/policies/jx0_walk_v1
+```
+
 Checkpoints and `metrics.csv` go to `rl/runs/<run>/`. The export writes `policy.onnx`, `policy.pt` and `policy_io.yaml`, the same bundle format as JX1's.
+
+## Training status (2026-10-16)
+
+| Run | Change | Result |
+|---|---|---|
+| `jx0_walk_v1` | first run | Walks forward and stands on the full model (sim2sim). Does not turn or side-step: one tracking tolerance gave turns no signal (`policies/jx0_walk_v1`) |
+| `jx0_walk_v2` | separate yaw tolerance, tighter speed tolerance, strong penalty above 70 % of no-load speed | Learned to stand still |
+| `jx0_walk_v3` | v1's speed tolerance, gentle speed penalty | At 1000 iterations, weaker than v1 forward; turns at 15–25 % |
+
+Turning and side-stepping still need reward work. One likely cause: with tolerance 0.01, standing still earns 85 % of the reward for a 0.04 m/s side-step command.
 
 ## Option 2: Isaac Lab on a GPU machine
 
