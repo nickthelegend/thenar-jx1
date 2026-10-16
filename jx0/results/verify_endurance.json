@@ -29,7 +29,7 @@
    "worst_joint": "r_knee",
    "latency_ms": 0,
    "stiffness_x": 1.0,
-   "real_time_factor": 2.09
+   "real_time_factor": 3.17
   },
   {
    "seed": 1,
@@ -43,7 +43,7 @@
    "worst_joint": "l_knee",
    "latency_ms": 40,
    "stiffness_x": 0.86,
-   "real_time_factor": 1.93
+   "real_time_factor": 3.48
   },
   {
    "seed": 2,
@@ -57,7 +57,7 @@
    "worst_joint": "r_ankle_pitch",
    "latency_ms": 40,
    "stiffness_x": 1.22,
-   "real_time_factor": 1.97
+   "real_time_factor": 3.22
   },
   {
    "seed": 3,
@@ -71,7 +71,7 @@
    "worst_joint": "r_knee",
    "latency_ms": 20,
    "stiffness_x": 1.33,
-   "real_time_factor": 2.0
+   "real_time_factor": 3.12
   },
   {
    "seed": 4,
@@ -85,7 +85,7 @@
    "worst_joint": "l_knee",
    "latency_ms": 20,
    "stiffness_x": 0.63,
-   "real_time_factor": 2.01
+   "real_time_factor": 3.26
   },
   {
    "seed": 5,
@@ -99,7 +99,7 @@
    "worst_joint": "r_knee",
    "latency_ms": 0,
    "stiffness_x": 1.04,
-   "real_time_factor": 2.0
+   "real_time_factor": 3.29
   },
   {
    "seed": 6,
@@ -113,7 +113,7 @@
    "worst_joint": "l_knee",
    "latency_ms": 20,
    "stiffness_x": 0.88,
-   "real_time_factor": 2.0
+   "real_time_factor": 3.53
   },
   {
    "seed": 7,
@@ -127,7 +127,7 @@
    "worst_joint": "r_knee",
    "latency_ms": 20,
    "stiffness_x": 0.76,
-   "real_time_factor": 1.9
+   "real_time_factor": 3.34
   },
   {
    "seed": 8,
@@ -141,7 +141,7 @@
    "worst_joint": "r_ankle_pitch",
    "latency_ms": 40,
    "stiffness_x": 1.06,
-   "real_time_factor": 1.94
+   "real_time_factor": 3.13
   },
   {
    "seed": 9,
@@ -155,7 +155,7 @@
    "worst_joint": "r_knee",
    "latency_ms": 20,
    "stiffness_x": 0.87,
-   "real_time_factor": 1.89
+   "real_time_factor": 3.16
   },
   {
    "seed": 10,
@@ -169,7 +169,7 @@
    "worst_joint": "r_knee",
    "latency_ms": 20,
    "stiffness_x": 0.73,
-   "real_time_factor": 1.96
+   "real_time_factor": 3.33
   },
   {
    "seed": 11,
@@ -183,12 +183,12 @@
    "worst_joint": "l_knee",
    "latency_ms": 0,
    "stiffness_x": 0.69,
-   "real_time_factor": 2.08
+   "real_time_factor": 3.46
   }
  ],
  "stayed_up": 12,
  "of": 12,
  "rated_torque_nm": 0.98,
  "pass": true,
- "wall_s": 39.8
+ "wall_s": 23.3
 }

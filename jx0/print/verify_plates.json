@@ -25,7 +25,7 @@
    "supported_mm2": 0.0,
    "height_mm": 8.0,
    "watertight": true,
-   "volume_cm3": 21.11,
+   "volume_cm3": 21.25,
    "problems": []
   },
   "JX0_ArmBlade_R": {
@@ -34,16 +34,16 @@
    "supported_mm2": 0.0,
    "height_mm": 8.0,
    "watertight": true,
-   "volume_cm3": 21.11,
+   "volume_cm3": 21.25,
    "problems": []
   },
   "JX0_ChestCap": {
    "contact_mm2": 5833.2,
    "com_over_contact": true,
-   "supported_mm2": 3978.0,
+   "supported_mm2": 3942.4,
    "height_mm": 42.0,
    "watertight": true,
-   "volume_cm3": 64.72,
+   "volume_cm3": 64.84,
    "problems": []
   },
   "JX0_Foot": {
@@ -58,10 +58,10 @@
   "JX0_Head": {
    "contact_mm2": 355.3,
    "com_over_contact": true,
-   "supported_mm2": 4298.7,
+   "supported_mm2": 4454.2,
    "height_mm": 62.0,
    "watertight": true,
-   "volume_cm3": 89.42,
+   "volume_cm3": 79.92,
    "problems": []
   },
   "JX0_HipRollBracket_L": {
@@ -166,10 +166,10 @@
   "JX0_Torso": {
    "contact_mm2": 905.6,
    "com_over_contact": true,
-   "supported_mm2": 9286.1,
+   "supported_mm2": 9208.7,
    "height_mm": 136.0,
    "watertight": true,
-   "volume_cm3": 146.16,
+   "volume_cm3": 147.29,
    "problems": []
   },
   "JX0_UpperArm_L": {
@@ -323,8 +323,8 @@
    "material": "PLA",
    "parts": 3,
    "bodies": 3,
-   "time": "11h 15m 35s",
-   "grams": 291.4,
+   "time": "10h 56m 59s",
+   "grams": 288.68,
    "nozzle": [
     210.0,
     215.0
@@ -342,8 +342,8 @@
    "material": "PLA",
    "parts": 5,
    "bodies": 5,
-   "time": "5h 38m 26s",
-   "grams": 170.18,
+   "time": "5h 34m 46s",
+   "grams": 169.89,
    "nozzle": [
     210.0,
     215.0
@@ -359,7 +359,7 @@
  },
  "filament_g": {
   "PETG": 654.8,
-  "PLA": 461.6
+  "PLA": 458.6
  },
  "problems": 0
 }

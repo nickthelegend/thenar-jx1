@@ -31,7 +31,7 @@
    "worst_mpa_max": 28.15,
    "fatigue_safety": 2.3,
    "static_safety": 4.6,
-   "seconds": 332.2
+   "seconds": 371.4
   },
   "yaw_keeper": {
    "loaded_by": "l_hip_yaw: the disc on the keeper's lip",
@@ -50,7 +50,7 @@
    "worst_mpa_max": 13.28,
    "fatigue_safety": 2.2,
    "static_safety": 4.8,
-   "seconds": 4.4
+   "seconds": 4.8
   },
   "hip_yaw_bracket": {
    "loaded_by": "l_hip_roll (parent frame) + the ring's and the keeper's pushes on the disc",
@@ -69,7 +69,7 @@
    "worst_mpa_max": 38.22,
    "fatigue_safety": 2.1,
    "static_safety": 2.9,
-   "seconds": 125.5
+   "seconds": 140.7
   },
   "hip_roll_bracket": {
    "loaded_by": "l_hip_pitch (parent frame)",
@@ -88,7 +88,7 @@
    "worst_mpa_max": 18.17,
    "fatigue_safety": 3.6,
    "static_safety": 5.0,
-   "seconds": 35.4
+   "seconds": 38.5
   },
   "thigh": {
    "loaded_by": "l_knee (parent frame)",
@@ -107,7 +107,7 @@
    "worst_mpa_max": 67.15,
    "fatigue_safety": 2.8,
    "static_safety": 3.8,
-   "seconds": 45.4
+   "seconds": 49.9
   },
   "shin": {
    "loaded_by": "l_ankle_pitch (parent frame)",
@@ -126,7 +126,7 @@
    "worst_mpa_max": 42.47,
    "fatigue_safety": 2.7,
    "static_safety": 3.1,
-   "seconds": 20.5
+   "seconds": 22.5
   },
   "ankle_bracket": {
    "loaded_by": "l_ankle_roll (parent frame)",
@@ -145,7 +145,7 @@
    "worst_mpa_max": 39.1,
    "fatigue_safety": 2.2,
    "static_safety": 3.2,
-   "seconds": 191.1
+   "seconds": 211.6
   },
   "foot": {
    "loaded_by": "l_ankle_roll (child frame)",
@@ -164,8 +164,8 @@
    "worst_mpa_max": 13.36,
    "fatigue_safety": 4.7,
    "static_safety": 6.4,
-   "seconds": 48.8
+   "seconds": 55.5
   }
  },
- "seconds": 855.6
+ "seconds": 946.2
 }

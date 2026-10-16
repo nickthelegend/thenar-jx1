@@ -26,7 +26,7 @@ sys.path.insert(0, str(HERE))
 import geometry as G  # noqa: E402
 
 SRC, OUT = HERE / "stl", HERE / "stl_engraved"
-DEPTH = 0.6                     # mm, 3 layers of 0.2
+DEPTH = 0.4                     # mm, 2 layers of 0.2: crisp, not deep
 BEHIND = 1.2                    # mm of wall that must stay under the letters
 INLAY = 0.25                    # the paint in the letters, for the renders: inlay/<part>.stl, the bottom 0.25 mm
 FONT = FontProperties(family="DejaVu Sans", weight="bold")
@@ -36,29 +36,50 @@ FRONT, BACK = (1.0, 0.0, 0.0), (-1.0, 0.0, 0.0)
 UP = (0.0, 0.0, 1.0)
 
 # part -> lines of (text, cap height mm, centre of the line on the face, outward normal, the text's up direction)
+# Premium and quiet: one small, widely spaced mark on the chest; the rest is a small nameplate on the back. Letters are
+# left in the body colour (tone on tone). Entries: (text, cap height mm, centre, outward normal, up, tracking) - tracking
+# = extra space between letters in cap heights; text "[frame W H]" is a nameplate outline (W x H mm, 0.8 mm line).
+NAMEPLATE_Z = 121.0
 TEXT = {
-    "JX0_Torso": [("JX0", 30.0, (TD, 0.0, 128.0), FRONT, UP),
-                  ("JNTUH's 1st", 6.5, (TD, 0.0, 96.0), FRONT, UP),
-                  ("Humanoid Robot", 6.5, (TD, 0.0, 85.0), FRONT, UP),
-                  ("thenar.io", 9.0, (-TD, 0.0, 122.0), BACK, UP),
-                  ("JX0", 14.0, (-TD, 0.0, 56.0), BACK, UP)],
-    "JX0_ChestCap": [("thenar.io", 8.0, (TD, 0.0, (TZS + TZT - CH) / 2 - 2.0), FRONT, UP)],
-    # the blades hang down from the elbow: on both the text runs up the blade, from the hand to the elbow
-    "JX0_ArmBlade_L": [("JX0", 13.0, (1.0, G.BLADE_T, -58.0), (0.0, 1.0, 0.0), (1.0, 0.0, 0.0))],
-    "JX0_ArmBlade_R": [("JX0", 13.0, (1.0, -G.BLADE_T, -58.0), (0.0, -1.0, 0.0), (-1.0, 0.0, 0.0))],
+    "JX0_Torso": [("JX0", 9.0, (TD, 0.0, 150.0), FRONT, UP, 0.9),
+                  ("[frame 62 27]", 0.0, (-TD, 0.0, NAMEPLATE_Z), BACK, UP, 0.0),
+                  ("JNTUH'S 1ST", 3.4, (-TD, 0.0, NAMEPLATE_Z + 7.0), BACK, UP, 0.15),
+                  ("HUMANOID ROBOT", 3.4, (-TD, 0.0, NAMEPLATE_Z), BACK, UP, 0.12),
+                  ("THENAR.IO", 2.8, (-TD, 0.0, NAMEPLATE_Z - 7.5), BACK, UP, 0.5)],
 }
 
 
-def text_section(text, cap):
-    """The text as a 2D cross-section (mm), its cap height = cap, centred on (0, 0)."""
+def text_section(text, cap, tracking=0.0):
+    """The text as a 2D cross-section (mm), its cap height = cap, centred on (0, 0); tracking = extra space between the
+    letters in cap heights. "[frame W H]": a W x H mm rounded nameplate outline, 0.8 mm wide."""
+    if text.startswith("[frame"):
+        w, h = (float(v) for v in text.strip("[]").split()[1:3])
+        return _rrect(w, h, 3.0) - _rrect(w - 1.6, h - 1.6, 2.2), (w, h)
     ref = TextPath((0, 0), "H", size=100.0, prop=FONT).get_extents()
     scale = cap / ref.height
-    tp = TextPath((0, 0), text, size=100.0, prop=FONT)
-    polys = [np.asarray(p) * scale for p in tp.to_polygons() if len(p) >= 3]
-    ext = tp.get_extents()
-    cx, cy = (ext.x0 + ext.x1) / 2 * scale, (ext.y0 + ext.y1) / 2 * scale
-    polys = [[(float(x - cx), float(y - cy)) for x, y in p] for p in polys]
-    return CrossSection(polys, FillRule.EvenOdd), (ext.width * scale, ext.height * scale)
+    polys, x = [], 0.0
+    for ch in text:                                        # letter by letter, so the spacing can open up
+        if ch == " ":                                      # (TextPath has no outline for a space)
+            x += 0.32 * 100.0 + tracking * ref.height
+            continue
+        tp = TextPath((x, 0), ch, size=100.0, prop=FONT)
+        polys += [np.asarray(q) * scale for q in tp.to_polygons() if len(q) >= 3]
+        adv = TextPath((0, 0), ch + "|", size=100.0, prop=FONT).get_extents().x1 - TextPath((0, 0), "|", size=100.0, prop=FONT).get_extents().x1
+        x += adv + tracking * ref.height
+    allp = np.vstack(polys)
+    lo, hi = allp.min(axis=0), allp.max(axis=0)
+    c = (lo + hi) / 2
+    polys = [[(float(px - c[0]), float(py - c[1])) for px, py in q] for q in polys]
+    return CrossSection(polys, FillRule.EvenOdd), tuple(float(v) for v in hi - lo)
+
+
+def _rrect(w, h, r, n=10):
+    pts = []
+    for cx, cy, a0 in ((w / 2 - r, h / 2 - r, 0), (-w / 2 + r, h / 2 - r, 90), (-w / 2 + r, -h / 2 + r, 180), (w / 2 - r, -h / 2 + r, 270)):
+        for k in range(n + 1):
+            t = np.radians(a0 + 90 * k / n)
+            pts.append((cx + r * np.cos(t), cy + r * np.sin(t)))
+    return CrossSection([pts], FillRule.EvenOdd)
 
 
 def cutter(section, depth, centre, normal, up, start=-0.5):
@@ -91,9 +112,9 @@ def main():
             continue
         part = to_mf(mesh)
         rows, inlay = [], Manifold()
-        for text, cap, centre, normal, up in TEXT[name]:
+        for text, cap, centre, normal, up, tracking in TEXT[name]:
             v0 = part.volume()
-            sec, (w, h) = text_section(text, cap)
+            sec, (w, h) = text_section(text, cap, tracking)
             area = sec.area()
             removed = v0 - (part - cutter(sec, DEPTH, centre, normal, up)).volume()
             deep = v0 - (part - cutter(sec, DEPTH + BEHIND, centre, normal, up)).volume()

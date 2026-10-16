@@ -475,19 +475,19 @@
    62.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 89.58,
-  "solid_mass_g_petg": 113.8,
-  "printed_mass_g": 62.6,
+  "volume_cm3": 80.07,
+  "solid_mass_g_petg": 101.7,
+  "printed_mass_g": 55.9,
   "print_fill": 0.55,
-  "features": 21,
-  "triangles": 1714,
+  "features": 24,
+  "triangles": 2004,
   "com_mm": [
-   1.93,
+   -1.44,
    -0.0,
-   33.35
+   34.58
   ],
   "quantity": 1,
-  "build_s": 49.4
+  "build_s": 61.3
  },
  "JX0_ChestCap": {
   "part": "JX0_ChestCap",

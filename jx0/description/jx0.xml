@@ -60,10 +60,10 @@
       <site name="imu" pos="0 0 0.03" group="4"/>
       <body name="torso_link">
         <inertial pos="0.005 0 0.143" mass="0.663" diaginertia="0.00380673 0.0025636 0.00195033"/>
-        <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Torso"/>
+        <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Torso"/>
         <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_ChestCap"/>
         <geom pos="0 0 0.2256" quat="0.707107 0 0 0.707107" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
-        <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_Torso"/>
+        <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_Torso"/>
         <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_ChestCap"/>
         <body name="left_upper_arm_link" pos="0.0125 0.063 0.186">
           <inertial pos="0.0064 0.0198 -0.0326" mass="0.204" diaginertia="0.00011 0.00013 7e-05"/>

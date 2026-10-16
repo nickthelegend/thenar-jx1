@@ -1,100 +1,61 @@
 {
- "depth_mm": 0.6,
+ "depth_mm": 0.4,
  "wall_behind_mm": 1.2,
  "parts": {
-  "JX0_ArmBlade_L": [
-   {
-    "text": "JX0",
-    "cap_mm": 13.0,
-    "size_mm": [
-     32.9,
-     16.8
-    ],
-    "area_mm2": 231.2,
-    "removed_mm3": 138.7,
-    "problems": []
-   }
-  ],
-  "JX0_ArmBlade_R": [
-   {
-    "text": "JX0",
-    "cap_mm": 13.0,
-    "size_mm": [
-     32.9,
-     16.8
-    ],
-    "area_mm2": 231.2,
-    "removed_mm3": 138.7,
-    "problems": []
-   }
-  ],
-  "JX0_ChestCap": [
-   {
-    "text": "thenar.io",
-    "cap_mm": 8.0,
-    "size_mm": [
-     54.4,
-     8.5
-    ],
-    "area_mm2": 189.8,
-    "removed_mm3": 113.9,
-    "problems": []
-   }
-  ],
   "JX0_Torso": [
    {
     "text": "JX0",
-    "cap_mm": 30.0,
-    "size_mm": [
-     76.0,
-     38.8
-    ],
-    "area_mm2": 1231.4,
-    "removed_mm3": 738.8,
-    "problems": []
-   },
-   {
-    "text": "JNTUH's 1st",
-    "cap_mm": 6.5,
-    "size_mm": [
-     58.8,
-     8.3
-    ],
-    "area_mm2": 167.0,
-    "removed_mm3": 100.2,
-    "problems": []
-   },
-   {
-    "text": "Humanoid Robot",
-    "cap_mm": 6.5,
-    "size_mm": [
-     82.9,
-     6.9
-    ],
-    "area_mm2": 245.4,
-    "removed_mm3": 147.2,
-    "problems": []
-   },
-   {
-    "text": "thenar.io",
     "cap_mm": 9.0,
     "size_mm": [
-     61.2,
-     9.6
+     39.0,
+     11.6
     ],
-    "area_mm2": 240.2,
-    "removed_mm3": 144.1,
+    "area_mm2": 110.8,
+    "removed_mm3": 44.3,
     "problems": []
    },
    {
-    "text": "JX0",
-    "cap_mm": 14.0,
+    "text": "[frame 62 27]",
+    "cap_mm": 0.0,
     "size_mm": [
-     35.5,
-     18.1
+     62.0,
+     27.0
     ],
-    "area_mm2": 268.2,
-    "removed_mm3": 160.9,
+    "area_mm2": 136.2,
+    "removed_mm3": 54.5,
+    "problems": []
+   },
+   {
+    "text": "JNTUH'S 1ST",
+    "cap_mm": 3.4,
+    "size_mm": [
+     37.9,
+     4.4
+    ],
+    "area_mm2": 49.8,
+    "removed_mm3": 19.9,
+    "problems": []
+   },
+   {
+    "text": "HUMANOID ROBOT",
+    "cap_mm": 3.4,
+    "size_mm": [
+     54.0,
+     3.5
+    ],
+    "area_mm2": 84.7,
+    "removed_mm3": 33.9,
+    "problems": []
+   },
+   {
+    "text": "THENAR.IO",
+    "cap_mm": 2.8,
+    "size_mm": [
+     34.7,
+     2.9
+    ],
+    "area_mm2": 32.8,
+    "removed_mm3": 13.1,
     "problems": []
    }
   ]

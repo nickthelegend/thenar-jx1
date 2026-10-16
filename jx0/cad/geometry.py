@@ -862,12 +862,14 @@ def head():
         p.append(("pcut", "y", corner_cut((xc, zc), (du, dv), r), (-hy - 1.0, hy + 1.0)))
     for xc, yc, du, dv in ((hx, hy, -1, -1), (hx, -hy, -1, 1), (-hx, hy, 1, -1), (-hx, -hy, 1, 1)):
         p.append(("pcut", "z", corner_cut((xc, yc), (du, dv), 20.0), (-0.1, hz + 0.1)))     # rounded vertical edges
+    p += neon_ring(hx)
     p += [("cut", (-26.0, 26.0), (-24.0, 24.0), (-0.1, 16.1)),                               # hollow, in steps; open
           ("cut", (-26.0, 26.0), (-30.0, 30.0), (16.0, 52.0)),                               # below for the neck hub
           ("cut", (-18.0, 18.0), (-24.0, 24.0), (51.9, 58.0)),
           ("cut", (-hx - 0.1, -25.9), (-16.0, 16.0), (16.0, 44.0))]                          # back window
-    for yc, zc in ((0.0, 49.0), (7.0, 42.0), (-7.0, 42.0), (0.0, 35.0)):                    # the four face holes
-        p.append(("hole", "x", (yc, zc), 5.0, (25.9, hx + 0.1)))
+    cz = NEON[1]
+    for yc, zc in ((0.0, cz + 7.0), (7.0, cz), (-7.0, cz), (0.0, cz - 7.0)):              # the four face holes, inside
+        p.append(("hole", "x", (yc, zc), 5.0, (25.9, hx + 0.1)))                            # the neon ring
     for y in (-HEAD_PIN_Y, HEAD_PIN_Y):                                                      # into the hub's back
         seat = -26.0 - 0.1 - 5.0
         p += [("hole", "x", (y, HEAD_PIN_Z), M2["hole"] + 0.2, (-hx - 0.1, -25.9)),
@@ -878,6 +880,27 @@ def head():
 
 
 HEAD_PIN_Y, HEAD_PIN_Z = 10.0, 8.0
+# red neon ring round the face (like Unitree G1's): a flat 5 x 10 mm silicone neon strip, its 10 mm glowing face flush
+# with the face, in a channel round the flat front face. NEON = (centreline width y, centre height z, height, corner
+# radius), channel 10.4 wide x NEON_DEPTH deep (1.8 mm of the 7 mm front wall left behind it).
+NEON = (40.0, 24.0, 34.0, 14.0)
+NEON_WIDTH, NEON_DEPTH = 10.4, 5.2
+
+
+def neon_rect(half_w, half_h, r, cz):
+    return rounded_polygon([(-half_w, cz - half_h), (half_w, cz - half_h), (half_w, cz + half_h), (-half_w, cz + half_h)],
+                           [r] * 4)
+
+
+def neon_ring(hx):
+    """The neon channel on the head's front face (x = hx) and the hole its lead goes in by, at the bottom of the ring:
+    the lead runs inside the head and down through the neck hub's cable hole with the microphone's."""
+    w, cz, h, r = NEON
+    e = NEON_WIDTH / 2
+    floor = hx - NEON_DEPTH
+    return [("pcut", "x", neon_rect(w / 2 + e, h / 2 + e, r + e, cz), (floor, hx + 1.0)),
+            ("prism", "x", neon_rect(w / 2 - e, h / 2 - e, r - e, cz), (floor - 0.05, hx)),       # the face inside it
+            ("hole", "x", (0.0, cz - h / 2), 5.0, (25.9, floor + 0.1))]                            # the lead, into the head
 
 
 def neck_hub():
