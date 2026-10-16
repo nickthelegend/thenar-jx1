@@ -251,12 +251,12 @@ commands:
 targets: q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad; left_hip_yaw
   - right_hip_yaw <= hip_yaw_toe_out_max_rad (excess taken off both hips equally)
 trained:
-  checkpoint: model_01500.pt
+  checkpoint: model_latest.pt
   run: jx0_walk17_v5
-  iteration: 1500
+  iteration: 3000
   task_config: run snapshot (config.yaml next to the checkpoint)
   source_mjcf: jx0/description/jx0.xml
   source_mjcf_sha256: 80d81349374053bc5fd7b5f0d0410cfeba820e214c75b325e2bffbe707c8d74e
   export_check:
-    onnx_max_abs_diff: 2.682209014892578e-07
+    onnx_max_abs_diff: 3.203749656677246e-07
     torchscript_max_abs_diff: 0.0

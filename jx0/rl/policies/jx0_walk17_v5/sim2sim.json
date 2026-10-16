@@ -1,6 +1,6 @@
 {
  "model": "jx0/sim/jx0_model.py, 1 kHz, STS3215 torque-speed line, 100 Hz bus, jx0bot clamps",
- "policy": "jx0_walk17_v5",
+ "policy": "v5_3000",
  "num_obs": 176,
  "joints": 17,
  "speeds": {
@@ -12,12 +12,12 @@
    ],
    "fell": false,
    "achieved": [
-    0.0,
-    0.0,
-    -0.0
+    -0.0,
+    -0.0,
+    0.0
    ],
-   "peak_torque_of_stall": 1.0,
-   "peak_speed_of_no_load": 0.16,
+   "peak_torque_of_stall": 0.67,
+   "peak_speed_of_no_load": 0.12,
    "pass": true
   },
   "forward_0.03": {
@@ -29,11 +29,11 @@
    "fell": false,
    "achieved": [
     0.036,
-    -0.0,
-    -0.008
+    -0.004,
+    -0.004
    ],
    "peak_torque_of_stall": 1.0,
-   "peak_speed_of_no_load": 0.91,
+   "peak_speed_of_no_load": 0.92,
    "pass": true
   },
   "forward_0.06": {
@@ -44,9 +44,9 @@
    ],
    "fell": false,
    "achieved": [
-    0.062,
-    -0.0,
-    -0.011
+    0.065,
+    -0.004,
+    -0.007
    ],
    "peak_torque_of_stall": 1.0,
    "peak_speed_of_no_load": 0.99,
@@ -60,12 +60,12 @@
    ],
    "fell": false,
    "achieved": [
-    0.079,
-    -0.0,
-    -0.012
+    0.083,
+    -0.003,
+    -0.004
    ],
    "peak_torque_of_stall": 1.0,
-   "peak_speed_of_no_load": 1.01,
+   "peak_speed_of_no_load": 1.0,
    "pass": true
   },
   "forward_0.10": {
@@ -76,12 +76,12 @@
    ],
    "fell": false,
    "achieved": [
-    0.096,
-    0.0,
-    -0.009
+    0.101,
+    -0.003,
+    0.002
    ],
    "peak_torque_of_stall": 1.0,
-   "peak_speed_of_no_load": 1.05,
+   "peak_speed_of_no_load": 1.07,
    "pass": true
   },
   "backward_0.04": {
@@ -92,12 +92,12 @@
    ],
    "fell": false,
    "achieved": [
-    -0.04,
-    0.001,
+    -0.043,
+    -0.003,
     -0.003
    ],
    "peak_torque_of_stall": 1.0,
-   "peak_speed_of_no_load": 1.0,
+   "peak_speed_of_no_load": 0.99,
    "pass": true
   },
   "left_0.03": {
@@ -108,12 +108,12 @@
    ],
    "fell": false,
    "achieved": [
-    -0.001,
-    0.026,
-    -0.024
+    -0.003,
+    0.021,
+    -0.007
    ],
    "peak_torque_of_stall": 1.0,
-   "peak_speed_of_no_load": 0.83,
+   "peak_speed_of_no_load": 0.84,
    "pass": true
   },
   "right_0.03": {
@@ -126,10 +126,10 @@
    "achieved": [
     -0.002,
     -0.025,
-    0.013
+    0.004
    ],
    "peak_torque_of_stall": 1.0,
-   "peak_speed_of_no_load": 0.68,
+   "peak_speed_of_no_load": 0.65,
    "pass": true
   },
   "turn_left_0.3": {
@@ -141,11 +141,11 @@
    "fell": false,
    "achieved": [
     0.003,
-    0.002,
-    0.281
+    -0.003,
+    0.284
    ],
    "peak_torque_of_stall": 1.0,
-   "peak_speed_of_no_load": 0.95,
+   "peak_speed_of_no_load": 0.94,
    "pass": true
   },
   "turn_right_0.3": {
@@ -156,12 +156,12 @@
    ],
    "fell": false,
    "achieved": [
-    0.002,
-    -0.003,
-    -0.304
+    0.0,
+    -0.004,
+    -0.293
    ],
-   "peak_torque_of_stall": 0.84,
-   "peak_speed_of_no_load": 0.68,
+   "peak_torque_of_stall": 0.98,
+   "peak_speed_of_no_load": 0.71,
    "pass": true
   },
   "forward_turn": {
@@ -172,12 +172,12 @@
    ],
    "fell": false,
    "achieved": [
-    0.056,
-    0.003,
-    0.197
+    0.06,
+    -0.003,
+    0.193
    ],
    "peak_torque_of_stall": 1.0,
-   "peak_speed_of_no_load": 0.98,
+   "peak_speed_of_no_load": 0.97,
    "pass": true
   }
  },
@@ -858,15 +858,15 @@
  "endurance": {
   "seconds": 60.0,
   "fell": false,
-  "distance_walked_m": 2.12,
+  "distance_walked_m": 2.22,
   "ms_at_a_printed_stop": 0,
-  "worst_past_limit_deg": 1.82,
-  "worst_past_limit_joint": "right_hip_roll_joint",
-  "worst_mean_torque_nm": 0.684,
+  "worst_past_limit_deg": 0.12,
+  "worst_past_limit_joint": "left_ankle_pitch_joint",
+  "worst_mean_torque_nm": 0.636,
   "worst_joint": "left_hip_roll_joint",
   "rated_torque_nm": 0.98,
   "peak_torque_of_stall": 1.0,
-  "real_time_factor": 2.13,
+  "real_time_factor": 4.13,
   "pass": true
  },
  "latency": {
@@ -878,12 +878,12 @@
    ],
    "fell": false,
    "achieved": [
-    0.063,
-    0.003,
-    -0.046
+    0.067,
+    0.001,
+    -0.077
    ],
    "peak_torque_of_stall": 1.0,
-   "peak_speed_of_no_load": 1.01,
+   "peak_speed_of_no_load": 1.0,
    "pass": true
   },
   "left_0.03": {
@@ -894,12 +894,12 @@
    ],
    "fell": false,
    "achieved": [
-    -0.002,
-    0.026,
-    -0.038
+    -0.0,
+    0.023,
+    -0.028
    ],
    "peak_torque_of_stall": 1.0,
-   "peak_speed_of_no_load": 0.92,
+   "peak_speed_of_no_load": 0.91,
    "pass": true
   },
   "turn_left_0.3": {
@@ -910,12 +910,12 @@
    ],
    "fell": false,
    "achieved": [
-    0.006,
-    0.003,
-    0.163
+    0.004,
+    -0.001,
+    0.223
    ],
    "peak_torque_of_stall": 1.0,
-   "peak_speed_of_no_load": 0.85,
+   "peak_speed_of_no_load": 0.83,
    "pass": true
   }
  },
@@ -934,5 +934,5 @@
   "latency": true
  },
  "pass": true,
- "wall_s": 509.2
+ "wall_s": 291.6
 }
