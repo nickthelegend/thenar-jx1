@@ -2,12 +2,13 @@
 (task_config.TASK_CONFIG: JX1 by default, JX0 with JX_TASK_CONFIG=jx0/rl/config/jx0_walk.yaml - scripts/train.py sets it
 from the task name):
   Isaac-Velocity-Flat-JX1-v0 / -Play-v0, Isaac-Velocity-Rough-JX1-v0 / -Play-v0      (JX1)
-  Isaac-Velocity-Flat-JX0-v0 / -Play-v0                                              (JX0, flat ground)
+  Isaac-Velocity-Flat-JX0-v0 / -Play-v0                                              (JX0, 12 leg joints)
+  Isaac-Velocity-Flat-JX0-Full-v0 / -Play-v0                                         (JX0, all 17 joints, 176 obs)
 Import it after the Isaac Sim app is launched (see scripts/train.py).
 """
 import gymnasium as gym
 
-from .task_config import ROBOT
+from .task_config import ISAAC_TASK, ROBOT
 
 _TASKS = [("Flat", "flat_env_cfg", "FlatEnvCfg", "FlatPPORunnerCfg")]
 if ROBOT == "jx1":
@@ -15,7 +16,7 @@ if ROBOT == "jx1":
 for ground, module, env_cls, ppo_cls in _TASKS:
     for suffix, play in (("", ""), ("-Play", "_PLAY")):
         gym.register(
-            id=f"Isaac-Velocity-{ground}-{ROBOT.upper()}{suffix}-v0",
+            id=f"{ISAAC_TASK if ISAAC_TASK and ground == 'Flat' else f'Isaac-Velocity-{ground}-{ROBOT.upper()}'}{suffix}-v0",
             entry_point="isaaclab.envs:ManagerBasedRLEnv",
             disable_env_checker=True,
             kwargs={"env_cfg_entry_point": f"{__name__}.{module}:JX1{env_cls}{play}",

@@ -60,3 +60,7 @@ jx0/print/**/result.json
 
 # promo film scratch meshes (tools/media/promo_jx0.py)
 media/jx0_promo_build/
+
+# Isaac Sim / Isaac Lab installed by jx0/setup/setup_isaac.bat
+.isaac/
+simulation/isaac/isaaclab/logs/

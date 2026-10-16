@@ -44,8 +44,13 @@ class TaskConfig:
         return len(self.policy_joints)
 
     @property
+    def history(self) -> int:
+        """Frames of history in the actor observation (observation.history_length; 1 = the current frame only)."""
+        return int(self.raw["observation"].get("history_length", 1))
+
+    @property
     def num_obs(self) -> int:
-        return 9 + 3 * self.num_actions + 2
+        return self.history * (6 + 3 * self.num_actions) + 5      # 9 + 3n + 2 for one frame
 
     @property
     def num_privileged_obs(self) -> int:

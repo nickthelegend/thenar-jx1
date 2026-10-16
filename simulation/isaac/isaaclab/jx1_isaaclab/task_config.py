@@ -65,11 +65,13 @@ def _load_task_yaml(path: Path) -> dict:
 # jx0/rl/config/jx0_walk.yaml), whose model block gives that robot's URDF, USD, joint map and MJCF.
 TASK_CONFIG = Path(os.environ.get("JX_TASK_CONFIG") or "rl/config/jx1_walk.yaml")
 TASK_CONFIG = TASK_CONFIG if TASK_CONFIG.is_absolute() else REPO / TASK_CONFIG
-_MODEL = _load_task_yaml(TASK_CONFIG)["model"]
+_RAW = _load_task_yaml(TASK_CONFIG)
+_MODEL = _RAW["model"]
 URDF = REPO / _MODEL.get("urdf", "ros2_ws/src/jx1_description/urdf/jx1.urdf")
 USD = REPO / _MODEL.get("usd", "simulation/isaac/jx1.usd")
 JOINT_MAP = REPO / _MODEL.get("joint_map", "simulation/joint_map.yaml")
 ROBOT = str(yaml.safe_load(JOINT_MAP.read_text(encoding="utf-8")).get("robot", "JX1")).lower()
+ISAAC_TASK = _RAW.get("isaac_task")         # a task file may name its own Isaac Lab task id (JX0's 17-joint policy)
 
 
 def load(config_path: Path | None = None) -> dict:
@@ -114,6 +116,8 @@ def load(config_path: Path | None = None) -> dict:
 OBS_LAYOUT = ["base_ang_vel_body x3 (rad/s) * scales.ang_vel", "projected_gravity_body x3", "command (vx m/s, vy m/s, wz rad/s) * scales.commands",
               "joint_pos - default (policy joints) * scales.dof_pos", "joint_vel (policy joints) * scales.dof_vel",
               "last_action (raw policy output)", "sin(2 pi phase), 0 in stand mode", "cos(2 pi phase), 0 in stand mode"]
+# with observation.history_length H > 1 every term except the command and the clock carries H frames, oldest first
+# (Isaac Lab's per-term history): ang_vel x H, gravity x H, command, (q - q0) x H, dq x H, last action x H, sin, cos
 
 
 def policy_io(tc: dict, meta: dict) -> dict:
@@ -126,9 +130,11 @@ def policy_io(tc: dict, meta: dict) -> dict:
     effort = {j: tc["effort"][j] if j in tc["effort"] else
               (46.0 if "ankle_pitch" in j else 51.0 if "ankle_roll" in j else class_effort[tc["classes"][j]]) for j in present}
     n = len(tc["policy_joints"])
+    H = int(raw["observation"].get("history_length", 1))
+    n_obs = H * (6 + 3 * n) + 5                              # 9 + 3n + 2 for one frame
     return {
         "format": "jx1-policy-io/1",
-        "policy": {"onnx": "policy.onnx", "torchscript": None, "input": "obs", "output": "actions", "num_obs": 9 + 3 * n + 2, "num_actions": n},
+        "policy": {"onnx": "policy.onnx", "torchscript": None, "input": "obs", "output": "actions", "num_obs": n_obs, "num_actions": n},
         "control": {"policy_dt_s": raw["model"]["timestep"] * raw["model"]["decimation"], "trained_physics_dt_s": raw["model"]["timestep"],
                     "trained_decimation": raw["model"]["decimation"]},
         "joints": {"policy": tc["policy_joints"], "held": [j for j in present if j not in tc["policy_joints"]]},
@@ -141,7 +147,7 @@ def policy_io(tc: dict, meta: dict) -> dict:
         "joint_limits_rad": {j: list(tc["limits"][j]) for j in present},
         "ankle_polygons_rad": {s: [[round(math.radians(a), 6), round(math.radians(b), 6)] for a, b in p] for s, p in tc["polygons_deg"].items()},
         **({"hip_yaw_toe_out_max_rad": round(tc["toe_out_max_rad"], 6)} if tc.get("toe_out_max_rad") is not None else {}),
-        "observation": {"size": 9 + 3 * n + 2, "layout": OBS_LAYOUT, "scales": raw["observation"]["scales"], "clip": raw["observation"]["clip"]},
+        "observation": {"size": n_obs, "history_length": H, "layout": OBS_LAYOUT, "scales": raw["observation"]["scales"], "clip": raw["observation"]["clip"]},
         "gait": raw["gait"],
         "commands": raw["commands"]["ranges"],
         "targets": "q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad; "

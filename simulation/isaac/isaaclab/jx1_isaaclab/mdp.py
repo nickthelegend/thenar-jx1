@@ -129,6 +129,15 @@ def base_height_error(env, target_height: float, asset_cfg: SceneEntityCfg = Sce
     return (_base_height(env, asset_cfg, ground_cfg) - target_height) ** 2
 
 
+def track_lin_vel_xy_scaled_exp(env, std: float, scale, command_name: str,
+                                asset_cfg: SceneEntityCfg = SceneEntityCfg("robot")) -> torch.Tensor:
+    """exp(-|(cmd_xy - v_xy) / scale|^2 / std^2): the x / y errors in units of rewards.tracking_lin_scale (rl/jx1_rl/env.py)."""
+    asset: Articulation = env.scene[asset_cfg.name]
+    s = torch.as_tensor(scale, dtype=torch.float32, device=asset.data.root_lin_vel_b.device)
+    err = (env.command_manager.get_command(command_name)[:, :2] - asset.data.root_lin_vel_b[:, :2]) / s
+    return torch.exp(-(err ** 2).sum(dim=1) / std ** 2)
+
+
 def joint_deviation_l2(env, asset_cfg: SceneEntityCfg) -> torch.Tensor:
     asset: Articulation = env.scene[asset_cfg.name]
     d = asset.data.joint_pos[:, asset_cfg.joint_ids] - asset.data.default_joint_pos[:, asset_cfg.joint_ids]

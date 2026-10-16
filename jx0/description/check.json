@@ -1,0 +1,29 @@
+{
+ "urdf_structure": {
+  "links": 21,
+  "joints": 20,
+  "revolute": 17,
+  "meshes": 46
+ },
+ "urdf": {
+  "mass_kg": 2.875,
+  "verified_mass_kg": 2.875,
+  "composite_inertia_rel_err": 5.513911848466297e-16,
+  "poses": 200,
+  "worst_com_mm": 0.0,
+  "worst_sole_mm": 0.0,
+  "left_sole_travel_mm": 174.8
+ },
+ "mjcf": {
+  "mass_kg": 2.875,
+  "verified_mass_kg": 2.875,
+  "composite_inertia_rel_err": 0.0,
+  "poses": 200,
+  "worst_com_mm": 0.0,
+  "worst_sole_mm": 0.0,
+  "left_sole_travel_mm": 174.8
+ },
+ "limits_checked": 17,
+ "problems": [],
+ "pass": true
+}

@@ -23,7 +23,8 @@ def _mirror():
         spec.loader.exec_module(mod)
         tc = load()
         n = len(tc["policy_joints"])
-        _MIRROR = mod.Mirror(tc["policy_joints"], 9 + 3 * n + 2 + 8)
+        H = int(tc["raw"]["observation"].get("history_length", 1))
+        _MIRROR = mod.Mirror(tc["policy_joints"], H * (6 + 3 * n) + 5 + 8, H)
     return _MIRROR
 
 

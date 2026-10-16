@@ -8,16 +8,19 @@ What is specific to JX0 lives here:
 
 | File | What it is |
 |---|---|
-| `build_description.py` | Writes `description/` from the verified JX0 model (`jx0/sim/jx0_model.py`) and the robot's own `config.yaml` |
-| `description/jx0.xml` | Training MJCF. Joints `left_hip_yaw_joint` … `neck_yaw_joint`; the 17 STS3215 servos as position actuators (60 N·m/rad, 0.6 N·m·s/rad, ±2.94 N·m); thigh, shin, pelvis and torso meshes for the collision fit |
-| `description/joint_map.yaml` | Joint frames, axes and limits (the commanded limits, see `verify_stops.py`), actuator data, sole frames, coupled limits |
-| `description/urdf/jx0.urdf` | For Isaac Sim's URDF importer. CAD inertias, mesh visuals, sole boxes, convex hulls on the legs |
-| `config/jx0_walk.yaml` | The task: 12 leg joints, the walking stance as default pose, 50 Hz policy, rewards, randomisation and PPO, all scaled for a 2.9 kg, 0.33 m robot |
+| `../description/` | The robot description (its own folder now): `build_description.py` writes it from the verified model, `check_description.py` checks it (see below) |
+| `../description/jx0.xml` | Training MJCF. Joints `left_hip_yaw_joint` … `neck_yaw_joint`; the 17 STS3215 servos as position actuators (60 N·m/rad, 0.6 N·m·s/rad, ±2.94 N·m); thigh, shin, pelvis and torso meshes for the collision fit |
+| `../description/joint_map.yaml` | Joint frames, axes and limits (the commanded limits, see `verify_stops.py`), actuator data, sole frames, coupled limits |
+| `../description/urdf/jx0.urdf` | For Isaac Sim's URDF importer. CAD inertias, mesh visuals, sole boxes, convex hulls on the legs |
+| `config/jx0_walk17.yaml` | **The whole-body task, for Isaac Lab:** all 17 servos at 50 Hz from 176 observations (3 frames of history). Isaac Lab task `Isaac-Velocity-Flat-JX0-Full-v0`; on a lab PC, `jx0\setup\setup_isaac.bat` then `train_isaac.bat` ([setup/README.md](../setup/README.md)) |
+| `sim2sim_jx0.py` | The test suite on the verified model: speeds, pushes, 60 s endurance, latency, PASS / FAIL (see below) |
+| `play_jx0.py` | Drive a policy in real time in the MuJoCo viewer: arrows walk and turn, J/L side-step, K stop, P push |
+| `config/jx0_walk.yaml` | The 12-leg-joint task: 12 leg joints, the walking stance as default pose, 50 Hz policy, rewards, randomisation and PPO, all scaled for a 2.9 kg, 0.33 m robot |
 
 Regenerate the description after any CAD or `config.yaml` change:
 
 ```bash
-python jx0/rl/build_description.py
+python jx0/description/build_description.py
 ```
 
 ## Option 1: MuJoCo on this PC

@@ -35,6 +35,12 @@ SIGMA = math.sqrt(W["tracking_sigma"])     # exp(-err^2 / sigma) in MuJoCo == ex
 SIGMA_ANG = math.sqrt(W.get("tracking_sigma_ang", W["tracking_sigma"]))   # yaw rate (JX1: the same as linear)
 # stand mode (OI-27): below this |command| the clock reads 0, both feet should be down, no swing target
 STAND = {"command_name": "base_velocity", "stand_threshold": G.get("stand_command_threshold")}
+# actor / critic observation history (observation.history_length; 1 = none): Isaac Lab's per-term history, the layout
+# rl/jx1_rl/env.py builds (policy_io.build_observation_history)
+H = int(R["observation"].get("history_length", 1))
+HIST = {"history_length": H} if H > 1 else {}
+UPPER = [j for j in POLICY if any(k in j for k in ("shoulder", "elbow", "neck"))]          # arms / neck in the policy
+LIN_SCALE = tuple(W.get("tracking_lin_scale", (1.0, 1.0)))
 
 
 def robot(joints=None, bodies=None):
@@ -51,14 +57,14 @@ class JX1Observations:
     @configclass
     class PolicyCfg(ObsGroup):
         # robot state with the per-env sensing delay (action term snapshots), like the MuJoCo env's obs_src
-        base_ang_vel = ObsTerm(func=jx1.delayed_base_ang_vel, scale=S["ang_vel"], noise=Unoise(n_min=-NZ["ang_vel"], n_max=NZ["ang_vel"]))
-        projected_gravity = ObsTerm(func=jx1.delayed_projected_gravity, noise=Unoise(n_min=-NZ["gravity"], n_max=NZ["gravity"]))
+        base_ang_vel = ObsTerm(func=jx1.delayed_base_ang_vel, **HIST, scale=S["ang_vel"], noise=Unoise(n_min=-NZ["ang_vel"], n_max=NZ["ang_vel"]))
+        projected_gravity = ObsTerm(func=jx1.delayed_projected_gravity, **HIST, noise=Unoise(n_min=-NZ["gravity"], n_max=NZ["gravity"]))
         velocity_commands = ObsTerm(func=mdp.generated_commands, params={"command_name": "base_velocity"}, scale=tuple(S["commands"]))
-        joint_pos = ObsTerm(func=jx1.delayed_joint_pos_rel, params={"asset_cfg": robot(POLICY)}, scale=S["dof_pos"],
+        joint_pos = ObsTerm(func=jx1.delayed_joint_pos_rel, **HIST, params={"asset_cfg": robot(POLICY)}, scale=S["dof_pos"],
                             noise=Unoise(n_min=-NZ["dof_pos"], n_max=NZ["dof_pos"]))
-        joint_vel = ObsTerm(func=jx1.delayed_joint_vel_rel, params={"asset_cfg": robot(POLICY)}, scale=S["dof_vel"],
+        joint_vel = ObsTerm(func=jx1.delayed_joint_vel_rel, **HIST, params={"asset_cfg": robot(POLICY)}, scale=S["dof_vel"],
                             noise=Unoise(n_min=-NZ["dof_vel"], n_max=NZ["dof_vel"]))
-        actions = ObsTerm(func=mdp.last_action)
+        actions = ObsTerm(func=mdp.last_action, **HIST)
         gait_phase = ObsTerm(func=jx1.gait_phase, params={"period": G["period_s"], **STAND})
 
         def __post_init__(self):
@@ -68,12 +74,12 @@ class JX1Observations:
     @configclass
     class CriticCfg(ObsGroup):
         # first block = the noise-free actor observation (delayed, as MuJoCo's privileged "clean" part)
-        base_ang_vel = ObsTerm(func=jx1.delayed_base_ang_vel, scale=S["ang_vel"])
-        projected_gravity = ObsTerm(func=jx1.delayed_projected_gravity)
+        base_ang_vel = ObsTerm(func=jx1.delayed_base_ang_vel, **HIST, scale=S["ang_vel"])
+        projected_gravity = ObsTerm(func=jx1.delayed_projected_gravity, **HIST)
         velocity_commands = ObsTerm(func=mdp.generated_commands, params={"command_name": "base_velocity"}, scale=tuple(S["commands"]))
-        joint_pos = ObsTerm(func=jx1.delayed_joint_pos_rel, params={"asset_cfg": robot(POLICY)}, scale=S["dof_pos"])
-        joint_vel = ObsTerm(func=jx1.delayed_joint_vel_rel, params={"asset_cfg": robot(POLICY)}, scale=S["dof_vel"])
-        actions = ObsTerm(func=mdp.last_action)
+        joint_pos = ObsTerm(func=jx1.delayed_joint_pos_rel, **HIST, params={"asset_cfg": robot(POLICY)}, scale=S["dof_pos"])
+        joint_vel = ObsTerm(func=jx1.delayed_joint_vel_rel, **HIST, params={"asset_cfg": robot(POLICY)}, scale=S["dof_vel"])
+        actions = ObsTerm(func=mdp.last_action, **HIST)
         gait_phase = ObsTerm(func=jx1.gait_phase, params={"period": G["period_s"], **STAND})
         # privileged, same as rl/jx1_rl/env.py: lin vel x2, (base height - standing height) x5, foot contact, sole heights x10
         base_lin_vel = ObsTerm(func=mdp.base_lin_vel, scale=S["lin_vel"])
@@ -102,7 +108,8 @@ class JX1Actions:
 
 @configclass
 class JX1Rewards:
-    track_lin_vel_xy_exp = RewTerm(func=mdp.track_lin_vel_xy_exp, weight=W["tracking_lin_vel"], params={"command_name": "base_velocity", "std": SIGMA})
+    track_lin_vel_xy_exp = RewTerm(func=jx1.track_lin_vel_xy_scaled_exp, weight=W["tracking_lin_vel"],
+                                   params={"command_name": "base_velocity", "std": SIGMA, "scale": LIN_SCALE})
     track_ang_vel_z_exp = RewTerm(func=mdp.track_ang_vel_z_exp, weight=W["tracking_ang_vel"], params={"command_name": "base_velocity", "std": SIGMA_ANG})
     lin_vel_z_l2 = RewTerm(func=mdp.lin_vel_z_l2, weight=W["lin_vel_z"])
     ang_vel_xy_l2 = RewTerm(func=mdp.ang_vel_xy_l2, weight=W["ang_vel_xy"])
@@ -121,6 +128,8 @@ class JX1Rewards:
     dof_pos_limits = RewTerm(func=mdp.joint_pos_limits, weight=W["dof_pos_limits"], params={"asset_cfg": robot(POLICY)})
     ankle_polygon = RewTerm(func=jx1.ankle_polygon_violation, weight=W["dof_pos_limits"], params={"polygons_rad": POLYGONS, "asset_cfg": robot()})
     alive = RewTerm(func=mdp.is_alive, weight=W["alive"])
+    upper_body_pos = (RewTerm(func=jx1.joint_deviation_l2, weight=W["upper_body_pos"], params={"asset_cfg": robot(UPPER)})
+                      if UPPER and W.get("upper_body_pos") else None)
     hip_pos = RewTerm(func=jx1.joint_deviation_l2, weight=W["hip_pos"],
                       params={"asset_cfg": robot([j for j in POLICY if "hip_roll" in j or "hip_yaw" in j])})
     contact = RewTerm(func=jx1.contact_phase_match, weight=W["contact"],

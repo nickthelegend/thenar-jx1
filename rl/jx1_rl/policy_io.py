@@ -57,6 +57,28 @@ def build_observation(ang_vel_b, gravity_b, command, dof_pos_rel, dof_vel, last_
     return np.clip(obs, -clip, clip)
 
 
+def build_observation_history(ang_hist, grav_hist, command, q_hist, dq_hist, act_hist, phase, scales, clip=100.0, moving=None):
+    """Actor observation with a history of H frames (Isaac Lab's per-term ObservationTerm.history_length layout):
+    [ang_vel x H, gravity x H, command, q - q0 x H, dq x H, last action x H, sin, cos], each history oldest frame first.
+    *_hist: (..., H, d), unscaled; H = 1 gives build_observation()."""
+    def flat(x):
+        x = np.asarray(x, dtype=np.float64)
+        return x.reshape(x.shape[:-2] + (-1,))
+    cmd_scale = np.asarray(scales["commands"], dtype=np.float64)
+    m = 1.0 if moving is None else np.asarray(moving, dtype=np.float64)[..., None]
+    obs = np.concatenate([
+        flat(np.asarray(ang_hist) * scales["ang_vel"]),
+        flat(grav_hist),
+        command * cmd_scale,
+        flat(np.asarray(q_hist) * scales["dof_pos"]),
+        flat(np.asarray(dq_hist) * scales["dof_vel"]),
+        flat(act_hist),
+        np.sin(2 * np.pi * phase)[..., None] * m,
+        np.cos(2 * np.pi * phase)[..., None] * m,
+    ], axis=-1)
+    return np.clip(obs, -clip, clip)
+
+
 def actions_to_targets(action, default_pos, action_scale, lower, upper):
     """Joint position targets for the policy joints: default + scale * action, clipped to the joint limits."""
     return np.clip(default_pos + action_scale * action, lower, upper)

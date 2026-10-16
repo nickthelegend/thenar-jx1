@@ -110,7 +110,7 @@ class JX1Env:
         self.completed = {"episodes": 0}
         self.unstable_resets = 0
         self.obs_scales = cfg["observation"]["scales"]
-        self.rw = {k: v for k, v in cfg["rewards"].items() if k not in ("tracking_sigma", "tracking_sigma_ang", "soft_torque_limit", "soft_dof_vel")}
+        self.rw = {k: v for k, v in cfg["rewards"].items() if k not in ("tracking_sigma", "tracking_sigma_ang", "tracking_lin_scale", "soft_torque_limit", "soft_dof_vel")}
         self.sigma = cfg["rewards"]["tracking_sigma"]
         self.sigma_ang = cfg["rewards"].get("tracking_sigma_ang", self.sigma)     # yaw-rate tolerance (JX1: the same)
         g = cfg["gait"]
@@ -118,6 +118,17 @@ class JX1Env:
         self.stand_thr = g.get("stand_command_threshold")
         # stand-mode contact reward: "both_down" (walk_v5/v6: both feet down, which penalises recovery steps) or "none"
         self.stand_contact = g.get("stand_contact_reward", "both_down")
+        # actor observation history (observation.history_length frames, Isaac Lab's layout): raw noisy frames
+        # [ang_vel, gravity, q - q0, dq, action] and their noise-free twins for the critic; a reset fills all H frames
+        self.H = cfg.history
+        nf = 6 + 3 * n
+        self.hist, self.hist_clean = np.zeros((N, self.H, nf)), np.zeros((N, self.H, nf))
+        self._fresh = np.ones(N, dtype=bool)
+        self._advance = False
+        self.upper_idx = np.array([i for i, j in enumerate(self.joints)
+                                   if joint_type(j) in ("shoulder_pitch", "shoulder_roll", "shoulder_yaw", "elbow", "neck_yaw", "neck_pitch")],
+                                  dtype=np.int64)
+        self.track_scale = np.asarray(cfg["rewards"].get("tracking_lin_scale", [1.0, 1.0]), dtype=np.float64)
         self._sense(self._sens_out)                           # placeholders
         self.reset_envs(np.arange(N))
 
@@ -142,7 +153,8 @@ class JX1Env:
         r = self.cfg["commands"]["ranges"]
         c = np.stack([self.rng.uniform(*r["lin_vel_x"], size=len(ids)), self.rng.uniform(*r["lin_vel_y"], size=len(ids)),
                       self.rng.uniform(*r["ang_vel_yaw"], size=len(ids))], axis=1)
-        c[np.linalg.norm(c[:, :2], axis=1) < 0.1, :2] = 0.0
+        # walking commands below commands.min_lin_vel are zeroed (JX1: 0.1 m/s; a 0.33 m robot walks slower than that)
+        c[np.linalg.norm(c[:, :2], axis=1) < self.cfg["commands"].get("min_lin_vel", 0.1), :2] = 0.0
         c[self.rng.random(len(ids)) < self.cfg["commands"]["zero_fraction"]] = 0.0
         self.commands[ids] = c
 
@@ -178,6 +190,7 @@ class JX1Env:
         self.obs_delay[ids] = self.rng.integers(self.obs_delay_range[0], self.obs_delay_range[1] + 1, size=len(ids))
         self.prev_ctrl[ids] = self.ctrl_hold
         self.obs_src[ids] = s
+        self._fresh[ids] = True
         self.resample_commands(ids)
 
     # ------------------------------------------------------------------ observations
@@ -206,11 +219,25 @@ class JX1Env:
 
         def u(scale, shape):
             return self.rng.uniform(-scale, scale, shape) if nz else 0.0
-        obs = policy_io.build_observation(ang_b + u(nz and nz["ang_vel"], ang_b.shape), grav_b + u(nz and nz["gravity"], grav_b.shape),
-                                          self.commands, q_rel + u(nz and nz["dof_pos"], q_rel.shape), dq + u(nz and nz["dof_vel"], dq.shape),
-                                          self.actions, ph, self.obs_scales, self.cfg["observation"]["clip"], moving=mv)
-        clean = policy_io.build_observation(ang_b, grav_b, self.commands, q_rel, dq, self.actions, ph, self.obs_scales,
-                                            self.cfg["observation"]["clip"], moving=mv) if nz else obs
+        frame = np.concatenate([ang_b + u(nz and nz["ang_vel"], ang_b.shape), grav_b + u(nz and nz["gravity"], grav_b.shape),
+                                q_rel + u(nz and nz["dof_pos"], q_rel.shape), dq + u(nz and nz["dof_vel"], dq.shape), self.actions], axis=1)
+        frame_clean = np.concatenate([ang_b, grav_b, q_rel, dq, self.actions], axis=1) if nz else frame
+        if self._advance:                                                   # one new frame per policy step
+            self.hist[:, :-1], self.hist_clean[:, :-1] = self.hist[:, 1:].copy(), self.hist_clean[:, 1:].copy()
+            self._advance = False
+        self.hist[:, -1], self.hist_clean[:, -1] = frame, frame_clean      # the newest frame: this call's
+        f = self._fresh
+        if f.any():                                                         # after a reset: every frame = the first one
+            self.hist[f] = frame[f][:, None, :]
+            self.hist_clean[f] = frame_clean[f][:, None, :]
+            self._fresh[:] = False
+        n = len(self.joints)
+
+        def build(h):
+            return policy_io.build_observation_history(h[..., 0:3], h[..., 3:6], self.commands, h[..., 6:6 + n], h[..., 6 + n:6 + 2 * n],
+                                                       h[..., 6 + 2 * n:], ph, self.obs_scales, self.cfg["observation"]["clip"], moving=mv)
+        clean = build(self.hist_clean)
+        obs = build(self.hist) if nz else clean
         qp, qv, lin_b, _, _ = self._base()                                   # critic: true current state
         contact = (self.foot_force > 1.0).astype(np.float64)
         h_base = qp[:, 2:3] - self.ground(qp[:, 0:1], qp[:, 1:2])
@@ -252,6 +279,7 @@ class JX1Env:
         self._sense(self._sens_out)
         self.episode_step += 1
         self.global_step += 1
+        self._advance = True
 
         bad = ~np.all(np.isfinite(self.state), axis=1) | (np.abs(self.qvel()).max(axis=1) > 1e3)
         if bad.any():
@@ -307,7 +335,9 @@ class JX1Env:
         standing = ~moving if self.stand_thr is not None else np.linalg.norm(self.commands, axis=1) < 0.1
         dof_err = np.abs(q - self.default).sum(axis=1)
         terms = {
-            "tracking_lin_vel": np.exp(-np.sum((self.commands[:, :2] - lin_b[:, :2]) ** 2, axis=1) / self.sigma),
+            # rewards.tracking_lin_scale [sx, sy] (default 1, 1): the x / y errors in those units, so a small sideways
+            # command counts as much as a large forward one
+            "tracking_lin_vel": np.exp(-np.sum(((self.commands[:, :2] - lin_b[:, :2]) / self.track_scale) ** 2, axis=1) / self.sigma),
             "tracking_ang_vel": np.exp(-(self.commands[:, 2] - ang_b[:, 2]) ** 2 / self.sigma_ang),
             "lin_vel_z": lin_b[:, 2] ** 2,
             "ang_vel_xy": np.sum(ang_b[:, :2] ** 2, axis=1),
@@ -323,6 +353,7 @@ class JX1Env:
                               + policy_io.ankle_polygon_violation(q, self.joints, self.cfg.ankle_polygons),
             "alive": np.ones(self.N),
             "hip_pos": np.sum(q[:, self.hip_idx] ** 2, axis=1),
+            "upper_body_pos": np.sum((q[:, self.upper_idx] - self.default[self.upper_idx]) ** 2, axis=1),
             "contact": np.sum(contact == stance, axis=1).astype(np.float64) * (moving | (self.stand_contact == "both_down")),
             "feet_swing_height": np.sum(((self.foot_pos[:, :, 2] - self.ground(self.foot_pos[:, :, 0], self.foot_pos[:, :, 1])
                                           - self.swing_h) ** 2) * ~contact, axis=1) * moving,

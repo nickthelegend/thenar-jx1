@@ -1,0 +1,48 @@
+# JX0 whole-body walking policy: all 17 STS3215 servos (legs, arms, neck), 50 Hz, 176 observations (3 frames of
+# history). For Isaac Lab (Isaac-Velocity-Flat-JX0-Full-v0, jx0\setup\train_isaac.bat) and for rl/train.py (MuJoCo).
+# Everything not set here comes from jx0_walk.yaml.
+base: jx0_walk.yaml
+name: jx0_walk17
+isaac_task: Isaac-Velocity-Flat-JX0-Full
+
+policy_joints:
+  - left_hip_yaw_joint
+  - left_hip_roll_joint
+  - left_hip_pitch_joint
+  - left_knee_joint
+  - left_ankle_pitch_joint
+  - left_ankle_roll_joint
+  - right_hip_yaw_joint
+  - right_hip_roll_joint
+  - right_hip_pitch_joint
+  - right_knee_joint
+  - right_ankle_pitch_joint
+  - right_ankle_roll_joint
+  - left_shoulder_pitch_joint
+  - left_elbow_joint
+  - right_shoulder_pitch_joint
+  - right_elbow_joint
+  - neck_yaw_joint
+
+# actor observation = [ang_vel x3, gravity x3, command, (q - q0) x3, dq x3, last action x3, sin, cos], each history
+# oldest frame first (Isaac Lab's per-term history): 3 x (6 + 3 x 17) + 5 = 176 values; actions = 17 joint corrections
+# (target = default + 0.25 x action, rad)
+observation:
+  history_length: 3
+
+rewards:
+  tracking_lin_scale: [0.12, 0.05]               # x / y errors in units of the command ranges' largest speeds
+  tracking_sigma: 0.25                           # in those units: standing still when told 0.06 m/s forward -> 0.37
+  tracking_sigma_ang: 0.05
+  upper_body_pos: -0.2                           # arms and neck near the default pose (they may swing for balance)
+
+randomization:
+  kp_scale: [0.7, 1.3]
+  kd_scale: [0.7, 1.4]
+  action_delay_substeps: [1, 6]                  # 2-12 ms
+  obs_delay_substeps: [1, 4]                     # 2-8 ms
+  push_velocity_m_s: 0.15
+
+ppo:
+  actor_hidden: [512, 256, 128]
+  critic_hidden: [512, 256, 128]

@@ -85,8 +85,9 @@ def export(checkpoint: Path, out: Path, task: str = "flat", task_id: str | None 
     n = len(tc["policy_joints"])
     ppo = tc["raw"]["ppo"]
     pol, info = load_policy(checkpoint, n, ppo["activation"])
-    if info["num_obs"] != 9 + 3 * n + 2:
-        raise ValueError(f"checkpoint takes {info['num_obs']} observations, the JX1 task has {9 + 3 * n + 2}")
+    H = int(tc["raw"]["observation"].get("history_length", 1))
+    if info["num_obs"] != H * (6 + 3 * n) + 5:
+        raise ValueError(f"checkpoint takes {info['num_obs']} observations, the task has {H * (6 + 3 * n) + 5}")
     out.mkdir(parents=True, exist_ok=True)
     dummy = torch.zeros(1, info["num_obs"])
     torch.jit.script(pol).save(str(out / "policy.pt"))

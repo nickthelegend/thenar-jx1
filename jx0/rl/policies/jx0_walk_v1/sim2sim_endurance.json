@@ -1,0 +1,23 @@
+{
+ "model": "jx0/sim/jx0_model.py, 1 kHz, STS3215 torque-speed line, 100 Hz bus, jx0bot clamps",
+ "policy": "jx0_walk_v1",
+ "num_obs": 47,
+ "joints": 12,
+ "endurance": {
+  "seconds": 60.0,
+  "fell": false,
+  "distance_walked_m": 2.01,
+  "limit_violations_ms": 0,
+  "worst_mean_torque_nm": 0.357,
+  "worst_joint": "right_ankle_pitch_joint",
+  "rated_torque_nm": 0.98,
+  "peak_torque_of_stall": 1.0,
+  "real_time_factor": 3.53,
+  "pass": true
+ },
+ "verdict": {
+  "endurance": true
+ },
+ "pass": true,
+ "wall_s": 17.1
+}

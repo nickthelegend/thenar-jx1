@@ -52,7 +52,7 @@ def main():
     env = JX1Env(cfg, N, nthread=a.threads, seed=a.seed)
     ac = ActorCritic(cfg.num_obs, cfg.num_privileged_obs, cfg.num_actions, pc["actor_hidden"], pc["critic_hidden"],
                      pc["activation"], pc["init_noise_std"]).to(dev)
-    ppo = PPO(ac, pc, dev, mirror=Mirror(cfg.policy_joints, cfg.num_privileged_obs) if pc.get("symmetry_coef", 0.0) > 0 else None)
+    ppo = PPO(ac, pc, dev, mirror=Mirror(cfg.policy_joints, cfg.num_privileged_obs, cfg.history) if pc.get("symmetry_coef", 0.0) > 0 else None)
     start = 0
     if a.resume:
         ck = torch.load(a.resume, map_location=dev)

@@ -25,20 +25,27 @@ def joint_mirror(joints: list[str]) -> tuple[np.ndarray, np.ndarray]:
 class Mirror:
     """Mirror maps for the 47-D actor observation, the privileged observation and the actions (torch or numpy)."""
 
-    def __init__(self, policy_joints: list[str], n_priv: int | None = None):
-        n = len(policy_joints)
+    def __init__(self, policy_joints: list[str], n_priv: int | None = None, history: int = 1):
+        n, H = len(policy_joints), history
         jidx, jsign = joint_mirror(policy_joints)
-        o_idx, o_sign = [0, 1, 2], [-1.0, 1.0, -1.0]                         # angular velocity (roll, pitch, yaw rates)
-        o_idx += [3, 4, 5]
-        o_sign += [1.0, -1.0, 1.0]                                          # projected gravity
-        o_idx += [6, 7, 8]
+        o_idx, o_sign = [], []
+
+        def block(base, size, idx, sign):                                   # one observation term, H frames of it
+            for h in range(H):
+                o_idx.extend(base + h * size + np.asarray(idx))
+                o_sign.extend(sign)
+            return base + H * size
+        b = block(0, 3, [0, 1, 2], [-1.0, 1.0, -1.0])                       # angular velocity (roll, pitch, yaw rates)
+        b = block(b, 3, [0, 1, 2], [1.0, -1.0, 1.0])                        # projected gravity
+        o_idx += [b, b + 1, b + 2]
         o_sign += [1.0, -1.0, -1.0]                                         # command vx, vy, wz
-        for base in (9, 9 + n, 9 + 2 * n):                                  # q - q0, dq, last action
-            o_idx += list(base + jidx)
-            o_sign += list(jsign)
-        o_idx += [9 + 3 * n, 10 + 3 * n]
+        b += 3
+        for _ in range(3):                                                  # q - q0, dq, last action
+            b = block(b, n, jidx, list(jsign))
+        o_idx += [b, b + 1]
         o_sign += [-1.0, -1.0]                                              # sin, cos of the phase (+0.5 period)
-        self.n_obs = 11 + 3 * n
+        self.n_obs = b + 2
+        assert self.n_obs == H * (6 + 3 * n) + 5
         self.o_idx, self.o_sign = np.array(o_idx), np.array(o_sign)
         self.a_idx, self.a_sign = jidx, jsign
         if n_priv is not None:

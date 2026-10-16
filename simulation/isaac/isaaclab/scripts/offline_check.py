@@ -482,7 +482,9 @@ def check_task(task_id, reg, rep, mods, tc_default):
             out = term.func(env, **term.params)
             if key.startswith("observations"):
                 ok = out.ndim == 2 and out.shape[0] == N_ENVS
-                dims[key] = out.shape[1]
+                # the observation manager stacks history_length frames of a term (flattened), as it will in Isaac Lab
+                h = getattr(term, "history_length", 0) or 0
+                dims[key] = out.shape[1] * (h if h > 0 and getattr(term, "flatten_history_dim", True) else 1)
             else:
                 ok = out.shape == (N_ENVS,)
             ok = ok and bool(torch.isfinite(out.float()).all())

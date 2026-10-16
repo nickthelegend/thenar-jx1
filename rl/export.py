@@ -25,6 +25,8 @@ from jx1_rl.ppo import ActorCritic  # noqa: E402
 OBS_LAYOUT = ["base_ang_vel_body x3 (rad/s) * scales.ang_vel", "projected_gravity_body x3", "command (vx m/s, vy m/s, wz rad/s) * scales.commands",
               "joint_pos - default (policy joints) * scales.dof_pos", "joint_vel (policy joints) * scales.dof_vel",
               "last_action (raw policy output)", "sin(2 pi phase), 0 in stand mode", "cos(2 pi phase), 0 in stand mode"]
+# with observation.history_length H > 1 every term except the command and the clock carries H frames, oldest first
+# (Isaac Lab's per-term history): ang_vel x H, gravity x H, command, (q - q0) x H, dq x H, last action x H, sin, cos
 
 
 class DeployPolicy(torch.nn.Module):
@@ -93,7 +95,7 @@ def policy_io(cfg, meta):
         "joint_limits_rad": {j: list(cfg.limits[j]) for j in present},
         "ankle_polygons_rad": {s: np.round(p, 6).tolist() for s, p in cfg.ankle_polygons.items()},
         **({"hip_yaw_toe_out_max_rad": round(cfg.hip_yaw_toe_out_max, 6)} if cfg.hip_yaw_toe_out_max is not None else {}),
-        "observation": {"size": cfg.num_obs, "layout": OBS_LAYOUT, "scales": cfg["observation"]["scales"], "clip": cfg["observation"]["clip"]},
+        "observation": {"size": cfg.num_obs, "history_length": cfg.history, "layout": OBS_LAYOUT, "scales": cfg["observation"]["scales"], "clip": cfg["observation"]["clip"]},
         "gait": cfg["gait"],
         "commands": cfg["commands"]["ranges"],
         "targets": "q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad; "
