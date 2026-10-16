@@ -56,7 +56,7 @@ python jx0\rl\play_jx0.py --policy jx0\rl\policies\jx0_walk17_isaac
 | | |
 |---|---|
 | Rate | 50 Hz |
-| Outputs | 17 joint corrections, one per STS3215: target = walking stance + 0.25 × output (rad) |
+| Outputs | 17 joint corrections, one per STS3215: target = reference gait (blended from the verified gaits) + 0.25 × output (rad) |
 | Inputs | 176 values: body rotation rate, gravity direction, the 17 joint angles, speeds and last outputs, each over the last 3 control steps (0.06 s); the speed command; the gait clock |
 | Task file | `jx0\rl\config\jx0_walk17.yaml`: rewards, randomisation (servo stiffness 0.7–1.3×, latency 2–12 ms, pushes, friction, mass) and PPO |
 | Robot | `jx0\description\urdf\jx0.urdf`, checked against the verified model by `jx0\description\check_description.py` |
