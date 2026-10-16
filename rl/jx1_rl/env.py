@@ -129,6 +129,17 @@ class JX1Env:
                                    if joint_type(j) in ("shoulder_pitch", "shoulder_roll", "shoulder_yaw", "elbow", "neck_yaw", "neck_pitch")],
                                   dtype=np.int64)
         self.track_scale = np.asarray(cfg["rewards"].get("tracking_lin_scale", [1.0, 1.0]), dtype=np.float64)
+        # reference stepping (rewards.ref_joint_pos, gait.ref_amplitude_rad; humanoid-gym): while walking, each leg in
+        # swing bends hip pitch -A, knee +2A, ankle pitch -A (foot kept parallel) along sin(pi * swing progress)
+        self.ref_amp = float(cfg["gait"].get("ref_amplitude_rad", 0.0))
+        self.ref_cols = {}
+        for side, li in (("left", 0), ("right", 1)):
+            for jt, k in (("hip_pitch", -1.0), ("knee", 2.0), ("ankle_pitch", -1.0)):
+                j = f"{side}_{jt}_joint"
+                if j in self.joints:
+                    self.ref_cols.setdefault(li, []).append((self.joints.index(j), k))
+        self.leg_idx = np.array([i for i, j in enumerate(self.joints) if j.startswith(("left_", "right_"))
+                                 and joint_type(j) in ("hip_yaw", "hip_roll", "hip_pitch", "knee", "ankle_pitch", "ankle_roll")])
         self._sense(self._sens_out)                           # placeholders
         self.reset_envs(np.arange(N))
 
@@ -325,6 +336,22 @@ class JX1Env:
         return obs, priv, rew.astype(np.float32), done.astype(np.float32), info
 
     # ------------------------------------------------------------------ rewards
+    def ref_targets(self, leg_phase, moving):
+        """Reference leg angles (N, n): the default pose, plus the swing bend while walking (rewards.ref_joint_pos)."""
+        ref = np.tile(self.default, (self.N, 1))
+        swing = np.clip((leg_phase - self.stance) / (1.0 - self.stance), 0.0, 1.0)            # (N, 2)
+        lift = np.sin(np.pi * swing) * (leg_phase >= self.stance) * moving[:, None]
+        for li, cols in self.ref_cols.items():
+            for c, k in cols:
+                ref[:, c] += k * self.ref_amp * lift[:, li]
+        return ref
+
+    def _ref_reward(self, q, leg_phase, moving):
+        if self.ref_amp == 0.0 or self.rw.get("ref_joint_pos", 0.0) == 0.0:
+            return np.zeros(self.N)
+        diff = np.linalg.norm((q - self.ref_targets(leg_phase, moving))[:, self.leg_idx], axis=1)
+        return np.exp(-2.0 * diff) - 0.2 * np.minimum(diff, 0.5)
+
     def _rewards(self, qp, q, dq, lin_b, ang_b, grav_b, died):
         w, dt = self.rw, self.dt
         contact = self.foot_force > 1.0
@@ -354,6 +381,7 @@ class JX1Env:
             "alive": np.ones(self.N),
             "hip_pos": np.sum(q[:, self.hip_idx] ** 2, axis=1),
             "upper_body_pos": np.sum((q[:, self.upper_idx] - self.default[self.upper_idx]) ** 2, axis=1),
+            "ref_joint_pos": self._ref_reward(q, leg_phase, moving),
             "contact": np.sum(contact == stance, axis=1).astype(np.float64) * (moving | (self.stand_contact == "both_down")),
             "feet_swing_height": np.sum(((self.foot_pos[:, :, 2] - self.ground(self.foot_pos[:, :, 0], self.foot_pos[:, :, 1])
                                           - self.swing_h) ** 2) * ~contact, axis=1) * moving,

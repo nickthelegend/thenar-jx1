@@ -58,6 +58,11 @@ def main():
             L.append(f"| Assembly in the build guide's order: {len(sw_)} slide-in steps, a screwdriver on all {len(dr)} screws | "
                      f"{sum(1 for x in sw_ if not x['ok'])} slides blocked, {sum(1 for x in dr if not x['ok'])} screws "
                      f"unreachable ({sum(1 for x in dr if x['tool'] != 'screwdriver')} need a PH bit by hand) |")
+    desc = json.loads((ROOT / "jx0" / "description" / "check.json").read_text(encoding="utf-8"))         if (ROOT / "jx0" / "description" / "check.json").exists() else None
+    if desc:
+        L.append(f"| Robot description: URDF and MJCF vs the verified model (mass, inertia, centre of mass and soles in "
+                 f"{desc['urdf']['poses']} random poses, limits of all {desc['limits_checked']} joints) | "
+                 f"{'**PASS**' if desc['pass'] else 'FAIL'}: centre of mass within {max(desc['urdf']['worst_com_mm'], desc['mjcf']['worst_com_mm'])} mm |")
     if stops:
         n = sum(stops["range"]["poses"].values())
         rows = [r for r in stops["stops"] if r["first_contact_deg"] is not None]

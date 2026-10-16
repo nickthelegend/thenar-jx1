@@ -26,6 +26,8 @@ STEPS = [
     ("printed brackets: voxel FEA", [PY, "jx0/verify/verify_fea.py"]),
     ("power and timing", [PY, "jx0/verify/verify_power.py"]),
     ("software tests", [PY, "-m", "unittest", "discover", "-s", "jx0/software/tests"]),
+    ("robot description (URDF / MJCF) = the verified model", [PY, "jx0/description/build_description.py"]),
+    ("robot description check", [PY, "jx0/description/check_description.py"]),
 ]
 
 

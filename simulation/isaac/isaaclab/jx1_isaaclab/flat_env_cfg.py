@@ -41,6 +41,11 @@ H = int(R["observation"].get("history_length", 1))
 HIST = {"history_length": H} if H > 1 else {}
 UPPER = [j for j in POLICY if any(k in j for k in ("shoulder", "elbow", "neck"))]          # arms / neck in the policy
 LIN_SCALE = tuple(W.get("tracking_lin_scale", (1.0, 1.0)))
+# reference stepping (rewards.ref_joint_pos, gait.ref_amplitude_rad), columns in the POLICY joint order
+REF_COLS = [(li, POLICY.index(f"{side}_{jt}_joint"), k) for side, li in (("left", 0), ("right", 1))
+            for jt, k in (("hip_pitch", -1.0), ("knee", 2.0), ("ankle_pitch", -1.0)) if f"{side}_{jt}_joint" in POLICY]
+LEG_COLS = [i for i, j in enumerate(POLICY) if j.startswith(("left_", "right_")) and
+            any(k in j for k in ("hip_yaw", "hip_roll", "hip_pitch", "knee", "ankle_pitch", "ankle_roll"))]
 
 
 def robot(joints=None, bodies=None):
@@ -128,6 +133,11 @@ class JX1Rewards:
     dof_pos_limits = RewTerm(func=mdp.joint_pos_limits, weight=W["dof_pos_limits"], params={"asset_cfg": robot(POLICY)})
     ankle_polygon = RewTerm(func=jx1.ankle_polygon_violation, weight=W["dof_pos_limits"], params={"polygons_rad": POLYGONS, "asset_cfg": robot()})
     alive = RewTerm(func=mdp.is_alive, weight=W["alive"])
+    ref_joint_pos = (RewTerm(func=jx1.ref_joint_pos, weight=W["ref_joint_pos"],
+                             params={"period": G["period_s"], "offset": G["offset"], "stance_fraction": G["stance_fraction"],
+                                     "amplitude": G.get("ref_amplitude_rad", 0.0), "ref_cols": REF_COLS, "leg_cols": LEG_COLS,
+                                     "asset_cfg": robot(POLICY), **STAND})
+                     if W.get("ref_joint_pos") and G.get("ref_amplitude_rad") else None)
     upper_body_pos = (RewTerm(func=jx1.joint_deviation_l2, weight=W["upper_body_pos"], params={"asset_cfg": robot(UPPER)})
                       if UPPER and W.get("upper_body_pos") else None)
     hip_pos = RewTerm(func=jx1.joint_deviation_l2, weight=W["hip_pos"],

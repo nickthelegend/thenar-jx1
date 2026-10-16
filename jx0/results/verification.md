@@ -11,6 +11,7 @@ Generated 2026-10-16 by `jx0/verify/run_all.py` from the CAD geometry, the MuJoC
 | The real STS3215 (Feetech factory model and SO-ARM100 model) and its cables at all 17 joints, against every printed part | 0 clashes |
 | Every screw (182): plate under the head, thread in the horn / case / insert, tip clear, on a real hole, head room | 0 problems |
 | Assembly in the build guide's order: 42 slide-in steps, a screwdriver on all 182 screws | 0 slides blocked, 0 screws unreachable (11 need a PH bit by hand) |
+| Robot description: URDF and MJCF vs the verified model (mass, inertia, centre of mass and soles in 200 random poses, limits of all 17 joints) | **PASS**: centre of mass within 0.0 mm |
 | Joint stops: the whole commanded range (2170 poses: hip yaw x pitch x roll, ankle pitch x roll, shoulder x elbow) | 0 contacts |
 | Joint stops: past each servo's own limit (EEPROM, 1 deg outside config.yaml), the first contact is printed bracket on printed bracket, 2-43 deg further (42 cases) | 0 problems |
 | Parts, servos, cables and screw heads colliding, standing (all 3321 pairs) | 0 clashes |
@@ -29,7 +30,7 @@ Generated 2026-10-16 by `jx0/verify/run_all.py` from the CAD geometry, the MuJoC
 | Whole robot program, 8-step mission, random realistic errors | **24/24 (100 %)** |
 | Battery current walking (servos + Pi) | 1.45 A average, 2.52 A peak → about 73 min walking per charge |
 | 100 Hz control loop on a Raspberry Pi 4 (estimated) | 1.8 ms of 10 ms |
-| Software unit tests | Ran 23 tests in 5.929s: OK |
+| Software unit tests | Ran 23 tests in 6.741s: OK |
 
 ## Leg joints: why double-sided
 

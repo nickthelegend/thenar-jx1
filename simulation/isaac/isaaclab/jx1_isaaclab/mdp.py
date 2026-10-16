@@ -138,6 +138,24 @@ def track_lin_vel_xy_scaled_exp(env, std: float, scale, command_name: str,
     return torch.exp(-(err ** 2).sum(dim=1) / std ** 2)
 
 
+def ref_joint_pos(env, period: float, offset: float, stance_fraction: float, amplitude: float, ref_cols, leg_cols,
+                  command_name: str | None = None, stand_threshold: float | None = None,
+                  asset_cfg: SceneEntityCfg = SceneEntityCfg("robot")) -> torch.Tensor:
+    """Reference stepping (rl/jx1_rl/env.py ref_targets): while walking, each leg in swing bends hip pitch -A, knee +2A,
+    ankle pitch -A along sin(pi * swing progress); reward exp(-2 |q - ref|) - 0.2 min(|q - ref|, 0.5) over the legs.
+    ref_cols: [(leg 0/1, column in asset_cfg's joints, factor)]; leg_cols: columns of the leg joints."""
+    asset: Articulation = env.scene[asset_cfg.name]
+    q = asset.data.joint_pos[:, asset_cfg.joint_ids]
+    ref = asset.data.default_joint_pos[:, asset_cfg.joint_ids].clone()
+    lp = _leg_phase(env, period, offset)                                   # (N, 2)
+    swing = torch.clamp((lp - stance_fraction) / (1.0 - stance_fraction), 0.0, 1.0)
+    lift = torch.sin(math.pi * swing) * (lp >= stance_fraction) * _moving(env, command_name, stand_threshold)[:, None]
+    for leg, col, k in ref_cols:
+        ref[:, col] += k * amplitude * lift[:, leg]
+    diff = torch.linalg.norm((q - ref)[:, list(leg_cols)], dim=1)
+    return torch.exp(-2.0 * diff) - 0.2 * torch.clamp(diff, max=0.5)
+
+
 def joint_deviation_l2(env, asset_cfg: SceneEntityCfg) -> torch.Tensor:
     asset: Articulation = env.scene[asset_cfg.name]
     d = asset.data.joint_pos[:, asset_cfg.joint_ids] - asset.data.default_joint_pos[:, asset_cfg.joint_ids]

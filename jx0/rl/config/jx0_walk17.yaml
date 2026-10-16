@@ -30,7 +30,11 @@ policy_joints:
 observation:
   history_length: 3
 
+gait:
+  ref_amplitude_rad: 0.28                        # reference swing bend: hip -0.28, knee +0.56, ankle -0.28 rad (~2 cm lift)
+
 rewards:
+  ref_joint_pos: 1.5                             # reference stepping (jx0_walk17_v1 without it learned to stand still)
   tracking_lin_scale: [0.12, 0.05]               # x / y errors in units of the command ranges' largest speeds
   tracking_sigma: 0.25                           # in those units: standing still when told 0.06 m/s forward -> 0.37
   tracking_sigma_ang: 0.05
