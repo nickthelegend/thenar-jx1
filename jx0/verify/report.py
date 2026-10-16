@@ -58,6 +58,12 @@ def main():
             L.append(f"| Assembly in the build guide's order: {len(sw_)} slide-in steps, a screwdriver on all {len(dr)} screws | "
                      f"{sum(1 for x in sw_ if not x['ok'])} slides blocked, {sum(1 for x in dr if not x['ok'])} screws "
                      f"unreachable ({sum(1 for x in dr if x['tool'] != 'screwdriver')} need a PH bit by hand) |")
+    endu = json.loads((ROOT / "jx0" / "results" / "verify_endurance.json").read_text(encoding="utf-8"))         if (ROOT / "jx0" / "results" / "verify_endurance.json").exists() else None
+    if endu:
+        L.append(f"| Endurance: the robot program for {endu['seconds']:.0f} s (walk, turn, side-step, back, wave, look) with a "
+                 f"{endu['push_ns']} N.s push every {endu['push_every_s']:.0f} s, on {endu['of']} robots with random model errors | "
+                 f"**{endu['stayed_up']}/{endu['of']}** stayed up, worst mean servo torque "
+                 f"{max(r['worst_mean_torque_nm'] for r in endu['runs'])} N.m (rated {endu['rated_torque_nm']}) |")
     desc = json.loads((ROOT / "jx0" / "description" / "check.json").read_text(encoding="utf-8"))         if (ROOT / "jx0" / "description" / "check.json").exists() else None
     if desc:
         L.append(f"| Robot description: URDF and MJCF vs the verified model (mass, inertia, centre of mass and soles in "

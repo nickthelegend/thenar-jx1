@@ -39,6 +39,8 @@ rewards:
   tracking_sigma: 0.25                           # in those units: standing still when told 0.06 m/s forward -> 0.37
   tracking_sigma_ang: 0.05
   upper_body_pos: -0.2                           # arms and neck near the default pose (they may swing for balance)
+  torque_limits: -0.05                           # N m above 0.85 x stall: -0.5 (jx0_walk) outweighed every reward in
+  dof_vel_limits: -0.05                          # jx0_walk17_v2 (-1.2 per s vs +0.7 for stepping): it stood still
 
 randomization:
   kp_scale: [0.7, 1.3]

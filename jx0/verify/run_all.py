@@ -22,6 +22,7 @@ STEPS = [
     ("joint stops: the commanded range and what stops each joint past it", [PY, "jx0/verify/verify_stops.py"]),
     ("robustness: model errors and pushes", [PY, "jx0/verify/robustness.py", "final"]),
     ("robustness: whole-program missions", [PY, "jx0/verify/robustness.py", "mission"]),
+    ("endurance: the robot program for 60 s with pushes, on 12 wrong robots", [PY, "jx0/verify/verify_endurance.py"]),
     ("joint strength (single- vs double-sided)", [PY, "jx0/verify/verify_strength.py"]),
     ("printed brackets: voxel FEA", [PY, "jx0/verify/verify_fea.py"]),
     ("power and timing", [PY, "jx0/verify/verify_power.py"]),
