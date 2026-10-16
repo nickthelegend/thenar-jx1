@@ -92,16 +92,31 @@ If your printer prints holes or pockets small, set its hole compensation now, be
 | JX0_HipRollBracket_L / _R | 1 + 1 | 30.5 g each | 98 × 56 × 31 | PETG near-solid; rear arm down |
 | JX0_Thigh_L / _R | 1 + 1 | 42.0 g each | 52 × 49 × 92 | PETG near-solid; outer arm down |
 | JX0_Shin_L / _R | 1 + 1 | 23.7 g each | 31 × 49 × 84 | PETG near-solid; outer arm down |
-| JX0_AnkleBracket_L / _R | 1 + 1 | 37.7 g each | 74 × 62 × 39 | PETG near-solid; outer arm down |
-| JX0_Foot | 2 | 50.8 g each | 124 × 70 × 46 | PETG near-solid; sole down |
+| JX0_AnkleBracket_L / _R | 1 + 1 | 37.8 g each | 74 × 62 × 39 | PETG near-solid; outer arm down |
+| JX0_Foot | 2 | 50.7 g each | 124 × 70 × 46 | PETG near-solid; sole down |
 | JX0_HornShim (0.4 mm, under a horn arm) | 40 | 0.1 g each | Ø19.6 | PETG; two 0.2 mm layers, flat |
 | JX0_Torso (lower shell with the skirt) | 1 | 103.0 g | 84 × 120 × 136 | PLA; floor down |
 | JX0_ChestCap | 1 | 45.3 g | 84 × 126 × 42 | PLA; upside down (top face on the bed), chamfers 45° |
 | JX0_Head | 1 | 62.6 g | 66 × 78 × 62 | PLA; upright on the flat rim of its open bottom, tree supports inside the rounded top |
 | JX0_NeckHub (on the neck horn, the head slides over it) | 1 | 10.7 g | 52 × 48 × 12 | PLA; flat plate down |
-| JX0_UpperArm_L / _R (shoulder hood + elbow box) | 1 + 1 | 21.5 g each | 54 × 35 × 85 | PLA; inner side (the shoulder horn's) down: on the outer plate it would tip |
+| JX0_UpperArm_L / _R (shoulder hood + elbow box) | 1 + 1 | 21.7 g each | 54 × 35 × 85 | PLA; inner side (the shoulder horn's) down: on the outer plate it would tip |
 | JX0_ArmBlade_L / _R | 1 + 1 | 14.8 g each | 36 × 8 × 116 | PLA; lying flat |
 | **Total** | **25 + 40 shims** | **848 g** | | 554 g PETG + 294 g PLA |
+
+## Joint stops
+
+Each joint is stopped three ways, so no two parts ever run into each other (`jx0/results/verify_stops.json`):
+
+1. **Software limits.** The robot program clamps every command to the limits in `config.yaml`. It also clamps each hip's sideways roll to a range that shrinks as the leg swings far forward: there, the thigh would otherwise reach the hip-yaw keeper.
+2. **Servo limits.** `python -m jx0bot.calibrate limits` (bring-up step 4) writes each joint's range, 1° wider, into its servo. The servo then refuses any position outside it, whatever the Pi sends.
+3. **Printed stops.** Past that, the first contact is always printed bracket on printed bracket, 2–15° further, never a screw head, a cable or a servo case:
+   - **Ankle pitch:** the block on top of the ankle bracket's arms meets the bottom of the shin's plates, 3° past the limit.
+   - **Ankle roll:** the ankle bracket meets the foot's U, after 2° (inward) or 4° (outward); the recess on the foot's arms keeps the shin clear.
+   - **Elbow:** the post beside the shoulder servo's plugs stops the blade 8° past the limit, before it can reach the plugs.
+   - **Knee, hip pitch and hip roll:** the U-brackets meet each other.
+   - **Hip yaw:** the keeper's lip meets the end of its groove.
+
+Inside the limits, 2,170 poses were checked: hip yaw × pitch × roll, ankle pitch × roll, and shoulder × elbow. None has a contact.
 
 ## 2. Before assembly: servo IDs, centring, horn height
 

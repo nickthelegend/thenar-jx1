@@ -2,7 +2,7 @@
 
     python jx0/verify/run_all.py          -> jx0/results/verification.md
 
-Order: servo sizing, the 14 gaits (exports the robot's gait files), the fit to the real servo, CAD interference,
+Order: servo sizing, the 14 gaits (exports the robot's gait files), the fit to the real servo, CAD interference, joint stops,
 robustness (model errors, pushes, whole-program missions), joint strength and bracket FEA, power and timing, the
 software unit tests, then the report.
 """
@@ -19,6 +19,7 @@ STEPS = [
     ("gaits", [PY, "jx0/sim/walk_jx0.py", "--no-render"]),
     ("fit to the real servo: parts, cables, screws, assembly order", [PY, "jx0/verify/verify_fit.py"]),
     ("CAD interference", [PY, "jx0/verify/verify_cad.py"]),
+    ("joint stops: the commanded range and what stops each joint past it", [PY, "jx0/verify/verify_stops.py"]),
     ("robustness: model errors and pushes", [PY, "jx0/verify/robustness.py", "final"]),
     ("robustness: whole-program missions", [PY, "jx0/verify/robustness.py", "mission"]),
     ("joint strength (single- vs double-sided)", [PY, "jx0/verify/verify_strength.py"]),

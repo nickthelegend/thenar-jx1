@@ -608,7 +608,7 @@
      "look"
     ],
     "max_tilt_deg": 9.3,
-    "distance_m": 0.25,
+    "distance_m": 0.26,
     "latency_ms": 20
    },
    {
@@ -678,6 +678,6 @@
   ]
  },
  "generated_by": "jx0/verify/robustness.py",
- "seconds_final": 125.3,
- "seconds_mission": 27.4
+ "seconds_final": 123.2,
+ "seconds_mission": 28.4
 }

@@ -131,7 +131,7 @@ def tick_limits(s: dict) -> tuple[int, int]:
 def limits(bus, cfg: dict):
     """Each servo gets its joint's range (config.yaml limits_deg, after zero and directions) as its own position limits,
     so it refuses any goal outside them: a software bug or a bad packet cannot drive a joint into its neighbours. Inside
-    those limits verify_cad finds no contact on any limb; just past them (2-12 deg) the parts touch (overtravel.json)."""
+    those limits nothing touches; past them the printed stops do (verify_stops.py)."""
     for name, s in all_servos(cfg).items():
         a, b = tick_limits(s)
         bus.set_angle_limits(s["id"], a, b)

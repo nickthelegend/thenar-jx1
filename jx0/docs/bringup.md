@@ -66,7 +66,7 @@ python -m jx0bot.calibrate limits
 
 Every servo stores its joint's limits from config.yaml, 1° wider, as its own position limits (EEPROM), and refuses any
 goal outside them. A software bug or a bad packet then cannot drive a joint into its neighbours. Inside the limits no
-two parts touch; 2–12° past them they would (`jx0/results/overtravel.json`). Run it again whenever `zero` or
+two parts touch; past them the printed stops take over (`jx0/results/verify_stops.json`). Run it again whenever `zero` or
 `directions` change config.yaml.
 
 ## 5. Check the stiffness

@@ -1,6 +1,6 @@
 # JX0 verification report
 
-Generated 2026-10-15 by `jx0/verify/run_all.py` from the CAD geometry, the MuJoCo model and the robot software in this repository (design v0.4: double-sided legs like the reference robot, every part fitted to the real STS3215). Everything here is simulation and analysis: the physical robot is not built yet, so the numbers say the design should work, not that it has been seen working.
+Generated 2026-10-16 by `jx0/verify/run_all.py` from the CAD geometry, the MuJoCo model and the robot software in this repository (design v0.4: double-sided legs like the reference robot, every part fitted to the real STS3215). Everything here is simulation and analysis: the physical robot is not built yet, so the numbers say the design should work, not that it has been seen working.
 
 ## Summary
 
@@ -11,6 +11,8 @@ Generated 2026-10-15 by `jx0/verify/run_all.py` from the CAD geometry, the MuJoC
 | The real STS3215 (Feetech factory model and SO-ARM100 model) and its cables at all 17 joints, against every printed part | 0 clashes |
 | Every screw (182): plate under the head, thread in the horn / case / insert, tip clear, on a real hole, head room | 0 problems |
 | Assembly in the build guide's order: 42 slide-in steps, a screwdriver on all 182 screws | 0 slides blocked, 0 screws unreachable (11 need a PH bit by hand) |
+| Joint stops: the whole commanded range (2170 poses: hip yaw x pitch x roll, ankle pitch x roll, shoulder x elbow) | 0 contacts |
+| Joint stops: past each servo's own limit (EEPROM, 1 deg outside config.yaml), the first contact is printed bracket on printed bracket, 2-43 deg further (42 cases) | 0 problems |
 | Parts, servos, cables and screw heads colliding, standing (all 3321 pairs) | 0 clashes |
 | Parts colliding in motion (1373 poses: every gait frame + every action) | 0 clashes |
 | Joint limits inside the collision-free range | 17/17 joints |
@@ -26,8 +28,8 @@ Generated 2026-10-15 by `jx0/verify/run_all.py` from the CAD geometry, the MuJoC
 | Sideways push of 1.44 N.s mid-walk (24 moments × 2 directions): stayed up | 21/48 (44 %) |
 | Whole robot program, 8-step mission, random realistic errors | **24/24 (100 %)** |
 | Battery current walking (servos + Pi) | 1.45 A average, 2.52 A peak → about 73 min walking per charge |
-| 100 Hz control loop on a Raspberry Pi 4 (estimated) | 1.9 ms of 10 ms |
-| Software unit tests | Ran 21 tests in 5.870s: OK |
+| 100 Hz control loop on a Raspberry Pi 4 (estimated) | 1.8 ms of 10 ms |
+| Software unit tests | Ran 23 tests in 5.929s: OK |
 
 ## Leg joints: why double-sided
 
@@ -54,8 +56,8 @@ Voxel FEA (`calculations/structural/voxel_fea.py`, 0.7 mm hexahedra with bending
 | hip roll bracket | 90,818 | 4.12 (3.6) | 9.96 (5.0) |
 | thigh | 117,401 | 5.31 (2.8) | 13.09 (3.8) |
 | shin | 70,022 | 5.49 (2.7) | 16.03 (3.1) |
-| ankle bracket | 108,986 | 6.94 (2.2) | 16.65 (3.0) |
-| foot | 143,464 | 3.19 (4.7) | 7.83 (6.4) |
+| ankle bracket | 109,478 | 6.67 (2.2) | 15.68 (3.2) |
+| foot | 143,340 | 3.2 (4.7) | 7.85 (6.4) |
 
 Stress maps: `images/fea_*.png`.
 
@@ -100,4 +102,4 @@ Stress maps: `images/fea_*.png`.
 python jx0/verify/run_all.py
 ```
 
-Detailed results in this folder: `walking.json`, `verify_fit.json`, `verify_cad.json`, `verify_robustness.json`, `verify_strength.json`, `verify_fea.json`, `verify_power.json`, `sizing.json`.
+Detailed results in this folder: `walking.json`, `verify_fit.json`, `verify_cad.json`, `verify_stops.json`, `verify_robustness.json`, `verify_strength.json`, `verify_fea.json`, `verify_power.json`, `sizing.json`.

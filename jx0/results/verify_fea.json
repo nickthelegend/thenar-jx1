@@ -31,7 +31,7 @@
    "worst_mpa_max": 28.15,
    "fatigue_safety": 2.3,
    "static_safety": 4.6,
-   "seconds": 327.1
+   "seconds": 332.2
   },
   "yaw_keeper": {
    "loaded_by": "l_hip_yaw: the disc on the keeper's lip",
@@ -50,7 +50,7 @@
    "worst_mpa_max": 13.28,
    "fatigue_safety": 2.2,
    "static_safety": 4.8,
-   "seconds": 4.1
+   "seconds": 4.4
   },
   "hip_yaw_bracket": {
    "loaded_by": "l_hip_roll (parent frame) + the ring's and the keeper's pushes on the disc",
@@ -69,7 +69,7 @@
    "worst_mpa_max": 38.22,
    "fatigue_safety": 2.1,
    "static_safety": 2.9,
-   "seconds": 123.6
+   "seconds": 125.5
   },
   "hip_roll_bracket": {
    "loaded_by": "l_hip_pitch (parent frame)",
@@ -88,7 +88,7 @@
    "worst_mpa_max": 18.17,
    "fatigue_safety": 3.6,
    "static_safety": 5.0,
-   "seconds": 35.0
+   "seconds": 35.4
   },
   "thigh": {
    "loaded_by": "l_knee (parent frame)",
@@ -126,12 +126,12 @@
    "worst_mpa_max": 42.47,
    "fatigue_safety": 2.7,
    "static_safety": 3.1,
-   "seconds": 32.5
+   "seconds": 20.5
   },
   "ankle_bracket": {
    "loaded_by": "l_ankle_roll (parent frame)",
-   "elements": 108986,
-   "dof": 395898,
+   "elements": 109478,
+   "dof": 397662,
    "support_nodes": 1283,
    "load_nodes": 3717,
    "load_components": 6,
@@ -139,18 +139,18 @@
     "walking": 6810,
     "worst": 62520
    },
-   "walking_mpa_p99_9": 6.94,
-   "walking_mpa_max": 20.32,
-   "worst_mpa_p99_9": 16.65,
-   "worst_mpa_max": 40.26,
+   "walking_mpa_p99_9": 6.67,
+   "walking_mpa_max": 19.52,
+   "worst_mpa_p99_9": 15.68,
+   "worst_mpa_max": 39.1,
    "fatigue_safety": 2.2,
-   "static_safety": 3.0,
-   "seconds": 358.4
+   "static_safety": 3.2,
+   "seconds": 191.1
   },
   "foot": {
    "loaded_by": "l_ankle_roll (child frame)",
-   "elements": 143464,
-   "dof": 508329,
+   "elements": 143340,
+   "dof": 507969,
    "support_nodes": 16777,
    "load_nodes": 894,
    "load_components": 6,
@@ -158,14 +158,14 @@
     "walking": 6810,
     "worst": 62520
    },
-   "walking_mpa_p99_9": 3.19,
-   "walking_mpa_max": 4.71,
-   "worst_mpa_p99_9": 7.83,
-   "worst_mpa_max": 12.99,
+   "walking_mpa_p99_9": 3.2,
+   "walking_mpa_max": 4.82,
+   "worst_mpa_p99_9": 7.85,
+   "worst_mpa_max": 13.36,
    "fatigue_safety": 4.7,
    "static_safety": 6.4,
-   "seconds": 84.7
+   "seconds": 48.8
   }
  },
- "seconds": 1061.7
+ "seconds": 855.6
 }

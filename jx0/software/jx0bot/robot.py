@@ -68,6 +68,7 @@ class HardwareIO(RealTime):
 
     def send(self, q: dict):
         ticks = {}
+        q = couple_hips(q)
         for name, s in self.servos.items():
             if name in q:
                 lo, hi = (math.radians(v) for v in s["limits_deg"])
@@ -167,6 +168,30 @@ class SimIO(RealTime):
         self.running = False
 
 
+# hip roll range that shrinks as the hip flexes: with the thigh swung far forward AND out (or in), its top touches the
+# hip-yaw keeper or bracket inside the separate pitch / roll limits (jx0/verify/verify_stops.py maps yaw x roll x pitch).
+# Roll toward the leg's own side (+ on the left leg) stays <= ROLL_OUT(pitch), toward the middle >= ROLL_IN(pitch), each
+# 4 deg inside the mapped contact; all 14 gaits stay 2 deg or more inside these bounds.
+def roll_out_max(pitch_deg: float) -> float:
+    return max(10.0, min(20.0, 22.0 - 0.5 * (-30.0 - pitch_deg)))
+
+
+def roll_in_min(pitch_deg: float) -> float:
+    return min(-12.0, max(-20.0, -20.0 + 0.5 * (-34.0 - pitch_deg)))
+
+
+def couple_hips(q: dict) -> dict:
+    """q with each hip roll clamped to the pitch-dependent range (angles in radians; right leg mirrored)."""
+    out = dict(q)
+    for side, sg in (("l", 1.0), ("r", -1.0)):
+        p, r = f"{side}_hip_pitch", f"{side}_hip_roll"
+        if p in out and r in out:
+            pd, rd = math.degrees(out[p]), sg * math.degrees(out[r])
+            rd = min(max(rd, roll_in_min(pd)), roll_out_max(pd))
+            out[r] = math.radians(sg * rd)
+    return out
+
+
 # ------------------------------------------------------------------------------------------------ the robot
 class Robot:
     def __init__(self, io, cfg: dict):
@@ -185,6 +210,7 @@ class Robot:
     # ---------------------------------------------------------------- low level
     def _send(self, q: dict):
         self.q.update(q)
+        self.q = couple_hips(self.q)
         self.io.send(self.q)
 
     def move_to(self, target: dict, seconds: float):

@@ -108,6 +108,9 @@ HIP_Y = 45.0       # half hip spacing
 XR = -15.9         # hip-roll horn face (servo behind the hip centre, horn facing +x); its U-bracket's front arm is the
 TU_ROLL = 5.2      # back wall of the hip-pitch cage, 5.2 mm so the roll horn screws' heads sink into it
 XA = -22.0         # ankle-roll horn face (servo behind the ankle centre, horn facing +x)
+ELBOW_STOP = (13.0, -17.0, 3.5)            # elbow stop post: (x, z) on the upper arm, radius
+ANKLE_STOP_X, ANKLE_STOP_H = -14.0, 0.9   # ankle pitch stop block: front end (x) and height over the top plate
+FOOT_RECESS = 1.0                          # mm off the foot's horn arm face where the shin passes (ankle roll stop)
 ANKLE_TOP = 6.0    # the ankle bracket's arms rise this far above the roll cage's top wall (verify_fea)
 SOLE_TO_ANKLE, SOLE_T, FOOT_X, FOOT_W = 33.0, 5.0, (-68.0, 56.0), 70.0
 # torso: octagonal prism, half depth TD (x) and half width TW (y), vertical edges chamfered TCH, split at TZS into the
@@ -734,8 +737,11 @@ def ankle_bracket():
     # (at the +-20 deg roll limit the foot's roll bracket reaches the horn arm's plane only below z -7.5, the hub
     # arm's plane only below z -12)
     top = rect(x_back, xf + 0.1, zt - WALL - 0.05, zt + ANKLE_TOP)                            # on the cage's top wall
+    # joint stop: with the toes ANKLE_STOP_DEG past the limit pointing down, this block's top meets the bottom of the
+    # shin's arm plates (both arms, coplanar), before the foot's horn screw heads reach the shin (verify_stops)
+    stop = rect(xf - 0.5, ANKLE_STOP_X, zt - 1.0, zt + ANKLE_TOP + ANKLE_STOP_H)
     side = rect(x_back, x_case + 0.3, -zt - 0.05, zt + 0.05)                                  # outboard: whole cage side
-    p = u_arms(ankle_pitch_servo(0.0), front, extra_horn=[slab, top, side], extra_hub=[slab_hub, top])
+    p = u_arms(ankle_pitch_servo(0.0), front, extra_horn=[slab, top, side, stop], extra_hub=[slab_hub, top, stop])
     p += cage(R, skip=("l0",), omit=-1, lengthwise=True)      # the roll servo slides in from the inboard end;
     #                                                                         the foot slides on from below
     x0s, x1s, ws, zs = ST["STRIP"]
@@ -761,6 +767,11 @@ def foot():
     p += u_arms(ankle_roll_servo(), arm)
     for x in (-40.0, 14.0, 36.0):                                                               # lightening holes
         p.append(("hole", "z", (x, 0.0), 12.0, (zs - 0.1, zs + SOLE_T + 0.1)))
+    # with the ankle pitched back and rolled past its limit, the shin's lower back corner reaches the horn arm's side
+    # edges: a shallow recess there, so the ankle bracket (the roll joint's own stop) touches the foot first
+    xh = XA + TU                                                                                # horn arm's front face
+    for sy in (1, -1):
+        p.append(("cut", (xh - FOOT_RECESS, xh + 0.1), tuple(sorted((sy * 12.5, sy * 17.0))), (-16.0, 0.0)))
     return p
 
 
@@ -906,6 +917,10 @@ def upper_arm():
     hood = rounded_polygon([(-hw, top - WALL + 0.05), (hw, top - WALL + 0.05), (hw, top + 4.0), (-hw, top + 4.0)],
                            [0.0, 0.0, 6.0, 6.0])                                                # (x, z) rounded hood
     p.append(("prism", "y", hood, (HF - HO, HF + HR + CASE_UNDER)))
+    # elbow stop: a post out of the shoulder cage's side into the blade's plane, beside the shoulder servo's plugs;
+    # the blade, swung forward past its limit, hits the post before it reaches the plugs (verify_stops)
+    x, z, r = ELBOW_STOP
+    p.append(("cyl", "y", (x, z), r, (36.5, ELBOW_Y + 3.2)))
     return p
 
 

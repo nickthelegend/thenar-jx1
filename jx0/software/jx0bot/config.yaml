@@ -15,16 +15,16 @@ bus:
 # with the joint at 0 rad — robot in the zero pose), limits = inside the collision-free range from jx0/verify/verify_cad.py (v0.4 double-sided legs)
 leg_servos:
   l_hip_yaw:     {id: 1,  direction: 1,  zero_ticks: 2048, limits_deg: [-12, 12]}
-  l_hip_roll:    {id: 2,  direction: 1,  zero_ticks: 2048, limits_deg: [-20, 22]}
+  l_hip_roll:    {id: 2,  direction: 1,  zero_ticks: 2048, limits_deg: [-20, 20]}
   l_hip_pitch:   {id: 3,  direction: 1,  zero_ticks: 2048, limits_deg: [-70, 8]}
   l_knee:        {id: 4,  direction: 1,  zero_ticks: 2048, limits_deg: [0, 84]}
-  l_ankle_pitch: {id: 5,  direction: 1,  zero_ticks: 2048, limits_deg: [-55, 5]}
+  l_ankle_pitch: {id: 5,  direction: 1,  zero_ticks: 2048, limits_deg: [-55, 0]}
   l_ankle_roll:  {id: 6,  direction: 1,  zero_ticks: 2048, limits_deg: [-20, 20]}
   r_hip_yaw:     {id: 7,  direction: 1,  zero_ticks: 2048, limits_deg: [-12, 12]}
-  r_hip_roll:    {id: 8,  direction: 1,  zero_ticks: 2048, limits_deg: [-22, 18]}
+  r_hip_roll:    {id: 8,  direction: 1,  zero_ticks: 2048, limits_deg: [-20, 18]}
   r_hip_pitch:   {id: 9,  direction: 1,  zero_ticks: 2048, limits_deg: [-70, 8]}
   r_knee:        {id: 10, direction: 1,  zero_ticks: 2048, limits_deg: [0, 84]}
-  r_ankle_pitch: {id: 11, direction: 1,  zero_ticks: 2048, limits_deg: [-55, 5]}
+  r_ankle_pitch: {id: 11, direction: 1,  zero_ticks: 2048, limits_deg: [-55, 0]}
   r_ankle_roll:  {id: 12, direction: 1,  zero_ticks: 2048, limits_deg: [-20, 20]}
 
 # arm and neck STS3215 on the same bus (IDs 13-17). Limits: the shoulder cradle and the blades clear the torso and the
@@ -33,9 +33,9 @@ leg_servos:
 # tooth off centre, calibrate.py limits)
 arm_servos:
   l_shoulder_pitch: {id: 13, direction: 1,  zero_ticks: 2048, limits_deg: [-165, 60]}
-  l_elbow:          {id: 14, direction: 1,  zero_ticks: 2048, limits_deg: [-130, 30]}
+  l_elbow:          {id: 14, direction: 1,  zero_ticks: 2048, limits_deg: [-115, 30]}
   r_shoulder_pitch: {id: 15, direction: 1,  zero_ticks: 2048, limits_deg: [-165, 60]}
-  r_elbow:          {id: 16, direction: 1,  zero_ticks: 2048, limits_deg: [-130, 30]}
+  r_elbow:          {id: 16, direction: 1,  zero_ticks: 2048, limits_deg: [-115, 30]}
   neck_yaw:         {id: 17, direction: 1,  zero_ticks: 2048, limits_deg: [-80, 80]}
 
 imu:

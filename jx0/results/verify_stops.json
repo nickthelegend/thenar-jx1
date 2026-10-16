@@ -1,0 +1,735 @@
+{
+ "eeprom_margin_deg": 1.0,
+ "required_stop_margin_deg": 2.0,
+ "range": {
+  "poses": {
+   "hip (yaw x pitch x coupled roll)": 1128,
+   "ankle (pitch x roll)": 391,
+   "arm (shoulder x elbow)": 651
+  },
+  "contacts": []
+ },
+ "stops": [
+  {
+   "joint": "l_hip_yaw",
+   "end": "low",
+   "eeprom_deg": -13.0,
+   "with_": {},
+   "first_contact_deg": -15.0,
+   "past_eeprom_deg": 2.0,
+   "contacts": [
+    [
+     "keeper_L",
+     "hip_yaw_L",
+     3.4
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_hip_yaw",
+   "end": "high",
+   "eeprom_deg": 13.0,
+   "with_": {},
+   "first_contact_deg": 15.0,
+   "past_eeprom_deg": 2.0,
+   "contacts": [
+    [
+     "keeper_L",
+     "hip_yaw_L",
+     3.4
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_hip_pitch",
+   "end": "low",
+   "eeprom_deg": -71.0,
+   "with_": {
+    "l_hip_roll": -12.0
+   },
+   "first_contact_deg": -80.0,
+   "past_eeprom_deg": 9.0,
+   "contacts": [
+    [
+     "hip_roll_L",
+     "thigh_L",
+     1.3
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_hip_pitch",
+   "end": "low",
+   "eeprom_deg": -71.0,
+   "with_": {
+    "l_hip_roll": 0.0
+   },
+   "first_contact_deg": -80.0,
+   "past_eeprom_deg": 9.0,
+   "contacts": [
+    [
+     "hip_roll_L",
+     "thigh_L",
+     1.3
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_hip_pitch",
+   "end": "low",
+   "eeprom_deg": -71.0,
+   "with_": {
+    "l_hip_roll": 10.0
+   },
+   "first_contact_deg": -77.0,
+   "past_eeprom_deg": 6.0,
+   "contacts": [
+    [
+     "keeper_L",
+     "thigh_L",
+     2.2
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_hip_pitch",
+   "end": "high",
+   "eeprom_deg": 9.0,
+   "with_": {
+    "l_hip_roll": -12.0
+   },
+   "first_contact_deg": 16.0,
+   "past_eeprom_deg": 7.0,
+   "contacts": [
+    [
+     "hip_yaw_L",
+     "thigh_L",
+     5.1
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_hip_pitch",
+   "end": "high",
+   "eeprom_deg": 9.0,
+   "with_": {
+    "l_hip_roll": 0.0
+   },
+   "first_contact_deg": 19.0,
+   "past_eeprom_deg": 10.0,
+   "contacts": [
+    [
+     "hip_yaw_L",
+     "thigh_L",
+     1.2
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_hip_pitch",
+   "end": "high",
+   "eeprom_deg": 9.0,
+   "with_": {
+    "l_hip_roll": 10.0
+   },
+   "first_contact_deg": 23.0,
+   "past_eeprom_deg": 14.0,
+   "contacts": [
+    [
+     "hip_yaw_L",
+     "thigh_L",
+     1.1
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_hip_roll",
+   "end": "low",
+   "eeprom_deg": -21.0,
+   "with_": {
+    "l_hip_pitch": -30.0
+   },
+   "first_contact_deg": -23.0,
+   "past_eeprom_deg": 2.0,
+   "contacts": [
+    [
+     "keeper_L",
+     "hip_roll_L",
+     2.5
+    ],
+    [
+     "hip_yaw_L",
+     "hip_roll_L",
+     5.3
+    ],
+    [
+     "hip_yaw_L",
+     "thigh_L",
+     2.7
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_hip_roll",
+   "end": "low",
+   "eeprom_deg": -21.0,
+   "with_": {
+    "l_hip_pitch": -10.0
+   },
+   "first_contact_deg": -23.0,
+   "past_eeprom_deg": 2.0,
+   "contacts": [
+    [
+     "keeper_L",
+     "hip_roll_L",
+     2.5
+    ],
+    [
+     "hip_yaw_L",
+     "hip_roll_L",
+     5.3
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_hip_roll",
+   "end": "low",
+   "eeprom_deg": -21.0,
+   "with_": {
+    "l_hip_pitch": 8.0
+   },
+   "first_contact_deg": -23.0,
+   "past_eeprom_deg": 2.0,
+   "contacts": [
+    [
+     "keeper_L",
+     "hip_roll_L",
+     2.5
+    ],
+    [
+     "hip_yaw_L",
+     "hip_roll_L",
+     5.3
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_hip_roll",
+   "end": "high",
+   "eeprom_deg": 21.0,
+   "with_": {
+    "l_hip_pitch": -30.0
+   },
+   "first_contact_deg": 24.0,
+   "past_eeprom_deg": 3.0,
+   "contacts": [
+    [
+     "keeper_L",
+     "thigh_L",
+     1.1
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_hip_roll",
+   "end": "high",
+   "eeprom_deg": 21.0,
+   "with_": {
+    "l_hip_pitch": -10.0
+   },
+   "first_contact_deg": 27.0,
+   "past_eeprom_deg": 6.0,
+   "contacts": [
+    [
+     "hip_yaw_L",
+     "hip_roll_L",
+     2.1
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_hip_roll",
+   "end": "high",
+   "eeprom_deg": 21.0,
+   "with_": {
+    "l_hip_pitch": 8.0
+   },
+   "first_contact_deg": 27.0,
+   "past_eeprom_deg": 6.0,
+   "contacts": [
+    [
+     "hip_yaw_L",
+     "hip_roll_L",
+     2.1
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_knee",
+   "end": "low",
+   "eeprom_deg": -1.0,
+   "with_": {},
+   "first_contact_deg": -3.0,
+   "past_eeprom_deg": 2.0,
+   "contacts": [
+    [
+     "thigh_L",
+     "shin_L",
+     2.1
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_knee",
+   "end": "high",
+   "eeprom_deg": 85.0,
+   "with_": {},
+   "first_contact_deg": 88.0,
+   "past_eeprom_deg": 3.0,
+   "contacts": [
+    [
+     "thigh_L",
+     "shin_L",
+     1.0
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_pitch",
+   "end": "low",
+   "eeprom_deg": -56.0,
+   "with_": {
+    "l_ankle_roll": -20.0
+   },
+   "first_contact_deg": -95.0,
+   "past_eeprom_deg": 39.0,
+   "contacts": [
+    [
+     "thigh_L",
+     "foot_L",
+     1.4
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_pitch",
+   "end": "low",
+   "eeprom_deg": -56.0,
+   "with_": {
+    "l_ankle_roll": 0.0
+   },
+   "first_contact_deg": -99.0,
+   "past_eeprom_deg": 43.0,
+   "contacts": [
+    [
+     "thigh_L",
+     "foot_L",
+     48.2
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_pitch",
+   "end": "low",
+   "eeprom_deg": -56.0,
+   "with_": {
+    "l_ankle_roll": 20.0
+   },
+   "first_contact_deg": -96.0,
+   "past_eeprom_deg": 40.0,
+   "contacts": [
+    [
+     "thigh_L",
+     "foot_L",
+     1.9
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_pitch",
+   "end": "high",
+   "eeprom_deg": 1.0,
+   "with_": {
+    "l_ankle_roll": -20.0
+   },
+   "first_contact_deg": 4.0,
+   "past_eeprom_deg": 3.0,
+   "contacts": [
+    [
+     "shin_L",
+     "ankle_L",
+     2.1
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_pitch",
+   "end": "high",
+   "eeprom_deg": 1.0,
+   "with_": {
+    "l_ankle_roll": 0.0
+   },
+   "first_contact_deg": 4.0,
+   "past_eeprom_deg": 3.0,
+   "contacts": [
+    [
+     "shin_L",
+     "ankle_L",
+     2.1
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_pitch",
+   "end": "high",
+   "eeprom_deg": 1.0,
+   "with_": {
+    "l_ankle_roll": 20.0
+   },
+   "first_contact_deg": 4.0,
+   "past_eeprom_deg": 3.0,
+   "contacts": [
+    [
+     "shin_L",
+     "ankle_L",
+     2.1
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_roll",
+   "end": "low",
+   "eeprom_deg": -21.0,
+   "with_": {
+    "l_ankle_pitch": -55.0
+   },
+   "first_contact_deg": -23.0,
+   "past_eeprom_deg": 2.0,
+   "contacts": [
+    [
+     "ankle_L",
+     "foot_L",
+     3.6
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_roll",
+   "end": "low",
+   "eeprom_deg": -21.0,
+   "with_": {
+    "l_ankle_pitch": -40.0
+   },
+   "first_contact_deg": -23.0,
+   "past_eeprom_deg": 2.0,
+   "contacts": [
+    [
+     "ankle_L",
+     "foot_L",
+     3.6
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_roll",
+   "end": "low",
+   "eeprom_deg": -21.0,
+   "with_": {
+    "l_ankle_pitch": -27.0
+   },
+   "first_contact_deg": -23.0,
+   "past_eeprom_deg": 2.0,
+   "contacts": [
+    [
+     "ankle_L",
+     "foot_L",
+     3.6
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_roll",
+   "end": "low",
+   "eeprom_deg": -21.0,
+   "with_": {
+    "l_ankle_pitch": -15.0
+   },
+   "first_contact_deg": -23.0,
+   "past_eeprom_deg": 2.0,
+   "contacts": [
+    [
+     "ankle_L",
+     "foot_L",
+     3.6
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_roll",
+   "end": "low",
+   "eeprom_deg": -21.0,
+   "with_": {
+    "l_ankle_pitch": 0.0
+   },
+   "first_contact_deg": -23.0,
+   "past_eeprom_deg": 2.0,
+   "contacts": [
+    [
+     "ankle_L",
+     "foot_L",
+     3.6
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_roll",
+   "end": "high",
+   "eeprom_deg": 21.0,
+   "with_": {
+    "l_ankle_pitch": -55.0
+   },
+   "first_contact_deg": 25.0,
+   "past_eeprom_deg": 4.0,
+   "contacts": [
+    [
+     "ankle_L",
+     "foot_L",
+     1.7
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_roll",
+   "end": "high",
+   "eeprom_deg": 21.0,
+   "with_": {
+    "l_ankle_pitch": -40.0
+   },
+   "first_contact_deg": 25.0,
+   "past_eeprom_deg": 4.0,
+   "contacts": [
+    [
+     "ankle_L",
+     "foot_L",
+     1.7
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_roll",
+   "end": "high",
+   "eeprom_deg": 21.0,
+   "with_": {
+    "l_ankle_pitch": -27.0
+   },
+   "first_contact_deg": 25.0,
+   "past_eeprom_deg": 4.0,
+   "contacts": [
+    [
+     "ankle_L",
+     "foot_L",
+     1.7
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_roll",
+   "end": "high",
+   "eeprom_deg": 21.0,
+   "with_": {
+    "l_ankle_pitch": -15.0
+   },
+   "first_contact_deg": 25.0,
+   "past_eeprom_deg": 4.0,
+   "contacts": [
+    [
+     "ankle_L",
+     "foot_L",
+     1.7
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_ankle_roll",
+   "end": "high",
+   "eeprom_deg": 21.0,
+   "with_": {
+    "l_ankle_pitch": 0.0
+   },
+   "first_contact_deg": 25.0,
+   "past_eeprom_deg": 4.0,
+   "contacts": [
+    [
+     "ankle_L",
+     "foot_L",
+     1.7
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_shoulder_pitch",
+   "end": "low",
+   "eeprom_deg": -166.0,
+   "with_": {},
+   "first_contact_deg": null,
+   "past_eeprom_deg": null,
+   "contacts": [],
+   "problems": []
+  },
+  {
+   "joint": "l_shoulder_pitch",
+   "end": "high",
+   "eeprom_deg": 61.0,
+   "with_": {},
+   "first_contact_deg": null,
+   "past_eeprom_deg": null,
+   "contacts": [],
+   "problems": []
+  },
+  {
+   "joint": "l_elbow",
+   "end": "low",
+   "eeprom_deg": -116.0,
+   "with_": {
+    "l_shoulder_pitch": -90.0
+   },
+   "first_contact_deg": -124.0,
+   "past_eeprom_deg": 8.0,
+   "contacts": [
+    [
+     "upper_arm_L",
+     "blade_L",
+     6.1
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_elbow",
+   "end": "low",
+   "eeprom_deg": -116.0,
+   "with_": {
+    "l_shoulder_pitch": 0.0
+   },
+   "first_contact_deg": -124.0,
+   "past_eeprom_deg": 8.0,
+   "contacts": [
+    [
+     "upper_arm_L",
+     "blade_L",
+     6.1
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_elbow",
+   "end": "low",
+   "eeprom_deg": -116.0,
+   "with_": {
+    "l_shoulder_pitch": 45.0
+   },
+   "first_contact_deg": -124.0,
+   "past_eeprom_deg": 8.0,
+   "contacts": [
+    [
+     "upper_arm_L",
+     "blade_L",
+     6.1
+    ]
+   ],
+   "problems": []
+  },
+  {
+   "joint": "l_elbow",
+   "end": "high",
+   "eeprom_deg": 31.0,
+   "with_": {
+    "l_shoulder_pitch": -90.0
+   },
+   "first_contact_deg": null,
+   "past_eeprom_deg": null,
+   "contacts": [],
+   "problems": []
+  },
+  {
+   "joint": "l_elbow",
+   "end": "high",
+   "eeprom_deg": 31.0,
+   "with_": {
+    "l_shoulder_pitch": 0.0
+   },
+   "first_contact_deg": null,
+   "past_eeprom_deg": null,
+   "contacts": [],
+   "problems": []
+  },
+  {
+   "joint": "l_elbow",
+   "end": "high",
+   "eeprom_deg": 31.0,
+   "with_": {
+    "l_shoulder_pitch": 45.0
+   },
+   "first_contact_deg": null,
+   "past_eeprom_deg": null,
+   "contacts": [],
+   "problems": []
+  },
+  {
+   "joint": "neck_yaw",
+   "end": "low",
+   "eeprom_deg": -81.0,
+   "with_": {},
+   "first_contact_deg": null,
+   "past_eeprom_deg": null,
+   "contacts": [],
+   "problems": []
+  },
+  {
+   "joint": "neck_yaw",
+   "end": "high",
+   "eeprom_deg": 81.0,
+   "with_": {},
+   "first_contact_deg": null,
+   "past_eeprom_deg": null,
+   "contacts": [],
+   "problems": []
+  }
+ ],
+ "problems": [],
+ "seconds": 210.5,
+ "pass": true
+}

@@ -162,6 +162,8 @@ def main():
         lo, hi = s_["limits_deg"]
         q0 = math.degrees(stand.get(joint, 0.0))
         angles = [float(a) for a in np.arange(lo, hi + 0.01, 2.0)]
+        if angles[-1] < hi:                                   # an odd-sized range: the far limit itself too
+            angles.append(float(hi))
         own = {}
         other = {}
         for deg in angles:

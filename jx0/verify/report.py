@@ -30,9 +30,9 @@ def pct(d, key="passed"):
 
 
 def main():
-    walk, cad, rob, pw, siz, st, fea, fit = (load(n) for n in ("walking.json", "verify_cad.json", "verify_robustness.json",
-                                                                 "verify_power.json", "sizing.json", "verify_strength.json",
-                                                                 "verify_fea.json", "verify_fit.json"))
+    walk, cad, rob, pw, siz, st, fea, fit, stops = (load(n) for n in (
+        "walking.json", "verify_cad.json", "verify_robustness.json", "verify_power.json", "sizing.json",
+        "verify_strength.json", "verify_fea.json", "verify_fit.json", "verify_stops.json"))
     gaits = walk.get("gaits", {})
     n_pass = sum(g["pass"] for g in gaits.values())
     fin, mis = rob.get("final", {}), rob.get("mission", {})
@@ -58,6 +58,15 @@ def main():
             L.append(f"| Assembly in the build guide's order: {len(sw_)} slide-in steps, a screwdriver on all {len(dr)} screws | "
                      f"{sum(1 for x in sw_ if not x['ok'])} slides blocked, {sum(1 for x in dr if not x['ok'])} screws "
                      f"unreachable ({sum(1 for x in dr if x['tool'] != 'screwdriver')} need a PH bit by hand) |")
+    if stops:
+        n = sum(stops["range"]["poses"].values())
+        rows = [r for r in stops["stops"] if r["first_contact_deg"] is not None]
+        L.append(f"| Joint stops: the whole commanded range ({n} poses: hip yaw x pitch x roll, ankle pitch x roll, shoulder x "
+                 f"elbow) | {len(stops['range']['contacts'])} contacts |")
+        L.append(f"| Joint stops: past each servo's own limit (EEPROM, 1 deg outside config.yaml), the first contact is printed "
+                 f"bracket on printed bracket, {min(r['past_eeprom_deg'] for r in rows):.0f}-"
+                 f"{max(r['past_eeprom_deg'] for r in rows):.0f} deg further ({len(stops['stops'])} cases) | "
+                 f"{len(stops['problems'])} problems |")
     if cad:
         sw = cad["joint_sweeps"]
         L.append(f"| Parts, servos, cables and screw heads colliding, standing (all {cad['static_zero_pose']['pairs_checked']} pairs) | "
@@ -229,7 +238,7 @@ def main():
           "simulated), carpet or very slippery floors (friction below 0.5), stairs, the I2S audio overlay on the Pi, "
           "long-term servo heating."]
     L += ["", "## Re-run", "", "```bash", "python jx0/verify/run_all.py", "```", "",
-          "Detailed results in this folder: `walking.json`, `verify_fit.json`, `verify_cad.json`, `verify_robustness.json`, "
+          "Detailed results in this folder: `walking.json`, `verify_fit.json`, `verify_cad.json`, `verify_stops.json`, `verify_robustness.json`, "
           "`verify_strength.json`, `verify_fea.json`, `verify_power.json`, `sizing.json`."]
     (RES / "verification.md").write_text("\n".join(L) + "\n", encoding="utf-8")
     print("wrote", (RES / "verification.md").relative_to(ROOT))

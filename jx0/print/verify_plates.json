@@ -2,21 +2,21 @@
  "coverage_problems": [],
  "orientation": {
   "JX0_AnkleBracket_L": {
-   "contact_mm2": 2304.9,
+   "contact_mm2": 2325.0,
    "com_over_contact": true,
-   "supported_mm2": 1516.1,
+   "supported_mm2": 1536.1,
    "height_mm": 61.5,
    "watertight": true,
-   "volume_cm3": 37.07,
+   "volume_cm3": 37.25,
    "problems": []
   },
   "JX0_AnkleBracket_R": {
-   "contact_mm2": 2304.9,
+   "contact_mm2": 2325.0,
    "com_over_contact": true,
-   "supported_mm2": 1516.1,
+   "supported_mm2": 1536.1,
    "height_mm": 61.5,
    "watertight": true,
-   "volume_cm3": 37.07,
+   "volume_cm3": 37.25,
    "problems": []
   },
   "JX0_ArmBlade_L": {
@@ -49,10 +49,10 @@
   "JX0_Foot": {
    "contact_mm2": 8048.6,
    "com_over_contact": true,
-   "supported_mm2": 275.7,
+   "supported_mm2": 278.6,
    "height_mm": 46.0,
    "watertight": true,
-   "volume_cm3": 50.02,
+   "volume_cm3": 49.95,
    "problems": []
   },
   "JX0_Head": {
@@ -175,19 +175,19 @@
   "JX0_UpperArm_L": {
    "contact_mm2": 494.2,
    "com_over_contact": true,
-   "supported_mm2": 1111.8,
-   "height_mm": 35.2,
+   "supported_mm2": 1115.8,
+   "height_mm": 41.3,
    "watertight": true,
-   "volume_cm3": 30.75,
+   "volume_cm3": 31.02,
    "problems": []
   },
   "JX0_UpperArm_R": {
    "contact_mm2": 494.2,
    "com_over_contact": true,
-   "supported_mm2": 1111.8,
-   "height_mm": 35.2,
+   "supported_mm2": 1115.8,
+   "height_mm": 41.3,
    "watertight": true,
-   "volume_cm3": 30.75,
+   "volume_cm3": 31.02,
    "problems": []
   },
   "JX0_YawKeeper_L": {
@@ -269,8 +269,8 @@
    "material": "PETG",
    "parts": 4,
    "bodies": 4,
-   "time": "7h 11m 46s",
-   "grams": 184.02,
+   "time": "7h 12m 23s",
+   "grams": 183.86,
    "nozzle": [
     240.0
    ],
@@ -305,8 +305,8 @@
    "material": "PETG",
    "parts": 4,
    "bodies": 4,
-   "time": "10h 11m 21s",
-   "grams": 202.97,
+   "time": "10h 12m 22s",
+   "grams": 203.5,
    "nozzle": [
     240.0
    ],
@@ -315,7 +315,7 @@
    ],
    "height_mm": 61.4,
    "min_gap_mm": 8.0,
-   "min_edge_mm": 10.8,
+   "min_edge_mm": 10.4,
    "problems": []
   },
   "i7-2_torso_head": {
@@ -342,8 +342,8 @@
    "material": "PLA",
    "parts": 5,
    "bodies": 5,
-   "time": "5h 35m 44s",
-   "grams": 169.67,
+   "time": "5h 38m 26s",
+   "grams": 170.18,
    "nozzle": [
     210.0,
     215.0
@@ -358,8 +358,8 @@
   }
  },
  "filament_g": {
-  "PETG": 654.4,
-  "PLA": 461.1
+  "PETG": 654.8,
+  "PLA": 461.6
  },
  "problems": 0
 }

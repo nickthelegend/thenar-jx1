@@ -4588,7 +4588,7 @@
     "ankle_L",
     "servo_ankle_pitch_L"
    ],
-   "at_mm": 1.0,
+   "at_mm": 8.0,
    "ok": true
   },
   {
@@ -4685,7 +4685,7 @@
     "servo_ankle_roll_R",
     "ankle_R"
    ],
-   "at_mm": 7.0,
+   "at_mm": 3.0,
    "ok": true
   },
   {
@@ -4723,7 +4723,7 @@
     "ankle_R",
     "servo_ankle_pitch_R"
    ],
-   "at_mm": 1.0,
+   "at_mm": 2.0,
    "ok": true
   },
   {
@@ -7416,6 +7416,6 @@
   }
  ],
  "screws_never_reached": [],
- "seconds": 8.6,
+ "seconds": 6.8,
  "pass": true
 }

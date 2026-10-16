@@ -40,12 +40,12 @@
   "l_hip_roll": {
    "limits_deg": [
     -20,
-    22
+    20
    ],
    "stance_deg": 0.0,
    "own_limb_clear_deg": [
     -20.0,
-    22.0
+    20.0
    ],
    "gaits_use_deg": [
     -13.7,
@@ -130,12 +130,12 @@
   "l_ankle_pitch": {
    "limits_deg": [
     -55,
-    5
+    0
    ],
    "stance_deg": -26.9,
    "own_limb_clear_deg": [
     -55.0,
-    5.0
+    0.0
    ],
    "gaits_use_deg": [
     -43.9,
@@ -189,12 +189,12 @@
   },
   "r_hip_roll": {
    "limits_deg": [
-    -22,
+    -20,
     18
    ],
    "stance_deg": 0.0,
    "own_limb_clear_deg": [
-    -22.0,
+    -20.0,
     18.0
    ],
    "gaits_use_deg": [
@@ -275,12 +275,12 @@
   "r_ankle_pitch": {
    "limits_deg": [
     -55,
-    5
+    0
    ],
    "stance_deg": -26.9,
    "own_limb_clear_deg": [
     -55.0,
-    5.0
+    0.0
    ],
    "gaits_use_deg": [
     -41.0,
@@ -310,12 +310,12 @@
   },
   "l_shoulder_pitch": {
    "limits_deg": [
-    -180,
+    -165,
     60
    ],
    "stance_deg": 0.0,
    "own_limb_clear_deg": [
-    -180.0,
+    -165.0,
     60.0
    ],
    "gaits_use_deg": [
@@ -328,12 +328,12 @@
   },
   "l_elbow": {
    "limits_deg": [
-    -130,
+    -115,
     30
    ],
    "stance_deg": -20.0,
    "own_limb_clear_deg": [
-    -130.0,
+    -115.0,
     30.0
    ],
    "gaits_use_deg": [
@@ -346,12 +346,12 @@
   },
   "r_shoulder_pitch": {
    "limits_deg": [
-    -180,
+    -165,
     60
    ],
    "stance_deg": 0.0,
    "own_limb_clear_deg": [
-    -180.0,
+    -165.0,
     60.0
    ],
    "gaits_use_deg": [
@@ -364,12 +364,12 @@
   },
   "r_elbow": {
    "limits_deg": [
-    -130,
+    -115,
     30
    ],
    "stance_deg": -20.0,
    "own_limb_clear_deg": [
-    -130.0,
+    -115.0,
     30.0
    ],
    "gaits_use_deg": [
@@ -399,6 +399,6 @@
    "ok": true
   }
  },
- "seconds": 356.0,
+ "seconds": 301.9,
  "pass": true
 }
