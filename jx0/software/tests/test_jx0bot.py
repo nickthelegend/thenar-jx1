@@ -477,3 +477,56 @@ class MainProgram(unittest.TestCase):
         self.assertIn("Done!", said)
         self.assertGreater(captured["x"], 0.009)          # two 1.5 cm steps from standing: it moved forward
         self.assertGreater(captured["z"], 0.11)           # and it is still upright (pelvis height, v0.4 legs)
+
+
+import numpy as np  # noqa: E402
+
+
+class PolicyRunner(unittest.TestCase):
+    """jx0bot.policy builds the trained policy's observation and targets the way the training / test code does."""
+    BUNDLE = ROOT / "jx0" / "rl" / "policies" / "jx0_walk17_v5"
+
+    def test_gravity_from_imu_angles(self):
+        from jx0bot.policy import gravity_body
+        for roll, pitch in ((0.0, 0.0), (0.2, -0.1), (-0.3, 0.25)):
+            cr, sr, cp, sp = math.cos(roll / 2), math.sin(roll / 2), math.cos(pitch / 2), math.sin(pitch / 2)
+            q = np.array([cr * cp, sr * cp, cr * sp, -sr * sp])                      # roll then pitch, yaw 0 (w, x, y, z)
+            w, x, y, z = q
+            R = np.array([[1 - 2 * (y * y + z * z), 2 * (x * y - w * z), 2 * (x * z + w * y)],
+                          [2 * (x * y + w * z), 1 - 2 * (x * x + z * z), 2 * (y * z - w * x)],
+                          [2 * (x * z - w * y), 2 * (y * z + w * x), 1 - 2 * (x * x + y * y)]])
+            self.assertTrue(np.allclose(gravity_body(roll, pitch), R.T @ [0, 0, -1], atol=1e-9))
+
+    def test_observation_and_targets_match_the_test_suite(self):
+        if not (self.BUNDLE / "policy.onnx").exists():
+            self.skipTest("no exported policy")
+        try:
+            import onnxruntime  # noqa: F401
+        except ImportError:
+            self.skipTest("onnxruntime not installed")
+        from collections import deque
+        from jx0bot.policy import PolicyWalker
+        sys.path.insert(0, str(ROOT / "rl"))
+        from jx1_rl import policy_io as pio
+        robot = types.SimpleNamespace(io=None, q={})
+        w = PolicyWalker(robot, self.BUNDLE)
+        rng = np.random.default_rng(4)
+        n = len(w.pj)
+        frames = deque([(rng.normal(size=3), rng.normal(size=3), rng.normal(size=n), rng.normal(size=n), rng.normal(size=n))
+                        for _ in range(w.H)], maxlen=w.H)
+        cmd, t = np.array([0.06, 0.0, 0.2]), 1.37
+        f = list(frames)
+        want = pio.build_observation_history(*[np.array([x[k] for x in f]) for k in (0, 1)], cmd,
+                                             *[np.array([x[k] for x in f]) for k in (2, 3, 4)],
+                                             pio.gait_phase(np.array(t), w.period), w.scales, w.clip,
+                                             pio.gait_moving(cmd, w.thr))
+        self.assertEqual(len(want), w.io["policy"]["num_obs"])
+        self.assertTrue(np.allclose(w.observation(frames, cmd, t), want, atol=1e-6))
+        sys.path.insert(0, str(ROOT / "jx0" / "rl"))
+        import gait_reference
+        ref = gait_reference.load(self.BUNDLE / "gait_reference.json", joints=w.pj, stand_threshold=w.thr)
+        a = rng.normal(size=n)
+        base = ref(np.array([(t / w.period) % 1.0]), cmd[None])[0]
+        want_t = np.clip(base + w.io["action_scale"] * a, w.lo, w.hi)
+        got = w.targets(a, cmd, t)
+        self.assertTrue(np.allclose([got[k] for k in w.names], want_t, atol=1e-9))

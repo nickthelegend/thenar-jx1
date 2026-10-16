@@ -129,3 +129,17 @@ sudo systemctl enable --now jx0
 | `calibrate.py` | servo IDs, centring, zero pose, joint directions, stiffness check (all 17 servos) |
 | `config.yaml` | servo IDs, directions, zero ticks, limits, IMU, balance gains, push-to-talk pin |
 | `gaits/*.json` | 100 Hz trajectories (legs and arm swing) that passed the closed-loop simulation check (`jx0/sim/walk_jx0.py`) |
+
+## Learned walking policy (optional)
+
+The robot can also walk with a trained policy instead of the gait files:
+
+```bash
+pip install onnxruntime
+```
+
+```bash
+python -m jx0bot.policy --bundle ../rl/policies/jx0_walk17_v5 --vx 0.05 --seconds 20
+```
+
+Training and tests are covered in `jx0/rl/README.md`, and training on a lab PC in `jx0/setup/README.md`.

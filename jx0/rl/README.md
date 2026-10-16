@@ -87,11 +87,12 @@ JX_TASK_CONFIG=jx0/rl/config/jx0_walk.yaml rl/.venv/Scripts/python simulation/is
 
 ## On the robot
 
-**Not written yet:** a jx0bot runner for the policy. The robot walks with its verified gait files today.
+Use `jx0bot.policy`. It runs an exported bundle at 50 Hz through the same Robot, clamps and servo limits as the gaits:
 
-A policy would need no new hardware: on the Pi it reads the IMU and the servo positions and sends goals at 50 Hz. The same safety layers would stay in front of it:
-- `couple_hips` and the clamps in `jx0bot.robot`;
-- each servo's own EEPROM limits;
-- the printed joint stops.
+```bash
+python -m jx0bot.policy --bundle ../rl/policies/jx0_walk17_v5 --vx 0.05 --seconds 20
+```
 
-What is assumed: the servo stiffness (60 N·m/rad, randomised 0.6–1.4×), the bus and servo latency (4–16 ms, randomised), and the floor friction.
+Run it from `jx0/software` on the Pi. Add `--sim` for jx0bot's real-time MuJoCo simulator. The Pi needs `pip install onnxruntime`.
+
+In the simulator it walked 0.60 m in 10 s at a 0.06 m/s command, in real time. `test_jx0bot.py` (`PolicyRunner`) checks that its observation and targets equal the training code's.

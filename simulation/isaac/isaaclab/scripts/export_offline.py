@@ -108,6 +108,9 @@ def export(checkpoint: Path, out: Path, task: str = "flat", task_id: str | None 
     io = task_config.policy_io(tc, meta)
     io["policy"]["torchscript"] = "policy.pt"
     (out / "policy_io.yaml").write_text(yaml.safe_dump(io, sort_keys=False, width=140), encoding="utf-8")
+    if tc["raw"].get("action", {}).get("reference"):               # the bundle carries its reference gait table
+        import shutil
+        shutil.copyfile(task_config.REPO / tc["raw"]["action"]["reference"], out / "gait_reference.json")
     if max(err.values()) > 1e-4:
         raise RuntimeError(f"exported policy does not match the checkpoint: {err}")
     return {"out": out.as_posix(), **info, **err}

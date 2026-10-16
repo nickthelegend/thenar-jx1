@@ -148,6 +148,7 @@ def policy_io(tc: dict, meta: dict) -> dict:
         "ankle_polygons_rad": {s: [[round(math.radians(a), 6), round(math.radians(b), 6)] for a, b in p] for s, p in tc["polygons_deg"].items()},
         **({"hip_yaw_toe_out_max_rad": round(tc["toe_out_max_rad"], 6)} if tc.get("toe_out_max_rad") is not None else {}),
         "observation": {"size": n_obs, "history_length": H, "layout": OBS_LAYOUT, "scales": raw["observation"]["scales"], "clip": raw["observation"]["clip"]},
+        **({"action_reference": raw["action"]["reference"]} if raw.get("action", {}).get("reference") else {}),
         "gait": raw["gait"],
         "commands": raw["commands"]["ranges"],
         "targets": "q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad; "

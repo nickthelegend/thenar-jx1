@@ -138,6 +138,9 @@ def main():
             "source_mjcf": cfg["model"]["source_mjcf"], "source_mjcf_sha256": hashlib.sha256(src.read_bytes()).hexdigest(),
             "export_check": err}
     (out / "policy_io.yaml").write_text(yaml.safe_dump(policy_io(cfg, meta), sort_keys=False, width=140), encoding="utf-8")
+    if cfg.raw.get("action", {}).get("reference"):                 # the bundle carries its reference gait table
+        import shutil
+        shutil.copyfile(REPO / cfg.raw["action"]["reference"], out / "gait_reference.json")
     print(json.dumps(err), "->", out)
     if max(err.values()) > 1e-4:
         sys.exit("exported policy does not match the checkpoint")

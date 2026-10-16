@@ -89,6 +89,7 @@ def heading(q):
 class Policy:
     def __init__(self, folder: Path):
         import onnxruntime as ort
+        self.folder = folder
         self.io = yaml.safe_load((folder / "policy_io.yaml").read_text(encoding="utf-8"))
         self.sess = ort.InferenceSession(str(folder / self.io["policy"]["onnx"]))
 
@@ -126,7 +127,9 @@ class JX0Sim:
         if io.get("action_reference"):
             sys.path.insert(0, str(ROOT / "jx0" / "rl"))
             import gait_reference
-            self.ref = gait_reference.load(ROOT / io["action_reference"], joints=self.pj, stand_threshold=self.thr)
+            own = policy.folder / "gait_reference.json"                     # the bundle's copy, else the repository's
+            self.ref = gait_reference.load(own if own.exists() else ROOT / io["action_reference"], joints=self.pj,
+                                           stand_threshold=self.thr)
         self.sub = int(round(io["control"]["policy_dt_s"] / m.opt.timestep))
         self.bus_every = int(round(1.0 / BUS_HZ / m.opt.timestep))
         self.pelvis = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, "pelvis")
