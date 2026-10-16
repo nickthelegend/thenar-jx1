@@ -63,13 +63,13 @@
    "task": "Isaac-Velocity-Flat-JX0-Play-v0",
    "check": "all manager terms resolve (signature + scene entities)",
    "ok": true,
-   "detail": "50 terms"
+   "detail": "51 terms"
   },
   {
    "task": "Isaac-Velocity-Flat-JX0-Play-v0",
    "check": "observation/reward/termination terms evaluate",
    "ok": true,
-   "detail": "41 terms on 8 fake envs"
+   "detail": "42 terms on 8 fake envs"
   },
   {
    "task": "Isaac-Velocity-Flat-JX0-Play-v0",
@@ -111,7 +111,7 @@
    "task": "Isaac-Velocity-Flat-JX0-Play-v0",
    "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
    "ok": true,
-   "detail": "delays [1, 3, 5] of [1, 5] substeps, max |diff| 4.8e-07"
+   "detail": "delays [1, 2, 3, 4, 5] of [1, 5] substeps, max |diff| 4.8e-07"
   },
   {
    "task": "Isaac-Velocity-Flat-JX0-Play-v0",
@@ -183,13 +183,13 @@
    "task": "Isaac-Velocity-Flat-JX0-v0",
    "check": "all manager terms resolve (signature + scene entities)",
    "ok": true,
-   "detail": "52 terms"
+   "detail": "53 terms"
   },
   {
    "task": "Isaac-Velocity-Flat-JX0-v0",
    "check": "observation/reward/termination terms evaluate",
    "ok": true,
-   "detail": "41 terms on 8 fake envs"
+   "detail": "42 terms on 8 fake envs"
   },
   {
    "task": "Isaac-Velocity-Flat-JX0-v0",
@@ -231,7 +231,7 @@
    "task": "Isaac-Velocity-Flat-JX0-v0",
    "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
    "ok": true,
-   "detail": "delays [2, 3, 4, 5] of [1, 5] substeps, max |diff| 4.8e-07"
+   "detail": "delays [1, 2, 4, 5] of [1, 5] substeps, max |diff| 9.5e-07"
   },
   {
    "task": "Isaac-Velocity-Flat-JX0-v0",
@@ -297,7 +297,7 @@
    "task": "export",
    "check": "export_offline ONNX == rsl_rl 3 ActorCritic.act_inference (normaliser in the policy)",
    "ok": true,
-   "detail": "max |diff| 7.45e-08; rsl_rl>=3 (policy normaliser)"
+   "detail": "max |diff| 1.04e-07; rsl_rl>=3 (policy normaliser)"
   },
   {
    "task": "export",

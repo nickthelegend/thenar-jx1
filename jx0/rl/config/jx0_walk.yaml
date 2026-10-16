@@ -84,7 +84,8 @@ termination:
 rewards:                                         # JX1's terms; the length-scaled ones rescaled for a 0.33 m robot
   tracking_lin_vel: 1.0
   tracking_ang_vel: 0.8
-  tracking_sigma: 0.01                           # speeds are ~8x smaller than JX1's (0.25 there)
+  tracking_sigma: 0.004                          # linear: 0.05 m/s off -> 0.54; JX1's 0.25 fits speeds ~8x larger
+  tracking_sigma_ang: 0.05                       # yaw rate: 0.15 rad/s off -> 0.64 (one shared sigma left no turn signal)
   lin_vel_z: -2.0
   ang_vel_xy: -0.05
   orientation: -1.0
@@ -93,6 +94,8 @@ rewards:                                         # JX1's terms; the length-scale
   torque_limits: -0.5
   soft_torque_limit: 0.85                        # of the 2.94 N m stall torque: the servos' headroom
   dof_vel: -1.0e-3
+  dof_vel_limits: -1.0                           # rad/s above soft_dof_vel x 4.72 rad/s: the training model has no
+  soft_dof_vel: 0.7                              # torque-speed line, the servos lose torque as they speed up
   dof_acc: -2.5e-7
   action_rate: -0.01
   dof_pos_limits: -5.0

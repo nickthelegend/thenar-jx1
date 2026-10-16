@@ -32,6 +32,7 @@ TRUNK = "torso_link" if "torso_link" in TC["bodies"] else "pelvis"      # JX0's 
 POLYGONS = {s: [[math.radians(a), math.radians(b)] for a, b in p] for s, p in TC["polygons_deg"].items()}
 SOLE = tuple(TC["sole_offset"])            # sole point in the foot-link frame (joint_map fixed frame left_sole_fixed)
 SIGMA = math.sqrt(W["tracking_sigma"])     # exp(-err^2 / sigma) in MuJoCo == exp(-err^2 / std^2) in Isaac Lab
+SIGMA_ANG = math.sqrt(W.get("tracking_sigma_ang", W["tracking_sigma"]))   # yaw rate (JX1: the same as linear)
 # stand mode (OI-27): below this |command| the clock reads 0, both feet should be down, no swing target
 STAND = {"command_name": "base_velocity", "stand_threshold": G.get("stand_command_threshold")}
 
@@ -102,7 +103,7 @@ class JX1Actions:
 @configclass
 class JX1Rewards:
     track_lin_vel_xy_exp = RewTerm(func=mdp.track_lin_vel_xy_exp, weight=W["tracking_lin_vel"], params={"command_name": "base_velocity", "std": SIGMA})
-    track_ang_vel_z_exp = RewTerm(func=mdp.track_ang_vel_z_exp, weight=W["tracking_ang_vel"], params={"command_name": "base_velocity", "std": SIGMA})
+    track_ang_vel_z_exp = RewTerm(func=mdp.track_ang_vel_z_exp, weight=W["tracking_ang_vel"], params={"command_name": "base_velocity", "std": SIGMA_ANG})
     lin_vel_z_l2 = RewTerm(func=mdp.lin_vel_z_l2, weight=W["lin_vel_z"])
     ang_vel_xy_l2 = RewTerm(func=mdp.ang_vel_xy_l2, weight=W["ang_vel_xy"])
     flat_orientation_l2 = RewTerm(func=mdp.flat_orientation_l2, weight=W["orientation"])
@@ -111,6 +112,10 @@ class JX1Rewards:
     torque_limits = RewTerm(func=jx1.torque_limits, weight=W.get("torque_limits", 0.0),
                             params={"soft_ratio": W.get("soft_torque_limit", 0.85), "asset_cfg": robot(POLICY)})
     dof_vel_l2 = RewTerm(func=mdp.joint_vel_l2, weight=W["dof_vel"], params={"asset_cfg": robot(POLICY)})
+    # speed above soft_dof_vel x the URDF velocity limit (JX0's servos: no-load speed); weight 0 for JX1
+    dof_vel_limits = (RewTerm(func=mdp.joint_vel_limits, weight=W["dof_vel_limits"],
+                              params={"soft_ratio": W.get("soft_dof_vel", 0.9), "asset_cfg": robot(POLICY)})
+                      if W.get("dof_vel_limits") else None)
     dof_acc_l2 = RewTerm(func=mdp.joint_acc_l2, weight=W["dof_acc"], params={"asset_cfg": robot(POLICY)})
     action_rate_l2 = RewTerm(func=mdp.action_rate_l2, weight=W["action_rate"])
     dof_pos_limits = RewTerm(func=mdp.joint_pos_limits, weight=W["dof_pos_limits"], params={"asset_cfg": robot(POLICY)})

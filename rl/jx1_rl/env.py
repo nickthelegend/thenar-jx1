@@ -59,6 +59,11 @@ class JX1Env:
         self.hip_idx = np.array([i for i, j in enumerate(self.joints) if joint_type(j) in ("hip_roll", "hip_yaw")])
         self.tau_limit = np.array([m.actuator_forcerange[a, 1] for a in self.act])     # actuator-class peak torque
         self.soft_torque = cfg["rewards"].get("soft_torque_limit", 0.85)
+        # joint speed limits from the joint map when it states them (JX0's servos: no-load speed); dof_vel_limits
+        # penalises speed above soft_dof_vel x that (weight 0 / absent for JX1)
+        vmax = {j["name"]: j.get("velocity_rad_s") for j in cfg.joint_map["joints"]}
+        self.vel_limit = np.array([vmax.get(j) or np.inf for j in self.joints])
+        self.soft_vel = cfg["rewards"].get("soft_dof_vel", 0.9)
         self.action_scale = cfg["action_scale"]
         self.ctrl_hold = m.key("home").ctrl.copy()           # non-policy joints hold the default pose
 
@@ -105,8 +110,9 @@ class JX1Env:
         self.completed = {"episodes": 0}
         self.unstable_resets = 0
         self.obs_scales = cfg["observation"]["scales"]
-        self.rw = {k: v for k, v in cfg["rewards"].items() if k not in ("tracking_sigma", "soft_torque_limit")}
+        self.rw = {k: v for k, v in cfg["rewards"].items() if k not in ("tracking_sigma", "tracking_sigma_ang", "soft_torque_limit", "soft_dof_vel")}
         self.sigma = cfg["rewards"]["tracking_sigma"]
+        self.sigma_ang = cfg["rewards"].get("tracking_sigma_ang", self.sigma)     # yaw-rate tolerance (JX1: the same)
         g = cfg["gait"]
         self.period, self.offset, self.stance, self.swing_h = g["period_s"], g["offset"], g["stance_fraction"], g["swing_height_m"]
         self.stand_thr = g.get("stand_command_threshold")
@@ -302,7 +308,7 @@ class JX1Env:
         dof_err = np.abs(q - self.default).sum(axis=1)
         terms = {
             "tracking_lin_vel": np.exp(-np.sum((self.commands[:, :2] - lin_b[:, :2]) ** 2, axis=1) / self.sigma),
-            "tracking_ang_vel": np.exp(-(self.commands[:, 2] - ang_b[:, 2]) ** 2 / self.sigma),
+            "tracking_ang_vel": np.exp(-(self.commands[:, 2] - ang_b[:, 2]) ** 2 / self.sigma_ang),
             "lin_vel_z": lin_b[:, 2] ** 2,
             "ang_vel_xy": np.sum(ang_b[:, :2] ** 2, axis=1),
             "orientation": np.sum(grav_b[:, :2] ** 2, axis=1),
@@ -310,6 +316,7 @@ class JX1Env:
             "torques": np.sum(self.tau ** 2, axis=1),
             "torque_limits": np.sum(np.clip(np.abs(self.tau) - self.soft_torque * self.tau_limit, 0, None), axis=1),
             "dof_vel": np.sum(dq ** 2, axis=1),
+            "dof_vel_limits": np.sum(np.clip(np.abs(dq) - self.soft_vel * self.vel_limit, 0, None), axis=1),
             "dof_acc": np.sum(((dq - self.last_dq) / dt) ** 2, axis=1),
             "action_rate": np.sum((self.actions - self.last_actions) ** 2, axis=1),
             "dof_pos_limits": np.sum(np.clip(self.soft_lower - q, 0, None) + np.clip(q - self.soft_upper, 0, None), axis=1)

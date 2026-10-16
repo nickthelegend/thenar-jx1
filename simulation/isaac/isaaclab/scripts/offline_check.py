@@ -258,6 +258,7 @@ def build_fake_env(torch, env_cfg, tc, joints, bodies, articulation_cls, articul
         "default_joint_pos": default, "default_joint_vel": torch.zeros(n, nj),
         "joint_pos_limits": lim.repeat(n, 1, 1), "soft_joint_pos_limits": soft.repeat(n, 1, 1),
         "joint_effort_limits": effort, "joint_vel_limits": torch.tensor([tc["velocity"].get(j, 20.0) for j in joints]).repeat(n, 1),
+        "soft_joint_vel_limits": torch.tensor([tc["velocity"].get(j, 20.0) for j in joints]).repeat(n, 1),
         "applied_torque": effort * U(-1.0, 1.0, n, nj), "computed_torque": effort * U(-1.2, 1.2, n, nj),
         "joint_pos_target": default.clone(),
         "root_pos_w": root_pos, "root_quat_w": torch.tensor([1.0, 0, 0, 0]).repeat(n, 1),
