@@ -136,7 +136,7 @@ class JX1Rewards:
     ankle_polygon = RewTerm(func=jx1.ankle_polygon_violation, weight=W["dof_pos_limits"], params={"polygons_rad": POLYGONS, "asset_cfg": robot()})
     alive = RewTerm(func=mdp.is_alive, weight=W["alive"])
     ref_joint_pos = (RewTerm(func=jx1.ref_gait_joint_pos, weight=W["ref_joint_pos"],
-                             params={"period": G["period_s"], "path": R["action"]["reference"], "leg_cols": LEG_COLS,
+                             params={"period": G["period_s"], "path": R["action"]["reference"], "leg_cols": list(range(len(POLICY))),
                                      "asset_cfg": robot(POLICY), **STAND})
                      if W.get("ref_joint_pos") and R.get("action", {}).get("reference") else
                      RewTerm(func=jx1.ref_joint_pos, weight=W["ref_joint_pos"],

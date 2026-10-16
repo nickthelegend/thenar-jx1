@@ -50,9 +50,15 @@ class Normalizer(nn.Module):
 
 
 class ActorCritic(nn.Module):
-    def __init__(self, n_obs, n_priv, n_act, actor_hidden, critic_hidden, activation="elu", init_noise_std=1.0):
+    def __init__(self, n_obs, n_priv, n_act, actor_hidden, critic_hidden, activation="elu", init_noise_std=1.0,
+                 actor_output_gain=None):
         super().__init__()
         self.actor = mlp(n_obs, actor_hidden, n_act, activation)
+        if actor_output_gain is not None:                    # ppo.actor_output_gain: near-zero first actions (corrections
+            last = [m for m in self.actor.modules() if isinstance(m, nn.Linear)][-1]          # on a reference start at 0)
+            with torch.no_grad():
+                last.weight.mul_(actor_output_gain)
+                last.bias.mul_(actor_output_gain)
         self.critic = mlp(n_priv, critic_hidden, 1, activation)
         self.log_std = nn.Parameter(torch.full((n_act,), float(torch.log(torch.tensor(init_noise_std)))))
         self.obs_norm = Normalizer(n_obs)

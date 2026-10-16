@@ -49,7 +49,8 @@ rewards:
   tracking_lin_scale: [0.10, 0.03]               # x / y errors in units of the command ranges' largest speeds
   tracking_sigma: 0.25                           # in those units: standing still when told 0.06 m/s forward -> 0.37
   tracking_sigma_ang: 0.05
-  upper_body_pos: -0.2                           # arms and neck near the default pose (they may swing for balance)
+  hip_pos: 0.0                                   # the reference gait rolls the hips +-0.24 rad to shift weight, swings the
+  upper_body_pos: 0.0                            # arms: ref_joint_pos (all 17 joints) replaces both posture terms
   torque_limits: -0.05                           # N m above 0.85 x stall: -0.5 (jx0_walk) outweighed every reward in
   dof_vel_limits: -0.05                          # jx0_walk17_v2 (-1.2 per s vs +0.7 for stepping): it stood still
 
@@ -61,5 +62,7 @@ randomization:
   push_velocity_m_s: 0.15
 
 ppo:
+  init_noise_std: 0.3                            # corrections: explore around the reference, not 0.2 rad away from it
+  actor_output_gain: 0.01                        # the untrained policy's corrections start near 0 (the verified gait)
   actor_hidden: [512, 256, 128]
   critic_hidden: [512, 256, 128]

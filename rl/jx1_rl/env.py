@@ -361,7 +361,8 @@ class JX1Env:
         if self.rw.get("ref_joint_pos", 0.0) == 0.0 or (self.ref_amp == 0.0 and self.gait_ref is None):
             return np.zeros(self.N)
         ref = self.gait_ref(leg_phase[:, 0], self.commands) if self.gait_ref is not None else self.ref_targets(leg_phase, moving)
-        diff = np.linalg.norm((q - ref)[:, self.leg_idx], axis=1)
+        cols = slice(None) if self.gait_ref is not None else self.leg_idx      # a reference gait covers every joint
+        diff = np.linalg.norm((q - ref)[:, cols], axis=1)
         return np.exp(-2.0 * diff) - 0.2 * np.minimum(diff, 0.5)
 
     def _rewards(self, qp, q, dq, lin_b, ang_b, grav_b, died):
