@@ -30,12 +30,23 @@ policy_joints:
 observation:
   history_length: 3
 
-gait:
-  ref_amplitude_rad: 0.28                        # reference swing bend: hip -0.28, knee +0.56, ankle -0.28 rad (~2 cm lift)
+# the policy's 17 outputs are corrections to the robot's verified gaits: target = q_ref(phase, command) + 0.25 x action,
+# q_ref blended from the forward / backward / sideways / turning gait cycles (jx0/rl/gait_reference.py). With zero
+# corrections the robot walks the verified gaits; the policy learns balance, push recovery and the speeds between.
+action:
+  reference: jx0/rl/config/jx0_gait_reference.json
+
+gait:                                            # the verified gaits' clock: 0.6 s steps, the foot down 62.5 % of a cycle
+  period_s: 1.2
+  stance_fraction: 0.625
+
+commands:
+  ranges: {lin_vel_x: [-0.05, 0.10], lin_vel_y: [-0.03, 0.03], ang_vel_yaw: [-0.4, 0.4]}
 
 rewards:
-  ref_joint_pos: 1.5                             # reference stepping (jx0_walk17_v1 without it learned to stand still)
-  tracking_lin_scale: [0.12, 0.05]               # x / y errors in units of the command ranges' largest speeds
+  ref_joint_pos: 1.0                             # stay near the reference (jx0_walk17_v1-v3 learned without one: they
+  #                                                stood or stepped in place)
+  tracking_lin_scale: [0.10, 0.03]               # x / y errors in units of the command ranges' largest speeds
   tracking_sigma: 0.25                           # in those units: standing still when told 0.06 m/s forward -> 0.37
   tracking_sigma_ang: 0.05
   upper_body_pos: -0.2                           # arms and neck near the default pose (they may swing for balance)

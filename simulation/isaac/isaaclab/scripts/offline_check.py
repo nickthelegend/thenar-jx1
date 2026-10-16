@@ -616,7 +616,17 @@ def check_action_term(task_id, env_cfg, env, tc, joints, rep, mods):
             ids = torch.arange(0, N_ENVS, 2)
             term.reset(ids)
             prev[ids.numpy()] = default
-        target = pio.clip_ankle_targets(pio.actions_to_targets(a.numpy(), default, tc["raw"]["action_scale"], lim[:, 0], lim[:, 1]),
+        base = default
+        if tc["raw"].get("action", {}).get("reference"):              # corrections on the reference gait (JX0)
+            import importlib.util
+            spec = importlib.util.spec_from_file_location("gait_reference", REPO / "jx0" / "rl" / "gait_reference.py")
+            gr = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(gr)
+            ref = gr.load(REPO / tc["raw"]["action"]["reference"], joints=pol,
+                          stand_threshold=tc["raw"]["gait"].get("stand_command_threshold"))
+            t = (env.episode_length_buf.float() * env.step_dt).numpy()
+            base = ref(np.mod(t / tc["raw"]["gait"]["period_s"], 1.0), env.command_manager.get_command("base_velocity").numpy())
+        target = pio.clip_ankle_targets(pio.actions_to_targets(a.numpy(), base, tc["raw"]["action_scale"], lim[:, 0], lim[:, 1]),
                                         pol, polys)
         target = pio.clip_hip_yaw_toe_out(target, pol, tc.get("toe_out_max_rad"))
         term.process_actions(a)

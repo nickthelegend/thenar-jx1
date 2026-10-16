@@ -108,7 +108,9 @@ class JX1Actions:
                                                          hub_interpolation=R["model"].get("hub_interpolation", False),
                                                          action_delay_substeps=tuple(RND.get("action_delay_substeps", (0, 0))),
                                                          obs_delay_substeps=tuple(RND.get("obs_delay_substeps", (0, 0))),
-                                                         hip_yaw_toe_out_max=TC["toe_out_max_rad"])
+                                                         hip_yaw_toe_out_max=TC["toe_out_max_rad"],
+                                                         reference=R.get("action", {}).get("reference"), period=G["period_s"],
+                                                         stand_threshold=G.get("stand_command_threshold"))
 
 
 @configclass
@@ -133,7 +135,11 @@ class JX1Rewards:
     dof_pos_limits = RewTerm(func=mdp.joint_pos_limits, weight=W["dof_pos_limits"], params={"asset_cfg": robot(POLICY)})
     ankle_polygon = RewTerm(func=jx1.ankle_polygon_violation, weight=W["dof_pos_limits"], params={"polygons_rad": POLYGONS, "asset_cfg": robot()})
     alive = RewTerm(func=mdp.is_alive, weight=W["alive"])
-    ref_joint_pos = (RewTerm(func=jx1.ref_joint_pos, weight=W["ref_joint_pos"],
+    ref_joint_pos = (RewTerm(func=jx1.ref_gait_joint_pos, weight=W["ref_joint_pos"],
+                             params={"period": G["period_s"], "path": R["action"]["reference"], "leg_cols": LEG_COLS,
+                                     "asset_cfg": robot(POLICY), **STAND})
+                     if W.get("ref_joint_pos") and R.get("action", {}).get("reference") else
+                     RewTerm(func=jx1.ref_joint_pos, weight=W["ref_joint_pos"],
                              params={"period": G["period_s"], "offset": G["offset"], "stance_fraction": G["stance_fraction"],
                                      "amplitude": G.get("ref_amplitude_rad", 0.0), "ref_cols": REF_COLS, "leg_cols": LEG_COLS,
                                      "asset_cfg": robot(POLICY), **STAND})

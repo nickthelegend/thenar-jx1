@@ -119,6 +119,11 @@ class JX0Sim:
         ob = io["observation"]
         self.scales, self.clip, self.H = ob["scales"], ob["clip"], int(ob.get("history_length", 1))
         self.period, self.thr = io["gait"]["period_s"], io["gait"].get("stand_command_threshold")
+        self.ref = None                                                     # corrections on the reference gait
+        if io.get("action_reference"):
+            sys.path.insert(0, str(ROOT / "jx0" / "rl"))
+            import gait_reference
+            self.ref = gait_reference.load(ROOT / io["action_reference"], joints=self.pj, stand_threshold=self.thr)
         self.sub = int(round(io["control"]["policy_dt_s"] / m.opt.timestep))
         self.bus_every = int(round(1.0 / BUS_HZ / m.opt.timestep))
         self.pelvis = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, "pelvis")
@@ -170,7 +175,8 @@ class JX0Sim:
                                             self.scales, self.clip, moving)
         a = self.pol(obs)
         self.last_action = a
-        tgt = pio.actions_to_targets(a, self.default, self.io["action_scale"], self.lo, self.hi)
+        base = self.default if self.ref is None else self.ref(np.array([pio.gait_phase(np.array(self.d.time), self.period)]), cmd[None])[0]
+        tgt = pio.actions_to_targets(a, base, self.io["action_scale"], self.lo, self.hi)
         tgt = pio.clip_ankle_targets(tgt, self.pj, self.polys)
         full = couple_hips({self.sj[j]: float(v) for j, v in zip(self.pj, tgt)})
         self.prev_goal = dict(self.next_goal)

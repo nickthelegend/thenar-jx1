@@ -15,7 +15,7 @@ import mujoco
 import numpy as np
 from mujoco import rollout
 
-from . import assets, policy_io
+from . import REPO, assets, policy_io
 from .config import TaskConfig, joint_type
 
 STATE_SPEC = mujoco.mjtState.mjSTATE_FULLPHYSICS
@@ -132,6 +132,16 @@ class JX1Env:
         # reference stepping (rewards.ref_joint_pos, gait.ref_amplitude_rad; humanoid-gym): while walking, each leg in
         # swing bends hip pitch -A, knee +2A, ankle pitch -A (foot kept parallel) along sin(pi * swing progress)
         self.ref_amp = float(cfg["gait"].get("ref_amplitude_rad", 0.0))
+        # corrections on a reference gait (action.reference: a gait table, JX0's jx0/rl/gait_reference.py): targets =
+        # q_ref(phase, command) + action_scale * action, and ref_joint_pos rewards staying near q_ref
+        self.gait_ref = None
+        rp = cfg.raw.get("action", {}).get("reference")
+        if rp:
+            import importlib.util
+            spec = importlib.util.spec_from_file_location("gait_reference", REPO / "jx0" / "rl" / "gait_reference.py")
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            self.gait_ref = mod.load(REPO / rp, joints=self.joints, stand_threshold=g.get("stand_command_threshold"))
         self.ref_cols = {}
         for side, li in (("left", 0), ("right", 1)):
             for jt, k in (("hip_pitch", -1.0), ("knee", 2.0), ("ankle_pitch", -1.0)):
@@ -267,7 +277,8 @@ class JX1Env:
     def step(self, actions: np.ndarray):
         self.last_actions[:] = self.actions
         self.actions[:] = np.clip(actions, -100.0, 100.0)
-        targets = policy_io.actions_to_targets(self.actions, self.default, self.action_scale, self.lower, self.upper)
+        base = self.default if self.gait_ref is None else self.gait_ref(self.phase(), self.commands)
+        targets = policy_io.actions_to_targets(self.actions, base, self.action_scale, self.lower, self.upper)
         targets = policy_io.clip_ankle_targets(targets, self.joints, self.cfg.ankle_polygons)
         targets = policy_io.clip_hip_yaw_toe_out(targets, self.joints, self.cfg.hip_yaw_toe_out_max)
         self.ctrl[:, self.act] = targets
@@ -347,9 +358,10 @@ class JX1Env:
         return ref
 
     def _ref_reward(self, q, leg_phase, moving):
-        if self.ref_amp == 0.0 or self.rw.get("ref_joint_pos", 0.0) == 0.0:
+        if self.rw.get("ref_joint_pos", 0.0) == 0.0 or (self.ref_amp == 0.0 and self.gait_ref is None):
             return np.zeros(self.N)
-        diff = np.linalg.norm((q - self.ref_targets(leg_phase, moving))[:, self.leg_idx], axis=1)
+        ref = self.gait_ref(leg_phase[:, 0], self.commands) if self.gait_ref is not None else self.ref_targets(leg_phase, moving)
+        diff = np.linalg.norm((q - ref)[:, self.leg_idx], axis=1)
         return np.exp(-2.0 * diff) - 0.2 * np.minimum(diff, 0.5)
 
     def _rewards(self, qp, q, dq, lin_b, ang_b, grav_b, died):

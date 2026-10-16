@@ -96,6 +96,7 @@ def policy_io(cfg, meta):
         "ankle_polygons_rad": {s: np.round(p, 6).tolist() for s, p in cfg.ankle_polygons.items()},
         **({"hip_yaw_toe_out_max_rad": round(cfg.hip_yaw_toe_out_max, 6)} if cfg.hip_yaw_toe_out_max is not None else {}),
         "observation": {"size": cfg.num_obs, "history_length": cfg.history, "layout": OBS_LAYOUT, "scales": cfg["observation"]["scales"], "clip": cfg["observation"]["clip"]},
+        **({"action_reference": cfg.raw["action"]["reference"]} if cfg.raw.get("action", {}).get("reference") else {}),
         "gait": cfg["gait"],
         "commands": cfg["commands"]["ranges"],
         "targets": "q_target = clip(default + action_scale * action, joint limits); ankle (pitch, roll) targets projected into ankle_polygons_rad; "

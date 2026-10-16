@@ -1,0 +1,10 @@
+# Fine-tune of jx0_walk17 once it steps: the reference stepping is a symmetric step-in-place pattern, so walking
+# somewhere means leaving it - here it only keeps the rhythm, and speed tracking leads. Resume a jx0_walk17 checkpoint:
+#   rl/.venv/Scripts/python rl/train.py --config jx0/rl/config/jx0_walk17_ft.yaml --resume rl/runs/<run>/model_<it>.pt
+base: jx0_walk17.yaml
+name: jx0_walk17_ft
+
+rewards:
+  ref_joint_pos: 0.3
+  tracking_lin_vel: 2.5
+  tracking_ang_vel: 1.5

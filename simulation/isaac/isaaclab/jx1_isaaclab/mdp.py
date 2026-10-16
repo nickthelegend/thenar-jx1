@@ -201,6 +201,62 @@ def hold_default_pose(env, env_ids, asset_cfg: SceneEntityCfg):
     asset.set_joint_position_target(asset.data.default_joint_pos[ids][:, asset_cfg.joint_ids], joint_ids=asset_cfg.joint_ids, env_ids=env_ids)
 
 
+# ------------------------------------------------------------------------------------------------ reference gait
+class GaitReference:
+    """Torch twin of jx0/rl/gait_reference.py Reference: q_ref(phase, command) for the given joints, from the gait
+    table (stance + moving * (step(phase) + sum_k w_k direction_k(phase)), w_k = command component / gait speed)."""
+
+    def __init__(self, path: str, joint_names, device, stand_threshold: float | None = None):
+        import json
+        from .task_config import REPO
+        t = json.loads((REPO / path).read_text(encoding="utf-8"))
+        cols = [t["joints"].index(j) for j in joint_names]
+        f = lambda x: torch.tensor(x, dtype=torch.float32, device=device)[..., cols]  # noqa: E731
+        self.stance, self.S = f(t["stance"]), f(t["step"])
+        self.E = {k: f(v["table"]) for k, v in t["directions"].items()}
+        self.v = {k: v["speed"] for k, v in t["directions"].items()}
+        self.sf, self.P, self.thr = t["stance_fraction"], len(t["step"]), stand_threshold
+
+    def __call__(self, phase: torch.Tensor, cmd: torch.Tensor) -> torch.Tensor:
+        k = torch.remainder(phase - self.sf, 1.0) * self.P
+        i0 = torch.floor(k).long() % self.P
+        i1 = (i0 + 1) % self.P
+        a = (k - torch.floor(k))[:, None]
+
+        def at(T):
+            return T[i0] * (1 - a) + T[i1] * a
+        vx, vy, wz = cmd[:, 0], cmd[:, 1], cmd[:, 2]
+        w = {"forward": vx.clamp(min=0) / self.v["forward"], "backward": (-vx).clamp(min=0) / self.v["backward"],
+             "left": vy.clamp(min=0) / self.v["left"], "right": (-vy).clamp(min=0) / self.v["right"],
+             "turn_left": wz.clamp(min=0) / self.v["turn_left"], "turn_right": (-wz).clamp(min=0) / self.v["turn_right"]}
+        dev = at(self.S)
+        for name, wk in w.items():
+            dev = dev + wk[:, None] * at(self.E[name])
+        moving = torch.ones_like(vx) if self.thr is None else (cmd.norm(dim=1) >= self.thr).float()
+        return self.stance + moving[:, None] * dev
+
+
+_REFS = {}
+
+
+def gait_reference(env, path, joint_names, stand_threshold):
+    key = (path, tuple(joint_names))
+    if key not in _REFS:
+        _REFS[key] = GaitReference(path, joint_names, env.device, stand_threshold)
+    return _REFS[key]
+
+
+def ref_gait_joint_pos(env, period: float, path: str, leg_cols, command_name: str, stand_threshold: float | None,
+                       asset_cfg: SceneEntityCfg = SceneEntityCfg("robot")) -> torch.Tensor:
+    """exp(-2 |q - q_ref|) - 0.2 min(|q - q_ref|, 0.5) over the legs, q_ref = the reference gait (rl/jx1_rl/env.py)."""
+    asset: Articulation = env.scene[asset_cfg.name]
+    names = [asset.joint_names[i] for i in asset_cfg.joint_ids]
+    ref = gait_reference(env, path, names, stand_threshold)(torch.remainder(_time(env) / period, 1.0),
+                                                            env.command_manager.get_command(command_name))
+    diff = torch.linalg.norm((asset.data.joint_pos[:, asset_cfg.joint_ids] - ref)[:, list(leg_cols)], dim=1)
+    return torch.exp(-2.0 * diff) - 0.2 * torch.clamp(diff, max=0.5)
+
+
 # ------------------------------------------------------------------------------------------------ action
 class PolygonClippedJointPositionAction(JointPositionAction):
     """JointPositionAction + joint-limit clamp + ankle (pitch, roll) projection into the coupled polygon, applied like
@@ -257,6 +313,11 @@ class PolygonClippedJointPositionAction(JointPositionAction):
 
     def process_actions(self, actions: torch.Tensor):
         super().process_actions(actions)
+        if self.cfg.reference:                            # corrections on the reference gait: default -> q_ref
+            ref = gait_reference(self._env, self.cfg.reference, list(self._joint_names), self.cfg.stand_threshold)
+            q_ref = ref(torch.remainder(_time(self._env) / self.cfg.period, 1.0),
+                        self._env.command_manager.get_command(self.cfg.command_name))
+            self._processed_actions = self._processed_actions - self._offset + q_ref
         p = torch.clamp(self._processed_actions, self._lo, self._hi)
         for ip, ir, poly in self._ankles:
             p[:, [ip, ir]] = project_to_polygon(p[:, [ip, ir]], poly)
@@ -296,6 +357,10 @@ class PolygonClippedJointPositionAction(JointPositionAction):
 class PolygonClippedJointPositionActionCfg(JointPositionActionCfg):
     class_type: type = PolygonClippedJointPositionAction
     polygons_rad: dict = {}
+    reference: str | None = None                          # gait table (repo path): target = q_ref + scale * action
+    period: float = 1.0
+    stand_threshold: float | None = None
+    command_name: str = "base_velocity"
     hub_interpolation: bool = True
     action_delay_substeps: tuple = (0, 0)
     obs_delay_substeps: tuple = (0, 0)
