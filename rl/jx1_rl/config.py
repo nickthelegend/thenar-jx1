@@ -1,4 +1,5 @@
-"""Task configuration (rl/config/*.yaml) + robot facts from simulation/joint_map.yaml, resolved per joint."""
+"""Task configuration (rl/config/*.yaml) + robot facts from the joint map (simulation/joint_map.yaml, or the task's
+model.joint_map), resolved per joint."""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -72,7 +73,8 @@ def load_raw(path: str | Path) -> dict:
 
 def load(path: str | Path = RL_DIR / "config" / "jx1_walk.yaml") -> TaskConfig:
     raw = load_raw(path)
-    jm = yaml.safe_load((REPO / "simulation" / "joint_map.yaml").read_text(encoding="utf-8"))
+    # the robot's joint map: JX1's by default; a task for another robot names its own (JX0: jx0/rl/description)
+    jm = yaml.safe_load((REPO / raw["model"].get("joint_map", "simulation/joint_map.yaml")).read_text(encoding="utf-8"))
     cfg = TaskConfig(raw=raw, joint_map=jm)
     cfg.all_joints = [j["name"] for j in jm["joints"]]
     cfg.policy_joints = list(raw["policy_joints"])

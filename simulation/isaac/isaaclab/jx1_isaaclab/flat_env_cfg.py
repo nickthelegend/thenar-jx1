@@ -28,7 +28,7 @@ S, NZ, G, W, RND = R["observation"]["scales"], R["observation"]["noise"], R["gai
 POLICY = TC["policy_joints"]
 HELD = [j for j in TC["present"] if j not in POLICY]
 FEET = ["left_foot_link", "right_foot_link"]
-TRUNK = "torso_link" if "torso_link" in TC["links"] else "pelvis"
+TRUNK = "torso_link" if "torso_link" in TC["bodies"] else "pelvis"      # JX0's torso is fixed to (merged into) the pelvis
 POLYGONS = {s: [[math.radians(a), math.radians(b)] for a, b in p] for s, p in TC["polygons_deg"].items()}
 SOLE = tuple(TC["sole_offset"])            # sole point in the foot-link frame (joint_map fixed frame left_sole_fixed)
 SIGMA = math.sqrt(W["tracking_sigma"])     # exp(-err^2 / sigma) in MuJoCo == exp(-err^2 / std^2) in Isaac Lab

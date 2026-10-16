@@ -79,7 +79,8 @@ def load_policy(checkpoint: Path, num_actions: int, activation: str) -> tuple[Rs
 
 
 def export(checkpoint: Path, out: Path, task: str = "flat", task_id: str | None = None) -> dict:
-    cfg_file = task_config.REPO / "rl" / "config" / ("jx1_walk_rough.yaml" if task == "rough" else "jx1_walk.yaml")
+    cfg_file = (task_config.REPO / "rl" / "config" / "jx1_walk_rough.yaml" if task == "rough" and task_config.ROBOT == "jx1"
+                else task_config.TASK_CONFIG)                 # the active robot's task (JX_TASK_CONFIG; JX1 by default)
     tc = task_config.load(cfg_file)
     n = len(tc["policy_joints"])
     ppo = tc["raw"]["ppo"]

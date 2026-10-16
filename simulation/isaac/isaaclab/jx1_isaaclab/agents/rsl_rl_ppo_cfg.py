@@ -3,7 +3,7 @@ from isaaclab.utils import configclass
 from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlPpoActorCriticCfg, RslRlPpoAlgorithmCfg
 
 from ..symmetry import mirror_augmentation
-from ..task_config import load
+from ..task_config import ROBOT, load
 
 try:
     from isaaclab_rl.rsl_rl import RslRlSymmetryCfg
@@ -18,7 +18,7 @@ class JX1FlatPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = P["num_steps_per_env"]
     max_iterations = P["max_iterations"]
     save_interval = P["save_interval"]
-    experiment_name = "jx1_flat"
+    experiment_name = f"{ROBOT}_flat"
     obs_groups = {"policy": ["policy"], "critic": ["critic"]}      # asymmetric actor-critic (rl/train.py: obs / privileged obs)
     clip_actions = 100.0                                           # rl/jx1_rl/env.py clips raw actions to +-100
     empirical_normalization = True
@@ -44,4 +44,4 @@ class JX1FlatPPORunnerCfg(RslRlOnPolicyRunnerCfg):
 
 @configclass
 class JX1RoughPPORunnerCfg(JX1FlatPPORunnerCfg):
-    experiment_name = "jx1_rough"
+    experiment_name = f"{ROBOT}_rough"

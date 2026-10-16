@@ -1,6 +1,7 @@
 """Train JX1 in Isaac Lab with rsl_rl (offline-checked against Isaac Lab 2.3.2 by offline_check.py; not run in Isaac Sim here).
 
   <IsaacLab>/isaaclab.sh -p simulation/isaac/isaaclab/scripts/train.py --task Isaac-Velocity-Flat-JX1-v0 --headless [--num_envs 4096]
+  (JX0: --task Isaac-Velocity-Flat-JX0-v0; logs in logs/jx0_flat)
 Logs and checkpoints: simulation/isaac/isaaclab/logs/jx1_flat/<time>/model_<it>.pt
 Deployment bundle: scripts/export_offline.py --checkpoint <model.pt> --out rl/policies/<name> (no Isaac Sim needed)
 """
@@ -19,6 +20,9 @@ parser.add_argument("--seed", type=int, default=42)
 parser.add_argument("--resume", default=None, help="checkpoint to continue from")
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
+if "-JX0" in args.task:                              # JX0's task file (robot description, rewards, PPO): jx0/rl/config
+    import os
+    os.environ.setdefault("JX_TASK_CONFIG", "jx0/rl/config/jx0_walk.yaml")
 app = AppLauncher(args).app
 
 import gymnasium as gym  # noqa: E402

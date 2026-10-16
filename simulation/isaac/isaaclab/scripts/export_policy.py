@@ -19,6 +19,9 @@ parser.add_argument("--checkpoint", required=True)
 parser.add_argument("--out", required=True)
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
+if "-JX0" in args.task:                              # JX0's task file (robot description, rewards, PPO): jx0/rl/config
+    import os
+    os.environ.setdefault("JX_TASK_CONFIG", "jx0/rl/config/jx0_walk.yaml")
 app = AppLauncher(args).app
 
 import gymnasium as gym  # noqa: E402

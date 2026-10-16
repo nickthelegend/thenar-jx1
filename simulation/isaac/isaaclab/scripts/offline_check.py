@@ -493,7 +493,7 @@ def check_task(task_id, reg, rep, mods, tc_default):
     evaluated = [k for k in resolved if not k.startswith(("events", "curriculum"))]
     rep.add(task_id, "observation/reward/termination terms evaluate", all(dims.get(k, 0) is not None for k in evaluated),
             f"{len(evaluated)} terms on {N_ENVS} fake envs")
-    rl_cfg = mods["rl_config"].load(REPO / "rl" / "config" / "jx1_walk.yaml")
+    rl_cfg = mods["rl_config"].load(mods["task_config"].TASK_CONFIG)
     for group, want in (("policy", rl_cfg.num_obs), ("critic", rl_cfg.num_privileged_obs)):
         size = sum(v or 0 for k, v in dims.items() if k.startswith(f"observations.{group}."))
         rep.add(task_id, f"{group} observation size == MuJoCo task ({'obs' if group == 'policy' else 'privileged obs'})",
@@ -689,7 +689,7 @@ def check_agent(task_id, reg, rep, mods):
         import torch
         from rsl_rl.utils import string_to_callable
         fn = string_to_callable(sym["data_augmentation_func"])
-        rl_cfg = mods["rl_config"].load(REPO / "rl" / "config" / "jx1_walk.yaml")
+        rl_cfg = mods["rl_config"].load(mods["task_config"].TASK_CONFIG)
         g = torch.Generator().manual_seed(3)
         obs = {"policy": torch.randn(4, rl_cfg.num_obs, generator=g), "critic": torch.randn(4, rl_cfg.num_privileged_obs, generator=g)}
         act = torch.randn(4, rl_cfg.num_actions, generator=g)
@@ -751,7 +751,7 @@ def check_exporter(rep, mods):
     import onnxruntime as ort
     import export_offline
     tc = mods["tc"]
-    rl_cfg = mods["rl_config"].load(REPO / "rl" / "config" / "jx1_walk.yaml")
+    rl_cfg = mods["rl_config"].load(mods["task_config"].TASK_CONFIG)
     n, n_obs, n_priv, P = rl_cfg.num_actions, rl_cfg.num_obs, rl_cfg.num_privileged_obs, tc["raw"]["ppo"]
     root = PKG / ".cache" / "offline_check"
     root.mkdir(parents=True, exist_ok=True)

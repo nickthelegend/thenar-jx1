@@ -45,7 +45,13 @@ CLASS_VELOCITY = {"XL": 20.9, "L": 20.9, "M": 50.3, "S": 44.0, "XS": 33.0, "serv
 ANKLE_VELOCITY = 30.0
 
 
+def _jm(cfg, joint):
+    return next(j for j in cfg.joint_map["joints"] if j["name"] == joint)
+
+
 def velocity_limit(cfg, joint):
+    if "velocity_rad_s" in _jm(cfg, joint):                     # a joint map that states it (JX0's servos)
+        return float(_jm(cfg, joint)["velocity_rad_s"])
     if config.joint_type(joint) in ANKLE_EFFORT:
         return ANKLE_VELOCITY
     cls = next(j["actuator_class"] for j in cfg.joint_map["joints"] if j["name"] == joint)
@@ -53,6 +59,8 @@ def velocity_limit(cfg, joint):
 
 
 def class_effort(cfg, joint):
+    if "effort_nm" in _jm(cfg, joint):
+        return float(_jm(cfg, joint)["effort_nm"])
     jt = config.joint_type(joint)
     if jt in ANKLE_EFFORT:
         return ANKLE_EFFORT[jt]

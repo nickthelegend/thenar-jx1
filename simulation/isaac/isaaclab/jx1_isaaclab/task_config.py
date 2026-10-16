@@ -7,14 +7,14 @@ and velocity limits per joint (actuator classes), link names.
 from __future__ import annotations
 
 import math
+import os
+import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import yaml
 
 REPO = Path(__file__).resolve().parents[4]
-URDF = REPO / "ros2_ws" / "src" / "jx1_description" / "urdf" / "jx1.urdf"
-USD = REPO / "simulation" / "isaac" / "jx1.usd"
 CACHE = Path(__file__).resolve().parents[1] / ".cache"
 
 
@@ -40,7 +40,7 @@ def base_height(cfg: dict, jm: dict) -> float:
 
 def mjcf_armature() -> dict:
     """Rotor armature per joint from the CAD MJCF (not carried by the URDF)."""
-    path = REPO / "simulation" / "mujoco" / "jx1.xml"
+    path = REPO / _MODEL.get("source_mjcf", "simulation/mujoco/jx1.xml")
     if not path.exists():
         return {}
     return {j.get("name"): float(j.get("armature")) for j in ET.parse(path).getroot().iter("joint") if j.get("armature")}
@@ -61,16 +61,28 @@ def _load_task_yaml(path: Path) -> dict:
     return raw
 
 
+# The robot and task: JX1's walking task by default; JX_TASK_CONFIG names another task file (JX0:
+# jx0/rl/config/jx0_walk.yaml), whose model block gives that robot's URDF, USD, joint map and MJCF.
+TASK_CONFIG = Path(os.environ.get("JX_TASK_CONFIG") or "rl/config/jx1_walk.yaml")
+TASK_CONFIG = TASK_CONFIG if TASK_CONFIG.is_absolute() else REPO / TASK_CONFIG
+_MODEL = _load_task_yaml(TASK_CONFIG)["model"]
+URDF = REPO / _MODEL.get("urdf", "ros2_ws/src/jx1_description/urdf/jx1.urdf")
+USD = REPO / _MODEL.get("usd", "simulation/isaac/jx1.usd")
+JOINT_MAP = REPO / _MODEL.get("joint_map", "simulation/joint_map.yaml")
+ROBOT = str(yaml.safe_load(JOINT_MAP.read_text(encoding="utf-8")).get("robot", "JX1")).lower()
+
+
 def load(config_path: Path | None = None) -> dict:
-    cfg = _load_task_yaml(Path(config_path or REPO / "rl" / "config" / "jx1_walk.yaml"))
-    jm = yaml.safe_load((REPO / "simulation" / "joint_map.yaml").read_text(encoding="utf-8"))
+    cfg = _load_task_yaml(Path(config_path or TASK_CONFIG))
+    jm = yaml.safe_load((REPO / cfg["model"].get("joint_map", "simulation/joint_map.yaml")).read_text(encoding="utf-8"))
     joints = [j["name"] for j in jm["joints"]]
     limits = {j["name"]: (j["lower_rad"], j["upper_rad"]) for j in jm["joints"]}
     classes = {j["name"]: str(j["actuator_class"]).split()[0] for j in jm["joints"]}
-    effort, velocity, links = {}, {}, []
+    effort, velocity, links, moving = {}, {}, [], set()
     if URDF.exists():
         root = ET.parse(URDF).getroot()
         links = [link.get("name") for link in root.findall("link")]
+        moving = {j.find("child").get("link") for j in root.findall("joint") if j.get("type") != "fixed"}
         for j in root.findall("joint"):
             lim = j.find("limit")
             if j.get("type") == "revolute" and lim is not None:
@@ -87,6 +99,8 @@ def load(config_path: Path | None = None) -> dict:
         "effort": effort,
         "velocity": velocity,
         "links": links,
+        # bodies that survive the importer's merge_fixed_joints: the root and every link behind a movable joint
+        "bodies": [l for l in links if l in moving or l == (links[0] if links else None)],
         "classes": classes,
         "armature": mjcf_armature(),
         "base_height": base_height(cfg, jm),
@@ -109,8 +123,8 @@ def policy_io(tc: dict, meta: dict) -> dict:
     present = tc["joints"]                                   # whole robot (joint_map), like rl/export.py
     class_effort = {"XL": 120.0, "L": 60.0, "M": 36.0, "S": 17.0, "XS": 14.0, "servo": 1.9}
     class_velocity = {"XL": 20.9, "L": 20.9, "M": 50.3, "S": 44.0, "XS": 33.0, "servo": 4.7}
-    effort = {j: tc["effort"].get(j, 46.0 if "ankle_pitch" in j else 51.0 if "ankle_roll" in j else class_effort[tc["classes"][j]])
-              for j in present}
+    effort = {j: tc["effort"][j] if j in tc["effort"] else
+              (46.0 if "ankle_pitch" in j else 51.0 if "ankle_roll" in j else class_effort[tc["classes"][j]]) for j in present}
     n = len(tc["policy_joints"])
     return {
         "format": "jx1-policy-io/1",
@@ -122,7 +136,8 @@ def policy_io(tc: dict, meta: dict) -> dict:
         "action_scale": raw["action_scale"],
         "pd_gains": {j: list(tc["gains"][j]) for j in present},
         "effort_limits_Nm": effort,
-        "velocity_limits_rad_s": {j: 30.0 if "ankle" in j else tc["velocity"].get(j, class_velocity[tc["classes"][j]]) for j in present},
+        "velocity_limits_rad_s": {j: tc["velocity"][j] if ROBOT != "jx1" and j in tc["velocity"] else 30.0 if "ankle" in j
+                                  else tc["velocity"][j] if j in tc["velocity"] else class_velocity[tc["classes"][j]] for j in present},
         "joint_limits_rad": {j: list(tc["limits"][j]) for j in present},
         "ankle_polygons_rad": {s: [[round(math.radians(a), 6), round(math.radians(b), 6)] for a, b in p] for s, p in tc["polygons_deg"].items()},
         **({"hip_yaw_toe_out_max_rad": round(tc["toe_out_max_rad"], 6)} if tc.get("toe_out_max_rad") is not None else {}),
@@ -136,9 +151,15 @@ def policy_io(tc: dict, meta: dict) -> dict:
 
 
 def urdf_with_absolute_meshes() -> Path:
-    """Copy of jx1.urdf with package://jx1_description/ mesh URIs replaced by absolute paths (Isaac's URDF importer)."""
+    """Copy of the robot's URDF with absolute mesh paths (Isaac's URDF importer): JX1's package://jx1_description/
+    URIs, or paths relative to the URDF (JX0's)."""
     CACHE.mkdir(parents=True, exist_ok=True)
     pkg = (REPO / "ros2_ws" / "src" / "jx1_description").as_posix()
-    out = CACHE / "jx1_abs.urdf"
-    out.write_text(URDF.read_text(encoding="utf-8").replace("package://jx1_description", pkg), encoding="utf-8")
+    text = URDF.read_text(encoding="utf-8").replace("package://jx1_description", pkg)
+
+    def absolute(m):
+        f = m.group(1)
+        return m.group(0) if (Path(f).is_absolute() or ":" in f) else f'filename="{(URDF.parent / f).resolve().as_posix()}"'
+    out = CACHE / f"{ROBOT}_abs.urdf"
+    out.write_text(re.sub(r'filename="([^"]+)"', absolute, text), encoding="utf-8")
     return out

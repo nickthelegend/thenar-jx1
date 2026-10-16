@@ -1,0 +1,339 @@
+{
+ "isaaclab_version": "0.54.2",
+ "isaaclab_source": "D:/jx1-deps/IsaacLab-2.3.2",
+ "isaacsim_source": "D:/jx1-deps/IsaacSim-5.1.0",
+ "rsl_rl_checked": true,
+ "mocked_modules": [
+  "carb",
+  "cuda",
+  "cutlass",
+  "defusedxml",
+  "dill",
+  "fcntl",
+  "flatdict",
+  "git",
+  "grp",
+  "gymnasium",
+  "h5py",
+  "hid",
+  "isaaclab_contrib",
+  "isaacsim",
+  "monkeytype",
+  "omni",
+  "opt_einsum",
+  "prettytable",
+  "pwd",
+  "pxr",
+  "pydot",
+  "pynvml",
+  "scipy",
+  "tensordict",
+  "torchcomms",
+  "tqdm",
+  "trimesh",
+  "triton",
+  "tvm_ffi",
+  "usdrt",
+  "warp"
+ ],
+ "tasks": [
+  "Isaac-Velocity-Flat-JX0-Play-v0",
+  "Isaac-Velocity-Flat-JX0-v0"
+ ],
+ "checks": [
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "env config instantiates",
+   "ok": true,
+   "detail": "jx1_isaaclab.flat_env_cfg:JX1FlatEnvCfg_PLAY"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "no MISSING fields",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "gym entry point resolves",
+   "ok": true,
+   "detail": "isaaclab.envs:ManagerBasedRLEnv"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "all manager terms resolve (signature + scene entities)",
+   "ok": true,
+   "detail": "50 terms"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "observation/reward/termination terms evaluate",
+   "ok": true,
+   "detail": "41 terms on 8 fake envs"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "policy observation size == MuJoCo task (obs)",
+   "ok": true,
+   "detail": "47 vs 47"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "critic observation size == MuJoCo task (privileged obs)",
+   "ok": true,
+   "detail": "55 vs 55"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "policy observation == policy_io.build_observation (MuJoCo / ROS 2)",
+   "ok": true,
+   "detail": "max |diff| 5.96e-08, shape (8, 47) vs (8, 47)"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "critic observation == MuJoCo privileged observation",
+   "ok": true,
+   "detail": "max |diff| 3.15e-07, shape (8, 55) vs (8, 55)"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "action term joints == policy_joints (order)",
+   "ok": true,
+   "detail": "12 actions"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, toe-out, hub ramp, delay, reset)",
+   "ok": true,
+   "detail": "max |diff| 1.88e-07 rad over 4 steps x 10 substeps"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
+   "ok": true,
+   "detail": "delays [1, 3, 5] of [1, 5] substeps, max |diff| 4.8e-07"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "actuator groups cover every joint once with the task gains and limits",
+   "ok": true,
+   "detail": "17 joints in 3 groups"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "initial joint positions resolve",
+   "ok": true,
+   "detail": "17/17"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "rsl_rl runner config: no MISSING fields",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "rsl_rl obs_groups",
+   "ok": true,
+   "detail": "{'policy': ['policy'], 'critic': ['critic']}"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "policy keys accepted by rsl_rl ActorCritic",
+   "ok": true,
+   "detail": "8 keys"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "algorithm keys accepted by rsl_rl PPO",
+   "ok": true,
+   "detail": "15 keys"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "rsl_rl symmetry: mirror loss wired to the MuJoCo mirror maps",
+   "ok": true,
+   "detail": "mirror loss 0.2 via jx1_isaaclab.symmetry:mirror_augmentation; [original; mirrored] batches, mirroring twice = identity"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-Play-v0",
+   "check": "empirical_normalization unset (deprecated in rsl_rl >= 3)",
+   "ok": true,
+   "detail": "None"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "env config instantiates",
+   "ok": true,
+   "detail": "jx1_isaaclab.flat_env_cfg:JX1FlatEnvCfg"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "no MISSING fields",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "gym entry point resolves",
+   "ok": true,
+   "detail": "isaaclab.envs:ManagerBasedRLEnv"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "all manager terms resolve (signature + scene entities)",
+   "ok": true,
+   "detail": "52 terms"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "observation/reward/termination terms evaluate",
+   "ok": true,
+   "detail": "41 terms on 8 fake envs"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "policy observation size == MuJoCo task (obs)",
+   "ok": true,
+   "detail": "47 vs 47"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "critic observation size == MuJoCo task (privileged obs)",
+   "ok": true,
+   "detail": "55 vs 55"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "policy observation == policy_io.build_observation (MuJoCo / ROS 2)",
+   "ok": true,
+   "detail": "max |diff| 5.96e-08, shape (8, 47) vs (8, 47)"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "critic observation == MuJoCo privileged observation",
+   "ok": true,
+   "detail": "max |diff| 3.15e-07, shape (8, 55) vs (8, 55)"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "action term joints == policy_joints (order)",
+   "ok": true,
+   "detail": "12 actions"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "action targets == MuJoCo pipeline every substep (clamp, ankle polygon, toe-out, hub ramp, delay, reset)",
+   "ok": true,
+   "detail": "max |diff| 1.88e-07 rad over 4 steps x 10 substeps"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "sensing delay: delayed observations == MuJoCo obs_src indexing",
+   "ok": true,
+   "detail": "delays [2, 3, 4, 5] of [1, 5] substeps, max |diff| 4.8e-07"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "actuator groups cover every joint once with the task gains and limits",
+   "ok": true,
+   "detail": "17 joints in 3 groups"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "initial joint positions resolve",
+   "ok": true,
+   "detail": "17/17"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "rsl_rl runner config: no MISSING fields",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "rsl_rl obs_groups",
+   "ok": true,
+   "detail": "{'policy': ['policy'], 'critic': ['critic']}"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "policy keys accepted by rsl_rl ActorCritic",
+   "ok": true,
+   "detail": "8 keys"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "algorithm keys accepted by rsl_rl PPO",
+   "ok": true,
+   "detail": "15 keys"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "rsl_rl symmetry: mirror loss wired to the MuJoCo mirror maps",
+   "ok": true,
+   "detail": "mirror loss 0.2 via jx1_isaaclab.symmetry:mirror_augmentation; [original; mirrored] batches, mirroring twice = identity"
+  },
+  {
+   "task": "Isaac-Velocity-Flat-JX0-v0",
+   "check": "empirical_normalization unset (deprecated in rsl_rl >= 3)",
+   "ok": true,
+   "detail": "None"
+  },
+  {
+   "task": "scripts",
+   "check": "train.py: imports exist, keyword arguments match the Isaac Lab / rsl_rl signatures",
+   "ok": true,
+   "detail": "6 imported names, 9 calls checked"
+  },
+  {
+   "task": "scripts",
+   "check": "export_policy.py: imports exist, keyword arguments match the Isaac Lab / rsl_rl signatures",
+   "ok": true,
+   "detail": "7 imported names, 11 calls checked"
+  },
+  {
+   "task": "export",
+   "check": "export_offline ONNX == rsl_rl 3 ActorCritic.act_inference (normaliser in the policy)",
+   "ok": true,
+   "detail": "max |diff| 7.45e-08; rsl_rl>=3 (policy normaliser)"
+  },
+  {
+   "task": "export",
+   "check": "export_offline ONNX == hand-computed rsl_rl 2.x actor (runner normaliser)",
+   "ok": true,
+   "detail": "max |diff| 1.43e-06"
+  },
+  {
+   "task": "export",
+   "check": "exported policy_io.yaml: jx1-policy-io/1, whole robot",
+   "ok": true,
+   "detail": "17 joints"
+  },
+  {
+   "task": "isaacsim",
+   "check": "ros2_bridge.py OmniGraph: node types, attributes, types, target inputs",
+   "ok": true,
+   "detail": "10 node types from .ogn, 26 connections, 12 values; not in the repo (Kit): ['omni.graph.action.OnPlaybackTick']"
+  },
+  {
+   "task": "isaacsim",
+   "check": "ros2_bridge.py Isaac Sim Python calls match the source signatures",
+   "ok": true,
+   "detail": "11 calls against 11 signatures; SingleArticulation.dof_names present"
+  },
+  {
+   "task": "isaacsim",
+   "check": "ROS 2 bridge extension present",
+   "ok": true,
+   "detail": "isaacsim.ros2.bridge"
+  },
+  {
+   "task": "isaacsim",
+   "check": "import_jx1.py (URDF -> USD) against the URDF importer: config fields, commands, arguments",
+   "ok": true,
+   "detail": "ok"
+  }
+ ]
+}
