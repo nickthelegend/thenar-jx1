@@ -117,6 +117,18 @@ class ServoBus:
         self.write(new, ADDR_LOCK, b"\x01")
 
 
+    def set_angle_limits(self, sid: int, lo: int, hi: int) -> None:
+        """The servo's own position limits (EEPROM, ticks 0-4095): it refuses goals outside them, whatever is sent."""
+        self.write(sid, ADDR_LOCK, b"\x00")
+        self.write(sid, ADDR_MIN_ANGLE, u16(lo))
+        self.write(sid, ADDR_MAX_ANGLE, u16(hi))
+        self.write(sid, ADDR_LOCK, b"\x01")
+
+    def angle_limits(self, sid: int) -> tuple[int, int]:
+        r = self.read(sid, ADDR_MIN_ANGLE, 4)
+        return s16(r[0], r[1]), s16(r[2], r[3])
+
+
 class FakeBus:
     """Software servos: each moves toward its goal at `max_speed_ticks_s`. Same interface as ServoBus."""
 
@@ -156,3 +168,9 @@ class FakeBus:
 
     def status(self, sid):
         return {"position": self.position(sid), "speed": 0, "load": 0, "voltage_v": 12.0, "temperature_c": 30}
+
+    def set_angle_limits(self, sid, lo, hi):
+        self.limits = {**getattr(self, "limits", {}), sid: (int(lo), int(hi))}
+
+    def angle_limits(self, sid):
+        return getattr(self, "limits", {}).get(sid, (0, 4095))

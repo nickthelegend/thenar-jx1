@@ -227,6 +227,24 @@ class HardwareMapping(unittest.TestCase):
         self.assertAlmostEqual(io.read_pose()["l_ankle_roll"], math.radians(SERVOS["l_ankle_roll"]["limits_deg"][0]), delta=math.radians(0.1))
 
 
+class ServoLimits(unittest.TestCase):
+    def test_eeprom_limits_cover_config(self):
+        from jx0bot import calibrate
+        bus = sb.FakeBus(range(1, 18))
+        calibrate.limits(bus, CFG)
+        for name, s in SERVOS.items():
+            a, b = bus.angle_limits(s["id"])
+            for deg in s["limits_deg"]:                                         # the config range fits inside,
+                t = s["zero_ticks"] + s["direction"] * math.radians(deg) * sb.TICKS_PER_REV / (2 * math.pi)
+                self.assertTrue(a < t < b, name)
+            self.assertLess(b - a, (s["limits_deg"][1] - s["limits_deg"][0] + 2.5) * 4096 / 360, name)  # and no more
+
+    def test_off_centre_horn_refused(self):
+        from jx0bot import calibrate
+        with self.assertRaises(ValueError):
+            calibrate.tick_limits({"limits_deg": [-180, 60], "zero_ticks": 500, "direction": 1})
+
+
 class RecordingIO:
     """Instant I/O for the action tests: records every command, upright IMU, yaw that follows the turn gaits."""
 

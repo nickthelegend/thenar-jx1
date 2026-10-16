@@ -1,0 +1,219 @@
+{
+ "l_hip_yaw": {
+  "limits_deg": [
+   -12,
+   12
+  ],
+  "low": {
+   "deg": -16.0,
+   "past_limit_deg": 4.0,
+   "contacts": [
+    [
+     "keeper_L",
+     "hip_yaw_L",
+     7.0
+    ]
+   ]
+  },
+  "high": {
+   "deg": 16.0,
+   "past_limit_deg": 4.0,
+   "contacts": [
+    [
+     "keeper_L",
+     "hip_yaw_L",
+     7.0
+    ]
+   ]
+  }
+ },
+ "l_hip_roll": {
+  "limits_deg": [
+   -20,
+   22
+  ],
+  "low": {
+   "deg": -24.0,
+   "past_limit_deg": 4.0,
+   "contacts": [
+    [
+     "keeper_L",
+     "hip_roll_L",
+     4.9
+    ],
+    [
+     "hip_yaw_L",
+     "hip_roll_L",
+     16.7
+    ],
+    [
+     "hip_yaw_L",
+     "thigh_L",
+     4.3
+    ]
+   ]
+  },
+  "high": {
+   "deg": 26.0,
+   "past_limit_deg": 4.0,
+   "contacts": [
+    [
+     "keeper_L",
+     "thigh_L",
+     1.1
+    ],
+    [
+     "hip_yaw_L",
+     "thigh_L",
+     2.2
+    ]
+   ]
+  }
+ },
+ "l_hip_pitch": {
+  "limits_deg": [
+   -70,
+   8
+  ],
+  "low": {
+   "deg": -80.0,
+   "past_limit_deg": 10.0,
+   "contacts": [
+    [
+     "hip_roll_L",
+     "thigh_L",
+     1.3
+    ]
+   ]
+  },
+  "high": {
+   "deg": 20.0,
+   "past_limit_deg": 12.0,
+   "contacts": [
+    [
+     "hip_yaw_L",
+     "thigh_L",
+     4.2
+    ]
+   ]
+  }
+ },
+ "l_knee": {
+  "limits_deg": [
+   0,
+   84
+  ],
+  "low": {
+   "deg": -4.0,
+   "past_limit_deg": 4.0,
+   "contacts": [
+    [
+     "thigh_L",
+     "shin_L",
+     10.0
+    ]
+   ]
+  },
+  "high": {
+   "deg": 88.0,
+   "past_limit_deg": 4.0,
+   "contacts": [
+    [
+     "thigh_L",
+     "shin_L",
+     1.0
+    ]
+   ]
+  }
+ },
+ "l_ankle_pitch": {
+  "limits_deg": [
+   -55,
+   5
+  ],
+  "low": {
+   "deg": -99.0,
+   "past_limit_deg": 44.0,
+   "contacts": [
+    [
+     "thigh_L",
+     "foot_L",
+     48.2
+    ]
+   ]
+  },
+  "high": {
+   "deg": 7.0,
+   "past_limit_deg": 2.0,
+   "contacts": [
+    [
+     "shin_L",
+     "screws:foot_L",
+     3.8
+    ]
+   ]
+  }
+ },
+ "l_ankle_roll": {
+  "limits_deg": [
+   -20,
+   20
+  ],
+  "low": {
+   "deg": -22.0,
+   "past_limit_deg": 2.0,
+   "contacts": [
+    [
+     "shin_L",
+     "foot_L",
+     1.3
+    ]
+   ]
+  },
+  "high": {
+   "deg": 26.0,
+   "past_limit_deg": 6.0,
+   "contacts": [
+    [
+     "ankle_L",
+     "foot_L",
+     4.3
+    ]
+   ]
+  }
+ },
+ "l_shoulder_pitch": {
+  "limits_deg": [
+   -180,
+   60
+  ],
+  "low": null,
+  "high": null
+ },
+ "l_elbow": {
+  "limits_deg": [
+   -130,
+   30
+  ],
+  "low": {
+   "deg": -136.0,
+   "past_limit_deg": 6.0,
+   "contacts": [
+    [
+     "blade_L",
+     "cables:servo_shoulder_pitch_L",
+     1.9
+    ]
+   ]
+  },
+  "high": null
+ },
+ "neck_yaw": {
+  "limits_deg": [
+   -80,
+   80
+  ],
+  "low": null,
+  "high": null
+ }
+}

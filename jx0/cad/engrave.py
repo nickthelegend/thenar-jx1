@@ -5,7 +5,8 @@
 Only the body shell and the arms carry text; the leg parts and the pelvis take the walking loads (verify_fea) and stay
 plain. Each line of text is checked: every letter lies on solid plastic (the cut removes exactly its area x depth),
 with at least BEHIND mm of wall left under it, and the part is still one body. The SolidWorks parts stay plain;
-the print plates (tools/print/make_plates.py) and the renders use these meshes.
+the print plates (tools/print/make_plates.py) and the renders use these meshes; the renders also show the letters
+filled with paint (stl_engraved/inlay/<part>.stl).
 Font: DejaVu Sans Bold (bundled with matplotlib, free licence).
 """
 from __future__ import annotations
@@ -27,6 +28,7 @@ import geometry as G  # noqa: E402
 SRC, OUT = HERE / "stl", HERE / "stl_engraved"
 DEPTH = 0.6                     # mm, 3 layers of 0.2
 BEHIND = 1.2                    # mm of wall that must stay under the letters
+INLAY = 0.25                    # the paint in the letters, for the renders: inlay/<part>.stl, the bottom 0.25 mm
 FONT = FontProperties(family="DejaVu Sans", weight="bold")
 
 TD, TW, TCH, TZS, TZT, CH = G.TD, G.TW, G.TCH, G.TZS, G.TZT, G.TOP_CH
@@ -59,13 +61,12 @@ def text_section(text, cap):
     return CrossSection(polys, FillRule.EvenOdd), (ext.width * scale, ext.height * scale)
 
 
-def cutter(section, depth, centre, normal, up):
-    """The text pushed depth mm into the face (from 0.5 mm outside it)."""
+def cutter(section, depth, centre, normal, up, start=-0.5):
+    """The text as a solid from start mm under the face (negative: outside it) to depth mm under it."""
     n, v = np.asarray(normal, float), np.asarray(up, float)
     u = np.cross(v, n)                                       # read from outside: u x v = n
-    solid = Manifold.extrude(section, depth + 0.5)           # z 0 .. depth + 0.5
-    # local (x, y, z) -> u, v, -n; origin 0.5 mm outside the face
-    o = np.asarray(centre, float) + 0.5 * n
+    solid = Manifold.extrude(section, depth - start)
+    o = np.asarray(centre, float) - start * n                # local (x, y, z) -> u, v, -n
     M = np.column_stack([u, v, -n, o])                      # 3 x 4
     return solid.transform(M.tolist())
 
@@ -80,7 +81,7 @@ def to_tm(m):
 
 
 def main():
-    OUT.mkdir(exist_ok=True)
+    (OUT / "inlay").mkdir(parents=True, exist_ok=True)
     report, bad = {}, 0
     for stl in sorted(SRC.glob("JX0_*.stl")):
         name = stl.stem
@@ -89,7 +90,7 @@ def main():
             mesh.export(OUT / stl.name)
             continue
         part = to_mf(mesh)
-        rows = []
+        rows, inlay = [], Manifold()
         for text, cap, centre, normal, up in TEXT[name]:
             v0 = part.volume()
             sec, (w, h) = text_section(text, cap)
@@ -104,6 +105,7 @@ def main():
             rows.append(dict(text=text, cap_mm=cap, size_mm=[round(w, 1), round(h, 1)], area_mm2=round(area, 1),
                              removed_mm3=round(removed, 1), problems=problems))
             part = part - cutter(sec, DEPTH, centre, normal, up)
+            inlay = inlay + cutter(sec, DEPTH, centre, normal, up, start=DEPTH - INLAY)
             bad += len(problems)
             print(f"{name:16s} {text!r:18s} {w:5.1f} x {h:4.1f} mm  {'; '.join(problems) or 'OK'}")
         out = to_tm(part)
@@ -112,6 +114,7 @@ def main():
             rows.append(dict(problems=[f"{pieces} bodies after engraving"]))
             bad += 1
         out.export(OUT / stl.name)
+        to_tm(inlay).export(OUT / "inlay" / stl.name)
         report[name] = rows
     (OUT / "engrave.json").write_text(json.dumps(dict(depth_mm=DEPTH, wall_behind_mm=BEHIND, parts=report,
                                                        problems=bad), indent=1), encoding="utf-8")

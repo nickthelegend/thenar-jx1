@@ -6,6 +6,7 @@ Run on the Pi with the legs hanging free (robot on a stand) and 12 V on the serv
     python -m jx0bot.calibrate center                    # all 17 servos to mid-travel, BEFORE fitting horns and links
     python -m jx0bot.calibrate zero                      # torque off, pose the robot in the zero pose, press Enter
     python -m jx0bot.calibrate directions                # moves each joint +10 deg; you answer y/n
+    python -m jx0bot.calibrate limits                    # writes each joint's range into its servo (EEPROM)
     python -m jx0bot.calibrate stiffness l_knee          # holds a joint; push on it and read the stiffness
 
 zero and directions write their results into config.yaml (the rest of the file, comments included, is kept).
@@ -112,6 +113,34 @@ def directions(bus: ServoBus, cfg: dict):
     print(f"written to {CONFIG}")
 
 
+LIMIT_MARGIN_DEG = 1.0      # the servo's own limit sits this far outside config.yaml's (robot.py clamps to those)
+
+
+def tick_limits(s: dict) -> tuple[int, int]:
+    """A joint's limits_deg as servo ticks (zero_ticks + direction * angle), 1 deg wider each way."""
+    lo, hi = s["limits_deg"]
+    t = [s["zero_ticks"] + s["direction"] * math.radians(a) * TICKS_PER_REV / (2 * math.pi)
+         for a in (lo - LIMIT_MARGIN_DEG, hi + LIMIT_MARGIN_DEG)]
+    a, b = int(math.floor(min(t))), int(math.ceil(max(t)))
+    if a < 0 or b > TICKS_PER_REV - 1:
+        raise ValueError(f"range {a}..{b} ticks runs past the encoder's 0..4095: the horn was fitted off-centre "
+                         f"(run `center` and refit it)")
+    return a, b
+
+
+def limits(bus, cfg: dict):
+    """Each servo gets its joint's range (config.yaml limits_deg, after zero and directions) as its own position limits,
+    so it refuses any goal outside them: a software bug or a bad packet cannot drive a joint into its neighbours. Inside
+    those limits verify_cad finds no contact on any limb; just past them (2-12 deg) the parts touch (overtravel.json)."""
+    for name, s in all_servos(cfg).items():
+        a, b = tick_limits(s)
+        bus.set_angle_limits(s["id"], a, b)
+        got = bus.angle_limits(s["id"])
+        ok = tuple(got) == (a, b)
+        print(f"{name:16s} id {s['id']:2d}  {s['limits_deg'][0]:5.0f}..{s['limits_deg'][1]:4.0f} deg -> ticks {a}..{b}"
+              f"  {'ok' if ok else f'READ BACK {got}'}")
+
+
 def stiffness(bus: ServoBus, cfg: dict, joint: str):
     """Hold the joint at zero and print the deflection. Hang a known weight on a known lever (e.g. 0.5 kg at 10 cm =
     0.49 N·m): the walking gaits need about 60 N·m/rad, i.e. ~0.5 deg (5-6 ticks) of sag for that load."""
@@ -142,6 +171,7 @@ def main():
     sub.add_parser("center")
     sub.add_parser("zero")
     sub.add_parser("directions")
+    sub.add_parser("limits")
     p = sub.add_parser("stiffness")
     p.add_argument("joint")
     a = ap.parse_args()
@@ -160,6 +190,8 @@ def main():
         zero(bus, cfg)
     elif a.cmd == "directions":
         directions(bus, cfg)
+    elif a.cmd == "limits":
+        limits(bus, cfg)
     elif a.cmd == "stiffness":
         stiffness(bus, cfg, a.joint)
 

@@ -29,10 +29,12 @@ leg_servos:
 
 # arm and neck STS3215 on the same bus (IDs 13-17). Limits: the shoulder cradle and the blades clear the torso and the
 # legs over these ranges (jx0/design_point.yaml); directions are placeholders until calibrate.py directions
+# (shoulder -165, not -180: the servo's own limit must stay inside its 0..4095 ticks with the horn up to a spline
+# tooth off centre, calibrate.py limits)
 arm_servos:
-  l_shoulder_pitch: {id: 13, direction: 1,  zero_ticks: 2048, limits_deg: [-180, 60]}
+  l_shoulder_pitch: {id: 13, direction: 1,  zero_ticks: 2048, limits_deg: [-165, 60]}
   l_elbow:          {id: 14, direction: 1,  zero_ticks: 2048, limits_deg: [-130, 30]}
-  r_shoulder_pitch: {id: 15, direction: 1,  zero_ticks: 2048, limits_deg: [-180, 60]}
+  r_shoulder_pitch: {id: 15, direction: 1,  zero_ticks: 2048, limits_deg: [-165, 60]}
   r_elbow:          {id: 16, direction: 1,  zero_ticks: 2048, limits_deg: [-130, 30]}
   neck_yaw:         {id: 17, direction: 1,  zero_ticks: 2048, limits_deg: [-80, 80]}
 

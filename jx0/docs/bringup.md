@@ -58,6 +58,17 @@ Each joint moves +10° and back. The tool asks whether it moved the way the simu
 arm swings BACKWARD", "the head turns to the robot's LEFT"). Answer y/n and the `direction` values in config.yaml are
 updated. **Don't skip this**: one reversed leg joint makes the balance loop push the wrong way.
 
+Then write each joint's range into its servo:
+
+```bash
+python -m jx0bot.calibrate limits
+```
+
+Every servo stores its joint's limits from config.yaml, 1° wider, as its own position limits (EEPROM), and refuses any
+goal outside them. A software bug or a bad packet then cannot drive a joint into its neighbours. Inside the limits no
+two parts touch; 2–12° past them they would (`jx0/results/overtravel.json`). Run it again whenever `zero` or
+`directions` change config.yaml.
+
 ## 5. Check the stiffness
 
 The walking was verified with servos that give way about 0.5° under a 0.5 N·m load (60 N·m/rad):

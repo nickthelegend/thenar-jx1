@@ -57,3 +57,6 @@ media/reference.mp4
 jx0/print/**/*.gcode
 jx0/print/**/*.gcode.3mf
 jx0/print/**/result.json
+
+# promo film scratch meshes (tools/media/promo_jx0.py)
+media/jx0_promo_build/
