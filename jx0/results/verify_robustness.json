@@ -328,7 +328,7 @@
      "look"
     ],
     "max_tilt_deg": 7.0,
-    "distance_m": 0.22,
+    "distance_m": 0.21,
     "latency_ms": 20
    },
    {
@@ -344,7 +344,7 @@
      "look"
     ],
     "max_tilt_deg": 7.0,
-    "distance_m": 0.2,
+    "distance_m": 0.19,
     "latency_ms": 20
    },
    {
@@ -360,7 +360,7 @@
      "look"
     ],
     "max_tilt_deg": 6.4,
-    "distance_m": 0.21,
+    "distance_m": 0.2,
     "latency_ms": 0
    },
    {
@@ -424,7 +424,7 @@
      "look"
     ],
     "max_tilt_deg": 6.7,
-    "distance_m": 0.27,
+    "distance_m": 0.26,
     "latency_ms": 0
    },
    {
@@ -440,7 +440,7 @@
      "look"
     ],
     "max_tilt_deg": 6.7,
-    "distance_m": 0.23,
+    "distance_m": 0.22,
     "latency_ms": 20
    },
    {
@@ -456,7 +456,7 @@
      "look"
     ],
     "max_tilt_deg": 7.2,
-    "distance_m": 0.25,
+    "distance_m": 0.24,
     "latency_ms": 20
    },
    {
@@ -472,7 +472,7 @@
      "look"
     ],
     "max_tilt_deg": 6.6,
-    "distance_m": 0.23,
+    "distance_m": 0.22,
     "latency_ms": 0
    },
    {
@@ -488,7 +488,7 @@
      "look"
     ],
     "max_tilt_deg": 6.4,
-    "distance_m": 0.17,
+    "distance_m": 0.16,
     "latency_ms": 0
    },
    {
@@ -536,7 +536,7 @@
      "look"
     ],
     "max_tilt_deg": 7.0,
-    "distance_m": 0.2,
+    "distance_m": 0.19,
     "latency_ms": 0
    },
    {
@@ -584,7 +584,7 @@
      "look"
     ],
     "max_tilt_deg": 7.0,
-    "distance_m": 0.24,
+    "distance_m": 0.23,
     "latency_ms": 20
    },
    {
@@ -600,38 +600,6 @@
      "look"
     ],
     "max_tilt_deg": 7.2,
-    "distance_m": 0.22,
-    "latency_ms": 20
-   },
-   {
-    "pass": true,
-    "completed": [
-     "walk",
-     "turn",
-     "walk",
-     "walk",
-     "walk",
-     "wave",
-     "nod",
-     "look"
-    ],
-    "max_tilt_deg": 6.9,
-    "distance_m": 0.24,
-    "latency_ms": 20
-   },
-   {
-    "pass": true,
-    "completed": [
-     "walk",
-     "turn",
-     "walk",
-     "walk",
-     "walk",
-     "wave",
-     "nod",
-     "look"
-    ],
-    "max_tilt_deg": 6.5,
     "distance_m": 0.21,
     "latency_ms": 20
    },
@@ -647,8 +615,40 @@
      "nod",
      "look"
     ],
+    "max_tilt_deg": 6.9,
+    "distance_m": 0.23,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 6.5,
+    "distance_m": 0.2,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
     "max_tilt_deg": 7.3,
-    "distance_m": 0.26,
+    "distance_m": 0.25,
     "latency_ms": 20
    },
    {
@@ -664,7 +664,7 @@
      "look"
     ],
     "max_tilt_deg": 7.1,
-    "distance_m": 0.26,
+    "distance_m": 0.25,
     "latency_ms": 20
    },
    {
@@ -680,7 +680,7 @@
      "look"
     ],
     "max_tilt_deg": 7.2,
-    "distance_m": 0.27,
+    "distance_m": 0.26,
     "latency_ms": 20
    },
    {
@@ -702,6 +702,6 @@
   ]
  },
  "generated_by": "jx0/verify/robustness.py",
- "seconds_final": 127.1,
- "seconds_mission": 27.1
+ "seconds_final": 606.6,
+ "seconds_mission": 23.8
 }

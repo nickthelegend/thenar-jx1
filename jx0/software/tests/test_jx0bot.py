@@ -484,7 +484,7 @@ import numpy as np  # noqa: E402
 
 class PolicyRunner(unittest.TestCase):
     """jx0bot.policy builds the trained policy's observation and targets the way the training / test code does."""
-    BUNDLE = ROOT / "jx0" / "rl" / "policies" / "jx0_walk17_v5"
+    BUNDLE = ROOT / "jx0" / "rl" / "policies" / "jx0_walk17_v7"
 
     def test_gravity_from_imu_angles(self):
         from jx0bot.policy import gravity_body

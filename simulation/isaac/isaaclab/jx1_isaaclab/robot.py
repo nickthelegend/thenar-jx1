@@ -21,7 +21,9 @@ GROUPS = {"legs": ("hip_", "knee", "ankle_"), "waist": ("waist",), "arms": ("sho
 def _spawn():
     rigid = sim_utils.RigidBodyPropertiesCfg(disable_gravity=False, retain_accelerations=False, linear_damping=0.0, angular_damping=0.0,
                                              max_linear_velocity=1000.0, max_angular_velocity=1000.0, max_depenetration_velocity=1.0)
-    art = sim_utils.ArticulationRootPropertiesCfg(enabled_self_collisions=True, solver_position_iteration_count=8,
+    # model.legs_collide false (JX0): no self-collisions, as in the MuJoCo training model (rl/jx1_rl/assets.py)
+    art = sim_utils.ArticulationRootPropertiesCfg(enabled_self_collisions=bool(TC["raw"]["model"].get("legs_collide", True)),
+                                                  solver_position_iteration_count=8,
                                                   solver_velocity_iteration_count=4)
     if task_config.USD.exists():
         return sim_utils.UsdFileCfg(usd_path=str(task_config.USD), activate_contact_sensors=True, rigid_props=rigid, articulation_props=art)

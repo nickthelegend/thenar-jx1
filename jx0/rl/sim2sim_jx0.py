@@ -12,7 +12,8 @@ through jx0bot's clamps (joint limits, couple_hips) and reach the servos at 100 
 Pushes are horizontal force pulses (0.1 s) on the torso.
 
 Criteria (all must hold for PASS):
-- speeds: 11 commands (stand; forward 0.03-0.10 m/s; back; sideways; turns; forward + turn), 10 s each, measured over
+- speeds: 11 commands (stand; forward 0.03-0.10 m/s; back; sideways 0.02 m/s (v0.5: the hip-roll range allows no
+  faster side steps without the feet coming together; v0.4 tested 0.03); turns; forward + turn), 10 s each, measured over
   the last 7 s: no fall; each commanded axis within max(35 %, 0.012 m/s | 0.06 rad/s); drift on the others under
   0.02 m/s / 0.10 rad/s;
 - pushes: walking (0.06 m/s) and standing, 0.24 / 0.48 / 0.72 N s from the front, back, left and right, at 4 moments
@@ -52,10 +53,10 @@ STOP_DEG = 3.0          # the printed stops touch 2 deg or more past the servo's
 #                         loaded past its limit by the servo's compliance must stay short of limit + 1 + 2 deg
 SPEEDS = [("stand", (0.0, 0.0, 0.0)), ("forward_0.03", (0.03, 0.0, 0.0)), ("forward_0.06", (0.06, 0.0, 0.0)),
           ("forward_0.08", (0.08, 0.0, 0.0)), ("forward_0.10", (0.10, 0.0, 0.0)), ("backward_0.04", (-0.04, 0.0, 0.0)),
-          ("left_0.03", (0.0, 0.03, 0.0)), ("right_0.03", (0.0, -0.03, 0.0)), ("turn_left_0.3", (0.0, 0.0, 0.3)),
+          ("left_0.02", (0.0, 0.02, 0.0)), ("right_0.02", (0.0, -0.02, 0.0)), ("turn_left_0.3", (0.0, 0.0, 0.3)),
           ("turn_right_0.3", (0.0, 0.0, -0.3)), ("forward_turn", (0.06, 0.0, 0.2))]
-ENDURANCE = [(0.0, 0.0, 0.0), (0.06, 0.0, 0.0), (0.0, 0.0, 0.3), (0.10, 0.0, 0.0), (0.0, 0.03, 0.0), (-0.04, 0.0, 0.0),
-             (0.0, 0.0, -0.3), (0.0, -0.03, 0.0), (0.03, 0.0, 0.0), (0.06, 0.0, 0.2), (0.0, 0.0, 0.0), (0.08, 0.0, 0.0)]
+ENDURANCE = [(0.0, 0.0, 0.0), (0.06, 0.0, 0.0), (0.0, 0.0, 0.3), (0.10, 0.0, 0.0), (0.0, 0.02, 0.0), (-0.04, 0.0, 0.0),
+             (0.0, 0.0, -0.3), (0.0, -0.02, 0.0), (0.03, 0.0, 0.0), (0.06, 0.0, 0.2), (0.0, 0.0, 0.0), (0.08, 0.0, 0.0)]
 PUSH_DIRS = {"front": (-1.0, 0.0), "back": (1.0, 0.0), "left": (0.0, -1.0), "right": (0.0, 1.0)}   # push FROM the side
 
 
@@ -404,7 +405,7 @@ def main():
         res["endurance"] = endurance(pol)
     if a.only in (None, "latency"):
         print("latency (+6 ms sensing, +6 ms actuation)")
-        res["latency"] = speeds(pol, 6.0, 6.0, [c for c in SPEEDS if c[0] in ("forward_0.06", "turn_left_0.3", "left_0.03")], rel=0.5)
+        res["latency"] = speeds(pol, 6.0, 6.0, [c for c in SPEEDS if c[0] in ("forward_0.06", "turn_left_0.3", "left_0.02")], rel=0.5)
     verdict = {}
     if "speeds" in res:
         verdict["speeds"] = all(r["pass"] for r in res["speeds"].values())

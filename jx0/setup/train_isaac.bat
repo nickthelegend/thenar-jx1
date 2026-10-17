@@ -74,6 +74,10 @@ python "%REPO%\jx0\rl\sim2sim_jx0.py" --policy "%OUT%"
 
 python "%REPO%\jx0\rl\sim2sim_jx0.py" --policy "%OUT%" --video "%OUT%\endurance.mp4"
 
+echo == clearance: the policy's poses on the real parts (the MuJoCo model has no leg-on-leg contact)
+
+python "%REPO%\jx0\rl\policy_clearance.py" --policy "%OUT%"
+
 echo.
 
 echo == done: %OUT%   (watch it live: python jx0\rl\play_jx0.py --policy "%OUT%")

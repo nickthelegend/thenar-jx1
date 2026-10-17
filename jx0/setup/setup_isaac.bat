@@ -108,7 +108,7 @@ call "%LAB%\isaaclab.bat" --install rsl_rl || goto :fail
 
 rem ---- 5. what the export and the MuJoCo test suite need
 
-pip install mujoco onnx onnxruntime onnxscript pyyaml pillow || goto :fail
+pip install mujoco onnx onnxruntime onnxscript pyyaml pillow manifold3d trimesh || goto :fail
 
 
 

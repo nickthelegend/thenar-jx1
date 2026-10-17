@@ -43,7 +43,7 @@ GAITS = {
     "backward": dict(step_length=-0.020, step_time=0.60, n_steps=8),
     "turn_left": dict(step_length=0.0, step_time=0.60, n_steps=8, turn_per_step_deg=10.0),
     "turn_right": dict(step_length=0.0, step_time=0.60, n_steps=8, turn_per_step_deg=-10.0),
-    "side_left": dict(step_length=0.0, step_time=0.60, n_steps=6, lateral_step=0.012),
+    "side_left": dict(step_length=0.0, step_time=0.60, n_steps=6, lateral_step=0.015, lead="side"),
     # the robot's building blocks: 2 steps from standing to standing, repeated by jx0bot.robot.walk / turn
     "forward_2": dict(step_length=0.030, step_time=0.60, n_steps=2),
     "forward_4": dict(step_length=0.030, step_time=0.60, n_steps=4),
@@ -51,8 +51,8 @@ GAITS = {
     "backward_4": dict(step_length=-0.020, step_time=0.60, n_steps=4),
     "turn_left_2": dict(step_length=0.0, step_time=0.60, n_steps=2, turn_per_step_deg=10.0),
     "turn_right_2": dict(step_length=0.0, step_time=0.60, n_steps=2, turn_per_step_deg=-10.0),
-    "side_left_2": dict(step_length=0.0, step_time=0.60, n_steps=2, lateral_step=0.012),
-    "side_right_2": dict(step_length=0.0, step_time=0.60, n_steps=2, lateral_step=-0.012),
+    "side_left_2": dict(step_length=0.0, step_time=0.60, n_steps=2, lateral_step=0.015, lead="side"),
+    "side_right_2": dict(step_length=0.0, step_time=0.60, n_steps=2, lateral_step=-0.015, lead="side"),
 }
 ARM_POSE = {"l_shoulder_pitch": 0.0, "r_shoulder_pitch": 0.0, "l_elbow": np.radians(-20), "r_elbow": np.radians(-20)}
 K_SWING = 1.6                                      # arm swing: shoulder pitch = 1.6 x the opposite hip's pitch swing

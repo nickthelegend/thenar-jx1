@@ -5,6 +5,10 @@ base: jx0_walk.yaml
 name: jx0_walk17
 isaac_task: Isaac-Velocity-Flat-JX0-Full
 
+model:
+  legs_collide: false      # the legs pass through each other in training, so leaning them together (it did, at stall
+  #                          torque, standing) is not held up by the other leg: rewards.feet_distance sees it
+
 policy_joints:
   - left_hip_yaw_joint
   - left_hip_roll_joint
@@ -41,12 +45,14 @@ gait:                                            # the verified gaits' clock: 0.
   stance_fraction: 0.625
 
 commands:
-  ranges: {lin_vel_x: [-0.05, 0.10], lin_vel_y: [-0.03, 0.03], ang_vel_yaw: [-0.4, 0.4]}
+  ranges: {lin_vel_x: [-0.05, 0.10], lin_vel_y: [-0.02, 0.02], ang_vel_yaw: [-0.4, 0.4]}   # v0.5 side steps: 0.02 m/s
 
 rewards:
   ref_joint_pos: 1.0                             # stay near the reference (jx0_walk17_v1-v3 learned without one: they
   #                                                stood or stepped in place)
-  tracking_lin_scale: [0.10, 0.03]               # x / y errors in units of the command ranges' largest speeds
+  tracking_lin_scale: [0.10, 0.02]               # x / y errors in units of the command ranges' largest speeds
+  feet_distance: -0.5                            # per cm the feet come closer sideways than min_feet_distance_m:
+  min_feet_distance_m: 0.085                     # the MuJoCo model has no leg-on-leg contact (jx0/rl/policy_clearance.py)
   tracking_sigma: 0.25                           # in those units: standing still when told 0.06 m/s forward -> 0.37
   tracking_sigma_ang: 0.05
   hip_pos: 0.0                                   # the reference gait rolls the hips +-0.24 rad to shift weight, swings the

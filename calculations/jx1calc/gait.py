@@ -29,6 +29,9 @@ class GaitParams:
     t_start: float = 0.8
     t_end: float = 1.2
     pelvis_height_profile: object = None   # optional callable t -> hip-height override (squats etc.)
+    lead: str = "r"              # first swing foot: "r", "l", or "side": side-steps led by the foot on the side of
+    #                                lateral_step, which steps out 2 x lateral_step while the other foot only closes
+    #                                back to step_width (same speed; the feet never come closer than step_width)
 
 
 @dataclass
@@ -62,7 +65,7 @@ def plan_steps(d: Design, g: GaitParams) -> Plan:
     events = []     # (t0, t1, swing side, p0, p1, yaw0, yaw1): single-support swing
     tk = g.t_start
     prev_zmp = (pos["l"] + pos["r"]) / 2
-    swing = "r"
+    swing = g.lead if g.lead in ("l", "r") else ("l" if g.lateral_step > 0 else "r")
     for k in range(1, g.n_steps + 1):
         stance = "l" if swing == "r" else "r"
         last = k == g.n_steps
@@ -74,7 +77,10 @@ def plan_steps(d: Design, g: GaitParams) -> Plan:
             target = pos[stance] + lat * side * w
         else:
             advance = g.step_length / 2 if k == 1 else g.step_length
-            target = pos[stance] + fwd * advance + lat * side * w + lat * g.lateral_step
+            ls = g.lateral_step
+            if g.lead == "side":                       # only the leading foot moves sideways (2 x), the other closes
+                ls = 2 * g.lateral_step if (swing == "l") == (g.lateral_step > 0) else 0.0
+            target = pos[stance] + fwd * advance + lat * side * w + lat * ls
         st_sgn = 1 if stance == "l" else -1
         stance_zmp = (pos[stance] + np.array([np.cos(yaw[stance]), np.sin(yaw[stance])]) * g.zmp_offset_x
                       - np.array([-np.sin(yaw[stance]), np.cos(yaw[stance])]) * st_sgn * g.zmp_offset_y)

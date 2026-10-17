@@ -31,7 +31,7 @@ Generated 2026-10-17 by `jx0/verify/run_all.py` from the CAD geometry, the MuJoC
 | Whole robot program, 8-step mission, random realistic errors | **24/24 (100 %)** |
 | Battery current walking (servos + Pi) | 1.72 A average, 2.67 A peak → about 61 min walking per charge |
 | 100 Hz control loop on a Raspberry Pi 4 (estimated) | 1.79 ms of 10 ms |
-| Software unit tests | Ran 25 tests in 5.822s: OK |
+| Software unit tests | Ran 25 tests in 5.831s: OK |
 
 ## Leg joints: why double-sided
 
@@ -52,14 +52,14 @@ Voxel FEA (`calculations/structural/voxel_fea.py`, 0.7 mm hexahedra with bending
 
 | Bracket | Elements | Walking MPa (fatigue SF) | Worst with pushes MPa (strength SF) |
 |---|---|---|---|
-| pelvis | 213,378 | 6.27 (2.4) | 10.62 (4.7) |
-| yaw keeper | 8,142 | 7.4 (2.0) | 10.4 (4.8) |
-| hip yaw bracket | 150,640 | 8.12 (1.8) | 15.25 (3.3) |
-| hip roll bracket | 90,818 | 4.83 (3.1) | 9.94 (5.0) |
-| thigh | 150,150 | 5.2 (2.9) | 10.72 (4.7) |
-| shin | 89,454 | 6.18 (2.4) | 14.64 (3.4) |
-| ankle bracket | 109,478 | 7.27 (2.1) | 11.65 (4.3) |
-| foot | 143,340 | 3.21 (4.7) | 6.1 (8.2) |
+| pelvis | 213,378 | 6.26 (2.4) | 10.62 (4.7) |
+| yaw keeper | 8,142 | 7.32 (2.0) | 10.4 (4.8) |
+| hip yaw bracket | 150,640 | 8.25 (1.8) | 15.25 (3.3) |
+| hip roll bracket | 90,818 | 4.87 (3.1) | 9.94 (5.0) |
+| thigh | 150,150 | 5.33 (2.8) | 10.72 (4.7) |
+| shin | 89,454 | 6.25 (2.4) | 14.64 (3.4) |
+| ankle bracket | 109,478 | 7.31 (2.1) | 11.65 (4.3) |
+| foot | 143,340 | 3.25 (4.6) | 6.1 (8.2) |
 
 Stress maps: `images/fea_*.png`.
 

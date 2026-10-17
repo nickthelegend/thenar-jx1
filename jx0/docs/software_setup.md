@@ -139,7 +139,7 @@ pip install onnxruntime
 ```
 
 ```bash
-python -m jx0bot.policy --bundle ../rl/policies/jx0_walk17_v5 --vx 0.05 --seconds 20
+python -m jx0bot.policy --bundle ../rl/policies/jx0_walk17_v7 --vx 0.05 --seconds 20
 ```
 
 Training and tests are covered in `jx0/rl/README.md`, and training on a lab PC in `jx0/setup/README.md`.

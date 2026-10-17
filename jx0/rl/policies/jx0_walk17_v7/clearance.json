@@ -1,0 +1,20 @@
+{
+ "policy": "jx0/rl/policies/jx0_walk17_v7",
+ "poses_checked": 1700,
+ "clashes": {
+  "stand": [],
+  "forward_0.03": [],
+  "forward_0.06": [],
+  "forward_0.08": [],
+  "forward_0.10": [],
+  "backward_0.04": [],
+  "left_0.02": [],
+  "right_0.02": [],
+  "turn_left_0.3": [],
+  "turn_right_0.3": [],
+  "forward_turn": [],
+  "endurance": []
+ },
+ "pass": true,
+ "wall_s": 360.2
+}

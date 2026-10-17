@@ -118,6 +118,18 @@ def feet_swing_height(env, target_height: float, sole_offset, sensor_cfg: SceneE
     return swing * _moving(env, command_name, stand_threshold)                        # no swing target in stand mode
 
 
+def feet_distance(env, min_distance: float, asset_cfg: SceneEntityCfg) -> torch.Tensor:
+    """Sideways foot spacing (across the heading) below min_distance, in cm: the twin of rl/jx1_rl/env.py's
+    rewards.feet_distance (the policy must not stand or step with its feet inside each other)."""
+    asset: Articulation = env.scene[asset_cfg.name]
+    p = asset.data.body_pos_w[:, asset_cfg.body_ids, :2]
+    q = asset.data.root_quat_w                                            # (w, x, y, z)
+    yaw = torch.atan2(2 * (q[:, 0] * q[:, 3] + q[:, 1] * q[:, 2]), 1 - 2 * (q[:, 2] ** 2 + q[:, 3] ** 2))
+    d = p[:, 0] - p[:, 1]
+    lateral = -torch.sin(yaw) * d[:, 0] + torch.cos(yaw) * d[:, 1]
+    return torch.clamp(min_distance - lateral, min=0.0) * 100.0
+
+
 def feet_contact_velocity(env, sensor_cfg: SceneEntityCfg, asset_cfg: SceneEntityCfg) -> torch.Tensor:
     asset: Articulation = env.scene[asset_cfg.name]
     v = asset.data.body_lin_vel_w[:, asset_cfg.body_ids, :]

@@ -110,7 +110,10 @@ class JX1Env:
         self.completed = {"episodes": 0}
         self.unstable_resets = 0
         self.obs_scales = cfg["observation"]["scales"]
-        self.rw = {k: v for k, v in cfg["rewards"].items() if k not in ("tracking_sigma", "tracking_sigma_ang", "tracking_lin_scale", "soft_torque_limit", "soft_dof_vel")}
+        self.rw = {k: v for k, v in cfg["rewards"].items() if k not in ("tracking_sigma", "tracking_sigma_ang", "tracking_lin_scale", "soft_torque_limit", "soft_dof_vel", "min_feet_distance_m")}
+        # rewards.feet_distance (JX0 v0.5): the training model has no leg-on-leg contact, so a policy can stand with
+        # its feet inside each other; this penalises the sideways foot spacing (heading frame) below min_feet_distance_m, in cm
+        self.min_feet = float(cfg["rewards"].get("min_feet_distance_m", 0.0))
         self.sigma = cfg["rewards"]["tracking_sigma"]
         self.sigma_ang = cfg["rewards"].get("tracking_sigma_ang", self.sigma)     # yaw-rate tolerance (JX1: the same)
         g = cfg["gait"]
@@ -365,6 +368,13 @@ class JX1Env:
         diff = np.linalg.norm((q - ref)[:, cols], axis=1)
         return np.exp(-2.0 * diff) - 0.2 * np.minimum(diff, 0.5)
 
+    def _feet_lateral(self, qp):
+        """Sideways distance from the right foot to the left one, across the body's heading (m)."""
+        w, x, y, z = qp[:, 3], qp[:, 4], qp[:, 5], qp[:, 6]
+        yaw = np.arctan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z))
+        d = self.foot_pos[:, 0, :2] - self.foot_pos[:, 1, :2]
+        return -np.sin(yaw) * d[:, 0] + np.cos(yaw) * d[:, 1]
+
     def _rewards(self, qp, q, dq, lin_b, ang_b, grav_b, died):
         w, dt = self.rw, self.dt
         contact = self.foot_force > 1.0
@@ -400,6 +410,7 @@ class JX1Env:
                                           - self.swing_h) ** 2) * ~contact, axis=1) * moving,
             "contact_no_vel": np.sum(np.sum(self.foot_vel ** 2, axis=2) * contact, axis=1),
             "stand_still": dof_err * standing,
+            "feet_distance": np.clip(self.min_feet - self._feet_lateral(qp), 0.0, None) * 100.0,
             "termination": died.astype(np.float64),
         }
         terms = {k: v * w[k] * dt for k, v in terms.items() if w.get(k, 0.0) != 0.0}

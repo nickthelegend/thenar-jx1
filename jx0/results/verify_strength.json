@@ -17,7 +17,7 @@
  "joints": {
   "hip_yaw": {
    "loads_walking": {
-    "torque_nm": 0.543,
+    "torque_nm": 0.551,
     "bending_horn_nm": 2.487,
     "bending_centre_nm": 2.648,
     "axial_n": 41.151,
@@ -65,7 +65,7 @@
      "ring_n": 123.8
     },
     "shaft_bending_nominal_walking_nm": 0.12,
-    "shaft_bending_ring_only_nominal_walking_nm": 1.31
+    "shaft_bending_ring_only_nominal_walking_nm": 1.33
    }
   },
   "hip_roll": {
@@ -244,5 +244,5 @@
    }
   }
  },
- "seconds": 117.9
+ "seconds": 98.2
 }

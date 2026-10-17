@@ -161,6 +161,9 @@ class JX1Rewards:
                                      "asset_cfg": robot(bodies=FEET)})
     stand_still = RewTerm(func=jx1.stand_still_deviation, weight=W["stand_still"],
                           params={"command_name": "base_velocity", "asset_cfg": robot(POLICY), "stand_threshold": G.get("stand_command_threshold", 0.1)})
+    feet_distance = (RewTerm(func=jx1.feet_distance, weight=W["feet_distance"],
+                             params={"min_distance": W["min_feet_distance_m"], "asset_cfg": robot(bodies=FEET)})
+                     if W.get("feet_distance") else None)
     termination = RewTerm(func=mdp.is_terminated, weight=W["termination"])
 
 

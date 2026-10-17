@@ -43,22 +43,28 @@ rl/.venv/Scripts/python jx0/rl/sim2sim_jx0.py --policy jx0/rl/policies/jx0_walk_
 
 Checkpoints and `metrics.csv` go to `rl/runs/<run>/`. The export writes `policy.onnx`, `policy.pt` and `policy_io.yaml`, the same bundle format as JX1's.
 
-## Result: jx0_walk17_v5 passes the test suite
+## Result: jx0_walk17_v7 (JX0 v0.5, 55 cm) passes the test suite and the parts clearance check
 
-The policy is 17 joint corrections at 50 Hz from 176 observations. On the verified model (servo torque-speed limit, 100 Hz bus) it passes:
-- **speeds:** 11/11 (forward 0.03–0.10 m/s, backward, sideways, turning, forward + turn);
+The policy is 17 joint corrections at 50 Hz from 176 observations. On the verified v0.5 model (servo torque-speed limit, 100 Hz bus) it passes:
+- **speeds:** 11/11 (forward 0.03–0.10 m/s, backward, sideways 0.02 m/s, turning, forward + turn);
 - **pushes:** 96/96, up to 0.72 N·s;
-- **endurance:** the 60 s run with pushes;
-- **latency:** 12 ms of extra delay.
+- **endurance:** the 60 s run with pushes (worst mean torque 0.61 N·m, under the servo's rated 0.98);
+- **latency:** 12 ms of extra delay;
+- **clearance** (`policy_clearance.py`): 1,700 of its poses on the SolidWorks parts, no contact.
 
-The robot's own gait program passes the same kind of tests in `jx0/verify` (walking, pushes, 60 s endurance on 12 robots with model errors). See `policies/jx0_walk17_v5/REPORT.md`.
+See `policies/jx0_walk17_v7/REPORT.md`. v0.4's `jx0_walk17_v5` (46 cm) passed the suite on the v0.4 robot; on v0.5 it passes 5 of 11 speeds.
+The robot's own gait program passes the same kind of tests in `jx0/verify` (walking, pushes, 60 s endurance on 12 robots with model errors).
+
+**Always run `policy_clearance.py` too:** the MuJoCo test model has no leg-on-leg contact. The first v0.5 policies passed the suite while standing with their feet inside each other (in training, where the legs collide, they pressed the legs together at stall torque).
 
 What made it work is the reference gait. Without one (runs v1–v3), the policies stood still or stepped in place. With the verified gaits as the reference and near-zero initial corrections, the robot walks from the first iteration, and the policy only learns balance, push recovery and the speeds in between.
 
-## Training history (2026-10-16)
+## Training history (2026-10-16/17)
 
 | Run | Change | Result |
 |---|---|---|
+| `jx0_walk17_v6` (v0.5 robot) | v0.4's task on the v0.5 legs, then side-step fixes | passed the MuJoCo suite but stood with its legs pressed together at stall torque (training) / feet inside each other (test model); its side gait brought the feet to 72 mm, where the ankle brackets clash. Discarded |
+| `jx0_walk17_v7` | `model.legs_collide: false`, `rewards.feet_distance`, side gait led by the foot on that side (0.02 m/s), from scratch 3000 + 1000 | **passes**, clearance 0 contacts |
 | `jx0_walk_v1` | first run | Walks forward and stands on the full model (sim2sim). Does not turn or side-step: one tracking tolerance gave turns no signal (`policies/jx0_walk_v1`) |
 | `jx0_walk_v2` | separate yaw tolerance, tighter speed tolerance, strong penalty above 70 % of no-load speed | Learned to stand still |
 | `jx0_walk_v3` | v1's speed tolerance, gentle speed penalty | At 1000 iterations, weaker than v1 forward; turns at 15–25 % |
@@ -90,7 +96,7 @@ JX_TASK_CONFIG=jx0/rl/config/jx0_walk.yaml rl/.venv/Scripts/python simulation/is
 Use `jx0bot.policy`. It runs an exported bundle at 50 Hz through the same Robot, clamps and servo limits as the gaits:
 
 ```bash
-python -m jx0bot.policy --bundle ../rl/policies/jx0_walk17_v5 --vx 0.05 --seconds 20
+python -m jx0bot.policy --bundle ../rl/policies/jx0_walk17_v7 --vx 0.05 --seconds 20
 ```
 
 Run it from `jx0/software` on the Pi. Add `--sim` for jx0bot's real-time MuJoCo simulator. The Pi needs `pip install onnxruntime`.

@@ -7,7 +7,7 @@ Each verified gait's steady cycle (one left and one right step, 1.2 s) is resamp
 phase = stance_fraction at the left foot's lift-off, as the training clock (rl/jx1_rl/env.py: a leg is in swing for
 phase >= stance_fraction). Every cycle is a deviation from the walking stance. The part all of them share is
 the stepping itself (S: lifting the feet in turn), so each gait becomes S + its own direction part E_k:
-forward 0.05 m/s, backward 0.033 m/s, sideways 0.02 m/s, turning 0.29 rad/s (the right-hand side gaits are mirror
+forward 0.05 m/s, backward 0.033 m/s, sideways 0.025 m/s, turning 0.29 rad/s (the right-hand side gaits are mirror
 images of the left ones). The reference for a command (vx, vy, wz):
 
     q_ref(phase, cmd) = stance + moving * (S(phase) + sum_k w_k E_k(phase)),   w_k = command component / gait speed
@@ -28,6 +28,7 @@ import numpy as np
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 GAITS = ROOT / "jx0" / "software" / "jx0bot" / "gaits"
+SIDE_REALISED = 1.0     # the side cycle on the gait clock walks this fraction of its planned speed (see build())
 OUT = HERE / "config" / "jx0_gait_reference.json"
 N_PHASE = 120
 FLIP = ("roll", "yaw")
@@ -93,7 +94,14 @@ def build(names):
     half = N_PHASE // 2
     E["right"] = np.roll(mirror(names, E["left"]), half, axis=0)
     E["turn_right"] = np.roll(mirror(names, E["turn_left"]), half, axis=0)
-    speeds = {"forward": 0.05, "backward": 0.0333, "left": 0.02, "right": 0.02,
+    def gait(name):
+        return json.loads((GAITS / f"{name}.json").read_text(encoding="utf-8"))
+    # sideways: the side gait's planned speed (lateral_step / step_time; v0.5 leads with the foot on that side, 2 x
+    # the step out, the other foot closes). Played under the policy it walks about that fast; with no corrections at
+    # all it slips to about 60 % (SIDE_REALISED < 1 made the policy overshoot by 1 / 0.62)
+    side = gait("side_left")
+    v_side = SIDE_REALISED * abs(side["lateral_step_m"]) / side["step_time_s"]
+    speeds = {"forward": 0.05, "backward": 0.0333, "left": v_side, "right": v_side,
               "turn_left": math.radians(10.0) / 0.6, "turn_right": math.radians(10.0) / 0.6}
     return {"source": "jx0bot/gaits (verified): forward, backward, side_left, turn_left; right = mirrored",
             "period_s": 1.2, "stance_fraction": round(float(np.mean(sf)), 4), "n_phase": N_PHASE, "joints": names,

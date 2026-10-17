@@ -42,7 +42,7 @@ jx0\setup\train_isaac.bat 5000 8192
 It does four things:
 1. Trains `Isaac-Velocity-Flat-JX0-Full-v0` headless. Logs go to `simulation\isaac\isaaclab\logs\jx0_full17\<time>\`.
 2. Exports the last checkpoint to `jx0\rl\policies\jx0_walk17_isaac\` (`policy.onnx`, `policy.pt`, `policy_io.yaml`).
-3. Tests it on the verified MuJoCo model: speeds, pushes, the 60 s endurance run and latency. Results go to `sim2sim.json`, ending in PASS or FAIL.
+3. Tests it on the verified MuJoCo model: speeds, pushes, the 60 s endurance run and latency. Results go to `sim2sim.json`, ending in PASS or FAIL. Then checks its poses on the real parts (`clearance.json`).
 4. Films the endurance run to `endurance.mp4`.
 
 To watch the policy live and drive it with the keyboard:
@@ -63,7 +63,7 @@ python jx0\rl\play_jx0.py --policy jx0\rl\policies\jx0_walk17_isaac
 
 ## What to expect
 
-The same task trained in MuJoCo on the design laptop gave `jx0_walk17_v5`, which passes the whole test suite at iteration 1500 (1024 robots). With 4096 robots, Isaac Lab sees 4× more data per iteration, so 1500–3000 iterations should be plenty. Isaac's physics differs from MuJoCo's, so check the `sim2sim.json` that `train_isaac.bat` writes. If it says FAIL, train longer (`train_isaac.bat 5000`).
+The same task trained in MuJoCo on the design laptop gave `jx0_walk17_v7` (the 55 cm v0.5 robot), which passes the whole test suite and the parts clearance check after 4000 iterations (1024 robots). With 4096 robots, Isaac Lab sees 4× more data per iteration, so 1500–3000 iterations should be plenty. Isaac's physics differs from MuJoCo's, so check the `sim2sim.json` that `train_isaac.bat` writes. If it says FAIL, train longer (`train_isaac.bat 5000`).
 
 ## How long training takes (estimate)
 

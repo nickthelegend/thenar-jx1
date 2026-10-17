@@ -60,11 +60,11 @@ def fit_box(v: np.ndarray):
     return (lo + hi) / 2, (hi - lo) / 2
 
 
-def _bits(body_name: str):
+def _bits(body_name: str, legs_collide: bool = True):
     if body_name.startswith("left_"):
-        return LEFT_BITS
+        return LEFT_BITS if legs_collide else (2, 1)
     if body_name.startswith("right_"):
-        return RIGHT_BITS
+        return RIGHT_BITS if legs_collide else (4, 1)
     return UPPER_BITS
 
 
@@ -81,6 +81,9 @@ def build_spec(cfg: TaskConfig) -> mujoco.MjSpec:
     opt.integrator = mujoco.mjtIntegrator.mjINT_IMPLICITFAST
     solref = list(mc["contact_solref"])
 
+    # model.legs_collide (default true): false lets the legs pass through each other (JX0: the policy leaned its legs
+    # together at stall torque while standing; without the contact, rewards.feet_distance sees it)
+    legs = bool(mc.get("legs_collide", True))
     verts = _body_frame_vertices(ref)
     for g in list(spec.geoms):
         if g.type == mujoco.mjtGeom.mjGEOM_MESH and g.group == 3:
@@ -88,7 +91,7 @@ def build_spec(cfg: TaskConfig) -> mujoco.MjSpec:
     for b in range(1, ref.nbody):
         name = mujoco.mj_id2name(ref, mujoco.mjtObj.mjOBJ_BODY, b)
         body = spec.body(name)
-        ct, ca = _bits(name)
+        ct, ca = _bits(name, legs)
         if b in verts and any(k in name for k in CAPSULE_LINKS):
             fromto, r = fit_capsule(verts[b])
             body.add_geom(name=f"{name}_capsule", type=mujoco.mjtGeom.mjGEOM_CAPSULE, fromto=fromto, size=[r, 0, 0],
@@ -103,7 +106,7 @@ def build_spec(cfg: TaskConfig) -> mujoco.MjSpec:
             g.solref = solref
             g.friction = [mc["floor_friction"], 0.005, 0.0001]
         elif g.name.endswith("_sole"):
-            g.contype, g.conaffinity = _bits(g.name)
+            g.contype, g.conaffinity = _bits(g.name, legs)
             g.solref = solref
             g.friction = [mc["floor_friction"], 0.005, 0.0001]
         elif g.group != 3 and g.type == mujoco.mjtGeom.mjGEOM_BOX and g.contype != 0 and not g.name:
