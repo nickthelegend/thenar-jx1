@@ -38,9 +38,9 @@
   </link>
   <link name="torso_link">
     <inertial>
-      <origin xyz="0.005 0 0.143" rpy="0 0 0"/>
-      <mass value="0.663"/>
-      <inertia ixx="0.00380673" ixy="0" ixz="0" iyy="0.0025636" iyz="0" izz="0.00195033"/>
+      <origin xyz="0.005 0 0.16" rpy="0 0 0"/>
+      <mass value="0.739"/>
+      <inertia ixx="0.00503752" ixy="0" ixz="0" iyy="0.00365189" iyz="0" izz="0.00217389"/>
     </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -51,7 +51,7 @@
       <geometry><mesh filename="../meshes/JX0_ChestCap.stl" scale="0.001 0.001 0.001"/></geometry>
     </visual>
     <visual>
-      <origin xyz="0 0 0.2256" rpy="0 0 1.5708"/>
+      <origin xyz="0 0 0.2516" rpy="0 0 1.5708"/>
       <geometry><mesh filename="../meshes/JX0_Servo_STS3215.stl" scale="0.001 0.001 0.001"/></geometry>
     </visual>
   </link>
@@ -117,13 +117,17 @@
   </link>
   <link name="head_link">
     <inertial>
-      <origin xyz="0 0 0.031" rpy="0 0 0"/>
+      <origin xyz="0 0 0.033" rpy="0 0 0"/>
       <mass value="0.077"/>
       <inertia ixx="4e-05" ixy="0" ixz="0" iyy="4e-05" iyz="0" izz="4e-05"/>
     </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry><mesh filename="../meshes/JX0_Head.stl" scale="0.001 0.001 0.001"/></geometry>
+    </visual>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="../meshes/JX0_Visor.stl" scale="0.001 0.001 0.001"/></geometry>
     </visual>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -162,9 +166,9 @@
   </link>
   <link name="left_thigh_link">
     <inertial>
-      <origin xyz="0.0123296 -0.000681481 -0.0555259" rpy="0 0 0"/>
-      <mass value="0.135"/>
-      <inertia ixx="5.53996e-05" ixy="0" ixz="0" iyy="4.8902e-05" iyz="0" izz="3.93075e-05"/>
+      <origin xyz="0.0123027 -0.000789116 -0.0815578" rpy="0 0 0"/>
+      <mass value="0.147"/>
+      <inertia ixx="0.000103097" ixy="0" ixz="0" iyy="9.7056e-05" iyz="0" izz="4.38529e-05"/>
     </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -175,15 +179,15 @@
       <geometry><mesh filename="../meshes/JX0_Thigh_L.stl" scale="0.001 0.001 0.001"/></geometry>
     </collision>
     <visual>
-      <origin xyz="0 0 -0.062" rpy="-1.5708 0 0"/>
+      <origin xyz="0 0 -0.093" rpy="-1.5708 0 0"/>
       <geometry><mesh filename="../meshes/JX0_Servo_STS3215.stl" scale="0.001 0.001 0.001"/></geometry>
     </visual>
   </link>
   <link name="left_shin_link">
     <inertial>
-      <origin xyz="0.000478632 -0.000717949 -0.040594" rpy="0 0 0"/>
-      <mass value="0.117"/>
-      <inertia ixx="4.35498e-05" ixy="0" ixz="0" iyy="3.3372e-05" iyz="0" izz="2.9693e-05"/>
+      <origin xyz="0.000576 -0.000864 -0.0637" rpy="0 0 0"/>
+      <mass value="0.125"/>
+      <inertia ixx="8.68905e-05" ixy="0" ixz="0" iyy="7.61577e-05" iyz="0" izz="3.1916e-05"/>
     </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -194,7 +198,7 @@
       <geometry><mesh filename="../meshes/JX0_Shin_L.stl" scale="0.001 0.001 0.001"/></geometry>
     </collision>
     <visual>
-      <origin xyz="0 0 -0.058" rpy="0 -1.5708 0"/>
+      <origin xyz="0 0 -0.087" rpy="0 -1.5708 0"/>
       <geometry><mesh filename="../meshes/JX0_Servo_STS3215.stl" scale="0.001 0.001 0.001"/></geometry>
     </visual>
   </link>
@@ -260,9 +264,9 @@
   </link>
   <link name="right_thigh_link">
     <inertial>
-      <origin xyz="0.0123296 0.000681481 -0.0555259" rpy="0 0 0"/>
-      <mass value="0.135"/>
-      <inertia ixx="5.53996e-05" ixy="0" ixz="0" iyy="4.8902e-05" iyz="0" izz="3.93075e-05"/>
+      <origin xyz="0.0123027 0.000789116 -0.0815578" rpy="0 0 0"/>
+      <mass value="0.147"/>
+      <inertia ixx="0.000103097" ixy="0" ixz="0" iyy="9.7056e-05" iyz="0" izz="4.38529e-05"/>
     </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -273,15 +277,15 @@
       <geometry><mesh filename="../meshes/JX0_Thigh_R.stl" scale="0.001 0.001 0.001"/></geometry>
     </collision>
     <visual>
-      <origin xyz="0 0 -0.062" rpy="1.5708 0 0"/>
+      <origin xyz="0 0 -0.093" rpy="1.5708 0 0"/>
       <geometry><mesh filename="../meshes/JX0_Servo_STS3215.stl" scale="0.001 0.001 0.001"/></geometry>
     </visual>
   </link>
   <link name="right_shin_link">
     <inertial>
-      <origin xyz="0.000478632 0.000717949 -0.040594" rpy="0 0 0"/>
-      <mass value="0.117"/>
-      <inertia ixx="4.35498e-05" ixy="0" ixz="0" iyy="3.3372e-05" iyz="0" izz="2.9693e-05"/>
+      <origin xyz="0.000576 0.000864 -0.0637" rpy="0 0 0"/>
+      <mass value="0.125"/>
+      <inertia ixx="8.68905e-05" ixy="0" ixz="0" iyy="7.61577e-05" iyz="0" izz="3.1916e-05"/>
     </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -292,7 +296,7 @@
       <geometry><mesh filename="../meshes/JX0_Shin_R.stl" scale="0.001 0.001 0.001"/></geometry>
     </collision>
     <visual>
-      <origin xyz="0 0 -0.058" rpy="0 -1.5708 0"/>
+      <origin xyz="0 0 -0.087" rpy="0 -1.5708 0"/>
       <geometry><mesh filename="../meshes/JX0_Servo_STS3215.stl" scale="0.001 0.001 0.001"/></geometry>
     </visual>
   </link>
@@ -332,7 +336,7 @@
     <child link="torso_link"/>
   </joint>
   <joint name="left_shoulder_pitch_joint" type="revolute">
-    <origin xyz="0.0125 0.063 0.186" rpy="0 0 0"/>
+    <origin xyz="0.0125 0.063 0.212" rpy="0 0 0"/>
     <parent link="torso_link"/>
     <child link="left_upper_arm_link"/>
     <axis xyz="0 1 0"/>
@@ -348,7 +352,7 @@
     <dynamics damping="0.01" friction="0"/>
   </joint>
   <joint name="right_shoulder_pitch_joint" type="revolute">
-    <origin xyz="0.0125 -0.063 0.186" rpy="0 0 0"/>
+    <origin xyz="0.0125 -0.063 0.212" rpy="0 0 0"/>
     <parent link="torso_link"/>
     <child link="right_upper_arm_link"/>
     <axis xyz="0 1 0"/>
@@ -364,7 +368,7 @@
     <dynamics damping="0.01" friction="0"/>
   </joint>
   <joint name="neck_yaw_joint" type="revolute">
-    <origin xyz="0 0 0.2444" rpy="0 0 0"/>
+    <origin xyz="0 0 0.2704" rpy="0 0 0"/>
     <parent link="torso_link"/>
     <child link="head_link"/>
     <axis xyz="0 0 1"/>
@@ -396,7 +400,7 @@
     <dynamics damping="0.01" friction="0"/>
   </joint>
   <joint name="left_knee_joint" type="revolute">
-    <origin xyz="0 0 -0.062" rpy="0 0 0"/>
+    <origin xyz="0 0 -0.093" rpy="0 0 0"/>
     <parent link="left_thigh_link"/>
     <child link="left_shin_link"/>
     <axis xyz="0 1 0"/>
@@ -404,7 +408,7 @@
     <dynamics damping="0.01" friction="0"/>
   </joint>
   <joint name="left_ankle_pitch_joint" type="revolute">
-    <origin xyz="0 0 -0.058" rpy="0 0 0"/>
+    <origin xyz="0 0 -0.087" rpy="0 0 0"/>
     <parent link="left_shin_link"/>
     <child link="left_ankle_pitch_link"/>
     <axis xyz="0 1 0"/>
@@ -444,7 +448,7 @@
     <dynamics damping="0.01" friction="0"/>
   </joint>
   <joint name="right_knee_joint" type="revolute">
-    <origin xyz="0 0 -0.062" rpy="0 0 0"/>
+    <origin xyz="0 0 -0.093" rpy="0 0 0"/>
     <parent link="right_thigh_link"/>
     <child link="right_shin_link"/>
     <axis xyz="0 1 0"/>
@@ -452,7 +456,7 @@
     <dynamics damping="0.01" friction="0"/>
   </joint>
   <joint name="right_ankle_pitch_joint" type="revolute">
-    <origin xyz="0 0 -0.058" rpy="0 0 0"/>
+    <origin xyz="0 0 -0.087" rpy="0 0 0"/>
     <parent link="right_shin_link"/>
     <child link="right_ankle_pitch_link"/>
     <axis xyz="0 1 0"/>

@@ -4513,7 +4513,7 @@
     "servo_ankle_pitch_L",
     "shin_L"
    ],
-   "at_mm": 11.0,
+   "at_mm": 2.0,
    "ok": true
   },
   {
@@ -4550,7 +4550,7 @@
     "servo_ankle_roll_L",
     "ankle_L"
    ],
-   "at_mm": 4.0,
+   "at_mm": 2.0,
    "ok": true
   },
   {
@@ -4648,7 +4648,7 @@
     "servo_ankle_pitch_R",
     "shin_R"
    ],
-   "at_mm": 6.0,
+   "at_mm": 27.0,
    "ok": true
   },
   {
@@ -4667,7 +4667,7 @@
     "shin_R",
     "servo_knee_R"
    ],
-   "at_mm": 2.0,
+   "at_mm": 4.0,
    "ok": true
   },
   {
@@ -4685,7 +4685,7 @@
     "servo_ankle_roll_R",
     "ankle_R"
    ],
-   "at_mm": 3.0,
+   "at_mm": 6.0,
    "ok": true
   },
   {
@@ -4703,7 +4703,7 @@
     "foot_R",
     "servo_ankle_roll_R"
    ],
-   "at_mm": 0.0,
+   "at_mm": 3.0,
    "ok": true
   },
   {
@@ -4723,7 +4723,7 @@
     "ankle_R",
     "servo_ankle_pitch_R"
    ],
-   "at_mm": 2.0,
+   "at_mm": 6.0,
    "ok": true
   },
   {
@@ -4747,7 +4747,7 @@
     "thigh_R",
     "servo_hip_pitch_R"
    ],
-   "at_mm": 1.0,
+   "at_mm": 14.0,
    "ok": true
   },
   {
@@ -7416,6 +7416,6 @@
   }
  ],
  "screws_never_reached": [],
- "seconds": 7.1,
+ "seconds": 10.6,
  "pass": true
 }

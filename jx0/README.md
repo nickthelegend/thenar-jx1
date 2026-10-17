@@ -5,7 +5,7 @@
 <h1 align="center">JX0: a walking, talking STS3215 humanoid you can build at home</h1>
 
 <p align="center">
-  <b>46 cm · 2.88 kg · 17 joints, every one a Feetech STS3215 12 V · double-sided leg joints · walks with its arms
+  <b>55 cm · 2.99 kg · 17 joints, every one a Feetech STS3215 12 V · double-sided leg joints · walks with its arms
   swinging · talks (Claude) · ₹57,878 in parts</b><br>
   3D-printed in pastel green, styled after a friend's working STS3215 robot. Full SolidWorks CAD, a verified walking
   simulation, a strength check of every leg part, the robot program and a parts list with Indian suppliers are all in
@@ -31,9 +31,9 @@
 <p align="center">
   <a href="results/images/jx0_demo.mp4"><img src="results/images/jx0_demo.webp" alt="Simulated JX0 waving, walking with its arms swinging, taking a hard side push and bumping a bottle out of its way" width="720"></a><br>
   <sub><b><a href="results/images/jx0_demo.mp4">Demo film (MP4)</a></b>, staged like the reference video: JX0 walks on
-  a wooden floor with its arms swinging, waves, takes a hard 0.96 N·s shove from the side and keeps going (in the
-  <a href="results/verification.md">verification</a> it stays up through all 48 such shoves, timed across a whole
-  step), and bumps a plastic bottle out of its way. The robot's own program (<code>software/jx0bot</code>, the same code that runs
+  a wooden floor with its arms swinging, waves, takes a hard 0.96 N·s shove from the side and keeps going (the film is
+  the 46 cm v0.4; in the <a href="results/verification.md">verification</a> the 55 cm v0.5 stays up through all 48
+  shoves of 0.72 N·s and 40 of 48 at 0.96 N·s, timed across a whole step), and bumps a plastic bottle out of its way. The robot's own program (<code>software/jx0bot</code>, the same code that runs
   on the Pi) drives the SolidWorks robot in MuJoCo; the push and the bottle are plain physics.</sub>
 </p>
 
@@ -124,16 +124,16 @@ takes a shove, and knocks over a bottle on the way. JX0 matches that:
 
 | | Status |
 |---|---|
-| SolidWorks CAD: 25 printed parts + all 17 servos in the assembly | **done**, every part rebuilt by script, one body each, no errors |
+| SolidWorks CAD: 26 printed parts + all 17 servos in the assembly | **done**, every part rebuilt by script, one body each, no errors |
 | Parts colliding, standing or in motion (every gait frame and action, 1,373 poses; every joint over its full range), with the real servo's shape, its cables and every screw head | **none** |
 | Fit to the real STS3215 (Feetech factory and SO-ARM100 models): all 17 servos, their cables, all 182 screws, every assembly step in order | **all fit** ([verify_fit](verify/verify_fit.py)) |
-| Servo sizing (every leg joint, 5 gaits + 8 static cases), 2.88 kg robot | **passes**; the tightest is hip roll with a 1.46× margin |
-| Strength of every printed leg part, finite elements under the simulated loads | **passes**: fatigue safety factor 2.1 or more, strength 2.9 or more (PETG data ASSUMED) |
+| Servo sizing (every leg joint, 5 gaits + 8 static cases), 2.99 kg robot | **passes**; the tightest is the knee with a 1.26× margin (hip roll 1.43×), on top of the 1.5× dynamic / 1.25× static factors |
+| Strength of every printed leg part, finite elements under the simulated loads | **passes**: fatigue safety factor 1.8 or more, strength 3.3 or more (PETG data ASSUMED) |
 | Walking in simulation, on the CAD masses and a servo model | **14 of 14 gaits pass** with arm swing (forward 0.05 m/s, backward, turns, side-steps) |
-| Walking when the real robot differs from the model (servo stiffness, latency, backlash, IMU noise, mass, friction, slope) | **139 of 140** random walks pass (latency up to 20 ms) and **all 140 stay up**; with 40 ms latency 125 pass, all 140 stay up |
+| Walking when the real robot differs from the model (servo stiffness, latency, backlash, IMU noise, mass, friction, slope) | **137 of 140** random walks pass (latency up to 20 ms) and **all 140 stay up**; with 40 ms latency 128 pass, all 140 stay up |
 | The whole robot program, an 8-action mission, random realistic errors | **24 of 24** completed without a fall |
-| Pushes mid-walk (48 timings each) | stays up through **every** push up to 0.96 N·s; 90 % at 1.2 N·s, 44 % at 1.44 N·s |
-| Robot program (voice, Claude brain, walking, gestures) | **written, unit-tested (21 tests) and run in simulation**; not yet on hardware |
+| Pushes mid-walk (48 timings each) | stays up through **every** push up to 0.72 N·s; 83 % at 0.96 N·s, 60 % at 1.2 N·s, 21 % at 1.44 N·s (v0.4, 46 cm: every push up to 0.96 N·s) |
+| Robot program (voice, Claude brain, walking, gestures) | **written, unit-tested (25 tests) and run in simulation**; not yet on hardware |
 | Parts list | ₹57,878; STS3215 price and stock checked 2026-10-04 ([8-page cost estimate](bom/JX0_cost_estimate.pdf)) |
 | Physical robot | **not built yet**: this is what the funding is for |
 
@@ -141,7 +141,7 @@ All of it is in the **[verification report](results/verification.md)**: what was
 the honest limits (`python jx0/verify/run_all.py` re-runs everything in about 45 minutes). Unverified until the robot
 is built, and the first things to check: the printed shin on a real servo (your printer's hole accuracy), each
 servo's horn height (the shims), the servo stiffness setting and the I2S audio overlay. Battery life
-is about 73 minutes of walking (CALCULATED: 1.45 A average for the servos and the Pi).
+is about 61 minutes of walking (CALCULATED: 1.72 A average for the servos and the Pi).
 
 ## What it can do
 
@@ -157,11 +157,11 @@ is about 73 minutes of walking (CALCULATED: 1.45 A average for the servos and th
 
 | | |
 |---|---|
-| Height, mass | 46.0 cm, 2.88 kg (CAD) |
+| Height, mass | 54.6 cm, 2.99 kg (CAD; v0.5: legs 1.5× longer, torso 26 mm taller, visor head) |
 | Joints | 17 Feetech STS3215 12 V serial bus servos: 6 per leg, shoulder pitch and elbow per arm, neck yaw |
 | Brain | Raspberry Pi 4 (2 GB): gaits and balance at 100 Hz, MPU6050 IMU, Vosk speech recognition, Piper voice, Claude over Wi-Fi |
 | Power | 3S 2200 mAh LiPo straight to the servo bus (12 V servos); a 5 V UBEC for the Pi; or a 12.6 V bench supply |
-| Structure | 25 printed parts and 40 horn shims, 848 g: pelvis and leg parts in PETG, printed near-solid (554 g); body, head and arms in PLA (294 g) |
+| Structure | 26 printed parts and 40 horn shims, 961 g: pelvis and leg parts in PETG, printed near-solid (596 g); body, head and arms in PLA (365 g, the 3 g visor in black) |
 
 ## What it costs
 

@@ -102,7 +102,7 @@ KEEP_SCREWS, KEEP_SCREW_R = (-25.0, 15.0, 55.0, 88.0), 22.0
 KEEP_BOSS_TO = 150.0                   # the pelvis boss wraps round the cage's outboard end to its back wall
 FLANGE_Z, GROOVE = 27.0, (15.3, 20.9)  # disc flange bottom; under it (the lip's room): inner radius, bottom
 BOSS_TOP = 36.6                        # pelvis boss the keeper screws into (the torso skirt starts above it)
-THIGH, SHIN = 62.0, 58.0
+THIGH, SHIN = 93.0, 87.0   # v0.5: 1.5 x v0.4's (62, 58), for a ~55 cm robot (jx0/analysis/sizing.py)
 SHIN_BACK = 10.0   # the shin cage's back wall comes down to this height above the ankle axis (verify_fea)
 HIP_Y = 45.0       # half hip spacing
 XR = -15.9         # hip-roll horn face (servo behind the hip centre, horn facing +x); its U-bracket's front arm is the
@@ -116,13 +116,13 @@ SOLE_TO_ANKLE, SOLE_T, FOOT_X, FOOT_W = 33.0, 5.0, (-68.0, 56.0), 70.0
 # torso: octagonal prism, half depth TD (x) and half width TW (y), vertical edges chamfered TCH, split at TZS into the
 # lower shell and the chest cap; walls TWALL. TZB: bottom of the skirt that hides the hip-yaw servos; TZ0: the floor
 TD, TW, TCH, TWALL = 42.0, 60.0, 16.0, 2.5
-TZB, TZ0, TZS, TZT, TOP_CH = 37.0, 68.925, 168.0, 210.0, 8.0
+TZB, TZ0, TZS, TZT, TOP_CH = 37.0, 68.925, 194.0, 236.0, 8.0   # v0.5: 26 mm taller
 # shoulder pitch: the servo hangs outside the chest; its horn bolts to a pad on the chest side wall (horn face y = 63)
-SHOULDER = (12.5, TW + 3.0, 186.0)
+SHOULDER = (12.5, TW + 3.0, 212.0)
 UA_L = 52.0                                                         # shoulder pitch axis to elbow axis
 ELBOW_Y = 41.0                                                      # elbow horn face, outboard of the shoulder horn face
                                                                     # (the blade clears the shoulder's case screws)
-BLADE_L, BLADE_T = 100.0, 6.0
+BLADE_L, BLADE_T = 120.0, 6.0
 # printed mass / solid mass. Body parts: 3 walls + 25 % gyroid. Pelvis and leg brackets (PETG): 6 walls, 6 top and
 # bottom layers, 40 % gyroid, so their 2.4-4.5 mm plates print solid, as the finite-element check assumes (verify_fea)
 FILL_BODY, FILL_LEG = 0.55, 0.80
@@ -134,7 +134,7 @@ def fill(name):
     return FILL_LEG if name.startswith(LEG_PARTS) else FILL_BODY
 
 
-NECK_Z = TZT + HR + HF                                              # neck horn face (head origin): 244.4
+NECK_Z = TZT + HR + HF                                              # neck horn face (head origin): 270.4
 
 # ------------------------------------------------------------------------------------------------ screws
 _SINK = None                                   # the screws of the part being built (see _build)
@@ -848,43 +848,59 @@ def chest_cap():
 
 
 def head():
-    """Head (frame: neck horn face, z up): the reference robot's soft rounded block, narrower at the chin, with four
-    holes in a diamond on the face (the microphone listens through them). Hollow (walls >= 2.5 mm under every fillet),
+    """Head (frame: neck horn face, z up), v0.5: a wide visor head. The front is a gloss-black visor (JX0_Visor, a
+    separate black part glued into its 3 mm pocket) framed by the red neon strip in its channel; the microphone listens
+    through the row of holes under the visor; an ear pod on each side. Hollow (walls >= 2.5 mm under every fillet),
     back window for the wiring, open underneath: it slides down over the neck hub (bolted to the neck horn first) and
     2 M2 x 10 CSK through its back wall hold it there; the hub's shape carries the turning."""
-    hx, hy, hz = 33.0, 39.0, 62.0
-    front = rounded_polygon([(-28.0, 0.0), (28.0, 0.0), (hy, 36.0), (hy, hz), (-hy, hz), (-hy, 36.0)],
-                            [4.0, 4.0, 26.0, 20.0, 20.0, 26.0])
-    p = [("prism", "x", front, (-hx, hx))]
-    # rounded top / chin edges; the chin and bottom-corner radii (5, 4) leave a flat rim of 365 mm^2 on the open bottom
-    # for the head to print standing on (with 12 / 10 it stood on rounded edges)
-    for xc, zc, du, dv, r in ((hx, hz, -1, -1, 22.0), (-hx, hz, 1, -1, 22.0), (hx, 0.0, -1, 1, 5.0), (-hx, 0.0, 1, 1, 5.0)):
+    xb, xf, hy, hz = HEAD_BOX
+    front = rounded_polygon([(-hy, 0.0), (hy, 0.0), (hy, hz), (-hy, hz)], [6.0, 6.0, 14.0, 14.0])
+    p = [("prism", "x", front, (xb, xf))]
+    # front edges small (the visor and its ring fill the face), back edges soft; the chin and bottom-corner radii leave a
+    # wide flat rim on the open bottom for the head to print standing on
+    for xc, zc, du, dv, r in ((xf, hz, -1, -1, 9.0), (xb, hz, 1, -1, 18.0), (xf, 0.0, -1, 1, 5.0), (xb, 0.0, 1, 1, 5.0)):
         p.append(("pcut", "y", corner_cut((xc, zc), (du, dv), r), (-hy - 1.0, hy + 1.0)))
-    for xc, yc, du, dv in ((hx, hy, -1, -1), (hx, -hy, -1, 1), (-hx, hy, 1, -1), (-hx, -hy, 1, 1)):
-        p.append(("pcut", "z", corner_cut((xc, yc), (du, dv), 20.0), (-0.1, hz + 0.1)))     # rounded vertical edges
-    p += neon_ring(hx)
-    p += [("cut", (-26.0, 26.0), (-24.0, 24.0), (-0.1, 16.1)),                               # hollow, in steps; open
-          ("cut", (-26.0, 26.0), (-30.0, 30.0), (16.0, 52.0)),                               # below for the neck hub
-          ("cut", (-18.0, 18.0), (-24.0, 24.0), (51.9, 58.0)),
-          ("cut", (-hx - 0.1, -25.9), (-16.0, 16.0), (16.0, 44.0))]                          # back window
-    cz = NEON[1]
-    for yc, zc in ((0.0, cz + 7.0), (7.0, cz), (-7.0, cz), (0.0, cz - 7.0)):              # the four face holes, inside
-        p.append(("hole", "x", (yc, zc), 5.0, (25.9, hx + 0.1)))                            # the neon ring
+    for xc, yc, du, dv, r in ((xf, hy, -1, -1, 6.0), (xf, -hy, -1, 1, 6.0), (xb, hy, 1, -1, 12.0), (xb, -hy, 1, 1, 12.0)):
+        p.append(("pcut", "z", corner_cut((xc, yc), (du, dv), r), (-0.1, hz + 0.1)))       # rounded vertical edges
+    p += neon_ring(xf)
+    p += [("cut", (-26.0, 26.0), (-24.0, 24.0), (-0.1, 16.1)),                               # the neck hub's plate
+          ("cut", (-26.0, 30.0), (-39.0, 39.0), (16.0, 58.0)),                               # hollow
+          ("cut", (xb - 0.1, -25.9), (-16.0, 16.0), (16.0, 44.0))]                           # back window
+    for yc, zc in mic_holes():                                                               # through the visor's
+        p.append(("lhole", "x", (yc, zc), 2.5, (29.9, xf - VISOR_T + 0.1)))                  # pocket floor
+    ex, ez, eh, er = EAR
+    for sy in (1, -1):                                                                       # ear pods: a raised disc
+        g = tuple(sorted((sy * (hy + eh - 0.6), sy * (hy + eh + 0.1))))                       # with a groove ring
+        p += [("cyl", "y", (ex, ez), er, tuple(sorted((sy * (hy - 0.5), sy * (hy + eh))))),
+              ("hole", "y", (ex, ez), 2 * (er - 3.0), g), ("lcyl", "y", (ex, ez), er - 4.0, g)]
     for y in (-HEAD_PIN_Y, HEAD_PIN_Y):                                                      # into the hub's back
         seat = -26.0 - 0.1 - 5.0
-        p += [("hole", "x", (y, HEAD_PIN_Z), M2["hole"] + 0.2, (-hx - 0.1, -25.9)),
-              ("hole", "x", (y, HEAD_PIN_Z), M2["cbore"], (-hx - 0.1, seat))]
+        p += [("hole", "x", (y, HEAD_PIN_Z), M2["hole"] + 0.2, (xb - 0.1, -25.9)),
+              ("hole", "x", (y, HEAD_PIN_Z), M2["cbore"], (xb - 0.1, seat))]
         screw("x", (y, HEAD_PIN_Z), seat, +1, "M2", 10.0 - (CSK["head"][0] - M2["hole"] - 0.2) / 2, "printed",
               "M2 x 10 CSK through the head's back wall into the neck hub", "csk", 10.0)
     return p
 
 
+def visor():
+    """The visor (head frame): a 2.95 mm gloss-black plate (black PLA) in the pocket inside the neon ring, 0.15 mm
+    clearance all round, glued (CA); the microphone's holes through it."""
+    xf = HEAD_BOX[1]
+    p = [("prism", "x", visor_outline(0.15), (xf - VISOR_T, xf - 0.05))]
+    for yc, zc in mic_holes():
+        p.append(("hole", "x", (yc, zc), 2.5, (xf - VISOR_T - 0.1, xf + 0.1)))
+    return p
+
+
 HEAD_PIN_Y, HEAD_PIN_Z = 10.0, 8.0
-# red neon ring round the face (like Unitree G1's): a flat 5 x 10 mm silicone neon strip, its 10 mm glowing face flush
-# with the face, in a channel round the flat front face. NEON = (centreline width y, centre height z, height, corner
-# radius), channel 10.4 wide x NEON_DEPTH deep (1.8 mm of the 7 mm front wall left behind it).
-NEON = (40.0, 24.0, 34.0, 14.0)
-NEON_WIDTH, NEON_DEPTH = 10.4, 5.2
+HEAD_BOX = (-33.0, 37.0, 45.0, 66.0)       # back x, front x, half width, height (v0.4: +-33, 39, 62)
+EAR = (0.0, 34.0, 2.0, 14.0)               # ear pod: x, z, height off the side, radius
+# red neon ring round the visor (like Unitree G1's): a flat 5 x 10 mm silicone neon strip, its 10 mm glowing face flush
+# with the face, in a channel. NEON = (centreline width y, centre height z, height, corner radius): about 188 mm of
+# strip; channel 10.4 wide x NEON_DEPTH deep (1.8 mm of the 7 mm front wall behind it). Inside the ring, the visor's
+# pocket (VISOR_T deep).
+NEON = (64.6, 32.0, 39.6, 14.0)
+NEON_WIDTH, NEON_DEPTH, VISOR_T = 10.4, 5.2, 3.0
 
 
 def neon_rect(half_w, half_h, r, cz):
@@ -892,15 +908,28 @@ def neon_rect(half_w, half_h, r, cz):
                            [r] * 4)
 
 
-def neon_ring(hx):
-    """The neon channel on the head's front face (x = hx) and the hole its lead goes in by, at the bottom of the ring:
-    the lead runs inside the head and down through the neck hub's cable hole with the microphone's."""
+def visor_outline(c=0.0):
+    """The ring's inner edge (the visor's outline), c inside it."""
     w, cz, h, r = NEON
     e = NEON_WIDTH / 2
-    floor = hx - NEON_DEPTH
-    return [("pcut", "x", neon_rect(w / 2 + e, h / 2 + e, r + e, cz), (floor, hx + 1.0)),
-            ("prism", "x", neon_rect(w / 2 - e, h / 2 - e, r - e, cz), (floor - 0.05, hx)),       # the face inside it
-            ("hole", "x", (0.0, cz - h / 2), 5.0, (25.9, floor + 0.1))]                            # the lead, into the head
+    return neon_rect(w / 2 - e - c, h / 2 - e - c, r - e - c, cz)
+
+
+def mic_holes():
+    return [(y, NEON[1] - 7.0) for y in (-9.0, -4.5, 0.0, 4.5, 9.0)]
+
+
+def neon_ring(xf):
+    """The neon channel on the head's front face (x = xf), the visor's pocket inside it and the hole the strip's lead
+    goes in by, at the bottom of the ring: the lead runs inside the head and down through the neck hub's cable hole
+    with the microphone's. The face inside the ring is a late boss: the ring's cut removes everything inside its
+    outline first (v0.4 built it before the cut, which left a 5.2 mm pocket instead of a channel)."""
+    w, cz, h, r = NEON
+    e = NEON_WIDTH / 2
+    floor = xf - NEON_DEPTH
+    return [("pcut", "x", neon_rect(w / 2 + e, h / 2 + e, r + e, cz), (floor, xf + 1.0)),
+            ("lprism", "x", visor_outline(), (floor - 0.05, xf - VISOR_T)),
+            ("hole", "x", (0.0, cz - h / 2), 5.0, (29.9, floor + 0.1))]
 
 
 def neck_hub():
@@ -987,7 +1016,7 @@ _CATALOGUE = [("JX0_Pelvis", pelvis, False, 1), ("JX0_YawKeeper_L", yaw_keeper, 
               ("JX0_Thigh_R", thigh, True, 1), ("JX0_Shin_L", shin, False, 1), ("JX0_Shin_R", shin, True, 1),
               ("JX0_AnkleBracket_L", ankle_bracket, False, 1), ("JX0_AnkleBracket_R", ankle_bracket, True, 1),
               ("JX0_Foot", foot, False, 2), ("JX0_Torso", torso, False, 1), ("JX0_ChestCap", chest_cap, False, 1),
-              ("JX0_Head", head, False, 1), ("JX0_NeckHub", neck_hub, False, 1),
+              ("JX0_Head", head, False, 1), ("JX0_Visor", visor, False, 1), ("JX0_NeckHub", neck_hub, False, 1),
               ("JX0_UpperArm_L", upper_arm, False, 1),
               ("JX0_UpperArm_R", upper_arm, True, 1), ("JX0_ArmBlade_L", arm_blade, False, 1),
               ("JX0_ArmBlade_R", arm_blade, True, 1), ("JX0_HornShim", horn_shim, False, 40)]

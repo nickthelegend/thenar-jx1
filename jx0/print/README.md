@@ -28,13 +28,15 @@ The sliced files are not in git; re-run the script to make them. Each plate fold
 
 | Order | Plate | Printer | Filament | Time | Parts |
 |---|---|---|---|---|---|
-| 1 | P1S-0_test_shin | P1S | PETG | 1.8 h | Shin L. **Fit a servo in it before printing the rest** |
+| 1 | P1S-0_test_shin | P1S | PETG | 2.2 h | Shin L. **Fit a servo in it before printing the rest** |
 | 2 | P1S-1_pelvis_hip_yaw | P1S | PETG | 7.5 h | Pelvis, hip-yaw brackets, keepers, yaw rings |
-| 2 | i7-1_thighs_ankles | i7 | PETG | 10.2 h | Thighs, ankle brackets |
+| 2 | i7-1_thighs_ankles | i7 | PETG | 11.7 h | Thighs, ankle brackets |
 | 3 | P1S-2_feet_hip_roll | P1S | PETG | 7.2 h | Feet, hip-roll brackets |
-| 3 | i7-2_torso_head | i7 | PLA | 11.3 h | Torso, head, neck hub |
-| 4 | P1S-3_shin_shims | P1S | PETG | 2.3 h | Shin R, 40 horn shims |
-| 5 | P1S-4_chest_arms | P1S | PLA | 5.6 h | Chest cap, upper arms, arm blades |
+| 3 | i7-2_torso_head | i7 | PLA | 14.1 h | Torso, head, neck hub |
+| 4 | P1S-3_shin_shims | P1S | PETG | 2.7 h | Shin R, 40 horn shims |
+| 5 | P1S-4_chest_arms | P1S | PLA | 4.6 h | Chest cap, upper arms |
+| 5 | P1S-6_blades | P1S | PLA | 1.2 h | Arm blades |
+| 6 | P1S-5_visor_black | P1S | PLA, **black** | 0.3 h | The visor (glued into the head) |
 
 How to print on each printer:
 - **P1S:** open the `.gcode.3mf` in Bambu Studio, then Print plate.

@@ -3,15 +3,15 @@
   "gains": null,
   "model_errors_latency_0_20ms": {
    "trials": 140,
-   "passed": 139,
-   "rate": 0.993,
+   "passed": 137,
+   "rate": 0.979,
    "stayed_up": 140,
    "stayed_up_rate": 1.0,
    "per_gait": {
     "forward": {
      "trials": 20,
-     "passed": 19,
-     "rate": 0.95,
+     "passed": 17,
+     "rate": 0.85,
      "stayed_up": 20,
      "stayed_up_rate": 1.0
     },
@@ -63,20 +63,44 @@
      "gait": "forward",
      "fell": false,
      "pass": false,
-     "pos_err_m": 0.029,
-     "heading_err_deg": -10.9,
-     "max_tilt_deg": 4.3,
+     "pos_err_m": 0.068,
+     "heading_err_deg": 11.6,
+     "max_tilt_deg": 4.0,
      "push": null,
-     "end_roll_deg": 0.2,
-     "end_pitch_deg": 0.2,
+     "end_roll_deg": -0.2,
+     "end_pitch_deg": -0.2,
+     "end_t_s": 7.94
+    },
+    {
+     "gait": "forward",
+     "fell": false,
+     "pass": false,
+     "pos_err_m": 0.073,
+     "heading_err_deg": 10.1,
+     "max_tilt_deg": 5.2,
+     "push": null,
+     "end_roll_deg": -0.2,
+     "end_pitch_deg": -0.3,
+     "end_t_s": 7.94
+    },
+    {
+     "gait": "forward",
+     "fell": false,
+     "pass": false,
+     "pos_err_m": 0.047,
+     "heading_err_deg": 10.4,
+     "max_tilt_deg": 4.0,
+     "push": null,
+     "end_roll_deg": -0.1,
+     "end_pitch_deg": 0.1,
      "end_t_s": 7.94
     }
    ]
   },
   "model_errors_latency_40ms_stress": {
    "trials": 140,
-   "passed": 125,
-   "rate": 0.893,
+   "passed": 128,
+   "rate": 0.914,
    "stayed_up": 140,
    "stayed_up_rate": 1.0,
    "per_gait": {
@@ -103,8 +127,8 @@
     },
     "turn_left_2": {
      "trials": 20,
-     "passed": 19,
-     "rate": 0.95,
+     "passed": 20,
+     "rate": 1.0,
      "stayed_up": 20,
      "stayed_up_rate": 1.0
     },
@@ -117,8 +141,8 @@
     },
     "side_left_2": {
      "trials": 20,
-     "passed": 18,
-     "rate": 0.9,
+     "passed": 20,
+     "rate": 1.0,
      "stayed_up": 20,
      "stayed_up_rate": 1.0
     },
@@ -135,96 +159,96 @@
      "gait": "forward",
      "fell": false,
      "pass": false,
-     "pos_err_m": 0.088,
-     "heading_err_deg": -32.8,
-     "max_tilt_deg": 6.7,
+     "pos_err_m": 0.085,
+     "heading_err_deg": 11.4,
+     "max_tilt_deg": 4.7,
      "push": null,
-     "end_roll_deg": 0.1,
-     "end_pitch_deg": 0.3,
+     "end_roll_deg": -0.1,
+     "end_pitch_deg": -0.3,
      "end_t_s": 7.94
     },
     {
      "gait": "forward",
      "fell": false,
      "pass": false,
-     "pos_err_m": 0.119,
-     "heading_err_deg": -55.8,
-     "max_tilt_deg": 7.3,
+     "pos_err_m": 0.101,
+     "heading_err_deg": -24.4,
+     "max_tilt_deg": 5.2,
      "push": null,
      "end_roll_deg": 0.1,
-     "end_pitch_deg": 1.2,
+     "end_pitch_deg": -0.9,
      "end_t_s": 7.94
     },
     {
      "gait": "forward",
      "fell": false,
      "pass": false,
-     "pos_err_m": 0.015,
-     "heading_err_deg": 14.4,
-     "max_tilt_deg": 5.1,
+     "pos_err_m": 0.104,
+     "heading_err_deg": -21.2,
+     "max_tilt_deg": 4.1,
      "push": null,
      "end_roll_deg": 0.1,
-     "end_pitch_deg": 0.9,
+     "end_pitch_deg": -0.1,
      "end_t_s": 7.94
     },
     {
      "gait": "forward",
      "fell": false,
      "pass": false,
-     "pos_err_m": 0.078,
-     "heading_err_deg": 26.0,
-     "max_tilt_deg": 4.3,
+     "pos_err_m": 0.104,
+     "heading_err_deg": -34.7,
+     "max_tilt_deg": 4.7,
+     "push": null,
+     "end_roll_deg": 0.4,
+     "end_pitch_deg": -0.0,
+     "end_t_s": 7.94
+    },
+    {
+     "gait": "forward",
+     "fell": false,
+     "pass": false,
+     "pos_err_m": 0.075,
+     "heading_err_deg": 10.0,
+     "max_tilt_deg": 4.8,
+     "push": null,
+     "end_roll_deg": -0.0,
+     "end_pitch_deg": -1.0,
+     "end_t_s": 7.94
+    },
+    {
+     "gait": "forward_4",
+     "fell": false,
+     "pass": false,
+     "pos_err_m": 0.009,
+     "heading_err_deg": -12.6,
+     "max_tilt_deg": 4.1,
+     "push": null,
+     "end_roll_deg": -0.1,
+     "end_pitch_deg": 0.2,
+     "end_t_s": 4.34
+    },
+    {
+     "gait": "forward",
+     "fell": false,
+     "pass": false,
+     "pos_err_m": 0.072,
+     "heading_err_deg": 11.9,
+     "max_tilt_deg": 4.5,
      "push": null,
      "end_roll_deg": 0.0,
-     "end_pitch_deg": 0.4,
-     "end_t_s": 7.94
-    },
-    {
-     "gait": "side_left_2",
-     "fell": false,
-     "pass": false,
-     "pos_err_m": 0.008,
-     "heading_err_deg": -11.4,
-     "max_tilt_deg": 3.5,
-     "push": null,
-     "end_roll_deg": 0.3,
-     "end_pitch_deg": 1.4,
-     "end_t_s": 3.14
-    },
-    {
-     "gait": "forward",
-     "fell": false,
-     "pass": false,
-     "pos_err_m": 0.065,
-     "heading_err_deg": -25.5,
-     "max_tilt_deg": 5.8,
-     "push": null,
-     "end_roll_deg": -0.2,
-     "end_pitch_deg": 0.9,
+     "end_pitch_deg": 1.6,
      "end_t_s": 7.94
     },
     {
      "gait": "forward",
      "fell": false,
      "pass": false,
-     "pos_err_m": 0.085,
-     "heading_err_deg": 11.8,
-     "max_tilt_deg": 5.4,
+     "pos_err_m": 0.088,
+     "heading_err_deg": -4.2,
+     "max_tilt_deg": 5.0,
      "push": null,
-     "end_roll_deg": 0.1,
-     "end_pitch_deg": -2.1,
-     "end_t_s": 7.94
-    },
-    {
-     "gait": "forward",
-     "fell": false,
-     "pass": false,
-     "pos_err_m": 0.055,
-     "heading_err_deg": -18.5,
-     "max_tilt_deg": 6.8,
-     "push": null,
-     "end_roll_deg": 0.1,
-     "end_pitch_deg": 0.1,
+     "end_roll_deg": 0.2,
+     "end_pitch_deg": -0.6,
      "end_t_s": 7.94
     }
    ]
@@ -246,31 +270,31 @@
    },
    "0.72 N.s": {
     "trials": 48,
-    "passed": 46,
-    "rate": 0.958,
+    "passed": 45,
+    "rate": 0.938,
     "stayed_up": 48,
     "stayed_up_rate": 1.0
    },
    "0.96 N.s": {
     "trials": 48,
-    "passed": 41,
-    "rate": 0.854,
-    "stayed_up": 48,
-    "stayed_up_rate": 1.0
+    "passed": 40,
+    "rate": 0.833,
+    "stayed_up": 40,
+    "stayed_up_rate": 0.833
    },
    "1.20 N.s": {
     "trials": 48,
-    "passed": 41,
-    "rate": 0.854,
-    "stayed_up": 43,
-    "stayed_up_rate": 0.896
+    "passed": 19,
+    "rate": 0.396,
+    "stayed_up": 29,
+    "stayed_up_rate": 0.604
    },
    "1.44 N.s": {
     "trials": 48,
-    "passed": 12,
-    "rate": 0.25,
-    "stayed_up": 21,
-    "stayed_up_rate": 0.438
+    "passed": 8,
+    "rate": 0.167,
+    "stayed_up": 10,
+    "stayed_up_rate": 0.208
    }
   }
  },
@@ -303,7 +327,7 @@
      "nod",
      "look"
     ],
-    "max_tilt_deg": 9.8,
+    "max_tilt_deg": 7.0,
     "distance_m": 0.22,
     "latency_ms": 20
    },
@@ -319,7 +343,103 @@
      "nod",
      "look"
     ],
-    "max_tilt_deg": 10.0,
+    "max_tilt_deg": 7.0,
+    "distance_m": 0.2,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 6.4,
+    "distance_m": 0.21,
+    "latency_ms": 0
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 6.6,
+    "distance_m": 0.24,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 6.3,
+    "distance_m": 0.22,
+    "latency_ms": 0
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 6.8,
+    "distance_m": 0.23,
+    "latency_ms": 0
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 6.7,
+    "distance_m": 0.27,
+    "latency_ms": 0
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 6.7,
     "distance_m": 0.23,
     "latency_ms": 20
    },
@@ -335,23 +455,7 @@
      "nod",
      "look"
     ],
-    "max_tilt_deg": 9.4,
-    "distance_m": 0.22,
-    "latency_ms": 0
-   },
-   {
-    "pass": true,
-    "completed": [
-     "walk",
-     "turn",
-     "walk",
-     "walk",
-     "walk",
-     "wave",
-     "nod",
-     "look"
-    ],
-    "max_tilt_deg": 9.4,
+    "max_tilt_deg": 7.2,
     "distance_m": 0.25,
     "latency_ms": 20
    },
@@ -367,8 +471,8 @@
      "nod",
      "look"
     ],
-    "max_tilt_deg": 9.0,
-    "distance_m": 0.22,
+    "max_tilt_deg": 6.6,
+    "distance_m": 0.23,
     "latency_ms": 0
    },
    {
@@ -383,8 +487,8 @@
      "nod",
      "look"
     ],
-    "max_tilt_deg": 9.8,
-    "distance_m": 0.24,
+    "max_tilt_deg": 6.4,
+    "distance_m": 0.17,
     "latency_ms": 0
    },
    {
@@ -399,24 +503,8 @@
      "nod",
      "look"
     ],
-    "max_tilt_deg": 9.7,
+    "max_tilt_deg": 7.0,
     "distance_m": 0.26,
-    "latency_ms": 0
-   },
-   {
-    "pass": true,
-    "completed": [
-     "walk",
-     "turn",
-     "walk",
-     "walk",
-     "walk",
-     "wave",
-     "nod",
-     "look"
-    ],
-    "max_tilt_deg": 9.6,
-    "distance_m": 0.24,
     "latency_ms": 20
    },
    {
@@ -431,40 +519,24 @@
      "nod",
      "look"
     ],
-    "max_tilt_deg": 10.2,
-    "distance_m": 0.25,
-    "latency_ms": 20
-   },
-   {
-    "pass": true,
-    "completed": [
-     "walk",
-     "turn",
-     "walk",
-     "walk",
-     "walk",
-     "wave",
-     "nod",
-     "look"
-    ],
-    "max_tilt_deg": 9.6,
-    "distance_m": 0.24,
-    "latency_ms": 0
-   },
-   {
-    "pass": true,
-    "completed": [
-     "walk",
-     "turn",
-     "walk",
-     "walk",
-     "walk",
-     "wave",
-     "nod",
-     "look"
-    ],
-    "max_tilt_deg": 9.5,
+    "max_tilt_deg": 7.1,
     "distance_m": 0.19,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 7.0,
+    "distance_m": 0.2,
     "latency_ms": 0
    },
    {
@@ -479,39 +551,7 @@
      "nod",
      "look"
     ],
-    "max_tilt_deg": 10.2,
-    "distance_m": 0.28,
-    "latency_ms": 20
-   },
-   {
-    "pass": true,
-    "completed": [
-     "walk",
-     "turn",
-     "walk",
-     "walk",
-     "walk",
-     "wave",
-     "nod",
-     "look"
-    ],
-    "max_tilt_deg": 9.9,
-    "distance_m": 0.21,
-    "latency_ms": 20
-   },
-   {
-    "pass": true,
-    "completed": [
-     "walk",
-     "turn",
-     "walk",
-     "walk",
-     "walk",
-     "wave",
-     "nod",
-     "look"
-    ],
-    "max_tilt_deg": 10.0,
+    "max_tilt_deg": 6.4,
     "distance_m": 0.21,
     "latency_ms": 0
    },
@@ -527,9 +567,41 @@
      "nod",
      "look"
     ],
-    "max_tilt_deg": 9.2,
+    "max_tilt_deg": 7.4,
+    "distance_m": 0.24,
+    "latency_ms": 0
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 7.0,
+    "distance_m": 0.24,
+    "latency_ms": 20
+   },
+   {
+    "pass": true,
+    "completed": [
+     "walk",
+     "turn",
+     "walk",
+     "walk",
+     "walk",
+     "wave",
+     "nod",
+     "look"
+    ],
+    "max_tilt_deg": 7.2,
     "distance_m": 0.22,
-    "latency_ms": 0
+    "latency_ms": 20
    },
    {
     "pass": true,
@@ -543,23 +615,7 @@
      "nod",
      "look"
     ],
-    "max_tilt_deg": 10.5,
-    "distance_m": 0.24,
-    "latency_ms": 0
-   },
-   {
-    "pass": true,
-    "completed": [
-     "walk",
-     "turn",
-     "walk",
-     "walk",
-     "walk",
-     "wave",
-     "nod",
-     "look"
-    ],
-    "max_tilt_deg": 10.1,
+    "max_tilt_deg": 6.9,
     "distance_m": 0.24,
     "latency_ms": 20
    },
@@ -575,8 +631,8 @@
      "nod",
      "look"
     ],
-    "max_tilt_deg": 10.4,
-    "distance_m": 0.31,
+    "max_tilt_deg": 6.5,
+    "distance_m": 0.21,
     "latency_ms": 20
    },
    {
@@ -591,23 +647,7 @@
      "nod",
      "look"
     ],
-    "max_tilt_deg": 10.1,
-    "distance_m": 0.24,
-    "latency_ms": 20
-   },
-   {
-    "pass": true,
-    "completed": [
-     "walk",
-     "turn",
-     "walk",
-     "walk",
-     "walk",
-     "wave",
-     "nod",
-     "look"
-    ],
-    "max_tilt_deg": 9.3,
+    "max_tilt_deg": 7.3,
     "distance_m": 0.26,
     "latency_ms": 20
    },
@@ -623,7 +663,7 @@
      "nod",
      "look"
     ],
-    "max_tilt_deg": 10.5,
+    "max_tilt_deg": 7.1,
     "distance_m": 0.26,
     "latency_ms": 20
    },
@@ -639,8 +679,8 @@
      "nod",
      "look"
     ],
-    "max_tilt_deg": 10.2,
-    "distance_m": 0.28,
+    "max_tilt_deg": 7.2,
+    "distance_m": 0.27,
     "latency_ms": 20
    },
    {
@@ -655,29 +695,13 @@
      "nod",
      "look"
     ],
-    "max_tilt_deg": 10.1,
-    "distance_m": 0.39,
-    "latency_ms": 20
-   },
-   {
-    "pass": true,
-    "completed": [
-     "walk",
-     "turn",
-     "walk",
-     "walk",
-     "walk",
-     "wave",
-     "nod",
-     "look"
-    ],
-    "max_tilt_deg": 10.0,
-    "distance_m": 0.25,
+    "max_tilt_deg": 7.0,
+    "distance_m": 0.24,
     "latency_ms": 20
    }
   ]
  },
  "generated_by": "jx0/verify/robustness.py",
- "seconds_final": 135.7,
- "seconds_mission": 27.5
+ "seconds_final": 127.1,
+ "seconds_mission": 27.1
 }

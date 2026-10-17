@@ -292,11 +292,11 @@ class Robot:
                     self.move_to({"neck_yaw": math.radians(30)}, 0.2)
                     self.move_to({"neck_yaw": math.radians(-30)}, 0.25)
                 self.move_to({"neck_yaw": 0.0}, 0.2)
-            else:                                              # a small bow from the hips (JX0 has no neck pitch)
-                base = {k: self.stand_pose[k] for k in ("l_hip_pitch", "r_hip_pitch")}
-                for _ in range(2):
-                    self.move_to({k: v - math.radians(8) for k, v in base.items()}, 0.3)
-                    self.move_to(base, 0.3)
+            else:                                              # a small bow from the hips (JX0 has no neck pitch);
+                base = {k: self.stand_pose[k] for k in ("l_hip_pitch", "r_hip_pitch")}    # v0.5's taller body tipped
+                for _ in range(2):                                                         # over at 8 deg in 0.3 s
+                    self.move_to({k: v - math.radians(6) for k, v in base.items()}, 0.45)
+                    self.move_to(base, 0.45)
         return "nodded " + kind
 
     def look(self, direction: str = "center") -> str:

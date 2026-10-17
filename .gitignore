@@ -64,3 +64,6 @@ media/jx0_promo_build/
 # Isaac Sim / Isaac Lab installed by jx0/setup/setup_isaac.bat
 .isaac/
 simulation/isaac/isaaclab/logs/
+
+# Rhoban Microban (CC BY-NC-SA 4.0 CAD), reference only until the licence question is settled
+jx0/reference/microban/

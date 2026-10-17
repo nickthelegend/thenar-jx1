@@ -20,21 +20,21 @@
    "problems": []
   },
   "JX0_ArmBlade_L": {
-   "contact_mm2": 3478.7,
+   "contact_mm2": 4076.1,
    "com_over_contact": true,
    "supported_mm2": 0.0,
    "height_mm": 8.0,
    "watertight": true,
-   "volume_cm3": 21.25,
+   "volume_cm3": 24.83,
    "problems": []
   },
   "JX0_ArmBlade_R": {
-   "contact_mm2": 3478.7,
+   "contact_mm2": 4076.1,
    "com_over_contact": true,
    "supported_mm2": 0.0,
    "height_mm": 8.0,
    "watertight": true,
-   "volume_cm3": 21.25,
+   "volume_cm3": 24.83,
    "problems": []
   },
   "JX0_ChestCap": {
@@ -56,12 +56,12 @@
    "problems": []
   },
   "JX0_Head": {
-   "contact_mm2": 355.3,
+   "contact_mm2": 2205.5,
    "com_over_contact": true,
-   "supported_mm2": 4454.2,
-   "height_mm": 62.0,
+   "supported_mm2": 6638.5,
+   "height_mm": 66.0,
    "watertight": true,
-   "volume_cm3": 79.92,
+   "volume_cm3": 154.94,
    "problems": []
   },
   "JX0_HipRollBracket_L": {
@@ -128,48 +128,48 @@
    "problems": []
   },
   "JX0_Shin_L": {
-   "contact_mm2": 1138.0,
+   "contact_mm2": 2031.2,
    "com_over_contact": true,
-   "supported_mm2": 1614.5,
+   "supported_mm2": 2507.7,
    "height_mm": 48.75,
    "watertight": true,
-   "volume_cm3": 23.36,
+   "volume_cm3": 31.4,
    "problems": []
   },
   "JX0_Shin_R": {
-   "contact_mm2": 1138.0,
+   "contact_mm2": 2031.2,
    "com_over_contact": true,
-   "supported_mm2": 1614.5,
+   "supported_mm2": 2507.7,
    "height_mm": 48.75,
    "watertight": true,
-   "volume_cm3": 23.36,
+   "volume_cm3": 31.4,
    "problems": []
   },
   "JX0_Thigh_L": {
-   "contact_mm2": 2855.3,
+   "contact_mm2": 4188.5,
    "com_over_contact": true,
-   "supported_mm2": 3318.9,
+   "supported_mm2": 4652.1,
    "height_mm": 48.75,
    "watertight": true,
-   "volume_cm3": 41.35,
+   "volume_cm3": 53.35,
    "problems": []
   },
   "JX0_Thigh_R": {
-   "contact_mm2": 2855.3,
+   "contact_mm2": 4188.5,
    "com_over_contact": true,
-   "supported_mm2": 3318.9,
+   "supported_mm2": 4652.1,
    "height_mm": 48.75,
    "watertight": true,
-   "volume_cm3": 41.35,
+   "volume_cm3": 53.35,
    "problems": []
   },
   "JX0_Torso": {
    "contact_mm2": 905.6,
    "com_over_contact": true,
    "supported_mm2": 9208.7,
-   "height_mm": 136.0,
+   "height_mm": 162.0,
    "watertight": true,
-   "volume_cm3": 147.29,
+   "volume_cm3": 170.83,
    "problems": []
   },
   "JX0_UpperArm_L": {
@@ -188,6 +188,15 @@
    "height_mm": 41.3,
    "watertight": true,
    "volume_cm3": 31.02,
+   "problems": []
+  },
+  "JX0_Visor": {
+   "contact_mm2": 1468.3,
+   "com_over_contact": true,
+   "supported_mm2": 0.0,
+   "height_mm": 2.95,
+   "watertight": true,
+   "volume_cm3": 4.33,
    "problems": []
   },
   "JX0_YawKeeper_L": {
@@ -233,8 +242,8 @@
    "material": "PETG",
    "parts": 1,
    "bodies": 1,
-   "time": "1h 47m 8s",
-   "grams": 33.52,
+   "time": "2h 13m 21s",
+   "grams": 44.08,
    "nozzle": [
     240.0
    ],
@@ -243,7 +252,7 @@
    ],
    "height_mm": 48.8,
    "min_gap_mm": 99.0,
-   "min_edge_mm": 85.9,
+   "min_edge_mm": 71.4,
    "problems": []
   },
   "P1S-1_pelvis_hip_yaw": {
@@ -287,8 +296,8 @@
    "material": "PETG",
    "parts": 41,
    "bodies": 41,
-   "time": "2h 15m 36s",
-   "grams": 37.65,
+   "time": "2h 42m 47s",
+   "grams": 49.06,
    "nozzle": [
     240.0
    ],
@@ -305,8 +314,8 @@
    "material": "PETG",
    "parts": 4,
    "bodies": 4,
-   "time": "10h 12m 22s",
-   "grams": 203.5,
+   "time": "11h 42m 4s",
+   "grams": 233.75,
    "nozzle": [
     240.0
    ],
@@ -315,7 +324,7 @@
    ],
    "height_mm": 61.4,
    "min_gap_mm": 8.0,
-   "min_edge_mm": 10.4,
+   "min_edge_mm": 20.4,
    "problems": []
   },
   "i7-2_torso_head": {
@@ -323,8 +332,8 @@
    "material": "PLA",
    "parts": 3,
    "bodies": 3,
-   "time": "10h 56m 59s",
-   "grams": 288.68,
+   "time": "14h 5m 30s",
+   "grams": 362.82,
    "nozzle": [
     210.0,
     215.0
@@ -332,18 +341,18 @@
    "bed": [
     60.0
    ],
-   "height_mm": 136.0,
+   "height_mm": 162.0,
    "min_gap_mm": 8.0,
-   "min_edge_mm": 21.1,
+   "min_edge_mm": 19.1,
    "problems": []
   },
   "P1S-4_chest_arms": {
    "printer": "P1S",
    "material": "PLA",
-   "parts": 5,
-   "bodies": 5,
-   "time": "5h 34m 46s",
-   "grams": 169.89,
+   "parts": 3,
+   "bodies": 3,
+   "time": "4h 35m 5s",
+   "grams": 140.6,
    "nozzle": [
     210.0,
     215.0
@@ -353,13 +362,51 @@
    ],
    "height_mm": 42.0,
    "min_gap_mm": 8.0,
-   "min_edge_mm": 8.0,
+   "min_edge_mm": 8.9,
+   "problems": []
+  },
+  "P1S-6_blades": {
+   "printer": "P1S",
+   "material": "PLA",
+   "parts": 2,
+   "bodies": 2,
+   "time": "1h 13m 37s",
+   "grams": 34.12,
+   "nozzle": [
+    210.0,
+    215.0
+   ],
+   "bed": [
+    60.0
+   ],
+   "height_mm": 8.0,
+   "min_gap_mm": 8.0,
+   "min_edge_mm": 60.0,
+   "problems": []
+  },
+  "P1S-5_visor_black": {
+   "printer": "P1S",
+   "material": "PLA",
+   "parts": 1,
+   "bodies": 1,
+   "time": "15m 1s",
+   "grams": 4.25,
+   "nozzle": [
+    210.0,
+    215.0
+   ],
+   "bed": [
+    60.0
+   ],
+   "height_mm": 3.0,
+   "min_gap_mm": 99.0,
+   "min_edge_mm": 101.1,
    "problems": []
   }
  },
  "filament_g": {
-  "PETG": 654.8,
-  "PLA": 458.6
+  "PETG": 707.1,
+  "PLA": 541.8
  },
  "problems": 0
 }

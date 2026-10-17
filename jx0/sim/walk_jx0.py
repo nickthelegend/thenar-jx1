@@ -32,7 +32,7 @@ from jx0bot.balance import GAINS, Balance  # noqa: E402  (the robot's own balanc
 OUT = ROOT / "jx0" / "results"
 IMG = OUT / "images"
 GAIT_DIR = ROOT / "jx0" / "software" / "jx0bot" / "gaits"
-H = 0.140                  # walking hip height (v0.4 legs: 153 mm hip to floor, knees bent like the reference robot)
+H = 0.190                  # walking hip height (v0.5 legs: 213 mm hip to floor, knees bent like the reference robot)
 COMMON = dict(zmp_offset_x=0.0, zmp_offset_y=0.02, hip_height=H, ds_ratio=0.25, step_height=0.012, t_start=0.8, t_end=1.0)
 # zmp_offset_y: the ZMP stays 20 mm inside each foot, so the short v0.4 legs lean ~15 deg sideways at most (0 mm: 26 deg, the
 # ankle-roll limit); chosen by Monte Carlo (jx0/verify/robustness.py) over step time 0.45-0.6 s and offset 0-20 mm

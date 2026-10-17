@@ -10,7 +10,7 @@ import math
 
 import numpy as np
 
-HIP_Y, THIGH, SHIN, SOLE = 0.045, 0.062, 0.058, 0.033   # v0.4 (jx0/design_point.yaml)
+HIP_Y, THIGH, SHIN, SOLE = 0.045, 0.093, 0.087, 0.033   # v0.5 (jx0/design_point.yaml)
 FOOT_X = (-0.068, 0.056)           # heel and toe, relative to the ankle
 FOOT_HALF_W = 0.035
 LEG = ("hip_yaw", "hip_roll", "hip_pitch", "knee", "ankle_pitch", "ankle_roll")
@@ -67,15 +67,15 @@ def leg_dict(q, side):
     return {f"{side}_{j}": float(v) for j, v in zip(LEG, q)}
 
 
-# masses (kg) and centres of mass (left leg link frames, m) from jx0/design_point.yaml via jx0/sim/jx0_model.py (v0.4;
+# masses (kg) and centres of mass (left leg link frames, m) from jx0/design_point.yaml via jx0/sim/jx0_model.py (v0.5;
 # checked against the MuJoCo model by tests/test_jx0bot.py). The legs are a third of the robot, so the centre of mass
 # moves with every step and is computed from both legs' joint angles.
-UPPER_MASS, UPPER_COM = 1.4490, np.array([0.0083, 0.0, 0.1345])   # pelvis + torso + head + arms (arms at rest)
+UPPER_MASS, UPPER_COM = 1.5250, np.array([0.0082, 0.0, 0.1521])   # pelvis + torso + head + arms (arms at rest)
 LINKS = {
     "hip_yaw_link": (0.1450, (-0.0308, -0.0115, 0.0058)),
     "hip_roll_link": (0.1240, (0.0056, 0.0020, 0.0006)),
-    "thigh": (0.1350, (0.0123, -0.0007, -0.0555)),
-    "shin": (0.1170, (0.0005, -0.0007, -0.0406)),
+    "thigh": (0.1470, (0.0123, -0.0008, -0.0816)),
+    "shin": (0.1250, (0.0006, -0.0009, -0.0637)),
     "ankle_cross": (0.1310, (-0.0375, -0.0082, 0.0000)),
     "foot": (0.0610, (-0.0140, 0.0000, -0.0260)),
 }

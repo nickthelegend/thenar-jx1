@@ -79,7 +79,7 @@ commands:
 episode_s: 20.0
 
 termination:
-  min_base_height_m: 0.10                      # the pelvis stands ~0.19 m up in the stance
+  min_base_height_m: 0.15                      # the pelvis stands ~0.25 m up in the stance (v0.5 legs)
   max_tilt_deg: 60.0
 
 rewards:                                         # JX1's terms; the length-scaled ones rescaled for a 0.33 m robot

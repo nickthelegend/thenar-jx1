@@ -33,6 +33,7 @@
     <mesh name="m_JX0_Torso" file="JX0_Torso.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_UpperArm_L" file="JX0_UpperArm_L.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_UpperArm_R" file="JX0_UpperArm_R.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="m_JX0_Visor" file="JX0_Visor.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_YawKeeper_L" file="JX0_YawKeeper_L.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_YawKeeper_R" file="JX0_YawKeeper_R.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_YawRing_L" file="JX0_YawRing_L.stl" scale="0.001 0.001 0.001"/>
@@ -42,7 +43,7 @@
   <worldbody>
     <geom name="floor" size="6 6 0.1" type="plane" friction="0.9 0.02 0.001" material="grid"/>
     <light pos="0.5 -0.5 2" dir="-0.19245 0.19245 -0.96225"/>
-    <body name="pelvis" pos="0 0 0.155">
+    <body name="pelvis" pos="0 0 0.215">
       <inertial pos="0.00067658 0 0.0490736" mass="0.269" diaginertia="0.000523292 6.62058e-05 0.000524273"/>
       <joint name="root" type="free"/>
       <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Pelvis"/>
@@ -59,13 +60,13 @@
       <geom pos="0 -0.045 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_YawRing_R"/>
       <site name="imu" pos="0 0 0.03" group="4"/>
       <body name="torso_link">
-        <inertial pos="0.005 0 0.143" mass="0.663" diaginertia="0.00380673 0.0025636 0.00195033"/>
-        <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Torso"/>
+        <inertial pos="0.005 0 0.16" mass="0.739" diaginertia="0.00503752 0.00365189 0.00217389"/>
+        <geom type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Torso"/>
         <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_ChestCap"/>
-        <geom pos="0 0 0.2256" quat="0.707107 0 0 0.707107" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
-        <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_Torso"/>
+        <geom pos="0 0 0.2516" quat="0.707107 0 0 0.707107" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
+        <geom type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_Torso"/>
         <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_ChestCap"/>
-        <body name="left_upper_arm_link" pos="0.0125 0.063 0.186">
+        <body name="left_upper_arm_link" pos="0.0125 0.063 0.212">
           <inertial pos="0.0064 0.0198 -0.0326" mass="0.204" diaginertia="0.00011 0.00013 7e-05"/>
           <joint name="left_shoulder_pitch_joint" range="-2.87979 1.0472" armature="0.005" damping="0.01" axis="0 1 0" limited="true"/>
           <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_UpperArm_L"/>
@@ -78,7 +79,7 @@
             <site name="left_hand" pos="0 0 -0.095" group="4"/>
           </body>
         </body>
-        <body name="right_upper_arm_link" pos="0.0125 -0.063 0.186">
+        <body name="right_upper_arm_link" pos="0.0125 -0.063 0.212">
           <inertial pos="0.0064 -0.0198 -0.0326" mass="0.204" diaginertia="0.00011 0.00013 7e-05"/>
           <joint name="right_shoulder_pitch_joint" range="-2.87979 1.0472" armature="0.005" damping="0.01" axis="0 1 0" limited="true"/>
           <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_UpperArm_R"/>
@@ -91,10 +92,11 @@
             <site name="right_hand" pos="0 0 -0.095" group="4"/>
           </body>
         </body>
-        <body name="head_link" pos="0 0 0.2444">
-          <inertial pos="0 0 0.031" mass="0.077" diaginertia="4e-05 4e-05 4e-05"/>
+        <body name="head_link" pos="0 0 0.2704">
+          <inertial pos="0 0 0.033" mass="0.077" diaginertia="4e-05 4e-05 4e-05"/>
           <joint name="neck_yaw_joint" range="-1.39626 1.39626" armature="0.0005" damping="0.01" limited="true"/>
           <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Head"/>
+          <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Visor"/>
           <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_NeckHub"/>
         </body>
       </body>
@@ -109,18 +111,18 @@
           <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_HipRollBracket_L"/>
           <geom quat="0.707107 -0.707107 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
           <body name="left_thigh_link">
-            <inertial pos="0.0123296 -0.000681481 -0.0555259" mass="0.135" diaginertia="5.53996e-05 4.8902e-05 3.93075e-05"/>
+            <inertial pos="0.0123027 -0.000789116 -0.0815578" mass="0.147" diaginertia="0.000103097 9.7056e-05 4.38529e-05"/>
             <joint name="left_hip_pitch_joint" range="-1.22173 0.139626" armature="0.005" damping="0.01" axis="0 1 0" limited="true"/>
             <geom type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Thigh_L"/>
-            <geom pos="0 0 -0.062" quat="0.707107 -0.707107 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
+            <geom pos="0 0 -0.093" quat="0.707107 -0.707107 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
             <geom type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_Thigh_L"/>
-            <body name="left_shin_link" pos="0 0 -0.062">
-              <inertial pos="0.000478632 -0.000717949 -0.040594" mass="0.117" diaginertia="4.35498e-05 3.3372e-05 2.9693e-05"/>
+            <body name="left_shin_link" pos="0 0 -0.093">
+              <inertial pos="0.000576 -0.000864 -0.0637" mass="0.125" diaginertia="8.68905e-05 7.61577e-05 3.1916e-05"/>
               <joint name="left_knee_joint" range="0 1.46608" armature="0.005" damping="0.01" axis="0 1 0" limited="true"/>
-              <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Shin_L"/>
-              <geom pos="0 0 -0.058" quat="-0.5 0.5 0.5 0.5" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
-              <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_Shin_L"/>
-              <body name="left_ankle_pitch_link" pos="0 0 -0.058">
+              <geom type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Shin_L"/>
+              <geom pos="0 0 -0.087" quat="-0.5 0.5 0.5 0.5" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
+              <geom type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_Shin_L"/>
+              <body name="left_ankle_pitch_link" pos="0 0 -0.087">
                 <inertial pos="-0.0375221 -0.00817176 0" mass="0.131" diaginertia="3.1866e-05 4.59e-05 5.55629e-05"/>
                 <joint name="left_ankle_pitch_joint" range="-0.959931 0" armature="0.005" damping="0.01" axis="0 1 0" limited="true"/>
                 <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_AnkleBracket_L"/>
@@ -148,18 +150,18 @@
           <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_HipRollBracket_R"/>
           <geom quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
           <body name="right_thigh_link">
-            <inertial pos="0.0123296 0.000681481 -0.0555259" mass="0.135" diaginertia="5.53996e-05 4.8902e-05 3.93075e-05"/>
+            <inertial pos="0.0123027 0.000789116 -0.0815578" mass="0.147" diaginertia="0.000103097 9.7056e-05 4.38529e-05"/>
             <joint name="right_hip_pitch_joint" range="-1.22173 0.139626" armature="0.005" damping="0.01" axis="0 1 0" limited="true"/>
             <geom type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Thigh_R"/>
-            <geom pos="0 0 -0.062" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
+            <geom pos="0 0 -0.093" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
             <geom type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_Thigh_R"/>
-            <body name="right_shin_link" pos="0 0 -0.062">
-              <inertial pos="0.000478632 0.000717949 -0.040594" mass="0.117" diaginertia="4.35498e-05 3.3372e-05 2.9693e-05"/>
+            <body name="right_shin_link" pos="0 0 -0.093">
+              <inertial pos="0.000576 0.000864 -0.0637" mass="0.125" diaginertia="8.68905e-05 7.61577e-05 3.1916e-05"/>
               <joint name="right_knee_joint" range="0 1.46608" armature="0.005" damping="0.01" axis="0 1 0" limited="true"/>
-              <geom type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Shin_R"/>
-              <geom pos="0 0 -0.058" quat="0.5 0.5 -0.5 0.5" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
-              <geom type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_Shin_R"/>
-              <body name="right_ankle_pitch_link" pos="0 0 -0.058">
+              <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Shin_R"/>
+              <geom pos="0 0 -0.087" quat="0.5 0.5 -0.5 0.5" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
+              <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_Shin_R"/>
+              <body name="right_ankle_pitch_link" pos="0 0 -0.087">
                 <inertial pos="-0.0375221 0.00817176 0" mass="0.131" diaginertia="3.1866e-05 4.59e-05 5.55629e-05"/>
                 <joint name="right_ankle_pitch_joint" range="-0.959931 0" armature="0.005" damping="0.01" axis="0 1 0" limited="true"/>
                 <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_AnkleBracket_R"/>

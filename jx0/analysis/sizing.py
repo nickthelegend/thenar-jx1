@@ -30,12 +30,12 @@ from run_leg_analysis import static_case  # noqa: E402
 
 DESIGN = ROOT / "jx0" / "design_point.yaml"
 OUT = ROOT / "jx0" / "results"
-H = 0.140                                   # walking hip height (as jx0/sim/walk_jx0.py, v0.4 legs): knees bent ~55 deg
+H = 0.190                                   # walking hip height (as jx0/sim/walk_jx0.py, v0.5 legs): knees bent ~55 deg
 POLICY = {"dynamic_peak_factor": 1.5, "static_peak_factor": 1.25, "continuous_factor": 1.3, "torque_speed_factor": 1.5}
 
 
 def gaits():
-    sq0, sqT, sqA = 1.0, 1.6, 0.025
+    sq0, sqT, sqA = 1.0, 1.6, 0.035
 
     def squat(t):
         return H - sqA * 0.5 * (1 - np.cos(2 * np.pi * (t - sq0) / sqT)) if sq0 <= t <= sq0 + sqT else H
@@ -55,7 +55,7 @@ def statics(d: Design):
     ya = d.hip_spacing / 2
     toe, heel, hw, m = d.foot_length - d.ankle_from_heel, d.ankle_from_heel, d.foot_width / 2, 0.005
     hs = 0.118                              # single-leg poses: the pelvis shifts over the stance foot, so it sits lower
-    return [("stand_double", "both", (0.005, 0.0), H), ("stand_deep_squat", "both", (0.005, 0.0), 0.115),
+    return [("stand_double", "both", (0.005, 0.0), H), ("stand_deep_squat", "both", (0.005, 0.0), 0.160),
             ("single_leg", "l", (0.005, ya), hs), ("single_leg_bent", "l", (0.005, ya), 0.11),
             ("single_leg_cop_toe", "l", (toe - m, ya), hs - 0.02), ("single_leg_cop_heel", "l", (-(heel - m), ya), hs - 0.02),
             ("single_leg_cop_outer_edge", "l", (0.005, ya + hw - m), hs - 0.02),

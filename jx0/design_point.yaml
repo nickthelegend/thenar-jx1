@@ -3,7 +3,7 @@
 # dynamics) sizes it unchanged. Every value carries an evidence label: VERIFIED / MEASURED / CALCULATED / ESTIMATED /
 # ASSUMED / UNVERIFIED. Masses are ASSUMED until the CAD mass properties replace them.
 meta:
-  version: "0.4"
+  version: "0.5"
   date: "2026-10-04"
   status: "v0.3 (2026-10-04): restyled after the reference robot (media/reference.mp4); all 17 joints Feetech STS3215 12 V; sage PETG; Raspberry Pi 4"
 
@@ -13,14 +13,14 @@ frames:
   zero_pose: "legs straight and vertical, feet flat and parallel, arms hanging, all joint angles 0"
 
 overall:
-  height_m: {value: 0.460, label: CALCULATED, note: "v0.4 CAD: sole 153 mm below the hip centres, head top 306.6 mm above"}
+  height_m: {value: 0.546, label: CALCULATED, note: "v0.5 CAD: sole 213 mm below the hip centres, head top 332.6 mm above (v0.4: 153 + 306.6 = 460 mm)"}
   mass_target_kg: {value: 2.0, label: ESTIMATED}
 
 geometry:
   sole_to_ankle_m: {value: 0.033, label: CALCULATED, note: "v0.4 CAD: sole 5 mm + the ankle-roll servo's cage clearance at 20 deg roll; reference robot ~25 mm"}
-  shin_m: {value: 0.058, label: CALCULATED, note: "v0.4 CAD: knee axis to ankle axis (reference robot ~46 mm); the ankle-pitch servo stands in a cage under the knee's U-bracket"}
-  thigh_m: {value: 0.062, label: CALCULATED, note: "v0.4 CAD: hip centre to knee axis (reference robot ~63 mm); the knee servo lies forward so the thigh is the reference's dog-leg plate"}
-  knee_actuator_z_m: {value: -0.062, label: CALCULATED, note: "knee servo on the knee axis (its case centre is 12.5 mm forward: actuator_offsets_m.knee)"}
+  shin_m: {value: 0.087, label: CALCULATED, note: "v0.5 CAD (1.5 x v0.4's 58 mm): knee axis to ankle axis (reference robot ~46 mm); the ankle-pitch servo stands in a cage under the knee's U-bracket"}
+  thigh_m: {value: 0.093, label: CALCULATED, note: "v0.5 CAD (1.5 x v0.4's 62 mm): hip centre to knee axis (reference robot ~63 mm); the knee servo lies forward so the thigh is the reference's dog-leg plate"}
+  knee_actuator_z_m: {value: -0.093, label: CALCULATED, note: "knee servo on the knee axis (its case centre is 12.5 mm forward: actuator_offsets_m.knee)"}
   hip_spacing_m: {value: 0.090, label: ASSUMED, note: "two hip roll/pitch servo blocks side by side (servo body 45 x 25 mm)"}
   foot:
     length_m: {value: 0.124, label: CALCULATED, note: "v0.4 CAD foot x -68..56 mm: the roll U-bracket's rear arm sits over the heel"}
@@ -28,7 +28,7 @@ geometry:
     ankle_from_heel_m: {value: 0.068, label: CALCULATED, note: "CAD foot x -68..56 mm"}
     thickness_m: {value: 0.006, label: CALCULATED, note: "PETG sole 5 mm + 1 mm rubber"}
   torso:
-    pelvis_to_shoulder_m: {value: 0.140, label: ASSUMED}
+    pelvis_to_shoulder_m: {value: 0.166, label: ASSUMED}
     shoulder_width_m: {value: 0.170, label: ASSUMED}
 
 ankle_type: serial   # one servo per ankle axis (JX1 uses a two-motor parallel ankle)
@@ -80,14 +80,14 @@ layout:
   actuator_offsets_m:
     hip_roll: [-0.0326, -0.0125, 0.0]   # CAD: hip-roll servo behind the hip centre (case toward the robot's centre)
     hip_pitch: [0.0125, 0.0, 0.0]       # CAD: hip-pitch servo case forward of the hip centre
-    knee: [0.0125, 0.0, -0.062]         # CAD v0.4: knee servo lying forward of the knee axis
+    knee: [0.0125, 0.0, -0.093]         # CAD v0.5: knee servo lying forward of the knee axis
   ankle_roll_actuator_m: [-0.0406, -0.0125, 0.0]   # CAD v0.4: ankle-roll servo on the ankle cross, behind the ankle (case inboard)
   ankle_actuator_y_m: 0.0
   structure_box_m:
     hip_yaw_link: [0.06, 0.05, 0.04]
     hip_roll_link: [0.06, 0.05, 0.035]
-    thigh: [0.05, 0.045, 0.062]
-    shin: [0.035, 0.045, 0.058]
+    thigh: [0.05, 0.045, 0.093]
+    shin: [0.035, 0.045, 0.087]
     ankle_cross: [0.07, 0.05, 0.035]
 
 # Mass budget per link (printed structure + mounted servos, via `carries`). COM in the link frame (m).
@@ -97,9 +97,9 @@ mass_budget:
     carries: [hip_yaw, hip_yaw]
     com_m: [0.002, 0.0, 0.050]
   upper_body:
-    mass_kg: {value: 1.180, label: ESTIMATED, note: "v0.4: CAD printed torso with skirt 103 g + chest cap 45 g + head 60 g + neck hub 11 g + arms 73 g (hood/elbow box 21.5 + blade 14.8 g per side); 5 STS3215 (neck, 2 shoulder, 2 elbow: the shoulder and elbow servos ride in the arms) 445 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, servo driver + UBEC 30 g, IMU/mic/amp/speaker/button 20 g, switch 10 g, wiring 70 g, screws 25 g"}
-    com_m: [0.005, 0.0, 0.143]
-    inertia_box_m: [0.08, 0.17, 0.20]
+    mass_kg: {value: 1.256, label: ESTIMATED, note: "v0.5: torso 26 mm taller (119 g), blades 120 mm (17.3 g each), visor head 108 g + black visor 3 g (v0.4 head 56 g); v0.4: CAD printed torso with skirt 103 g + chest cap 45 g + head 60 g + neck hub 11 g + arms 73 g (hood/elbow box 21.5 + blade 14.8 g per side); 5 STS3215 (neck, 2 shoulder, 2 elbow: the shoulder and elbow servos ride in the arms) 445 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, servo driver + UBEC 30 g, IMU/mic/amp/speaker/button 20 g, switch 10 g, wiring 70 g, screws 25 g"}
+    com_m: [0.005, 0.0, 0.160]
+    inertia_box_m: [0.08, 0.17, 0.23]
   hip_yaw_link:
     structure_kg: {value: 0.056, label: ESTIMATED, note: "v0.4 fitted to the real STS3215: hip-yaw bracket 50.9 g printed (disc with the keeper's groove under its rim, keel, solid block, roll-servo cage) + screws"}
     carries: [hip_roll]
@@ -109,13 +109,13 @@ mass_budget:
     carries: [hip_pitch]
     com_m: [-0.012, 0.007, 0.002]
   thigh:
-    structure_kg: {value: 0.046, label: ESTIMATED, note: "v0.4 fitted to the real STS3215: thigh 42.1 g printed (dog-leg U-bracket + knee cage) + screws"}
+    structure_kg: {value: 0.058, label: ESTIMATED, note: "v0.5: thigh 54.2 g printed (v0.4 42.1 g) (dog-leg U-bracket + knee cage) + screws"}
     carries: [knee]
-    com_m: [0.012, -0.002, -0.043]
+    com_m: [0.012, -0.002, -0.064]
   shin:
-    structure_kg: {value: 0.028, label: ESTIMATED, note: "v0.4 fitted to the real STS3215: shin 23.7 g printed (knee U-bracket + ankle-pitch cage) + screws"}
+    structure_kg: {value: 0.036, label: ESTIMATED, note: "v0.5: shin 31.9 g printed (v0.4 23.7 g) (knee U-bracket + ankle-pitch cage) + screws"}
     carries: [ankle_A]
-    com_m: [0.002, -0.003, -0.025]
+    com_m: [0.002, -0.003, -0.037]
   ankle_cross:
     structure_kg: {value: 0.042, label: ESTIMATED, note: "v0.4 fitted to the real STS3215: ankle bracket 37.7 g printed (U-bracket + closed roll cage) + screws; carries the ankle-roll servo (layout.ankle_roll_actuator_m)"}
     carries: [ankle_B]
@@ -127,11 +127,11 @@ mass_budget:
 
 # Upper body (arms and head) — used by the simulation model; lumped into upper_body for the leg analysis.
 upper_body_geometry:
-  shoulder_pitch_origin: {value: [0.0125, 0.063, 0.186], label: CALCULATED, note: "CAD v0.4: the shoulder servo's horn face on the chest-wall pad (the servo hangs outside, in the arm's hood)"}
+  shoulder_pitch_origin: {value: [0.0125, 0.063, 0.212], label: CALCULATED, note: "CAD v0.5: the shoulder servo's horn face on the chest-wall pad (the servo hangs outside, in the arm's hood)"}
   upper_arm_m: {value: 0.052, label: CALCULATED, note: "CAD: shoulder-pitch axis to elbow axis (hood + elbow box)"}
-  forearm_m: {value: 0.100, label: CALCULATED, note: "CAD: elbow axis to blade tip"}
-  neck_yaw_origin: {value: [0.0, 0.0, 0.2444], label: CALCULATED, note: "CAD: neck STS3215 standing on the chest cap by its rear face, horn face (geometry.NECK_Z)"}
-  head_size_m: {value: [0.066, 0.078, 0.062], label: CALCULATED, note: "CAD head: soft block, four face holes"}
+  forearm_m: {value: 0.120, label: CALCULATED, note: "CAD: elbow axis to blade tip"}
+  neck_yaw_origin: {value: [0.0, 0.0, 0.2704], label: CALCULATED, note: "CAD: neck STS3215 standing on the chest cap by its rear face, horn face (geometry.NECK_Z)"}
+  head_size_m: {value: [0.070, 0.090, 0.066], label: CALCULATED, note: "CAD v0.5 head: wide visor head, neon ring round the black visor, ear pods"}
 
 upper_body_joint_ranges_deg:
   shoulder_pitch: {min: -180, max: 60,  label: ASSUMED, note: "- = arm raises forward (the cradle swings past the torso side)"}

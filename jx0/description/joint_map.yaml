@@ -14,7 +14,7 @@ joints:
   origin_xyz_m:
   - 0.0125
   - 0.063
-  - 0.186
+  - 0.212
   origin_rpy_rad:
   - 0.0
   - 0.0
@@ -60,7 +60,7 @@ joints:
   origin_xyz_m:
   - 0.0125
   - -0.063
-  - 0.186
+  - 0.212
   origin_rpy_rad:
   - 0.0
   - 0.0
@@ -106,7 +106,7 @@ joints:
   origin_xyz_m:
   - 0.0
   - 0.0
-  - 0.2444
+  - 0.2704
   origin_rpy_rad:
   - 0.0
   - 0.0
@@ -198,7 +198,7 @@ joints:
   origin_xyz_m:
   - 0.0
   - 0.0
-  - -0.062
+  - -0.093
   origin_rpy_rad:
   - 0.0
   - 0.0
@@ -221,7 +221,7 @@ joints:
   origin_xyz_m:
   - 0.0
   - 0.0
-  - -0.058
+  - -0.087
   origin_rpy_rad:
   - 0.0
   - 0.0
@@ -336,7 +336,7 @@ joints:
   origin_xyz_m:
   - 0.0
   - 0.0
-  - -0.062
+  - -0.093
   origin_rpy_rad:
   - 0.0
   - 0.0
@@ -359,7 +359,7 @@ joints:
   origin_xyz_m:
   - 0.0
   - 0.0
-  - -0.058
+  - -0.087
   origin_rpy_rad:
   - 0.0
   - 0.0

@@ -40,11 +40,10 @@ FONT = "C:/Windows/Fonts/segoeuil.ttf"
 def neon_mesh() -> Path:
     """The neon strip in its channel, head frame (mm): the ring, NEON_DEPTH deep, its face flush with the head's."""
     from preview import solid
-    hx = 33.0
+    xf = G.HEAD_BOX[1]
     w, cz, h, r = G.NEON
     e = G.NEON_WIDTH / 2 - 0.2
-    ring = solid(("prism", "x", G.neon_rect(w / 2 + e, h / 2 + e, r + e, cz), (hx - G.NEON_DEPTH + 0.2, hx - 0.05))) - \
-        solid(("prism", "x", G.neon_rect(w / 2 - e, h / 2 - e, r - e, cz), (hx - G.NEON_DEPTH, hx + 0.1)))
+    ring = solid(("prism", "x", G.neon_rect(w / 2 + e, h / 2 + e, r + e, cz), (xf - G.NEON_DEPTH + 0.2, xf - 0.05))) -         solid(("prism", "x", G.neon_rect(w / 2 - e, h / 2 - e, r - e, cz), (xf - G.NEON_DEPTH, xf + 0.1)))
     mm = ring.to_mesh()
     TMP.mkdir(parents=True, exist_ok=True)
     f = TMP / "neon.stl"
@@ -90,21 +89,6 @@ def bloom(img: Image.Image) -> Image.Image:
     return Image.fromarray((np.clip(out, 0, 1) * 255).astype(np.uint8))
 
 
-def visor_mesh() -> Path:
-    """The face inside the ring, painted gloss black like a visor (a thin skin on the flat face, for the renders)."""
-    from preview import solid
-    hx = 33.0
-    w, cz, h, r = G.NEON
-    e = G.NEON_WIDTH / 2
-    face = solid(("prism", "x", G.neon_rect(w / 2 - e, h / 2 - e, r - e, cz), (hx - 0.05, hx + 0.08)))
-    for yc, zc in ((0.0, cz + 7.0), (7.0, cz), (-7.0, cz), (0.0, cz - 7.0)):
-        face = face - solid(("cyl", "x", (yc, zc), 2.5, (hx - 1.0, hx + 1.0)))
-    mm = face.to_mesh()
-    f = TMP / "visor.stl"
-    trimesh.Trimesh(np.asarray(mm.vert_properties)[:, :3], np.asarray(mm.tri_verts)).export(f)
-    return f
-
-
 def scene() -> str:
     xml = build(Design(ROOT / "jx0" / "design_point.yaml"))
     xml = re.sub(r"<visual>.*?</visual>", '<visual><global offwidth="1920" offheight="1920"/><quality shadowsize="8192" '
@@ -124,15 +108,15 @@ def scene() -> str:
     def colour(m):
         part = m.group(1)
         mat = "graphite" if any(part.startswith(f"JX0_{k}") for k in LEGS) else "shell"
+        if part == "JX0_Visor":
+            return re.sub(r'rgba="[^"]*"', 'material="visor"', m.group(0))
         return m.group(0).replace('rgba=".74 .86 .58 1"', f'material="{mat}"')
     xml = re.sub(r'<geom type="mesh" mesh="m_(JX0_\w+)"[^>]*/>', colour, xml)
     xml = re.sub(r'(<mesh name="m_JX0_Head" file=")[^"]*"', lambda m: m.group(1) + fine_head().as_posix() + '"', xml)
-    f, v = neon_mesh(), visor_mesh()
-    xml = xml.replace("</asset>", f'<mesh name="neon" file="{f.as_posix()}" scale=".001 .001 .001"/>'
-                      f'<mesh name="visor" file="{v.as_posix()}" scale=".001 .001 .001"/>\n  </asset>', 1)
+    f = neon_mesh()
+    xml = xml.replace("</asset>", f'<mesh name="neon" file="{f.as_posix()}" scale=".001 .001 .001"/>\n  </asset>', 1)
     xml = re.sub(r'(<geom type="mesh" mesh="m_JX0_Head" (pos="[^"]*" quat="[^"]*") [^>]*/>)',
-                 r'\1<geom type="mesh" mesh="neon" \2 material="neon" contype="0" conaffinity="0" mass="0"/>'
-                 r'<geom type="mesh" mesh="visor" \2 material="visor" contype="0" conaffinity="0" mass="0"/>', xml)
+                 r'\1<geom type="mesh" mesh="neon" \2 material="neon" contype="0" conaffinity="0" mass="0"/>', xml)
     lights = '''
     <light name="key" directional="true" pos="0.8 -0.6 1.6" dir="-0.5 0.35 -1" diffuse=".75 .74 .72" specular=".3 .3 .3" castshadow="true"/>
     <light name="rim" directional="true" pos="-1 0.8 0.8" dir="0.8 -0.6 -0.25" diffuse=".35 .38 .45" specular=".4 .4 .45" castshadow="false"/>

@@ -5,7 +5,7 @@
   "gaits": 14,
   "pushes_0.96_Ns": 48,
   "model_error_walks": 42,
-  "runs_that_fell_excluded": 0,
+  "runs_that_fell_excluded": 8,
   "note": "falls are excluded: the model has no body collisions, so a fall's impact is not simulated"
  },
  "petg_strength": {
@@ -17,232 +17,232 @@
  "joints": {
   "hip_yaw": {
    "loads_walking": {
-    "torque_nm": 0.536,
-    "bending_horn_nm": 2.613,
-    "bending_centre_nm": 2.697,
-    "axial_n": 42.186,
-    "radial_n": 17.584,
-    "yaw_shaft_ring_only_nm": 2.332,
-    "yaw_shaft_residual_nm": 0.316,
+    "torque_nm": 0.543,
+    "bending_horn_nm": 2.487,
+    "bending_centre_nm": 2.648,
+    "axial_n": 41.151,
+    "radial_n": 14.693,
+    "yaw_shaft_ring_only_nm": 2.068,
+    "yaw_shaft_residual_nm": 0.265,
     "yaw_keeper_lip_n": 100.0,
-    "yaw_ring_n": 110.848
+    "yaw_ring_n": 123.289
    },
    "loads_worst_with_pushes": {
-    "torque_nm": 1.097,
-    "bending_horn_nm": 3.059,
-    "bending_centre_nm": 3.063,
-    "axial_n": 46.384,
-    "radial_n": 25.833,
-    "yaw_shaft_ring_only_nm": 2.665,
-    "yaw_shaft_residual_nm": 0.487,
+    "torque_nm": 0.797,
+    "bending_horn_nm": 2.86,
+    "bending_centre_nm": 2.874,
+    "axial_n": 41.151,
+    "radial_n": 18.243,
+    "yaw_shaft_ring_only_nm": 2.317,
+    "yaw_shaft_residual_nm": 0.501,
     "yaw_keeper_lip_n": 100.0,
-    "yaw_ring_n": 119.742
+    "yaw_ring_n": 123.78
    },
    "v03_single_sided": {
-    "walking_mpa": 54.4,
-    "worst_mpa": 63.7,
-    "shaft_bending_walking_nm": 2.61,
-    "shaft_bending_worst_nm": 3.06,
-    "fatigue_safety": 0.28,
-    "static_safety": 0.78
+    "walking_mpa": 51.8,
+    "worst_mpa": 59.6,
+    "shaft_bending_walking_nm": 2.49,
+    "shaft_bending_worst_nm": 2.86,
+    "fatigue_safety": 0.29,
+    "static_safety": 0.84
    },
    "v04": {
     "design": "disc held from both sides: thrust ring + keeper",
     "walking_mpa": null,
     "worst_mpa": null,
-    "shaft_bending_walking_nm": 0.32,
-    "shaft_bending_worst_nm": 0.49,
+    "shaft_bending_walking_nm": 0.26,
+    "shaft_bending_worst_nm": 0.5,
     "fatigue_safety": null,
     "static_safety": null,
     "walking": {
-     "shaft_bending_ring_only_nm": 2.33,
+     "shaft_bending_ring_only_nm": 2.07,
      "keeper_lip_n": 100.0,
-     "ring_n": 110.8
+     "ring_n": 123.3
     },
     "worst": {
-     "shaft_bending_ring_only_nm": 2.66,
+     "shaft_bending_ring_only_nm": 2.32,
      "keeper_lip_n": 100.0,
-     "ring_n": 119.7
+     "ring_n": 123.8
     },
-    "shaft_bending_nominal_walking_nm": 0.1,
-    "shaft_bending_ring_only_nominal_walking_nm": 1.2
+    "shaft_bending_nominal_walking_nm": 0.12,
+    "shaft_bending_ring_only_nominal_walking_nm": 1.31
    }
   },
   "hip_roll": {
    "loads_walking": {
-    "torque_nm": 2.572,
-    "bending_horn_nm": 1.605,
-    "bending_centre_nm": 2.176,
-    "axial_n": 9.598,
-    "radial_n": 46.31
+    "torque_nm": 2.366,
+    "bending_horn_nm": 1.893,
+    "bending_centre_nm": 2.555,
+    "axial_n": 9.637,
+    "radial_n": 45.13
    },
    "loads_worst_with_pushes": {
-    "torque_nm": 2.787,
-    "bending_horn_nm": 2.333,
-    "bending_centre_nm": 3.0,
-    "axial_n": 15.571,
-    "radial_n": 51.853
+    "torque_nm": 2.885,
+    "bending_horn_nm": 2.252,
+    "bending_centre_nm": 2.727,
+    "axial_n": 13.219,
+    "radial_n": 45.13
    },
    "v03_single_sided": {
-    "walking_mpa": 30.6,
-    "worst_mpa": 44.4,
-    "shaft_bending_walking_nm": 1.61,
-    "shaft_bending_worst_nm": 2.33,
-    "fatigue_safety": 0.49,
-    "static_safety": 1.13
+    "walking_mpa": 36.1,
+    "worst_mpa": 42.9,
+    "shaft_bending_walking_nm": 1.89,
+    "shaft_bending_worst_nm": 2.25,
+    "fatigue_safety": 0.42,
+    "static_safety": 1.17
    },
    "v04": {
     "design": "double-sided U-bracket",
     "walking_mpa": 1.8,
-    "worst_mpa": 2.1,
+    "worst_mpa": 1.9,
     "shaft_bending_walking_nm": 0.0,
     "shaft_bending_worst_nm": 0.0,
-    "fatigue_safety": 8.4,
-    "static_safety": 23.7,
-    "couple_n": 67.8,
-    "shaft_radial_n": 93.7
+    "fatigue_safety": 8.2,
+    "static_safety": 26.9,
+    "couple_n": 61.6,
+    "shaft_radial_n": 84.2
    }
   },
   "hip_pitch": {
    "loads_walking": {
-    "torque_nm": 1.175,
-    "bending_horn_nm": 3.234,
-    "bending_centre_nm": 2.57,
-    "axial_n": 18.689,
-    "radial_n": 49.57
+    "torque_nm": 1.254,
+    "bending_horn_nm": 2.904,
+    "bending_centre_nm": 2.364,
+    "axial_n": 17.044,
+    "radial_n": 48.499
    },
    "loads_worst_with_pushes": {
-    "torque_nm": 1.839,
-    "bending_horn_nm": 3.796,
-    "bending_centre_nm": 3.014,
-    "axial_n": 19.4,
-    "radial_n": 56.18
+    "torque_nm": 1.874,
+    "bending_horn_nm": 3.716,
+    "bending_centre_nm": 2.889,
+    "axial_n": 17.044,
+    "radial_n": 48.499
    },
    "v03_single_sided": {
-    "walking_mpa": 40.4,
-    "worst_mpa": 47.4,
-    "shaft_bending_walking_nm": 3.23,
-    "shaft_bending_worst_nm": 3.8,
-    "fatigue_safety": 0.37,
-    "static_safety": 1.05
+    "walking_mpa": 36.3,
+    "worst_mpa": 46.4,
+    "shaft_bending_walking_nm": 2.9,
+    "shaft_bending_worst_nm": 3.72,
+    "fatigue_safety": 0.41,
+    "static_safety": 1.08
    },
    "v04": {
     "design": "double-sided U-bracket",
-    "walking_mpa": 2.9,
-    "worst_mpa": 3.4,
+    "walking_mpa": 2.8,
+    "worst_mpa": 2.9,
     "shaft_bending_walking_nm": 0.0,
     "shaft_bending_worst_nm": 0.0,
-    "fatigue_safety": 5.1,
-    "static_safety": 14.9,
-    "couple_n": 68.1,
-    "shaft_radial_n": 96.2
+    "fatigue_safety": 5.3,
+    "static_safety": 17.0,
+    "couple_n": 65.3,
+    "shaft_radial_n": 89.5
    }
   },
   "knee": {
    "loads_walking": {
-    "torque_nm": 1.916,
-    "bending_horn_nm": 2.755,
-    "bending_centre_nm": 2.058,
-    "axial_n": 19.633,
-    "radial_n": 53.186
+    "torque_nm": 2.493,
+    "bending_horn_nm": 2.422,
+    "bending_centre_nm": 1.856,
+    "axial_n": 17.541,
+    "radial_n": 52.602
    },
    "loads_worst_with_pushes": {
-    "torque_nm": 2.5,
-    "bending_horn_nm": 3.354,
-    "bending_centre_nm": 2.444,
-    "axial_n": 20.549,
-    "radial_n": 60.562
+    "torque_nm": 2.833,
+    "bending_horn_nm": 3.178,
+    "bending_centre_nm": 2.311,
+    "axial_n": 17.541,
+    "radial_n": 52.602
    },
    "v03_single_sided": {
-    "walking_mpa": 34.4,
-    "worst_mpa": 41.9,
-    "shaft_bending_walking_nm": 2.76,
-    "shaft_bending_worst_nm": 3.35,
-    "fatigue_safety": 0.44,
-    "static_safety": 1.19
+    "walking_mpa": 30.3,
+    "worst_mpa": 39.7,
+    "shaft_bending_walking_nm": 2.42,
+    "shaft_bending_worst_nm": 3.18,
+    "fatigue_safety": 0.5,
+    "static_safety": 1.26
    },
    "v04": {
     "design": "double-sided U-bracket",
-    "walking_mpa": 3.0,
-    "worst_mpa": 3.4,
+    "walking_mpa": 2.9,
+    "worst_mpa": 3.0,
     "shaft_bending_walking_nm": 0.0,
     "shaft_bending_worst_nm": 0.0,
-    "fatigue_safety": 5.0,
-    "static_safety": 14.6,
-    "couple_n": 55.2,
-    "shaft_radial_n": 85.5
+    "fatigue_safety": 5.2,
+    "static_safety": 16.5,
+    "couple_n": 52.2,
+    "shaft_radial_n": 78.5
    }
   },
   "ankle_pitch": {
    "loads_walking": {
-    "torque_nm": 1.666,
-    "bending_horn_nm": 2.281,
-    "bending_centre_nm": 1.553,
-    "axial_n": 20.19,
-    "radial_n": 56.457
+    "torque_nm": 2.003,
+    "bending_horn_nm": 2.069,
+    "bending_centre_nm": 1.444,
+    "axial_n": 17.614,
+    "radial_n": 56.036
    },
    "loads_worst_with_pushes": {
-    "torque_nm": 2.402,
-    "bending_horn_nm": 3.115,
-    "bending_centre_nm": 2.142,
-    "axial_n": 22.055,
-    "radial_n": 63.939
+    "torque_nm": 2.166,
+    "bending_horn_nm": 2.691,
+    "bending_centre_nm": 1.749,
+    "axial_n": 17.614,
+    "radial_n": 56.036
    },
    "v03_single_sided": {
-    "walking_mpa": 50.7,
-    "worst_mpa": 69.2,
-    "shaft_bending_walking_nm": 2.28,
-    "shaft_bending_worst_nm": 3.12,
-    "fatigue_safety": 0.3,
-    "static_safety": 0.72
+    "walking_mpa": 46.0,
+    "worst_mpa": 59.8,
+    "shaft_bending_walking_nm": 2.07,
+    "shaft_bending_worst_nm": 2.69,
+    "fatigue_safety": 0.33,
+    "static_safety": 0.84
    },
    "v04": {
     "design": "double-sided U-bracket",
     "walking_mpa": 2.5,
-    "worst_mpa": 2.9,
+    "worst_mpa": 2.5,
     "shaft_bending_walking_nm": 0.0,
     "shaft_bending_worst_nm": 0.0,
-    "fatigue_safety": 5.9,
-    "static_safety": 17.0,
-    "couple_n": 48.4,
-    "shaft_radial_n": 80.4
+    "fatigue_safety": 6.0,
+    "static_safety": 19.6,
+    "couple_n": 39.5,
+    "shaft_radial_n": 67.5
    }
   },
   "ankle_roll": {
    "loads_walking": {
-    "torque_nm": 1.562,
-    "bending_horn_nm": 2.38,
-    "bending_centre_nm": 3.073,
-    "axial_n": 12.822,
-    "radial_n": 58.773
+    "torque_nm": 1.415,
+    "bending_horn_nm": 2.927,
+    "bending_centre_nm": 3.729,
+    "axial_n": 11.76,
+    "radial_n": 58.706
    },
    "loads_worst_with_pushes": {
-    "torque_nm": 1.836,
-    "bending_horn_nm": 3.563,
-    "bending_centre_nm": 4.639,
-    "axial_n": 21.397,
-    "radial_n": 64.523
+    "torque_nm": 1.757,
+    "bending_horn_nm": 2.927,
+    "bending_centre_nm": 3.729,
+    "axial_n": 17.229,
+    "radial_n": 58.706
    },
    "v03_single_sided": {
-    "walking_mpa": 66.1,
-    "worst_mpa": 99.0,
-    "shaft_bending_walking_nm": 2.38,
-    "shaft_bending_worst_nm": 3.56,
-    "fatigue_safety": 0.23,
-    "static_safety": 0.51
+    "walking_mpa": 81.3,
+    "worst_mpa": 81.3,
+    "shaft_bending_walking_nm": 2.93,
+    "shaft_bending_worst_nm": 2.93,
+    "fatigue_safety": 0.18,
+    "static_safety": 0.61
    },
    "v04": {
     "design": "double-sided U-bracket",
-    "walking_mpa": 2.3,
-    "worst_mpa": 2.8,
+    "walking_mpa": 2.5,
+    "worst_mpa": 2.5,
     "shaft_bending_walking_nm": 0.0,
     "shaft_bending_worst_nm": 0.0,
-    "fatigue_safety": 6.4,
-    "static_safety": 17.8,
-    "couple_n": 104.8,
-    "shaft_radial_n": 137.1
+    "fatigue_safety": 6.1,
+    "static_safety": 20.3,
+    "couple_n": 84.3,
+    "shaft_radial_n": 113.6
    }
   }
  },
- "seconds": 134.1
+ "seconds": 117.9
 }

@@ -37,7 +37,7 @@ def components():
     """(key, part file, 4x4 pose in the pelvis frame) at the zero pose."""
     hf = G.ST["HORN_FACE"]
     comps = [("pelvis", "JX0_Pelvis", pose()), ("torso", "JX0_Torso", pose()), ("chest_cap", "JX0_ChestCap", pose()),
-             ("head", "JX0_Head", pose(p=(0, 0, G.NECK_Z))),
+             ("head", "JX0_Head", pose(p=(0, 0, G.NECK_Z))), ("visor", "JX0_Visor", pose(p=(0, 0, G.NECK_Z))),
              ("neck_hub", "JX0_NeckHub", pose(p=(0, 0, G.NECK_Z))),
              ("servo_neck", ST, pose(servo_axes((0, 1, 0), (0, 0, 1)), (0, 0, G.NECK_Z - hf)))]
     for side, sg in (("L", 1), ("R", -1)):
@@ -79,7 +79,7 @@ def link_of(key):
     sh, el = arm_points(sg)
     base = key[:-2] if side else key
     table = {"pelvis": ("pelvis", (0, 0, 0)), "torso": ("torso", (0, 0, 0)), "chest_cap": ("torso", (0, 0, 0)),
-             "servo_neck": ("torso", (0, 0, 0)), "head": ("head", (0, 0, G.NECK_Z)), "neck_hub": ("head", (0, 0, G.NECK_Z)),
+             "servo_neck": ("torso", (0, 0, 0)), "head": ("head", (0, 0, G.NECK_Z)), "visor": ("head", (0, 0, G.NECK_Z)), "neck_hub": ("head", (0, 0, G.NECK_Z)),
              "servo_hip_yaw": ("pelvis", (0, 0, 0)), "keeper": ("pelvis", (0, 0, 0)), "yaw_ring": ("pelvis", (0, 0, 0)),
              "hip_yaw": (f"{s}_hip_yaw_link", hip), "servo_hip_roll": (f"{s}_hip_yaw_link", hip),
              "hip_roll": (f"{s}_hip_roll_link", hip), "servo_hip_pitch": (f"{s}_hip_roll_link", hip),

@@ -90,18 +90,19 @@ If your printer prints holes or pockets small, set its hole compensation now, be
 | JX0_YawKeeper_L / _R | 1 + 1 | 2.9 g each | 31 × 42 × 9 | PETG near-solid; flat top down |
 | JX0_HipYawBracket_L / _R | 1 + 1 | 50.9 g each | 74 × 58 × 46 | PETG near-solid; disc face down, supports in the groove |
 | JX0_HipRollBracket_L / _R | 1 + 1 | 30.5 g each | 98 × 56 × 31 | PETG near-solid; rear arm down |
-| JX0_Thigh_L / _R | 1 + 1 | 42.0 g each | 52 × 49 × 92 | PETG near-solid; outer arm down |
-| JX0_Shin_L / _R | 1 + 1 | 23.7 g each | 31 × 49 × 84 | PETG near-solid; outer arm down |
+| JX0_Thigh_L / _R | 1 + 1 | 54.2 g each | 52 × 49 × 122 | PETG near-solid; outer arm down |
+| JX0_Shin_L / _R | 1 + 1 | 31.9 g each | 31 × 49 × 113 | PETG near-solid; outer arm down |
 | JX0_AnkleBracket_L / _R | 1 + 1 | 37.8 g each | 74 × 62 × 39 | PETG near-solid; outer arm down |
 | JX0_Foot | 2 | 50.7 g each | 124 × 70 × 46 | PETG near-solid; sole down |
 | JX0_HornShim (0.4 mm, under a horn arm) | 40 | 0.1 g each | Ø19.6 | PETG; two 0.2 mm layers, flat |
-| JX0_Torso (lower shell with the skirt) | 1 | 103.0 g | 84 × 120 × 136 | PLA; floor down |
+| JX0_Torso (lower shell with the skirt) | 1 | 119.4 g | 84 × 120 × 162 | PLA; floor down |
 | JX0_ChestCap | 1 | 45.3 g | 84 × 126 × 42 | PLA; upside down (top face on the bed), chamfers 45° |
-| JX0_Head (10.4 × 5.2 mm channel round the face for the red neon strip) | 1 | 55.9 g | 66 × 78 × 62 | PLA; upright on the flat rim of its open bottom, tree supports inside the rounded top |
+| JX0_Head (visor head: 10.4 × 5.2 mm channel for the red neon strip round the visor's pocket, ear pods) | 1 | 108.3 g | 70 × 94 × 66 | PLA; upright on the flat rim of its open bottom, tree supports inside the top |
+| JX0_Visor (glued into the head's pocket with CA) | 1 | 3.0 g | 3 × 54 × 29 | PLA in **black**; flat |
 | JX0_NeckHub (on the neck horn, the head slides over it) | 1 | 10.7 g | 52 × 48 × 12 | PLA; flat plate down |
 | JX0_UpperArm_L / _R (shoulder hood + elbow box) | 1 + 1 | 21.7 g each | 54 × 35 × 85 | PLA; inner side (the shoulder horn's) down: on the outer plate it would tip |
-| JX0_ArmBlade_L / _R | 1 + 1 | 14.8 g each | 36 × 8 × 116 | PLA; lying flat |
-| **Total** | **25 + 40 shims** | **841 g** | | 554 g PETG + 287 g PLA |
+| JX0_ArmBlade_L / _R | 1 + 1 | 17.3 g each | 36 × 8 × 136 | PLA; lying flat |
+| **Total** | **26 + 40 shims** | **961 g** | | 596 g PETG + 365 g PLA (3 g of it black) |
 
 ## Joint stops
 

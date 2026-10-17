@@ -39,9 +39,9 @@ UP = (0.0, 0.0, 1.0)
 # Premium and quiet: one small, widely spaced mark on the chest; the rest is a small nameplate on the back. Letters are
 # left in the body colour (tone on tone). Entries: (text, cap height mm, centre, outward normal, up, tracking) - tracking
 # = extra space between letters in cap heights; text "[frame W H]" is a nameplate outline (W x H mm, 0.8 mm line).
-NAMEPLATE_Z = 121.0
+NAMEPLATE_Z = 140.0
 TEXT = {
-    "JX0_Torso": [("JX0", 9.0, (TD, 0.0, 150.0), FRONT, UP, 0.9),
+    "JX0_Torso": [("JX0", 9.0, (TD, 0.0, 176.0), FRONT, UP, 0.9),
                   ("[frame 62 27]", 0.0, (-TD, 0.0, NAMEPLATE_Z), BACK, UP, 0.0),
                   ("JNTUH'S 1ST", 3.4, (-TD, 0.0, NAMEPLATE_Z + 7.0), BACK, UP, 0.15),
                   ("HUMANOID ROBOT", 3.4, (-TD, 0.0, NAMEPLATE_Z), BACK, UP, 0.12),

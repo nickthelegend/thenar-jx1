@@ -85,13 +85,13 @@
    "with_": {
     "l_hip_roll": 10.0
    },
-   "first_contact_deg": -77.0,
-   "past_eeprom_deg": 6.0,
+   "first_contact_deg": -78.0,
+   "past_eeprom_deg": 7.0,
    "contacts": [
     [
      "keeper_L",
      "thigh_L",
-     2.2
+     1.4
     ]
    ],
    "problems": []
@@ -317,13 +317,13 @@
    "with_": {
     "l_ankle_roll": -20.0
    },
-   "first_contact_deg": -95.0,
-   "past_eeprom_deg": 39.0,
+   "first_contact_deg": -96.0,
+   "past_eeprom_deg": 40.0,
    "contacts": [
     [
-     "thigh_L",
+     "shin_L",
      "foot_L",
-     1.4
+     2.6
     ]
    ],
    "problems": []
@@ -335,15 +335,9 @@
    "with_": {
     "l_ankle_roll": 0.0
    },
-   "first_contact_deg": -99.0,
-   "past_eeprom_deg": 43.0,
-   "contacts": [
-    [
-     "thigh_L",
-     "foot_L",
-     48.2
-    ]
-   ],
+   "first_contact_deg": null,
+   "past_eeprom_deg": null,
+   "contacts": [],
    "problems": []
   },
   {
@@ -353,13 +347,13 @@
    "with_": {
     "l_ankle_roll": 20.0
    },
-   "first_contact_deg": -96.0,
-   "past_eeprom_deg": 40.0,
+   "first_contact_deg": -97.0,
+   "past_eeprom_deg": 41.0,
    "contacts": [
     [
-     "thigh_L",
+     "shin_L",
      "foot_L",
-     1.9
+     4.6
     ]
    ],
    "problems": []
@@ -631,7 +625,7 @@
     [
      "upper_arm_L",
      "blade_L",
-     6.1
+     6.2
     ]
    ],
    "problems": []
@@ -649,7 +643,7 @@
     [
      "upper_arm_L",
      "blade_L",
-     6.1
+     6.2
     ]
    ],
    "problems": []
@@ -667,7 +661,7 @@
     [
      "upper_arm_L",
      "blade_L",
-     6.1
+     6.2
     ]
    ],
    "problems": []
@@ -730,6 +724,6 @@
   }
  ],
  "problems": [],
- "seconds": 189.8,
+ "seconds": 236.9,
  "pass": true
 }
