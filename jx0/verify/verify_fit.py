@@ -344,6 +344,7 @@ def sequence():
     for s in ("L", "R"):
         out += lower_leg_seq(s)
     out.append(("lower torso onto the pelvis", ["torso"], "robot", (["torso"], (0, 0, -1)), {}))
+    out.append(("webcam onto its shelves, clamp plate over it", ["cam_clamp"], "robot", (["cam_clamp"], (0, 0, -1)), {}))
     for s in ("L", "R"):
         out += arm_seq(s)
     out += [("neck servo onto the chest cap", ["chest_cap", "servo_neck"], "cap", (["servo_neck"], (0, 0, -1)),

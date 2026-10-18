@@ -16,60 +16,60 @@
  "parts": {
   "pelvis": {
    "loaded_by": "l_hip_yaw (parent frame), split by the keeper",
-   "elements": 213378,
-   "dof": 766641,
+   "elements": 217716,
+   "dof": 781869,
    "support_nodes": 408,
-   "load_nodes": 4203,
+   "load_nodes": 4323,
    "load_components": 15,
    "instants": {
     "walking": 6810,
     "worst": 56160
    },
-   "walking_mpa_p99_9": 7.8,
-   "walking_mpa_max": 21.92,
-   "worst_mpa_p99_9": 10.8,
-   "worst_mpa_max": 22.93,
-   "fatigue_safety": 1.9,
-   "static_safety": 4.6,
-   "seconds": 379.6
+   "walking_mpa_p99_9": 5.0,
+   "walking_mpa_max": 12.49,
+   "worst_mpa_p99_9": 9.46,
+   "worst_mpa_max": 19.59,
+   "fatigue_safety": 3.0,
+   "static_safety": 5.3,
+   "seconds": 346.5
   },
   "yaw_keeper": {
    "loaded_by": "l_hip_yaw: the disc on the keeper's lip",
-   "elements": 8142,
-   "dof": 32430,
-   "support_nodes": 592,
-   "load_nodes": 571,
+   "elements": 10085,
+   "dof": 40029,
+   "support_nodes": 892,
+   "load_nodes": 576,
    "load_components": 8,
    "instants": {
     "walking": 6810,
     "worst": 56160
    },
-   "walking_mpa_p99_9": 9.68,
-   "walking_mpa_max": 13.28,
-   "worst_mpa_p99_9": 10.4,
-   "worst_mpa_max": 13.28,
-   "fatigue_safety": 1.5,
-   "static_safety": 4.8,
-   "seconds": 4.8
+   "walking_mpa_p99_9": 7.77,
+   "walking_mpa_max": 10.66,
+   "worst_mpa_p99_9": 12.3,
+   "worst_mpa_max": 16.72,
+   "fatigue_safety": 1.9,
+   "static_safety": 4.1,
+   "seconds": 4.0
   },
   "hip_yaw_bracket": {
    "loaded_by": "l_hip_roll (parent frame) + the ring's and the keeper's pushes on the disc",
-   "elements": 150640,
-   "dof": 513162,
+   "elements": 150652,
+   "dof": 513255,
    "support_nodes": 506,
-   "load_nodes": 5039,
+   "load_nodes": 5037,
    "load_components": 17,
    "instants": {
     "walking": 6810,
     "worst": 56160
    },
-   "walking_mpa_p99_9": 9.63,
-   "walking_mpa_max": 17.56,
-   "worst_mpa_p99_9": 15.72,
-   "worst_mpa_max": 37.84,
-   "fatigue_safety": 1.6,
-   "static_safety": 3.2,
-   "seconds": 142.8
+   "walking_mpa_p99_9": 8.75,
+   "walking_mpa_max": 13.77,
+   "worst_mpa_p99_9": 16.8,
+   "worst_mpa_max": 30.89,
+   "fatigue_safety": 1.7,
+   "static_safety": 3.0,
+   "seconds": 130.6
   },
   "hip_roll_bracket": {
    "loaded_by": "l_hip_pitch (parent frame)",
@@ -82,13 +82,13 @@
     "walking": 6810,
     "worst": 56160
    },
-   "walking_mpa_p99_9": 4.9,
-   "walking_mpa_max": 8.66,
-   "worst_mpa_p99_9": 11.3,
-   "worst_mpa_max": 25.95,
-   "fatigue_safety": 3.1,
+   "walking_mpa_p99_9": 4.96,
+   "walking_mpa_max": 8.84,
+   "worst_mpa_p99_9": 11.42,
+   "worst_mpa_max": 26.27,
+   "fatigue_safety": 3.0,
    "static_safety": 4.4,
-   "seconds": 40.7
+   "seconds": 36.7
   },
   "thigh": {
    "loaded_by": "l_knee (parent frame)",
@@ -101,13 +101,13 @@
     "walking": 6810,
     "worst": 56160
    },
-   "walking_mpa_p99_9": 5.42,
-   "walking_mpa_max": 32.81,
-   "worst_mpa_p99_9": 11.3,
-   "worst_mpa_max": 60.29,
-   "fatigue_safety": 2.8,
+   "walking_mpa_p99_9": 5.49,
+   "walking_mpa_max": 33.05,
+   "worst_mpa_p99_9": 11.49,
+   "worst_mpa_max": 60.11,
+   "fatigue_safety": 2.7,
    "static_safety": 4.4,
-   "seconds": 59.1
+   "seconds": 53.6
   },
   "shin": {
    "loaded_by": "l_ankle_pitch (parent frame)",
@@ -120,13 +120,13 @@
     "walking": 6810,
     "worst": 56160
    },
-   "walking_mpa_p99_9": 6.4,
-   "walking_mpa_max": 18.1,
-   "worst_mpa_p99_9": 15.0,
-   "worst_mpa_max": 41.1,
+   "walking_mpa_p99_9": 6.46,
+   "walking_mpa_max": 17.37,
+   "worst_mpa_p99_9": 15.08,
+   "worst_mpa_max": 42.19,
    "fatigue_safety": 2.3,
    "static_safety": 3.3,
-   "seconds": 33.7
+   "seconds": 30.4
   },
   "ankle_bracket": {
    "loaded_by": "l_ankle_roll (parent frame)",
@@ -139,13 +139,13 @@
     "walking": 6810,
     "worst": 56160
    },
-   "walking_mpa_p99_9": 7.49,
-   "walking_mpa_max": 20.69,
-   "worst_mpa_p99_9": 12.85,
-   "worst_mpa_max": 35.81,
+   "walking_mpa_p99_9": 7.67,
+   "walking_mpa_max": 21.19,
+   "worst_mpa_p99_9": 13.29,
+   "worst_mpa_max": 37.93,
    "fatigue_safety": 2.0,
-   "static_safety": 3.9,
-   "seconds": 192.8
+   "static_safety": 3.8,
+   "seconds": 228.1
   },
   "foot": {
    "loaded_by": "l_ankle_roll (child frame)",
@@ -158,14 +158,14 @@
     "walking": 6810,
     "worst": 56160
    },
-   "walking_mpa_p99_9": 3.36,
-   "walking_mpa_max": 5.36,
-   "worst_mpa_p99_9": 6.39,
-   "worst_mpa_max": 10.09,
-   "fatigue_safety": 4.5,
+   "walking_mpa_p99_9": 3.44,
+   "walking_mpa_max": 5.48,
+   "worst_mpa_p99_9": 6.4,
+   "worst_mpa_max": 10.27,
+   "fatigue_safety": 4.4,
    "static_safety": 7.8,
-   "seconds": 48.3
+   "seconds": 63.4
   }
  },
- "seconds": 953.7
+ "seconds": 947.8
 }

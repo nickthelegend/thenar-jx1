@@ -56,3 +56,10 @@ eyes:
   data_gpio: 10                # SPI MOSI (pin 19): two WS2812 12-LED rings, left ring first (I2S has GPIO 18-21)
   brightness: 0.3             # 24 LEDs at 0.3 stay under ~0.5 A of the UBEC's 5 A
   blink_every_s: 4.0
+
+camera:
+  record: true                # the chest webcam records while JX0 runs
+  device: 0                   # /dev/video0
+  size: [1280, 720]
+  fps: 15
+  segment_s: 300              # one file per 5 minutes

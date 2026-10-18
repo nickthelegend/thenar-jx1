@@ -16,6 +16,7 @@
     <mesh name="m_JX0_AnkleBracket_R" file="JX0_AnkleBracket_R.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_ArmBlade_L" file="JX0_ArmBlade_L.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_ArmBlade_R" file="JX0_ArmBlade_R.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="m_JX0_CamClamp" file="JX0_CamClamp.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_ChestCap" file="JX0_ChestCap.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_EyeLens" file="JX0_EyeLens.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_Foot" file="JX0_Foot.stl" scale="0.001 0.001 0.001"/>
@@ -60,12 +61,14 @@
       <geom pos="0 -0.045 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_YawRing_R"/>
       <site name="imu" pos="0 0 0.03" group="4"/>
       <body name="torso_link">
-        <inertial pos="0.005 0 0.16" mass="0.796" diaginertia="0.00542607 0.00393357 0.00234157"/>
+        <inertial pos="0.005 0 0.16" mass="0.846" diaginertia="0.0057669 0.00418065 0.00248865"/>
         <geom type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Torso"/>
         <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_ChestCap"/>
+        <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_CamClamp"/>
         <geom pos="0 0 0.2516" quat="0.707107 0 0 0.707107" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
         <geom type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_Torso"/>
         <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_ChestCap"/>
+        <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_CamClamp"/>
         <body name="left_upper_arm_link" pos="0.0125 0.063 0.212">
           <inertial pos="0.0064 0.0198 -0.0326" mass="0.204" diaginertia="0.00011 0.00013 7e-05"/>
           <joint name="left_shoulder_pitch_joint" range="-2.87979 1.0472" armature="0.005" damping="0.01" axis="0 1 0" limited="true"/>
@@ -104,7 +107,7 @@
       <body name="left_hip_yaw_link" pos="0 0.045 0">
         <inertial pos="-0.0308234 -0.0115345 0.0057931" mass="0.145" diaginertia="4.07101e-05 5.45606e-05 5.12416e-05"/>
         <joint name="left_hip_yaw_joint" range="-0.20944 0.20944" armature="0.005" damping="0.01" limited="true"/>
-        <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_HipYawBracket_L"/>
+        <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_HipYawBracket_L"/>
         <geom pos="-0.0347 0 0" quat="-0.5 0.5 -0.5 0.5" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
         <body name="left_hip_roll_link">
           <inertial pos="0.00558468 0.00197581 0.000564516" mass="0.124" diaginertia="3.40288e-05 4.28804e-05 5.59343e-05"/>

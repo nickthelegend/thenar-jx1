@@ -10,6 +10,7 @@ import argparse
 import threading
 
 from .brain import Brain
+from .camera import Recorder
 from .eyes import Eyes
 from .robot import REST_ARMS, HardwareIO, Robot, SimIO, load_config
 
@@ -35,6 +36,7 @@ def main():
         speak = Speaker().say
 
     eyes = Eyes(cfg, hardware=not a.sim).start()
+    camera = Recorder(cfg).start() if cfg.get("camera", {}).get("record") and not a.sim else None
     say_aloud = speak
 
     def speak(sentence):                               # the eyes pulse while JX0 talks
@@ -77,6 +79,8 @@ def main():
                 print(f"heard: {text}")
                 reply(text)
     eyes.close()
+    if camera:
+        camera.stop()
     io.close()
 
 

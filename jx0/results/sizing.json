@@ -1,6 +1,6 @@
 {
  "design": "jx0/design_point.yaml",
- "total_mass_kg": 3.048,
+ "total_mass_kg": 3.098,
  "servo": {
   "product": "Feetech STS3215 12 V serial bus servo (ST3215-C018 / Waveshare ST3215; 30 kg\u00b7cm stall, 10 kg\u00b7cm rated at 12 V)",
   "stall_torque_nm": 2.94,
@@ -18,15 +18,15 @@
  "joints": [
   {
    "joint": "hip_yaw",
-   "dynamic_peak_nm": 0.101,
+   "dynamic_peak_nm": 0.102,
    "dynamic_scenario": "turn_10deg_per_step",
    "static_peak_nm": 0.0,
    "static_case": "stand_deep_squat",
-   "required_peak_nm": 0.152,
-   "peak_margin": 19.32,
+   "required_peak_nm": 0.153,
+   "peak_margin": 19.21,
    "rms_walk_nm": 0.017,
    "required_continuous_nm": 0.022,
-   "continuous_margin": 44.15,
+   "continuous_margin": 44.23,
    "speed_peak_rad_s": 0.73,
    "torque_speed_utilisation": 0.06,
    "torque_speed_scenario": "turn_10deg_per_step",
@@ -34,17 +34,17 @@
   },
   {
    "joint": "hip_roll",
-   "dynamic_peak_nm": 1.393,
+   "dynamic_peak_nm": 1.412,
    "dynamic_scenario": "walk_nominal_0.05ms",
-   "static_peak_nm": 1.689,
+   "static_peak_nm": 1.709,
    "static_case": "single_leg_cop_outer_edge",
-   "required_peak_nm": 2.111,
-   "peak_margin": 1.39,
-   "rms_walk_nm": 0.695,
-   "required_continuous_nm": 0.903,
-   "continuous_margin": 1.08,
+   "required_peak_nm": 2.136,
+   "peak_margin": 1.38,
+   "rms_walk_nm": 0.705,
+   "required_continuous_nm": 0.916,
+   "continuous_margin": 1.07,
    "speed_peak_rad_s": 0.95,
-   "torque_speed_utilisation": 0.76,
+   "torque_speed_utilisation": 0.77,
    "torque_speed_scenario": "walk_brisk_0.055ms",
    "pass": true
   },
@@ -52,13 +52,13 @@
    "joint": "hip_pitch",
    "dynamic_peak_nm": 0.21,
    "dynamic_scenario": "walk_brisk_0.055ms",
-   "static_peak_nm": 0.242,
+   "static_peak_nm": 0.244,
    "static_case": "single_leg_cop_heel",
    "required_peak_nm": 0.316,
-   "peak_margin": 9.32,
-   "rms_walk_nm": 0.09,
-   "required_continuous_nm": 0.117,
-   "continuous_margin": 8.39,
+   "peak_margin": 9.31,
+   "rms_walk_nm": 0.091,
+   "required_continuous_nm": 0.119,
+   "continuous_margin": 8.25,
    "speed_peak_rad_s": 2.23,
    "torque_speed_utilisation": 0.14,
    "torque_speed_scenario": "walk_brisk_0.055ms",
@@ -66,17 +66,17 @@
   },
   {
    "joint": "knee",
-   "dynamic_peak_nm": 1.171,
+   "dynamic_peak_nm": 1.192,
    "dynamic_scenario": "turn_10deg_per_step",
-   "static_peak_nm": 1.952,
+   "static_peak_nm": 1.99,
    "static_case": "single_leg_cop_inner_edge",
-   "required_peak_nm": 2.44,
-   "peak_margin": 1.2,
-   "rms_walk_nm": 0.66,
-   "required_continuous_nm": 0.857,
-   "continuous_margin": 1.14,
+   "required_peak_nm": 2.487,
+   "peak_margin": 1.18,
+   "rms_walk_nm": 0.672,
+   "required_continuous_nm": 0.873,
+   "continuous_margin": 1.12,
    "speed_peak_rad_s": 2.4,
-   "torque_speed_utilisation": 0.62,
+   "torque_speed_utilisation": 0.63,
    "torque_speed_scenario": "turn_10deg_per_step",
    "pass": true
   },
@@ -84,10 +84,10 @@
    "joint": "ankle_pitch",
    "dynamic_peak_nm": 0.174,
    "dynamic_scenario": "walk_brisk_0.055ms",
-   "static_peak_nm": 1.412,
+   "static_peak_nm": 1.438,
    "static_case": "single_leg_cop_heel",
-   "required_peak_nm": 1.766,
-   "peak_margin": 1.67,
+   "required_peak_nm": 1.798,
+   "peak_margin": 1.64,
    "rms_walk_nm": 0.073,
    "required_continuous_nm": 0.095,
    "continuous_margin": 10.36,
@@ -98,15 +98,15 @@
   },
   {
    "joint": "ankle_roll",
-   "dynamic_peak_nm": 0.683,
+   "dynamic_peak_nm": 0.694,
    "dynamic_scenario": "turn_10deg_per_step",
-   "static_peak_nm": 0.897,
+   "static_peak_nm": 0.912,
    "static_case": "single_leg_cop_inner_edge",
-   "required_peak_nm": 1.121,
-   "peak_margin": 2.62,
-   "rms_walk_nm": 0.326,
-   "required_continuous_nm": 0.424,
-   "continuous_margin": 2.31,
+   "required_peak_nm": 1.14,
+   "peak_margin": 2.58,
+   "rms_walk_nm": 0.332,
+   "required_continuous_nm": 0.431,
+   "continuous_margin": 2.27,
    "speed_peak_rad_s": 0.95,
    "torque_speed_utilisation": 0.42,
    "torque_speed_scenario": "turn_10deg_per_step",
@@ -117,7 +117,7 @@
   {
    "scenario": "walk_slow_0.042ms",
    "duration_s": 6.945,
-   "zmp_error_mm": 3.03,
+   "zmp_error_mm": 2.94,
    "joints": {
     "hip_yaw": {
      "peak_nm": 0.037,
@@ -125,36 +125,36 @@
      "speed_peak_rad_s": 0.0
     },
     "hip_roll": {
-     "peak_nm": 1.392,
-     "rms_nm": 0.673,
-     "speed_peak_rad_s": 0.95
+     "peak_nm": 1.411,
+     "rms_nm": 0.683,
+     "speed_peak_rad_s": 0.94
     },
     "hip_pitch": {
-     "peak_nm": 0.159,
-     "rms_nm": 0.068,
+     "peak_nm": 0.164,
+     "rms_nm": 0.069,
      "speed_peak_rad_s": 1.81
     },
     "knee": {
-     "peak_nm": 1.132,
-     "rms_nm": 0.648,
+     "peak_nm": 1.152,
+     "rms_nm": 0.66,
      "speed_peak_rad_s": 2.08
     },
     "ankle_pitch": {
-     "peak_nm": 0.149,
+     "peak_nm": 0.15,
      "rms_nm": 0.066,
      "speed_peak_rad_s": 1.89
     },
     "ankle_roll": {
-     "peak_nm": 0.681,
-     "rms_nm": 0.315,
-     "speed_peak_rad_s": 0.95
+     "peak_nm": 0.692,
+     "rms_nm": 0.321,
+     "speed_peak_rad_s": 0.94
     }
    }
   },
   {
    "scenario": "walk_nominal_0.05ms",
    "duration_s": 8.145,
-   "zmp_error_mm": 3.03,
+   "zmp_error_mm": 2.94,
    "joints": {
     "hip_yaw": {
      "peak_nm": 0.043,
@@ -162,36 +162,36 @@
      "speed_peak_rad_s": 0.0
     },
     "hip_roll": {
-     "peak_nm": 1.393,
-     "rms_nm": 0.694,
-     "speed_peak_rad_s": 0.95
+     "peak_nm": 1.412,
+     "rms_nm": 0.704,
+     "speed_peak_rad_s": 0.94
     },
     "hip_pitch": {
-     "peak_nm": 0.189,
-     "rms_nm": 0.081,
+     "peak_nm": 0.194,
+     "rms_nm": 0.083,
      "speed_peak_rad_s": 2.06
     },
     "knee": {
-     "peak_nm": 1.139,
-     "rms_nm": 0.66,
+     "peak_nm": 1.158,
+     "rms_nm": 0.672,
      "speed_peak_rad_s": 2.2
     },
     "ankle_pitch": {
-     "peak_nm": 0.165,
+     "peak_nm": 0.166,
      "rms_nm": 0.07,
      "speed_peak_rad_s": 2.15
     },
     "ankle_roll": {
-     "peak_nm": 0.681,
-     "rms_nm": 0.326,
-     "speed_peak_rad_s": 0.95
+     "peak_nm": 0.692,
+     "rms_nm": 0.331,
+     "speed_peak_rad_s": 0.94
     }
    }
   },
   {
    "scenario": "walk_brisk_0.055ms",
    "duration_s": 7.635,
-   "zmp_error_mm": 3.03,
+   "zmp_error_mm": 2.94,
    "joints": {
     "hip_yaw": {
      "peak_nm": 0.052,
@@ -199,18 +199,18 @@
      "speed_peak_rad_s": 0.0
     },
     "hip_roll": {
-     "peak_nm": 1.389,
-     "rms_nm": 0.678,
-     "speed_peak_rad_s": 0.95
+     "peak_nm": 1.408,
+     "rms_nm": 0.688,
+     "speed_peak_rad_s": 0.94
     },
     "hip_pitch": {
      "peak_nm": 0.21,
-     "rms_nm": 0.089,
-     "speed_peak_rad_s": 2.23
+     "rms_nm": 0.09,
+     "speed_peak_rad_s": 2.22
     },
     "knee": {
-     "peak_nm": 1.137,
-     "rms_nm": 0.659,
+     "peak_nm": 1.156,
+     "rms_nm": 0.671,
      "speed_peak_rad_s": 2.4
     },
     "ankle_pitch": {
@@ -219,35 +219,35 @@
      "speed_peak_rad_s": 2.33
     },
     "ankle_roll": {
-     "peak_nm": 0.676,
-     "rms_nm": 0.323,
-     "speed_peak_rad_s": 0.95
+     "peak_nm": 0.687,
+     "rms_nm": 0.328,
+     "speed_peak_rad_s": 0.94
     }
    }
   },
   {
    "scenario": "turn_10deg_per_step",
    "duration_s": 6.945,
-   "zmp_error_mm": 3.03,
+   "zmp_error_mm": 2.94,
    "joints": {
     "hip_yaw": {
-     "peak_nm": 0.101,
+     "peak_nm": 0.102,
      "rms_nm": 0.032,
      "speed_peak_rad_s": 0.73
     },
     "hip_roll": {
-     "peak_nm": 1.391,
-     "rms_nm": 0.67,
-     "speed_peak_rad_s": 0.94
+     "peak_nm": 1.41,
+     "rms_nm": 0.679,
+     "speed_peak_rad_s": 0.93
     },
     "hip_pitch": {
-     "peak_nm": 0.148,
-     "rms_nm": 0.056,
+     "peak_nm": 0.151,
+     "rms_nm": 0.057,
      "speed_peak_rad_s": 1.16
     },
     "knee": {
-     "peak_nm": 1.171,
-     "rms_nm": 0.645,
+     "peak_nm": 1.192,
+     "rms_nm": 0.657,
      "speed_peak_rad_s": 1.88
     },
     "ankle_pitch": {
@@ -256,16 +256,16 @@
      "speed_peak_rad_s": 1.32
     },
     "ankle_roll": {
-     "peak_nm": 0.68,
-     "rms_nm": 0.315,
-     "speed_peak_rad_s": 0.94
+     "peak_nm": 0.691,
+     "rms_nm": 0.32,
+     "speed_peak_rad_s": 0.93
     }
    }
   },
   {
    "scenario": "squat_2.5cm_1.6s",
    "duration_s": 3.11,
-   "zmp_error_mm": 3.03,
+   "zmp_error_mm": 2.94,
    "joints": {
     "hip_yaw": {
      "peak_nm": 0.0,
@@ -278,13 +278,13 @@
      "speed_peak_rad_s": 0.0
     },
     "hip_pitch": {
-     "peak_nm": 0.017,
-     "rms_nm": 0.007,
+     "peak_nm": 0.016,
+     "rms_nm": 0.006,
      "speed_peak_rad_s": 0.63
     },
     "knee": {
-     "peak_nm": 0.76,
-     "rms_nm": 0.548,
+     "peak_nm": 0.776,
+     "rms_nm": 0.56,
      "speed_peak_rad_s": 1.23
     },
     "ankle_pitch": {

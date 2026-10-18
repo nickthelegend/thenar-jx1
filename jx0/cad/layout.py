@@ -37,6 +37,7 @@ def components():
     """(key, part file, 4x4 pose in the pelvis frame) at the zero pose."""
     hf = G.ST["HORN_FACE"]
     comps = [("pelvis", "JX0_Pelvis", pose()), ("torso", "JX0_Torso", pose()), ("chest_cap", "JX0_ChestCap", pose()),
+             ("cam_clamp", "JX0_CamClamp", pose()),
              ("head", "JX0_Head", pose(p=(0, 0, G.NECK_Z))),
              ("lens_L", "JX0_EyeLens", pose(p=(G.HEAD_BOX[1] - G.LENS_T, G.EYE[0], G.NECK_Z + G.EYE[1]))),
              ("lens_R", "JX0_EyeLens", pose(p=(G.HEAD_BOX[1] - G.LENS_T, -G.EYE[0], G.NECK_Z + G.EYE[1]))),
@@ -80,7 +81,7 @@ def link_of(key):
     knee, ankle = hip + [0, 0, -G.THIGH], hip + [0, 0, -G.THIGH - G.SHIN]
     sh, el = arm_points(sg)
     base = key[:-2] if side else key
-    table = {"pelvis": ("pelvis", (0, 0, 0)), "torso": ("torso", (0, 0, 0)), "chest_cap": ("torso", (0, 0, 0)),
+    table = {"pelvis": ("pelvis", (0, 0, 0)), "torso": ("torso", (0, 0, 0)), "chest_cap": ("torso", (0, 0, 0)), "cam_clamp": ("torso", (0, 0, 0)),
              "servo_neck": ("torso", (0, 0, 0)), "head": ("head", (0, 0, G.NECK_Z)), "lens": ("head", (0, 0, G.NECK_Z)), "neck_hub": ("head", (0, 0, G.NECK_Z)),
              "servo_hip_yaw": ("pelvis", (0, 0, 0)), "keeper": ("pelvis", (0, 0, 0)), "yaw_ring": ("pelvis", (0, 0, 0)),
              "hip_yaw": (f"{s}_hip_yaw_link", hip), "servo_hip_roll": (f"{s}_hip_yaw_link", hip),
@@ -128,4 +129,6 @@ def keepouts():
             out.append((f"cables:{key}", G.servo_cables(cable_mode(key)), M, key))
         elif G.SCREWS.get(part):
             out.append((f"screws:{key}", [q for s in G.SCREWS[part] for q in G.screw_head(s)], M, key))
+    # the webcam head behind the chest window (geometry.webcam_envelope): nothing but its mount may enter it
+    out.append(("webcam", G.webcam_envelope(), np.eye(4), "torso"))
     return out

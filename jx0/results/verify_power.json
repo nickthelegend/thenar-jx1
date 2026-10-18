@@ -2,80 +2,80 @@
  "walking_forward": {
   "joints": {
    "l_hip_yaw": {
-    "peak_nm": 0.288,
-    "rms_nm": 0.081,
+    "peak_nm": 0.296,
+    "rms_nm": 0.082,
     "peak_of_stall": 0.1,
     "rms_of_rated": 0.08
    },
    "l_hip_roll": {
-    "peak_nm": 1.764,
-    "rms_nm": 0.665,
-    "peak_of_stall": 0.6,
+    "peak_nm": 1.746,
+    "rms_nm": 0.671,
+    "peak_of_stall": 0.59,
     "rms_of_rated": 0.68
    },
    "l_hip_pitch": {
-    "peak_nm": 0.869,
-    "rms_nm": 0.293,
-    "peak_of_stall": 0.3,
+    "peak_nm": 0.899,
+    "rms_nm": 0.297,
+    "peak_of_stall": 0.31,
     "rms_of_rated": 0.3
    },
    "l_knee": {
-    "peak_nm": 1.633,
-    "rms_nm": 0.685,
-    "peak_of_stall": 0.56,
-    "rms_of_rated": 0.7
+    "peak_nm": 1.668,
+    "rms_nm": 0.701,
+    "peak_of_stall": 0.57,
+    "rms_of_rated": 0.72
    },
    "l_ankle_pitch": {
-    "peak_nm": 1.874,
-    "rms_nm": 0.365,
-    "peak_of_stall": 0.64,
-    "rms_of_rated": 0.37
+    "peak_nm": 1.913,
+    "rms_nm": 0.369,
+    "peak_of_stall": 0.65,
+    "rms_of_rated": 0.38
    },
    "l_ankle_roll": {
-    "peak_nm": 1.374,
-    "rms_nm": 0.45,
-    "peak_of_stall": 0.47,
-    "rms_of_rated": 0.46
+    "peak_nm": 1.479,
+    "rms_nm": 0.466,
+    "peak_of_stall": 0.5,
+    "rms_of_rated": 0.48
    },
    "r_hip_yaw": {
-    "peak_nm": 0.288,
-    "rms_nm": 0.078,
+    "peak_nm": 0.298,
+    "rms_nm": 0.079,
     "peak_of_stall": 0.1,
     "rms_of_rated": 0.08
    },
    "r_hip_roll": {
-    "peak_nm": 1.71,
-    "rms_nm": 0.667,
+    "peak_nm": 1.714,
+    "rms_nm": 0.673,
     "peak_of_stall": 0.58,
-    "rms_of_rated": 0.68
+    "rms_of_rated": 0.69
    },
    "r_hip_pitch": {
-    "peak_nm": 0.867,
-    "rms_nm": 0.294,
-    "peak_of_stall": 0.29,
-    "rms_of_rated": 0.3
+    "peak_nm": 0.901,
+    "rms_nm": 0.299,
+    "peak_of_stall": 0.31,
+    "rms_of_rated": 0.31
    },
    "r_knee": {
-    "peak_nm": 1.615,
-    "rms_nm": 0.683,
+    "peak_nm": 1.603,
+    "rms_nm": 0.699,
     "peak_of_stall": 0.55,
-    "rms_of_rated": 0.7
+    "rms_of_rated": 0.71
    },
    "r_ankle_pitch": {
-    "peak_nm": 1.876,
-    "rms_nm": 0.362,
-    "peak_of_stall": 0.64,
+    "peak_nm": 1.867,
+    "rms_nm": 0.365,
+    "peak_of_stall": 0.63,
     "rms_of_rated": 0.37
    },
    "r_ankle_roll": {
-    "peak_nm": 1.375,
-    "rms_nm": 0.456,
-    "peak_of_stall": 0.47,
-    "rms_of_rated": 0.47
+    "peak_nm": 1.475,
+    "rms_nm": 0.473,
+    "peak_of_stall": 0.5,
+    "rms_of_rated": 0.48
    },
    "l_shoulder_pitch": {
-    "peak_nm": 1.174,
-    "rms_nm": 0.19,
+    "peak_nm": 1.173,
+    "rms_nm": 0.189,
     "peak_of_stall": 0.4,
     "rms_of_rated": 0.19
    },
@@ -86,7 +86,7 @@
     "rms_of_rated": 0.0
    },
    "r_shoulder_pitch": {
-    "peak_nm": 1.174,
+    "peak_nm": 1.172,
     "rms_nm": 0.184,
     "peak_of_stall": 0.4,
     "rms_of_rated": 0.19
@@ -104,11 +104,11 @@
     "rms_of_rated": 0.0
    }
   },
-  "servo_current_avg_a": 1.3,
-  "servo_current_peak_20ms_a": 2.27,
-  "total_avg_a": 1.75,
-  "total_peak_a": 2.72,
-  "total_avg_w": 19.4
+  "servo_current_avg_a": 1.33,
+  "servo_current_peak_20ms_a": 2.33,
+  "total_avg_a": 1.78,
+  "total_peak_a": 2.78,
+  "total_avg_w": 19.8
  },
  "standing": {
   "servo_current_a": 0.48,
@@ -118,8 +118,8 @@
  "battery": {
   "pack": "3S 2200 mAh 35C",
   "max_continuous_a": 77.0,
-  "walking_minutes_80pct": 60,
-  "standing_minutes_80pct": 114,
+  "walking_minutes_80pct": 59,
+  "standing_minutes_80pct": 113,
   "switch_rating_a": 10,
   "switch_ok": true,
   "pack_ok": true,
@@ -146,15 +146,15 @@
   "rated_nm": 0.98
  },
  "realtime": {
-  "python_ms_per_frame_pc": 0.024,
-  "python_ms_per_frame_pi4_est": 0.12,
+  "python_ms_per_frame_pc": 0.042,
+  "python_ms_per_frame_pi4_est": 0.21,
   "bus_bytes_per_frame": 127,
   "bus_ms_per_frame": 1.27,
   "imu_read_ms_est": 0.4,
   "frame_ms": 10.0,
-  "frame_used_ms_pi4_est": 1.79,
+  "frame_used_ms_pi4_est": 1.88,
   "ok": true
  },
  "pass": true,
- "seconds": 5.2
+ "seconds": 6.2
 }

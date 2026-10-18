@@ -97,6 +97,8 @@ The servos need no GPIO at all: they're all on the USB servo bus.
   servos are in the arms' hoods, their horns bolted to the pads on the cap's side walls.
 - **Pelvis:** the MPU6050, as close to the hip centre as you can, **x arrow forward, y arrow to the robot's left**
   (otherwise set `imu.mount` in config.yaml).
+- **Chest:** the USB webcam head behind the round window in the torso's front wall, clamped on its shelves; its cable
+  into one of the Pi's USB ports.
 - **Head:** the INMP441 microphone glued behind the three holes between the eyes, and the two WS2812 12-LED ring
   eyes (left ring first in the chain). The microphone cable and the eyes' three wires go down through the hole in the
   head floor, with a loop of slack for the ±80° neck turn.

@@ -491,6 +491,60 @@ class MainProgram(unittest.TestCase):
         self.assertEqual(captured["eyes"].state, "idle")        # and they went back to idle after the reply
 
 
+class CameraTests(unittest.TestCase):
+    """The chest-camera recorder with a stand-in OpenCV: frames go into files of segment_s seconds; no camera, no
+    recording and no crash."""
+
+    def test_record_segments_and_no_camera(self):
+        import tempfile
+        import types
+        import numpy as np
+        from jx0bot.camera import Recorder
+
+        class Cap:
+            def __init__(self, ok):
+                self.ok = ok
+
+            def isOpened(self):
+                return self.ok
+
+            def set(self, *a):
+                pass
+
+            def read(self):
+                return True, np.zeros((72, 128, 3), np.uint8)
+
+            def release(self):
+                pass
+
+        written = {}
+
+        class Writer:
+            def __init__(self, path, *a):
+                self.path = path
+                written[path] = 0
+
+            def write(self, f):
+                written[self.path] += 1
+
+            def release(self):
+                pass
+
+        fake = types.SimpleNamespace(VideoCapture=lambda d: Cap(True), VideoWriter=Writer, VideoWriter_fourcc=lambda *c: 0,
+                                     CAP_PROP_FRAME_WIDTH=3, CAP_PROP_FRAME_HEIGHT=4, CAP_PROP_FPS=5, imwrite=lambda p, f: True)
+        with tempfile.TemporaryDirectory() as d:
+            r = Recorder({"camera": {"fps": 100, "segment_s": 0.2}}, out_dir=d)
+            r.cv2 = fake
+            files = r.record(0.5)
+            r.stop()
+            self.assertGreaterEqual(len(files), 2)                          # split into segments
+            self.assertTrue(all(n > 0 for n in written.values()))
+            none = Recorder({}, out_dir=d)
+            none.cv2 = types.SimpleNamespace(**{**fake.__dict__, "VideoCapture": lambda dev: Cap(False)})
+            self.assertEqual(none.record(0.1), [])                          # no camera: nothing, no crash
+            self.assertIsNone(none.snapshot())
+
+
 class EyesTests(unittest.TestCase):
     """The LED-ring eyes without hardware: 24 LEDs, brightness cap, states and moods, unknown names refused."""
 

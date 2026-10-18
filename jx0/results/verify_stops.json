@@ -21,7 +21,7 @@
     [
      "keeper_L",
      "hip_yaw_L",
-     3.4
+     3.5
     ]
    ],
    "problems": []
@@ -91,7 +91,7 @@
     [
      "keeper_L",
      "thigh_L",
-     1.4
+     2.2
     ]
    ],
    "problems": []
@@ -161,14 +161,9 @@
    "past_eeprom_deg": 2.0,
    "contacts": [
     [
-     "keeper_L",
-     "hip_roll_L",
-     2.5
-    ],
-    [
      "hip_yaw_L",
      "hip_roll_L",
-     5.3
+     7.2
     ],
     [
      "hip_yaw_L",
@@ -189,14 +184,9 @@
    "past_eeprom_deg": 2.0,
    "contacts": [
     [
-     "keeper_L",
-     "hip_roll_L",
-     2.5
-    ],
-    [
      "hip_yaw_L",
      "hip_roll_L",
-     5.3
+     7.2
     ]
    ],
    "problems": []
@@ -212,14 +202,9 @@
    "past_eeprom_deg": 2.0,
    "contacts": [
     [
-     "keeper_L",
-     "hip_roll_L",
-     2.5
-    ],
-    [
      "hip_yaw_L",
      "hip_roll_L",
-     5.3
+     7.2
     ]
    ],
    "problems": []
@@ -235,9 +220,9 @@
    "past_eeprom_deg": 3.0,
    "contacts": [
     [
-     "keeper_L",
+     "hip_yaw_L",
      "thigh_L",
-     1.1
+     4.5
     ]
    ],
    "problems": []
@@ -249,13 +234,13 @@
    "with_": {
     "l_hip_pitch": -10.0
    },
-   "first_contact_deg": 27.0,
-   "past_eeprom_deg": 6.0,
+   "first_contact_deg": 25.0,
+   "past_eeprom_deg": 4.0,
    "contacts": [
     [
-     "hip_yaw_L",
+     "keeper_L",
      "hip_roll_L",
-     2.1
+     3.7
     ]
    ],
    "problems": []
@@ -267,13 +252,13 @@
    "with_": {
     "l_hip_pitch": 8.0
    },
-   "first_contact_deg": 27.0,
-   "past_eeprom_deg": 6.0,
+   "first_contact_deg": 25.0,
+   "past_eeprom_deg": 4.0,
    "contacts": [
     [
-     "hip_yaw_L",
+     "keeper_L",
      "hip_roll_L",
-     2.1
+     3.7
     ]
    ],
    "problems": []
@@ -724,6 +709,6 @@
   }
  ],
  "problems": [],
- "seconds": 205.5,
+ "seconds": 217.5,
  "pass": true
 }

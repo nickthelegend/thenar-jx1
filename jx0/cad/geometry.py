@@ -93,12 +93,12 @@ YAW_SEAT = 0.3     # the yaw servo hangs 0.3 mm higher than nominal: the disc un
 # toward +y): where the lip is needed (verify_strength), clear of the hip-yaw bracket and the hip-roll bracket over the
 # whole hip-yaw range (+-12 deg; the gaits use +-5)
 YAW_LIMIT = 12.0
-KEEP_ARC = (-45.0, 104.0)
-KEEP_R = (15.6, 19.6, 24.6)            # lip inner radius, wall inner radius, outer radius
+KEEP_ARC = (-45.0, 125.0)              # v0.5: to 125 (from 104): the swinging longer leg tilts the disc past 104 deg
+KEEP_R = (15.6, 19.6, 26.0)            # lip inner radius, wall inner radius, outer radius (v0.5: 26, from 24.6)
 KEEP_Z = (24.6, 26.55, 30.2)           # wall bottom, lip top (0.45 under the flange: the disc's height varies with the
 KEEP_LIP = (21.6, 23.9)                # servo, PTFE tape takes up the play), top (clamped to the boss); the keeper is
                                        # solid from z 21.6 up out to r 23.9: a C round the disc's rim
-KEEP_SCREWS, KEEP_SCREW_R = (-25.0, 15.0, 55.0, 88.0), 22.0
+KEEP_SCREWS, KEEP_SCREW_R = (-35.0, 5.0, 45.0, 85.0, 115.0), 22.0
 KEEP_BOSS_TO = 150.0                   # the pelvis boss wraps round the cage's outboard end to its back wall
 FLANGE_Z, GROOVE = 27.0, (15.3, 20.9)  # disc flange bottom; under it (the lip's room): inner radius, bottom
 BOSS_TOP = 36.6                        # pelvis boss the keeper screws into (the torso skirt starts above it)
@@ -584,7 +584,11 @@ def hip_yaw_bracket():
          ("prism", "z", middle, (zd, ZY - 6.9)),                                            # 9 across the middle (the
          # thigh's arms swing under its sides when the hip rolls)
          ("box", (-14.2, 14.0), (-5.0, 5.0), (19.6, zd + 0.1)),                            # keel (clear of the roll
-         ("box", (x_plate, XR - 0.5), (-35.0, 12.0), (HW + C + 3.0 - 0.1, ZY))]            # bracket); solid block
+         ("box", (x_plate, XR - 0.5), (-35.0, 12.0), (HW + C + 3.0 - 0.1, ZY)),            # bracket); solid block
+         # v0.5 fillets in the two inside corners that took the peak stress (verify_fea): the middle's sides into the
+         # disc's underside, and the middle's underside into the block
+         ("prism", "x", [(-11.0, zd + 0.05), (12.0, zd + 0.05), (15.0, ZY - 6.9), (-12.5, ZY - 6.9)], (-11.5, 11.5)),
+         ("prism", "y", [(XR - 0.55, zd + 0.1), (XR - 0.55, zd - 1.1), (XR + 1.1, zd + 0.1)], (-11.0, 11.0))]
     p += cage(R, wall=3.0, omit=-1)                            # (the roll U slides on from below)
     # room under the disc's rim for the keeper's lip: the keeper's arc + the yaw range + 2 deg
     p.append(("pcut", "z", sector(GROOVE[0], 19.6, KEEP_ARC[0] - YAW_LIMIT - 2.0, KEEP_ARC[1] + YAW_LIMIT + 2.0),
@@ -598,7 +602,7 @@ def hip_yaw_bracket():
 
 def yaw_keeper():
     """The hip-yaw keeper (frame: the yaw axis at the origin, pelvis z): a C-section ring segment round the yaw disc's
-    rim; its 4.95 mm lip slides sideways under the disc's flange, and 4 M2 x 10 screws from below clamp its top flat
+    rim; its 4.95 mm lip slides sideways under the disc's flange, and 5 M2 x 10 screws from below clamp its top flat
     against the pelvis's boss. Outer bottom edge stepped: clear of the hip-roll bracket's arm at full roll."""
     a0, a1 = KEEP_ARC
     r_lip, r_wall, r_out = KEEP_R
@@ -606,8 +610,15 @@ def yaw_keeper():
     p = [("prism", "z", sector(r_wall, r_out, a0, a1), (zb, zt)),
          ("prism", "z", sector(r_lip, KEEP_LIP[1], a0 + 0.07, a1 - 0.07), (KEEP_LIP[0], zl)),
          ("pcut", "z", sector(KEEP_LIP[1], r_out + 0.2, a0 - 1.0, a1 + 1.0), (zb - 0.1, zb + 1.0)),
-         ("pcut", "z", sector(r_lip - 0.1, r_lip + 1.4, a0 - 1.0, a1 + 1.0), (KEEP_LIP[0] - 0.1, KEEP_LIP[0] + 1.0))]
-    # (the lip's inner bottom corner stepped back: clear of the thigh's arm at full hip roll)
+         ("pcut", "z", sector(r_lip - 0.1, r_lip + 1.4, a0 - 1.0, a1 + 1.0), (KEEP_LIP[0] - 0.1, KEEP_LIP[0] + 1.0)),
+         ("pcut", "z", sector(r_lip - 0.1, r_lip + 2.6, 60.0, a1 + 1.0), (KEEP_LIP[0] - 0.1, KEEP_LIP[0] + 1.0)),
+         ("pcut", "z", sector(r_lip - 0.1, r_lip + 3.6, a0 - 1.0, -15.0), (KEEP_LIP[0] - 0.1, KEEP_LIP[0] + 1.0)),
+         ("pcut", "z", sector(20.3, r_out + 0.2, a0 - 1.0, -15.0), (KEEP_LIP[0] - 0.1, KEEP_LIP[0] + 1.6)),
+         ("pcut", "z", sector(20.3, r_out + 0.2, 60.0, a1 + 1.0), (KEEP_LIP[0] - 0.1, KEEP_LIP[0] + 1.6)),
+         ("pcut", "z", sector(20.3, r_out + 0.2, 105.0, a1 + 1.0), (KEEP_LIP[0] - 0.1, zb - 1.2)),
+         ("pcut", "z", sector(21.3, r_out + 0.2, 112.0, a1 + 1.0), (KEEP_LIP[0] - 0.1, zb - 0.2))]
+    # (the lip's inner bottom corner stepped back: clear of the thigh's arm at full hip roll; its outer bottom corner
+    # too, and more past 105 deg: the hip-roll bracket's arm at full roll and yaw, 2 deg past the servo limits)
     for a in KEEP_SCREWS:
         cxy = polar(KEEP_SCREW_R, a)
         p += [("hole", "z", cxy, M2["hole"] + 0.2, (KEEP_LIP[0] - 0.1, zt + 0.1)),
@@ -806,7 +817,65 @@ def torso():
         for z in (96.0, 145.0):                                                                 # (M2 x 8 CSK through the
             p.append(("lcyl", "x", (y, z), 3.2, (-TD + w - 0.5, -TD + w + 6.0)))               # board's 2.7 mm holes)
             p.append(("lhole", "x", (y, z), 1.8, (-TD + 1.4, -TD + w + 6.1)))
+    p += webcam_mount()
     return p
+
+
+# the chest camera: a USB webcam head (Lapcare Lapcam HD 720M P: about 85 x 35 x 25 mm, a pill with the lens in the
+# middle; measure yours) behind a window in the torso's front wall, under the lettering. CAM = (width y, height z,
+# depth x, centre height z, lens window diameter)
+CAM = (85.0, 35.0, 25.0, 150.0, 20.0)
+CAM_SHELF_T, CAM_GAP = 6.0, 0.3
+
+
+def webcam_mount():
+    """Inside the torso's front wall: a shelf under and over the webcam's head, its face against the wall and its lens
+    at the window; the clamp plate (JX0_CamClamp) screws onto the shelves' back ends with 4 M2 x 10 CSK and holds it
+    there. The bottom shelf is split in the middle for the USB cable (take the webcam off its clip; the cable goes
+    down to the Raspberry Pi)."""
+    W, H, D, zc, lens = CAM
+    xf = TD - TWALL                                                  # inner face of the front wall
+    xb = xf - CAM_GAP - D                                            # the webcam's back = the clamp plate's front
+    hw = W / 2 - 8.0                                                 # the shelves stay on the wall's flat front
+    zlo, zhi = zc - H / 2 - CAM_GAP, zc + H / 2 + CAM_GAP
+    p = [("lhole", "x", (0.0, zc), lens, (xf - 0.5, TD + 0.1)),                              # the lens window
+         ("lbox", (xb, xf + 0.5), (-hw, -7.0), (zlo - CAM_SHELF_T, zlo)),                   # bottom shelf, split for
+         ("lbox", (xb, xf + 0.5), (7.0, hw), (zlo - CAM_SHELF_T, zlo)),                     # the cable
+         ("lbox", (xb, xf + 0.5), (-hw, hw), (zhi, zhi + CAM_SHELF_T))]                     # top shelf
+    for y, z in cam_screws():
+        p.append(("lhole", "x", (y, z), 1.8, (xb - 0.1, xb + 9.0)))                         # M2 pilots, 9 mm deep
+    return p
+
+
+def cam_screws():
+    W, H, D, zc, lens = CAM
+    zlo, zhi = zc - H / 2 - CAM_GAP, zc + H / 2 + CAM_GAP
+    return [(y, z) for y in (-22.0, 22.0) for z in (zlo - CAM_SHELF_T / 2, zhi + CAM_SHELF_T / 2)]
+
+
+def cam_clamp():
+    """The webcam's clamp plate (torso frame): 4 mm, over the shelves' back ends and the webcam's back, a notch at the
+    bottom for its cable; 4 M2 x 10 CSK through it into the shelves."""
+    W, H, D, zc, lens = CAM
+    xb = TD - TWALL - CAM_GAP - D
+    hw = W / 2 - 8.0
+    zlo, zhi = zc - H / 2 - CAM_GAP, zc + H / 2 + CAM_GAP
+    t = 4.0
+    p = [("box", (xb - t, xb), (-hw, hw), (zlo - CAM_SHELF_T, zhi + CAM_SHELF_T)),
+         ("cut", (xb - t - 0.1, xb + 0.1), (-7.0, 7.0), (zlo - CAM_SHELF_T - 0.1, zlo + 6.0))]   # the cable's notch
+    for y, z in cam_screws():
+        p += [("hole", "x", (y, z), M2["hole"] + 0.2, (xb - t - 0.1, xb + 0.1)),
+              ("hole", "x", (y, z), M2["cbore"], (xb - t - 0.1, xb - t + 1.3))]
+        screw("x", (y, z), xb - t + 1.3, +1, "M2", 10.0 - (CSK["head"][0] - M2["hole"] - 0.2) / 2, "printed",
+              "M2 x 10 CSK through the camera clamp into the torso's camera shelf", "csk", 10.0)
+    return p
+
+
+def webcam_envelope():
+    """The webcam head's room (torso frame), a keep-out for the fit and interference checks."""
+    W, H, D, zc, lens = CAM
+    xf = TD - TWALL
+    return [("box", (xf - CAM_GAP - D + 0.2, xf - 0.2), (-W / 2 + 0.5, W / 2 - 0.5), (zc - H / 2 + 0.2, zc + H / 2 - 0.2))]
 
 
 def chest_cap():
@@ -993,7 +1062,7 @@ _CATALOGUE = [("JX0_Pelvis", pelvis, False, 1), ("JX0_YawKeeper_L", yaw_keeper, 
               ("JX0_Thigh_R", thigh, True, 1), ("JX0_Shin_L", shin, False, 1), ("JX0_Shin_R", shin, True, 1),
               ("JX0_AnkleBracket_L", ankle_bracket, False, 1), ("JX0_AnkleBracket_R", ankle_bracket, True, 1),
               ("JX0_Foot", foot, False, 2), ("JX0_Torso", torso, False, 1), ("JX0_ChestCap", chest_cap, False, 1),
-              ("JX0_Head", head, False, 1), ("JX0_EyeLens", eye_lens, False, 2), ("JX0_NeckHub", neck_hub, False, 1),
+              ("JX0_Head", head, False, 1), ("JX0_EyeLens", eye_lens, False, 2), ("JX0_CamClamp", cam_clamp, False, 1), ("JX0_NeckHub", neck_hub, False, 1),
               ("JX0_UpperArm_L", upper_arm, False, 1),
               ("JX0_UpperArm_R", upper_arm, True, 1), ("JX0_ArmBlade_L", arm_blade, False, 1),
               ("JX0_ArmBlade_R", arm_blade, True, 1), ("JX0_HornShim", horn_shim, False, 40)]

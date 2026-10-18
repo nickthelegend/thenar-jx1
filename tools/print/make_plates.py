@@ -37,7 +37,7 @@ DOWN = {"JX0_Pelvis": (0, 0, 1), "JX0_YawKeeper_L": (0, 0, 1), "JX0_YawKeeper_R"
         "JX0_HipRollBracket_L": (-1, 0, 0), "JX0_HipRollBracket_R": (-1, 0, 0),
         "JX0_Thigh_L": (0, 1, 0), "JX0_Thigh_R": (0, -1, 0), "JX0_Shin_L": (0, 1, 0), "JX0_Shin_R": (0, -1, 0),
         "JX0_AnkleBracket_L": (0, 1, 0), "JX0_AnkleBracket_R": (0, -1, 0), "JX0_Foot": (0, 0, -1),
-        "JX0_HornShim": (0, 0, -1), "JX0_Torso": (0, 0, -1), "JX0_ChestCap": (0, 0, 1), "JX0_Head": (0, 0, -1), "JX0_EyeLens": (-1, 0, 0),
+        "JX0_HornShim": (0, 0, -1), "JX0_Torso": (0, 0, -1), "JX0_ChestCap": (0, 0, 1), "JX0_Head": (0, 0, -1), "JX0_EyeLens": (-1, 0, 0), "JX0_CamClamp": (1, 0, 0),
         "JX0_NeckHub": (0, 0, -1), "JX0_UpperArm_L": (0, -1, 0), "JX0_UpperArm_R": (0, 1, 0),
         "JX0_ArmBlade_L": (0, -1, 0), "JX0_ArmBlade_R": (0, 1, 0)}
 
@@ -53,7 +53,7 @@ PLATES = {
                                           ("JX0_AnkleBracket_R", 1)]),
     "i7-2_torso_head": ("i7", "PETG-body", [("JX0_Torso", 1), ("JX0_Head", 1), ("JX0_NeckHub", 1)]),
     "P1S-4_chest_arms": ("P1S", "PETG-body", [("JX0_ChestCap", 1), ("JX0_UpperArm_L", 1), ("JX0_UpperArm_R", 1)]),
-    "P1S-6_blades": ("P1S", "PETG-body", [("JX0_ArmBlade_L", 1), ("JX0_ArmBlade_R", 1)]),   # v0.5's 120 mm blades
+    "P1S-6_blades": ("P1S", "PETG-body", [("JX0_ArmBlade_L", 1), ("JX0_ArmBlade_R", 1), ("JX0_CamClamp", 1)]),   # + the camera clamp
     "P1S-5_eye_lenses": ("P1S", "PETG-body", [("JX0_EyeLens", 2)]),                # transparent PETG
 }
 

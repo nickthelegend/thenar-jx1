@@ -37,6 +37,15 @@
    "volume_cm3": 24.83,
    "problems": []
   },
+  "JX0_CamClamp": {
+   "contact_mm2": 3098.5,
+   "com_over_contact": true,
+   "supported_mm2": 0.0,
+   "height_mm": 4.0,
+   "watertight": true,
+   "volume_cm3": 12.33,
+   "problems": []
+  },
   "JX0_ChestCap": {
    "contact_mm2": 5833.2,
    "com_over_contact": true,
@@ -94,19 +103,19 @@
   "JX0_HipYawBracket_L": {
    "contact_mm2": 2789.8,
    "com_over_contact": true,
-   "supported_mm2": 1893.7,
+   "supported_mm2": 1895.0,
    "height_mm": 45.9,
    "watertight": true,
-   "volume_cm3": 50.14,
+   "volume_cm3": 50.18,
    "problems": []
   },
   "JX0_HipYawBracket_R": {
    "contact_mm2": 2789.8,
    "com_over_contact": true,
-   "supported_mm2": 1893.7,
+   "supported_mm2": 1895.0,
    "height_mm": 45.9,
    "watertight": true,
-   "volume_cm3": 50.14,
+   "volume_cm3": 50.18,
    "problems": []
   },
   "JX0_HornShim": {
@@ -130,10 +139,10 @@
   "JX0_Pelvis": {
    "contact_mm2": 3974.4,
    "com_over_contact": true,
-   "supported_mm2": 1473.2,
+   "supported_mm2": 1713.9,
    "height_mm": 38.83,
    "watertight": true,
-   "volume_cm3": 71.87,
+   "volume_cm3": 73.39,
    "problems": []
   },
   "JX0_Shin_L": {
@@ -175,10 +184,10 @@
   "JX0_Torso": {
    "contact_mm2": 905.6,
    "com_over_contact": true,
-   "supported_mm2": 9208.7,
+   "supported_mm2": 12435.8,
    "height_mm": 162.0,
    "watertight": true,
-   "volume_cm3": 170.83,
+   "volume_cm3": 188.79,
    "problems": []
   },
   "JX0_UpperArm_L": {
@@ -200,21 +209,21 @@
    "problems": []
   },
   "JX0_YawKeeper_L": {
-   "contact_mm2": 269.2,
+   "contact_mm2": 410.1,
    "com_over_contact": true,
-   "supported_mm2": 182.7,
+   "supported_mm2": 208.5,
    "height_mm": 8.6,
    "watertight": true,
-   "volume_cm3": 2.85,
+   "volume_cm3": 3.51,
    "problems": []
   },
   "JX0_YawKeeper_R": {
-   "contact_mm2": 269.2,
+   "contact_mm2": 410.1,
    "com_over_contact": true,
-   "supported_mm2": 182.7,
+   "supported_mm2": 208.5,
    "height_mm": 8.6,
    "watertight": true,
-   "volume_cm3": 2.85,
+   "volume_cm3": 3.51,
    "problems": []
   },
   "JX0_YawRing_L": {
@@ -260,8 +269,8 @@
    "material": "PETG",
    "parts": 7,
    "bodies": 7,
-   "time": "7h 27m 47s",
-   "grams": 196.34,
+   "time": "7h 42m 29s",
+   "grams": 200.12,
    "nozzle": [
     240.0
    ],
@@ -332,8 +341,8 @@
    "material": "PETG-body",
    "parts": 3,
    "bodies": 3,
-   "time": "17h 11m 56s",
-   "grams": 406.02,
+   "time": "18h 40m 13s",
+   "grams": 428.91,
    "nozzle": [
     240.0
    ],
@@ -366,10 +375,10 @@
   "P1S-6_blades": {
    "printer": "P1S",
    "material": "PETG-body",
-   "parts": 2,
-   "bodies": 2,
-   "time": "1h 14m 55s",
-   "grams": 33.88,
+   "parts": 3,
+   "bodies": 3,
+   "time": "1h 33m 37s",
+   "grams": 43.74,
    "nozzle": [
     240.0
    ],
@@ -378,7 +387,7 @@
    ],
    "height_mm": 8.0,
    "min_gap_mm": 8.0,
-   "min_edge_mm": 60.0,
+   "min_edge_mm": 32.2,
    "problems": []
   },
   "P1S-5_eye_lenses": {
@@ -401,8 +410,8 @@
   }
  },
  "filament_g": {
-  "PETG": 707.1,
-  "PETG-body": 585.4
+  "PETG": 711.0,
+  "PETG-body": 618.1
  },
  "problems": 0
 }

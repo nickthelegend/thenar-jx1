@@ -47,7 +47,7 @@ PART_NAMES = {"JX0_Pelvis": "Pelvis", "JX0_YawKeeper": "Hip-yaw keeper", "JX0_Ya
               "JX0_HipYawBracket": "Hip-yaw bracket (disc)", "JX0_HornShim": "Horn shim, 0.4 mm",
               "JX0_HipRollBracket": "Hip-roll U-bracket", "JX0_Thigh": "Thigh", "JX0_Shin": "Shin",
               "JX0_AnkleBracket": "Ankle bracket", "JX0_Foot": "Foot", "JX0_Torso": "Torso (lower shell, skirt)",
-              "JX0_ChestCap": "Chest cap", "JX0_Head": "Head", "JX0_EyeLens": "Eye lens (clear PETG)", "JX0_UpperArm": "Upper arm (hood + elbow box)",
+              "JX0_ChestCap": "Chest cap", "JX0_Head": "Head", "JX0_EyeLens": "Eye lens (clear PETG)", "JX0_CamClamp": "Camera clamp", "JX0_UpperArm": "Upper arm (hood + elbow box)",
               "JX0_ArmBlade": "Arm blade"}
 FEA_OF = {"JX0_Pelvis": "pelvis", "JX0_YawKeeper": "yaw_keeper", "JX0_HipYawBracket": "hip_yaw_bracket",
           "JX0_HipRollBracket": "hip_roll_bracket", "JX0_Thigh": "thigh", "JX0_Shin": "shin", "JX0_AnkleBracket": "ankle_bracket",

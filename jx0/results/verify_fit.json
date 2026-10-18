@@ -616,6 +616,70 @@
    "index": 15
   },
   {
+   "part": "cam_clamp",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK through the camera clamp into the torso's camera shelf",
+   "under_head_mm": 2.7,
+   "seat_error_mm": 0.0,
+   "target": "torso",
+   "gap_mm": 0.0,
+   "engagement_mm": 6.6,
+   "problems": [],
+   "hole_depth_mm": 9.0,
+   "thread_in_part_mm": 6.6,
+   "index": 0
+  },
+  {
+   "part": "cam_clamp",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK through the camera clamp into the torso's camera shelf",
+   "under_head_mm": 2.7,
+   "seat_error_mm": 0.0,
+   "target": "torso",
+   "gap_mm": 0.0,
+   "engagement_mm": 6.6,
+   "problems": [],
+   "hole_depth_mm": 9.0,
+   "thread_in_part_mm": 6.6,
+   "index": 1
+  },
+  {
+   "part": "cam_clamp",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK through the camera clamp into the torso's camera shelf",
+   "under_head_mm": 2.7,
+   "seat_error_mm": 0.0,
+   "target": "torso",
+   "gap_mm": 0.0,
+   "engagement_mm": 6.6,
+   "problems": [],
+   "hole_depth_mm": 9.0,
+   "thread_in_part_mm": 6.6,
+   "index": 2
+  },
+  {
+   "part": "cam_clamp",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK through the camera clamp into the torso's camera shelf",
+   "under_head_mm": 2.7,
+   "seat_error_mm": 0.0,
+   "target": "torso",
+   "gap_mm": 0.0,
+   "engagement_mm": 6.6,
+   "problems": [],
+   "hole_depth_mm": 9.0,
+   "thread_in_part_mm": 6.6,
+   "index": 3
+  },
+  {
    "part": "head",
    "size": "M2",
    "length": 10.0,
@@ -808,6 +872,22 @@
    "index": 3
   },
   {
+   "part": "keeper_L",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "under_head_mm": 5.6,
+   "seat_error_mm": 0.0,
+   "target": "pelvis",
+   "gap_mm": 0.0,
+   "engagement_mm": 3.7,
+   "problems": [],
+   "hole_depth_mm": 5.6,
+   "thread_in_part_mm": 3.7,
+   "index": 4
+  },
+  {
    "part": "hip_yaw_L",
    "size": "M2",
    "length": 6.0,
@@ -2550,6 +2630,22 @@
    "hole_depth_mm": 5.6,
    "thread_in_part_mm": 3.7,
    "index": 3
+  },
+  {
+   "part": "keeper_R",
+   "size": "M2",
+   "length": 10.0,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "under_head_mm": 5.6,
+   "seat_error_mm": 0.0,
+   "target": "pelvis",
+   "gap_mm": 0.0,
+   "engagement_mm": 3.7,
+   "problems": [],
+   "hole_depth_mm": 5.6,
+   "thread_in_part_mm": 3.7,
+   "index": 4
   },
   {
    "part": "hip_yaw_R",
@@ -4441,7 +4537,7 @@
     "keeper_R",
     "pelvis"
    ],
-   "at_mm": 0.0,
+   "at_mm": 2.0,
    "ok": true
   },
   {
@@ -4766,6 +4862,24 @@
     "pelvis"
    ],
    "at_mm": 0.0,
+   "ok": true
+  },
+  {
+   "step": "webcam onto its shelves, clamp plate over it",
+   "moving": [
+    "cam_clamp"
+   ],
+   "direction": [
+    0.0,
+    0.0,
+    -1.0
+   ],
+   "worst_mm3": 0.0,
+   "pair": [
+    "cam_clamp",
+    "torso"
+   ],
+   "at_mm": 2.0,
    "ok": true
   },
   {
@@ -5161,6 +5275,19 @@
    "ok": true
   },
   {
+   "step": "keeper under the disc's rim (L)",
+   "part": "keeper_L",
+   "index": 4,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
    "step": "hip-roll bracket onto the roll servo (L)",
    "part": "hip_roll_L",
    "index": 0,
@@ -5489,6 +5616,19 @@
    "step": "keeper under the disc's rim (R)",
    "part": "keeper_R",
    "index": 3,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK, into the pelvis boss's 1.8 mm pilot",
+   "tool": "screwdriver",
+   "free_along_axis_mm": 60.0,
+   "straight_driver_blocked_by": [],
+   "ok": true
+  },
+  {
+   "step": "keeper under the disc's rim (R)",
+   "part": "keeper_R",
+   "index": 4,
    "size": "M2",
    "length": 9.3,
    "into": "printed",
@@ -6798,9 +6938,14 @@
    "length": 8.0,
    "into": "insert",
    "note": "M3 x 8 socket head, into the pelvis plate's M3 x 4 heat-set insert; its tip goes on into the hole through the rib below",
-   "tool": "screwdriver",
-   "free_along_axis_mm": 60.0,
-   "straight_driver_blocked_by": [],
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 51.3,
+   "straight_driver_blocked_by": [
+    [
+     "torso",
+     146.5
+    ]
+   ],
    "ok": true
   },
   {
@@ -6811,9 +6956,86 @@
    "length": 8.0,
    "into": "insert",
    "note": "M3 x 8 socket head, into the pelvis plate's M3 x 4 heat-set insert; its tip goes on into the hole through the rib below",
-   "tool": "screwdriver",
-   "free_along_axis_mm": 60.0,
-   "straight_driver_blocked_by": [],
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 51.3,
+   "straight_driver_blocked_by": [
+    [
+     "torso",
+     146.5
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "step": "webcam onto its shelves, clamp plate over it",
+   "part": "cam_clamp",
+   "index": 0,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK through the camera clamp into the torso's camera shelf",
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 49.0,
+   "straight_driver_blocked_by": [
+    [
+     "torso",
+     39.5
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "step": "webcam onto its shelves, clamp plate over it",
+   "part": "cam_clamp",
+   "index": 1,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK through the camera clamp into the torso's camera shelf",
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 49.0,
+   "straight_driver_blocked_by": [
+    [
+     "torso",
+     39.5
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "step": "webcam onto its shelves, clamp plate over it",
+   "part": "cam_clamp",
+   "index": 2,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK through the camera clamp into the torso's camera shelf",
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 49.0,
+   "straight_driver_blocked_by": [
+    [
+     "torso",
+     39.5
+    ]
+   ],
+   "ok": true
+  },
+  {
+   "step": "webcam onto its shelves, clamp plate over it",
+   "part": "cam_clamp",
+   "index": 3,
+   "size": "M2",
+   "length": 9.3,
+   "into": "printed",
+   "note": "M2 x 10 CSK through the camera clamp into the torso's camera shelf",
+   "tool": "PH bit by hand / spanner",
+   "free_along_axis_mm": 49.0,
+   "straight_driver_blocked_by": [
+    [
+     "torso",
+     39.5
+    ]
+   ],
    "ok": true
   },
   {
@@ -7416,6 +7638,6 @@
   }
  ],
  "screws_never_reached": [],
- "seconds": 7.9,
+ "seconds": 8.4,
  "pass": true
 }
