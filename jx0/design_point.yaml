@@ -97,7 +97,7 @@ mass_budget:
     carries: [hip_yaw, hip_yaw]
     com_m: [0.002, 0.0, 0.050]
   upper_body:
-    mass_kg: {value: 1.256, label: ESTIMATED, note: "v0.5: torso 26 mm taller (119 g), blades 120 mm (17.3 g each), visor head 108 g + black visor 3 g (v0.4 head 56 g); v0.4: CAD printed torso with skirt 103 g + chest cap 45 g + head 60 g + neck hub 11 g + arms 73 g (hood/elbow box 21.5 + blade 14.8 g per side); 5 STS3215 (neck, 2 shoulder, 2 elbow: the shoulder and elbow servos ride in the arms) 445 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, servo driver + UBEC 30 g, IMU/mic/amp/speaker/button 20 g, switch 10 g, wiring 70 g, screws 25 g"}
+    mass_kg: {value: 1.313, label: ESTIMATED, note: "v0.5: torso 26 mm taller (119 g), blades 120 mm (17.3 g each), two-eye head 157 g + 2 lenses 3 g + 2 WS2812 12-LED rings ~10 g (v0.4 head 56 g); v0.4: CAD printed torso with skirt 103 g + chest cap 45 g + head 60 g + neck hub 11 g + arms 73 g (hood/elbow box 21.5 + blade 14.8 g per side); 5 STS3215 (neck, 2 shoulder, 2 elbow: the shoulder and elbow servos ride in the arms) 445 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, servo driver + UBEC 30 g, IMU/mic/amp/speaker/button 20 g, switch 10 g, wiring 70 g, screws 25 g"}
     com_m: [0.005, 0.0, 0.160]
     inertia_box_m: [0.08, 0.17, 0.23]
   hip_yaw_link:
@@ -131,7 +131,7 @@ upper_body_geometry:
   upper_arm_m: {value: 0.052, label: CALCULATED, note: "CAD: shoulder-pitch axis to elbow axis (hood + elbow box)"}
   forearm_m: {value: 0.120, label: CALCULATED, note: "CAD: elbow axis to blade tip"}
   neck_yaw_origin: {value: [0.0, 0.0, 0.2704], label: CALCULATED, note: "CAD: neck STS3215 standing on the chest cap by its rear face, horn face (geometry.NECK_Z)"}
-  head_size_m: {value: [0.070, 0.090, 0.066], label: CALCULATED, note: "CAD v0.5 head: wide visor head, neon ring round the black visor, ear pods"}
+  head_size_m: {value: [0.070, 0.124, 0.070], label: CALCULATED, note: "CAD v0.5 head: two WS2812 12-LED ring eyes under clear lenses, ear pods"}
 
 upper_body_joint_ranges_deg:
   shoulder_pitch: {min: -180, max: 60,  label: ASSUMED, note: "- = arm raises forward (the cradle swings past the torso side)"}

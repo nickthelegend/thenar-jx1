@@ -2,79 +2,79 @@
  "walking_forward": {
   "joints": {
    "l_hip_yaw": {
-    "peak_nm": 0.273,
-    "rms_nm": 0.078,
-    "peak_of_stall": 0.09,
+    "peak_nm": 0.288,
+    "rms_nm": 0.081,
+    "peak_of_stall": 0.1,
     "rms_of_rated": 0.08
    },
    "l_hip_roll": {
-    "peak_nm": 1.766,
-    "rms_nm": 0.655,
+    "peak_nm": 1.764,
+    "rms_nm": 0.665,
     "peak_of_stall": 0.6,
-    "rms_of_rated": 0.67
+    "rms_of_rated": 0.68
    },
    "l_hip_pitch": {
-    "peak_nm": 0.853,
-    "rms_nm": 0.289,
-    "peak_of_stall": 0.29,
+    "peak_nm": 0.869,
+    "rms_nm": 0.293,
+    "peak_of_stall": 0.3,
     "rms_of_rated": 0.3
    },
    "l_knee": {
-    "peak_nm": 1.557,
-    "rms_nm": 0.673,
-    "peak_of_stall": 0.53,
-    "rms_of_rated": 0.69
+    "peak_nm": 1.633,
+    "rms_nm": 0.685,
+    "peak_of_stall": 0.56,
+    "rms_of_rated": 0.7
    },
    "l_ankle_pitch": {
-    "peak_nm": 1.843,
-    "rms_nm": 0.368,
-    "peak_of_stall": 0.63,
-    "rms_of_rated": 0.38
+    "peak_nm": 1.874,
+    "rms_nm": 0.365,
+    "peak_of_stall": 0.64,
+    "rms_of_rated": 0.37
    },
    "l_ankle_roll": {
-    "peak_nm": 1.31,
-    "rms_nm": 0.433,
-    "peak_of_stall": 0.45,
-    "rms_of_rated": 0.44
+    "peak_nm": 1.374,
+    "rms_nm": 0.45,
+    "peak_of_stall": 0.47,
+    "rms_of_rated": 0.46
    },
    "r_hip_yaw": {
-    "peak_nm": 0.273,
-    "rms_nm": 0.075,
-    "peak_of_stall": 0.09,
+    "peak_nm": 0.288,
+    "rms_nm": 0.078,
+    "peak_of_stall": 0.1,
     "rms_of_rated": 0.08
    },
    "r_hip_roll": {
-    "peak_nm": 1.695,
-    "rms_nm": 0.657,
+    "peak_nm": 1.71,
+    "rms_nm": 0.667,
     "peak_of_stall": 0.58,
-    "rms_of_rated": 0.67
+    "rms_of_rated": 0.68
    },
    "r_hip_pitch": {
-    "peak_nm": 0.851,
-    "rms_nm": 0.291,
+    "peak_nm": 0.867,
+    "rms_nm": 0.294,
     "peak_of_stall": 0.29,
     "rms_of_rated": 0.3
    },
    "r_knee": {
-    "peak_nm": 1.559,
-    "rms_nm": 0.671,
-    "peak_of_stall": 0.53,
-    "rms_of_rated": 0.68
+    "peak_nm": 1.615,
+    "rms_nm": 0.683,
+    "peak_of_stall": 0.55,
+    "rms_of_rated": 0.7
    },
    "r_ankle_pitch": {
-    "peak_nm": 1.845,
-    "rms_nm": 0.365,
-    "peak_of_stall": 0.63,
+    "peak_nm": 1.876,
+    "rms_nm": 0.362,
+    "peak_of_stall": 0.64,
     "rms_of_rated": 0.37
    },
    "r_ankle_roll": {
-    "peak_nm": 1.303,
-    "rms_nm": 0.438,
-    "peak_of_stall": 0.44,
-    "rms_of_rated": 0.45
+    "peak_nm": 1.375,
+    "rms_nm": 0.456,
+    "peak_of_stall": 0.47,
+    "rms_of_rated": 0.47
    },
    "l_shoulder_pitch": {
-    "peak_nm": 1.176,
+    "peak_nm": 1.174,
     "rms_nm": 0.19,
     "peak_of_stall": 0.4,
     "rms_of_rated": 0.19
@@ -86,8 +86,8 @@
     "rms_of_rated": 0.0
    },
    "r_shoulder_pitch": {
-    "peak_nm": 1.176,
-    "rms_nm": 0.185,
+    "peak_nm": 1.174,
+    "rms_nm": 0.184,
     "peak_of_stall": 0.4,
     "rms_of_rated": 0.19
    },
@@ -104,22 +104,22 @@
     "rms_of_rated": 0.0
    }
   },
-  "servo_current_avg_a": 1.27,
-  "servo_current_peak_20ms_a": 2.22,
-  "total_avg_a": 1.72,
-  "total_peak_a": 2.67,
-  "total_avg_w": 19.1
+  "servo_current_avg_a": 1.3,
+  "servo_current_peak_20ms_a": 2.27,
+  "total_avg_a": 1.75,
+  "total_peak_a": 2.72,
+  "total_avg_w": 19.4
  },
  "standing": {
-  "servo_current_a": 0.47,
+  "servo_current_a": 0.48,
   "reference_robot_standing_a": 0.58,
   "note": "reference robot's bench supply at 12.6 V, standing (17 STS3215, no Pi)"
  },
  "battery": {
   "pack": "3S 2200 mAh 35C",
   "max_continuous_a": 77.0,
-  "walking_minutes_80pct": 61,
-  "standing_minutes_80pct": 115,
+  "walking_minutes_80pct": 60,
+  "standing_minutes_80pct": 114,
   "switch_rating_a": 10,
   "switch_ok": true,
   "pack_ok": true,
@@ -146,7 +146,7 @@
   "rated_nm": 0.98
  },
  "realtime": {
-  "python_ms_per_frame_pc": 0.023,
+  "python_ms_per_frame_pc": 0.024,
   "python_ms_per_frame_pi4_est": 0.12,
   "bus_bytes_per_frame": 127,
   "bus_ms_per_frame": 1.27,
@@ -156,5 +156,5 @@
   "ok": true
  },
  "pass": true,
- "seconds": 5.0
+ "seconds": 5.2
 }

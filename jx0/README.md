@@ -124,16 +124,16 @@ takes a shove, and knocks over a bottle on the way. JX0 matches that:
 
 | | Status |
 |---|---|
-| SolidWorks CAD: 26 printed parts + all 17 servos in the assembly | **done**, every part rebuilt by script, one body each, no errors |
+| SolidWorks CAD: 27 printed parts + all 17 servos in the assembly | **done**, every part rebuilt by script, one body each, no errors |
 | Parts colliding, standing or in motion (every gait frame and action, 1,373 poses; every joint over its full range), with the real servo's shape, its cables and every screw head | **none** |
 | Fit to the real STS3215 (Feetech factory and SO-ARM100 models): all 17 servos, their cables, all 182 screws, every assembly step in order | **all fit** ([verify_fit](verify/verify_fit.py)) |
-| Servo sizing (every leg joint, 5 gaits + 8 static cases), 2.99 kg robot | **passes**; the tightest is the knee with a 1.26× margin (hip roll 1.43×), on top of the 1.5× dynamic / 1.25× static factors |
-| Strength of every printed leg part, finite elements under the simulated loads | **passes**: fatigue safety factor 1.8 or more, strength 3.3 or more (PETG data ASSUMED) |
+| Servo sizing (every leg joint, 5 gaits + 8 static cases), 3.05 kg robot | **passes**; the tightest is the knee with a 1.20× margin (hip roll 1.39×), on top of the 1.5× dynamic / 1.25× static factors |
+| Strength of every printed leg part, finite elements under the simulated loads | **passes**: fatigue safety factor 1.5 or more (the yaw keeper; hip-yaw bracket 1.6), strength 3.2 or more (PETG data ASSUMED) |
 | Walking in simulation, on the CAD masses and a servo model | **14 of 14 gaits pass** with arm swing (forward 0.05 m/s, backward, turns, side-steps) |
-| Walking when the real robot differs from the model (servo stiffness, latency, backlash, IMU noise, mass, friction, slope) | **137 of 140** random walks pass (latency up to 20 ms) and **all 140 stay up**; with 40 ms latency 128 pass, all 140 stay up |
+| Walking when the real robot differs from the model (servo stiffness, latency, backlash, IMU noise, mass, friction, slope) | **138 of 140** random walks pass (latency up to 20 ms) and **all 140 stay up**; with 40 ms latency 130 pass, all 140 stay up |
 | The whole robot program, an 8-action mission, random realistic errors | **24 of 24** completed without a fall |
-| Pushes mid-walk (48 timings each) | stays up through **every** push up to 0.72 N·s; 83 % at 0.96 N·s, 60 % at 1.2 N·s, 21 % at 1.44 N·s (v0.4, 46 cm: every push up to 0.96 N·s) |
-| Robot program (voice, Claude brain, walking, gestures) | **written, unit-tested (25 tests) and run in simulation**; not yet on hardware |
+| Pushes mid-walk (48 timings each) | stays up through **every** push up to 0.72 N·s; 83 % at 0.96 N·s, 63 % at 1.2 N·s, 23 % at 1.44 N·s (v0.4, 46 cm: every push up to 0.96 N·s) |
+| Robot program (voice, Claude brain, walking, gestures) | **written, unit-tested (26 tests) and run in simulation**; not yet on hardware |
 | Parts list | ₹57,878; STS3215 price and stock checked 2026-10-04 ([8-page cost estimate](bom/JX0_cost_estimate.pdf)) |
 | Physical robot | **not built yet**: this is what the funding is for |
 
@@ -141,7 +141,7 @@ All of it is in the **[verification report](results/verification.md)**: what was
 the honest limits (`python jx0/verify/run_all.py` re-runs everything in about 45 minutes). Unverified until the robot
 is built, and the first things to check: the printed shin on a real servo (your printer's hole accuracy), each
 servo's horn height (the shims), the servo stiffness setting and the I2S audio overlay. Battery life
-is about 61 minutes of walking (CALCULATED: 1.72 A average for the servos and the Pi).
+is about 60 minutes of walking (CALCULATED: 1.75 A average for the servos and the Pi).
 
 ## What it can do
 
@@ -152,16 +152,17 @@ is about 61 minutes of walking (CALCULATED: 1.72 A average for the servos and th
 | "Turn around" | repeats 10° turn blocks until the IMU says it has turned far enough |
 | "Wave at me" | raises an arm up in front and wags the blade |
 | "Look left" / "yes or no?" | turns its head; bows for yes, shakes its head for no |
+| "Are you happy?" / any feeling | its two LED-ring eyes change colour (happy, sad, angry, surprised, sleepy, love); they glow blue while it listens, spin while it thinks and pulse while it talks |
 
 ## JX0 at a glance
 
 | | |
 |---|---|
-| Height, mass | 54.6 cm, 2.99 kg (CAD; v0.5: legs 1.5× longer, torso 26 mm taller, visor head) |
+| Height, mass | 54.6 cm, 3.05 kg (CAD; v0.5: legs 1.5× longer, torso 26 mm taller, a head with two LED-ring eyes) |
 | Joints | 17 Feetech STS3215 12 V serial bus servos: 6 per leg, shoulder pitch and elbow per arm, neck yaw |
 | Brain | Raspberry Pi 4 (2 GB): gaits and balance at 100 Hz, MPU6050 IMU, Vosk speech recognition, Piper voice, Claude over Wi-Fi |
 | Power | 3S 2200 mAh LiPo straight to the servo bus (12 V servos); a 5 V UBEC for the Pi; or a 12.6 V bench supply |
-| Structure | 26 printed parts and 40 horn shims, 961 g: pelvis and leg parts in PETG, printed near-solid (596 g); body, head and arms in PLA (365 g, the 3 g visor in black) |
+| Structure | 27 printed parts and 40 horn shims, 1010 g, all PETG: pelvis and leg parts printed near-solid (596 g, grey); body, head and arms (414 g, white; the two eye lenses clear) |
 
 ## What it costs
 

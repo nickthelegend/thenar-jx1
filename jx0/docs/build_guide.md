@@ -95,14 +95,14 @@ If your printer prints holes or pockets small, set its hole compensation now, be
 | JX0_AnkleBracket_L / _R | 1 + 1 | 37.8 g each | 74 × 62 × 39 | PETG near-solid; outer arm down |
 | JX0_Foot | 2 | 50.7 g each | 124 × 70 × 46 | PETG near-solid; sole down |
 | JX0_HornShim (0.4 mm, under a horn arm) | 40 | 0.1 g each | Ø19.6 | PETG; two 0.2 mm layers, flat |
-| JX0_Torso (lower shell with the skirt) | 1 | 119.4 g | 84 × 120 × 162 | PLA; floor down |
-| JX0_ChestCap | 1 | 45.3 g | 84 × 126 × 42 | PLA; upside down (top face on the bed), chamfers 45° |
-| JX0_Head (visor head: 10.4 × 5.2 mm channel for the red neon strip round the visor's pocket, ear pods) | 1 | 108.3 g | 70 × 94 × 66 | PLA; upright on the flat rim of its open bottom, tree supports inside the top |
-| JX0_Visor (glued into the head's pocket with CA) | 1 | 3.0 g | 3 × 54 × 29 | PLA in **black**; flat |
-| JX0_NeckHub (on the neck horn, the head slides over it) | 1 | 10.7 g | 52 × 48 × 12 | PLA; flat plate down |
-| JX0_UpperArm_L / _R (shoulder hood + elbow box) | 1 + 1 | 21.7 g each | 54 × 35 × 85 | PLA; inner side (the shoulder horn's) down: on the outer plate it would tip |
-| JX0_ArmBlade_L / _R | 1 + 1 | 17.3 g each | 36 × 8 × 136 | PLA; lying flat |
-| **Total** | **26 + 40 shims** | **961 g** | | 596 g PETG + 365 g PLA (3 g of it black) |
+| JX0_Torso (lower shell with the skirt) | 1 | 119.4 g | 84 × 120 × 162 | PETG (white); floor down |
+| JX0_ChestCap | 1 | 45.3 g | 84 × 126 × 42 | PETG (white); upside down (top face on the bed), chamfers 45° |
+| JX0_Head (two pockets for the WS2812 12-LED ring eyes, wire slots behind them, ear pods) | 1 | 157.4 g | 70 × 124 × 70 | PETG (white); upright on the flat rim of its open bottom, tree supports inside the top |
+| JX0_EyeLens (over each LED ring, flush with the face) | 2 | 1.6 g each | Ø50.4 × 1.2 | PETG, **transparent**; flat |
+| JX0_NeckHub (on the neck horn, the head slides over it) | 1 | 10.7 g | 52 × 48 × 12 | PETG (white); flat plate down |
+| JX0_UpperArm_L / _R (shoulder hood + elbow box) | 1 + 1 | 21.7 g each | 54 × 35 × 85 | PETG (white); inner side (the shoulder horn's) down: on the outer plate it would tip |
+| JX0_ArmBlade_L / _R | 1 + 1 | 17.3 g each | 36 × 8 × 136 | PETG (white); lying flat |
+| **Total** | **27 + 40 shims** | **1010 g** | | all PETG: 596 g grey (pelvis and legs) + 414 g white (body, head, arms; the lenses clear) |
 
 ## Joint stops
 
@@ -246,8 +246,16 @@ Body, arms and head:
 14. **Head**:
     - Fit the neck horn's centre screw first.
     - Bolt the **neck hub** to the neck horn from above: shims, then 4 × M3 × 8 pan heads, a normal screwdriver.
-    - Glue the microphone behind the four face holes and take its cable down through the hole in the hub, with slack
-      for ±80° of head turn.
+    - Glue the microphone behind the three holes between the eyes and take its cable down through the hole in the hub,
+      with slack for ±80° of head turn.
+    - **Eyes** (two WS2812 12-LED rings, 50 mm): solder three wires to each ring's back pads first (5 V, GND, and
+      data in; on the left ring also data out). Measure the ring's hole: the pupil boss is 33 mm, for a hole of about
+      35 mm. Feed the wires through the slot under each eye pocket from the front, turn the ring so its pads sit over
+      the slot, and press it onto the pupil, LEDs out. Inside the head, chain left DO → right DI and join the two 5 V
+      and the two GND; the three wires (5 V, GND, data) go down the hub's cable hole with the microphone's. Nothing
+      shows in front.
+    - Press a clear **eye lens** over each ring, flush with the face; a few dots of clear silicone at the rim (not CA:
+      it fogs clear PETG).
     - Slide the head down over the hub and fix it with 2 × M2 × 10 CSK through the back wall into the hub.
 
 Look at `jx0/cad/JX0_Robot.SLDASM` in SolidWorks, or the pictures in [../README.md](../README.md), whenever a

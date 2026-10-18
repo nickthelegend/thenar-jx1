@@ -39,8 +39,8 @@
   <link name="torso_link">
     <inertial>
       <origin xyz="0.005 0 0.16" rpy="0 0 0"/>
-      <mass value="0.739"/>
-      <inertia ixx="0.00503752" ixy="0" ixz="0" iyy="0.00365189" iyz="0" izz="0.00217389"/>
+      <mass value="0.796"/>
+      <inertia ixx="0.00542607" ixy="0" ixz="0" iyy="0.00393357" iyz="0" izz="0.00234157"/>
     </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -117,7 +117,7 @@
   </link>
   <link name="head_link">
     <inertial>
-      <origin xyz="0 0 0.033" rpy="0 0 0"/>
+      <origin xyz="0 0 0.035" rpy="0 0 0"/>
       <mass value="0.077"/>
       <inertia ixx="4e-05" ixy="0" ixz="0" iyy="4e-05" iyz="0" izz="4e-05"/>
     </inertial>
@@ -126,8 +126,12 @@
       <geometry><mesh filename="../meshes/JX0_Head.stl" scale="0.001 0.001 0.001"/></geometry>
     </visual>
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry><mesh filename="../meshes/JX0_Visor.stl" scale="0.001 0.001 0.001"/></geometry>
+      <origin xyz="0.0358 0.028 0.035" rpy="0 0 0"/>
+      <geometry><mesh filename="../meshes/JX0_EyeLens.stl" scale="0.001 0.001 0.001"/></geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.0358 -0.028 0.035" rpy="0 0 0"/>
+      <geometry><mesh filename="../meshes/JX0_EyeLens.stl" scale="0.001 0.001 0.001"/></geometry>
     </visual>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>

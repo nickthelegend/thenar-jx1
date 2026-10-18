@@ -2,16 +2,16 @@
 
 The plates are made by `python tools/print/make_plates.py`. The script orients every part the way the build guide says,
 lays each plate out, and slices it. Settings: 0.2 mm layers, Textured PEI plate, tree supports.
-- PETG: 6 walls, 40 % gyroid, 240 / 80 °C.
-- PLA: 3 walls, 25 % gyroid, 210 / 60 °C.
+- PETG, leg parts (grey): 6 walls, 40 % gyroid, 240 / 80 °C.
+- PETG, body parts (white; the eye lenses clear): 3 walls, 25 % gyroid, 240 / 80 °C.
 
 `python tools/print/verify_plates.py` checks every plate before printing:
 - every part of the build guide's table is on a plate, in its quantity and material;
 - each part stands on a flat face with its centre of mass over it;
 - no two parts touch;
-- in the G-code: the printer's own start G-code, the print temperatures (PETG 240 / 80 °C, PLA 210 / 60 °C), walls, infill and supports, every move inside the bed, and every part printed from the bed to its top.
+- in the G-code: the printer's own start G-code, the print temperatures (PETG 240 / 80 °C), walls, infill and supports, every move inside the bed, and every part printed from the bed to its top.
 
-Result: 0 problems (`verify_plates.json`). Filament: PETG 654 g, PLA 461 g.
+Result: 0 problems (`verify_plates.json`). Filament: PETG 707 g grey (legs) + 585 g white (body, 6 g of it the clear lenses).
 
 The plates use the parts with their lettering (`jx0/cad/engrave.py`, 0.6 mm deep):
 - torso front: JX0 and JNTUH's 1st Humanoid Robot;
@@ -32,11 +32,11 @@ The sliced files are not in git; re-run the script to make them. Each plate fold
 | 2 | P1S-1_pelvis_hip_yaw | P1S | PETG | 7.5 h | Pelvis, hip-yaw brackets, keepers, yaw rings |
 | 2 | i7-1_thighs_ankles | i7 | PETG | 11.7 h | Thighs, ankle brackets |
 | 3 | P1S-2_feet_hip_roll | P1S | PETG | 7.2 h | Feet, hip-roll brackets |
-| 3 | i7-2_torso_head | i7 | PLA | 14.1 h | Torso, head, neck hub |
+| 3 | i7-2_torso_head | i7 | PETG white | 17.2 h | Torso, head, neck hub |
 | 4 | P1S-3_shin_shims | P1S | PETG | 2.7 h | Shin R, 40 horn shims |
-| 5 | P1S-4_chest_arms | P1S | PLA | 4.6 h | Chest cap, upper arms |
-| 5 | P1S-6_blades | P1S | PLA | 1.2 h | Arm blades |
-| 6 | P1S-5_visor_black | P1S | PLA, **black** | 0.3 h | The visor (glued into the head) |
+| 5 | P1S-4_chest_arms | P1S | PETG white | 4.7 h | Chest cap, upper arms |
+| 5 | P1S-6_blades | P1S | PETG white | 1.2 h | Arm blades |
+| 6 | P1S-5_eye_lenses | P1S | PETG **clear** | 0.3 h | The two eye lenses |
 
 How to print on each printer:
 - **P1S:** open the `.gcode.3mf` in Bambu Studio, then Print plate.

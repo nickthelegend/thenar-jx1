@@ -46,7 +46,7 @@ def _box(size, pos=(0, 0, 0), rgba=WHITE, euler=None, name=None, collide=False):
 
 
 CAD = ROOT / "jx0" / "cad"
-PART_RGBA = {"JX0_Servo_STS3215": BLACK, "JX0_Visor": BLACK}   # every other printed part is sage
+PART_RGBA = {"JX0_Servo_STS3215": BLACK, "JX0_EyeLens": ".85 .92 1 .5"}   # every other printed part is sage
 
 
 def stl_dir():

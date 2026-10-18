@@ -460,34 +460,34 @@
   "errors": [],
   "bbox_mm": [
    -33.0,
-   -47.1,
+   -62.1,
    -0.0,
    37.0,
-   47.1,
-   66.0
+   62.1,
+   70.0
   ],
   "bbox_expected_mm": [
    -33.0,
-   -47.1,
+   -62.1,
    0.0,
    37.0,
-   47.1,
-   66.0
+   62.1,
+   70.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 155.08,
-  "solid_mass_g_petg": 196.9,
-  "printed_mass_g": 108.3,
+  "volume_cm3": 225.33,
+  "solid_mass_g_petg": 286.2,
+  "printed_mass_g": 157.4,
   "print_fill": 0.55,
-  "features": 30,
-  "triangles": 2640,
+  "features": 31,
+  "triangles": 2670,
   "com_mm": [
-   2.01,
-   -0.0,
-   33.06
+   2.41,
+   0.0,
+   33.25
   ],
   "quantity": 1,
-  "build_s": 37.3
+  "build_s": 48.6
  },
  "JX0_ChestCap": {
   "part": "JX0_ChestCap",
@@ -909,39 +909,39 @@
   "quantity": 40,
   "build_s": 12.6
  },
- "JX0_Visor": {
-  "part": "JX0_Visor",
+ "JX0_EyeLens": {
+  "part": "JX0_EyeLens",
   "bodies": 1,
   "errors": [],
   "bbox_mm": [
-   34.0,
-   -26.95,
-   17.55,
-   36.95,
-   26.95,
-   46.45
+   0.0,
+   -25.2,
+   -25.2,
+   1.15,
+   25.2,
+   25.2
   ],
   "bbox_expected_mm": [
-   34.0,
-   -26.95,
-   17.55,
-   36.95,
-   26.95,
-   46.45
+   0.0,
+   -25.2,
+   -25.2,
+   1.15,
+   25.2,
+   25.2
   ],
   "bbox_ok": true,
-  "volume_cm3": 4.33,
-  "solid_mass_g_petg": 5.5,
-  "printed_mass_g": 3.0,
+  "volume_cm3": 2.29,
+  "solid_mass_g_petg": 2.9,
+  "printed_mass_g": 1.6,
   "print_fill": 0.55,
-  "features": 6,
-  "triangles": 692,
+  "features": 1,
+  "triangles": 216,
   "com_mm": [
-   35.48,
-   -0.0,
-   32.12
+   0.57,
+   0.0,
+   0.0
   ],
-  "quantity": 1,
-  "build_s": 8.0
+  "quantity": 2,
+  "build_s": 2.7
  }
 }

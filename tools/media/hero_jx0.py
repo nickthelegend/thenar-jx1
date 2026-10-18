@@ -1,5 +1,5 @@
 """Premium studio renders of JX0: light-grey matte shell (PLA body, head, arms), graphite legs (PETG), black servos,
-the red neon ring glowing round the face, lettering tone on tone, on a dark studio floor.
+the two LED-ring eyes glowing cyan under their lenses, lettering tone on tone, on a dark studio floor.
 
     python tools/media/hero_jx0.py         -> media/jx0_hero.png (4 views) + media/jx0_hero_<view>.png
 """
@@ -31,22 +31,25 @@ from jx1calc.design import Design  # noqa: E402
 
 OUT = ROOT / "media"
 TMP = ROOT / "media" / "jx0_promo_build"
-SHELL, GRAPHITE, SERVO, NEON = ".86 .87 .88 1", ".17 .18 .20 1", ".07 .07 .08 1", "1 .015 .01 1"
+SHELL, GRAPHITE, SERVO, EYE = ".86 .87 .88 1", ".17 .18 .20 1", ".07 .07 .08 1", ".1 .8 1 1"
 LEGS = ("Pelvis", "YawKeeper", "YawRing", "HipYawBracket", "HipRollBracket", "Thigh", "Shin", "AnkleBracket", "Foot")
 W, H = 1000, 1300
 FONT = "C:/Windows/Fonts/segoeuil.ttf"
 
 
-def neon_mesh() -> Path:
-    """The neon strip in its channel, head frame (mm): the ring, NEON_DEPTH deep, its face flush with the head's."""
+def eye_mesh() -> Path:
+    """The two LED rings' glow, head frame (mm): an annulus over each ring's LEDs (r 18.5..24), just under the lens."""
     from preview import solid
     xf = G.HEAD_BOX[1]
-    w, cz, h, r = G.NEON
-    e = G.NEON_WIDTH / 2 - 0.2
-    ring = solid(("prism", "x", G.neon_rect(w / 2 + e, h / 2 + e, r + e, cz), (xf - G.NEON_DEPTH + 0.2, xf - 0.05))) -         solid(("prism", "x", G.neon_rect(w / 2 - e, h / 2 - e, r - e, cz), (xf - G.NEON_DEPTH, xf + 0.1)))
-    mm = ring.to_mesh()
+    ey, ez, d, depth = G.EYE
+    x0 = xf - G.LENS_T - 0.6
+    glow = None
+    for yc in (-ey, ey):
+        ring = solid(("cyl", "x", (yc, ez), 24.0, (x0, x0 + 0.5))) - solid(("cyl", "x", (yc, ez), 18.5, (x0 - 1, x0 + 1)))
+        glow = ring if glow is None else glow + ring
+    mm = glow.to_mesh()
     TMP.mkdir(parents=True, exist_ok=True)
-    f = TMP / "neon.stl"
+    f = TMP / "eyes.stl"
     trimesh.Trimesh(np.asarray(mm.vert_properties)[:, :3], np.asarray(mm.tri_verts)).export(f)
     return f
 
@@ -78,13 +81,13 @@ def bloom(img: Image.Image) -> Image.Image:
     light round itself; the render alone paints it flat."""
     from PIL import ImageFilter
     a = np.asarray(img).astype(np.float32) / 255
-    mask = ((a[..., 0] > 0.75) & (a[..., 1] < 0.45) & (a[..., 2] < 0.45)).astype(np.float32)
+    mask = ((a[..., 2] > 0.8) & (a[..., 1] > 0.6) & (a[..., 0] < 0.45)).astype(np.float32)   # the cyan eyes
     k = np.zeros(a.shape[:2], np.float32)
     for radius, gain in ((W / 300, 0.75), (W / 70, 0.5)):
         k += gain * np.asarray(Image.fromarray((mask * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(radius))) / 255
     k = np.clip(k, 0, 0.85)[..., None] * (1 - mask[..., None])     # the light it throws: tints the shell, lights the dark
     lum = a.mean(axis=2, keepdims=True)
-    lit = np.concatenate([np.maximum(lum * 1.1, 0.95), lum * 0.3, lum * 0.25], axis=2)   # red light on it
+    lit = np.concatenate([lum * 0.35, np.maximum(lum, 0.8), np.maximum(lum * 1.1, 0.95)], axis=2)   # cyan light on it
     out = a * (1 - k) + lit * k
     return Image.fromarray((np.clip(out, 0, 1) * 255).astype(np.uint8))
 
@@ -100,23 +103,23 @@ def scene() -> str:
     <material name="shell" rgba="{SHELL}" specular=".18" shininess=".25"/>
     <material name="graphite" rgba="{GRAPHITE}" specular=".35" shininess=".5"/>
     <material name="servo" rgba="{SERVO}" specular=".5" shininess=".7"/>
-    <material name="neon" rgba="{NEON}" emission="3"/>
-    <material name="visor" rgba=".03 .03 .035 1" specular=".6" shininess=".9"/>'''
+    <material name="eye" rgba="{EYE}" emission="3"/>
+    <material name="lens" rgba=".85 .93 1 .28" specular=".9" shininess=".95"/>'''
     xml = re.sub(r'<texture name="grid"[^>]*/>\s*<material name="grid"[^>]*/>', assets, xml, count=1)
     xml = xml.replace('rgba=".12 .12 .14 1"', 'material="servo"')
 
     def colour(m):
         part = m.group(1)
         mat = "graphite" if any(part.startswith(f"JX0_{k}") for k in LEGS) else "shell"
-        if part == "JX0_Visor":
-            return re.sub(r'rgba="[^"]*"', 'material="visor"', m.group(0))
+        if part == "JX0_EyeLens":
+            return re.sub(r'rgba="[^"]*"', 'material="lens"', m.group(0))
         return m.group(0).replace('rgba=".74 .86 .58 1"', f'material="{mat}"')
     xml = re.sub(r'<geom type="mesh" mesh="m_(JX0_\w+)"[^>]*/>', colour, xml)
     xml = re.sub(r'(<mesh name="m_JX0_Head" file=")[^"]*"', lambda m: m.group(1) + fine_head().as_posix() + '"', xml)
-    f = neon_mesh()
-    xml = xml.replace("</asset>", f'<mesh name="neon" file="{f.as_posix()}" scale=".001 .001 .001"/>\n  </asset>', 1)
+    f = eye_mesh()
+    xml = xml.replace("</asset>", f'<mesh name="eyes" file="{f.as_posix()}" scale=".001 .001 .001"/>\n  </asset>', 1)
     xml = re.sub(r'(<geom type="mesh" mesh="m_JX0_Head" (pos="[^"]*" quat="[^"]*") [^>]*/>)',
-                 r'\1<geom type="mesh" mesh="neon" \2 material="neon" contype="0" conaffinity="0" mass="0"/>', xml)
+                 r'\1<geom type="mesh" mesh="eyes" \2 material="eye" contype="0" conaffinity="0" mass="0"/>', xml)
     lights = '''
     <light name="key" directional="true" pos="0.8 -0.6 1.6" dir="-0.5 0.35 -1" diffuse=".75 .74 .72" specular=".3 .3 .3" castshadow="true"/>
     <light name="rim" directional="true" pos="-1 0.8 0.8" dir="0.8 -0.6 -0.25" diffuse=".35 .38 .45" specular=".4 .4 .45" castshadow="false"/>

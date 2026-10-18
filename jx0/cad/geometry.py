@@ -848,31 +848,40 @@ def chest_cap():
 
 
 def head():
-    """Head (frame: neck horn face, z up), v0.5: a wide visor head. The front is a gloss-black visor (JX0_Visor, a
-    separate black part glued into its 3 mm pocket) framed by the red neon strip in its channel; the microphone listens
-    through the row of holes under the visor; an ear pod on each side. Hollow (walls >= 2.5 mm under every fillet),
-    back window for the wiring, open underneath: it slides down over the neck hub (bolted to the neck horn first) and
-    2 M2 x 10 CSK through its back wall hold it there; the hub's shape carries the turning."""
+    """Head (frame: neck horn face, z up), v0.5: a wide head with two LED-ring eyes. Each eye is a WS2812 12-LED ring
+    (50 mm outside, about 35 mm inside, black PCB, LEDs on the front, solder pads on the back) in a pocket in the face:
+    a boss in the middle centres the ring by its hole and is the pupil; a 1.2 mm clear PETG lens (JX0_EyeLens) covers
+    it flush with the face. Behind each ring a slot takes its wires into the head (turn the ring so its pads sit over
+    the slot); inside, the two rings are chained and three wires (5 V, GND, data) go down the neck hub's cable hole
+    with the microphone's, so no wire shows in front. The microphone listens through the holes between the eyes. Ear
+    pods on the sides. Hollow (walls >= 2.5 mm under every fillet), back window for the wiring, open underneath: it
+    slides down over the neck hub (bolted to the neck horn first) and 2 M2 x 10 CSK through its back wall hold it
+    there; the hub's shape carries the turning."""
     xb, xf, hy, hz = HEAD_BOX
     front = rounded_polygon([(-hy, 0.0), (hy, 0.0), (hy, hz), (-hy, hz)], [6.0, 6.0, 14.0, 14.0])
     p = [("prism", "x", front, (xb, xf))]
-    # front edges small (the visor and its ring fill the face), back edges soft; the chin and bottom-corner radii leave a
-    # wide flat rim on the open bottom for the head to print standing on
+    # front edges small (the eyes fill the face), back edges soft; the chin and bottom-corner radii leave a wide flat
+    # rim on the open bottom for the head to print standing on
     for xc, zc, du, dv, r in ((xf, hz, -1, -1, 9.0), (xb, hz, 1, -1, 18.0), (xf, 0.0, -1, 1, 5.0), (xb, 0.0, 1, 1, 5.0)):
         p.append(("pcut", "y", corner_cut((xc, zc), (du, dv), r), (-hy - 1.0, hy + 1.0)))
     for xc, yc, du, dv, r in ((xf, hy, -1, -1, 6.0), (xf, -hy, -1, 1, 6.0), (xb, hy, 1, -1, 12.0), (xb, -hy, 1, 1, 12.0)):
         p.append(("pcut", "z", corner_cut((xc, yc), (du, dv), r), (-0.1, hz + 0.1)))       # rounded vertical edges
-    p += neon_ring(xf)
     p += [("cut", (-26.0, 26.0), (-24.0, 24.0), (-0.1, 16.1)),                               # the neck hub's plate
-          ("cut", (-26.0, 30.0), (-39.0, 39.0), (16.0, 58.0)),                               # hollow
+          ("cut", (-26.0, 30.0), (-hy + 5.0, hy - 5.0), (16.0, 62.0)),                       # hollow
           ("cut", (xb - 0.1, -25.9), (-16.0, 16.0), (16.0, 44.0))]                           # back window
-    for yc, zc in mic_holes():                                                               # through the visor's
-        p.append(("lhole", "x", (yc, zc), 2.5, (29.9, xf - VISOR_T + 0.1)))                  # pocket floor
-    ex, ez, eh, er = EAR
+    ey, ez, d, depth = EYE
+    floor = xf - depth
+    for yc in (-ey, ey):
+        p += [("hole", "x", (yc, ez), d, (floor, xf + 0.1)),                                 # the ring's pocket
+              ("cut", (29.9, floor + 0.1), (yc - 6.0, yc + 6.0), (ez - 25.0, ez - 17.0)),    # its wires, into the head
+              ("lcyl", "x", (yc, ez), PUPIL / 2, (floor - 0.05, xf - LENS_T - 0.05))]        # pupil: centres the ring
+    for zc in (ez - 6.0, ez, ez + 6.0):                                                      # microphone, between the
+        p.append(("hole", "x", (0.0, zc), 2.0, (29.9, xf + 0.1)))                            # eyes
+    ex, ez2, eh, er = EAR
     for sy in (1, -1):                                                                       # ear pods: a raised disc
         g = tuple(sorted((sy * (hy + eh - 0.6), sy * (hy + eh + 0.1))))                       # with a groove ring
-        p += [("cyl", "y", (ex, ez), er, tuple(sorted((sy * (hy - 0.5), sy * (hy + eh))))),
-              ("hole", "y", (ex, ez), 2 * (er - 3.0), g), ("lcyl", "y", (ex, ez), er - 4.0, g)]
+        p += [("cyl", "y", (ex, ez2), er, tuple(sorted((sy * (hy - 0.5), sy * (hy + eh))))),
+              ("hole", "y", (ex, ez2), 2 * (er - 3.0), g), ("lcyl", "y", (ex, ez2), er - 4.0, g)]
     for y in (-HEAD_PIN_Y, HEAD_PIN_Y):                                                      # into the hub's back
         seat = -26.0 - 0.1 - 5.0
         p += [("hole", "x", (y, HEAD_PIN_Z), M2["hole"] + 0.2, (xb - 0.1, -25.9)),
@@ -882,54 +891,22 @@ def head():
     return p
 
 
-def visor():
-    """The visor (head frame): a 2.95 mm gloss-black plate (black PLA) in the pocket inside the neon ring, 0.15 mm
-    clearance all round, glued (CA); the microphone's holes through it."""
-    xf = HEAD_BOX[1]
-    p = [("prism", "x", visor_outline(0.15), (xf - VISOR_T, xf - 0.05))]
-    for yc, zc in mic_holes():
-        p.append(("hole", "x", (yc, zc), 2.5, (xf - VISOR_T - 0.1, xf + 0.1)))
-    return p
+def eye_lens():
+    """Eye lens (frame: its back face on x = 0, the eye's axis): a 1.2 mm clear PETG disc that covers the LED ring
+    flush with the face, resting on the LEDs and the pupil; a few dots of clear silicone at the rim hold it. Printed
+    flat, it diffuses the LEDs into a glowing ring."""
+    return [("cyl", "x", (0.0, 0.0), LENS_D / 2, (0.0, LENS_T - 0.05))]
 
 
 HEAD_PIN_Y, HEAD_PIN_Z = 10.0, 8.0
-HEAD_BOX = (-33.0, 37.0, 45.0, 66.0)       # back x, front x, half width, height (v0.4: +-33, 39, 62)
-EAR = (0.0, 34.0, 2.0, 14.0)               # ear pod: x, z, height off the side, radius
-# red neon ring round the visor (like Unitree G1's): a flat 5 x 10 mm silicone neon strip, its 10 mm glowing face flush
-# with the face, in a channel. NEON = (centreline width y, centre height z, height, corner radius): about 188 mm of
-# strip; channel 10.4 wide x NEON_DEPTH deep (1.8 mm of the 7 mm front wall behind it). Inside the ring, the visor's
-# pocket (VISOR_T deep).
-NEON = (64.6, 32.0, 39.6, 14.0)
-NEON_WIDTH, NEON_DEPTH, VISOR_T = 10.4, 5.2, 3.0
-
-
-def neon_rect(half_w, half_h, r, cz):
-    return rounded_polygon([(-half_w, cz - half_h), (half_w, cz - half_h), (half_w, cz + half_h), (-half_w, cz + half_h)],
-                           [r] * 4)
-
-
-def visor_outline(c=0.0):
-    """The ring's inner edge (the visor's outline), c inside it."""
-    w, cz, h, r = NEON
-    e = NEON_WIDTH / 2
-    return neon_rect(w / 2 - e - c, h / 2 - e - c, r - e - c, cz)
-
-
-def mic_holes():
-    return [(y, NEON[1] - 7.0) for y in (-9.0, -4.5, 0.0, 4.5, 9.0)]
-
-
-def neon_ring(xf):
-    """The neon channel on the head's front face (x = xf), the visor's pocket inside it and the hole the strip's lead
-    goes in by, at the bottom of the ring: the lead runs inside the head and down through the neck hub's cable hole
-    with the microphone's. The face inside the ring is a late boss: the ring's cut removes everything inside its
-    outline first (v0.4 built it before the cut, which left a 5.2 mm pocket instead of a channel)."""
-    w, cz, h, r = NEON
-    e = NEON_WIDTH / 2
-    floor = xf - NEON_DEPTH
-    return [("pcut", "x", neon_rect(w / 2 + e, h / 2 + e, r + e, cz), (floor, xf + 1.0)),
-            ("lprism", "x", visor_outline(), (floor - 0.05, xf - VISOR_T)),
-            ("hole", "x", (0.0, cz - h / 2), 5.0, (29.9, floor + 0.1))]
+HEAD_BOX = (-33.0, 37.0, 60.0, 70.0)       # back x, front x, half width, height (v0.4: +-33, 39, 62)
+EAR = (0.0, 36.0, 2.0, 14.0)               # ear pod: x, z, height off the side, radius
+# the eyes: WS2812 12-LED rings, 50 mm outside (robocraze "WS2812 12 Bit RGB LED (round)"; the inside, about 35 mm,
+# is read off the photo: measure yours). EYE = (centre y, centre z, pocket diameter, pocket depth = the ring's
+# ~3.4 mm (1.6 mm PCB + 1.6 mm LEDs) + the lens)
+EYE = (28.0, 35.0, 50.8, 4.6)
+PUPIL = 33.0                               # the boss in the ring's ~35 mm hole
+LENS_T, LENS_D = 1.2, 50.4
 
 
 def neck_hub():
@@ -1016,7 +993,7 @@ _CATALOGUE = [("JX0_Pelvis", pelvis, False, 1), ("JX0_YawKeeper_L", yaw_keeper, 
               ("JX0_Thigh_R", thigh, True, 1), ("JX0_Shin_L", shin, False, 1), ("JX0_Shin_R", shin, True, 1),
               ("JX0_AnkleBracket_L", ankle_bracket, False, 1), ("JX0_AnkleBracket_R", ankle_bracket, True, 1),
               ("JX0_Foot", foot, False, 2), ("JX0_Torso", torso, False, 1), ("JX0_ChestCap", chest_cap, False, 1),
-              ("JX0_Head", head, False, 1), ("JX0_Visor", visor, False, 1), ("JX0_NeckHub", neck_hub, False, 1),
+              ("JX0_Head", head, False, 1), ("JX0_EyeLens", eye_lens, False, 2), ("JX0_NeckHub", neck_hub, False, 1),
               ("JX0_UpperArm_L", upper_arm, False, 1),
               ("JX0_UpperArm_R", upper_arm, True, 1), ("JX0_ArmBlade_L", arm_blade, False, 1),
               ("JX0_ArmBlade_R", arm_blade, True, 1), ("JX0_HornShim", horn_shim, False, 40)]

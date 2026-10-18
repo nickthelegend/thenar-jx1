@@ -50,3 +50,9 @@ voice:
   talk_button_gpio: 17        # push-to-talk button to GND (internal pull-up)
   vosk_model: models/vosk-model-small-en-us-0.15
   piper_voice: models/en_US-lessac-medium.onnx
+
+eyes:
+  enabled: true
+  data_gpio: 10                # SPI MOSI (pin 19): two WS2812 12-LED rings, left ring first (I2S has GPIO 18-21)
+  brightness: 0.3             # 24 LEDs at 0.3 stay under ~0.5 A of the UBEC's 5 A
+  blink_every_s: 4.0

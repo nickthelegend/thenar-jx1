@@ -393,7 +393,9 @@ class BrainLoop(unittest.TestCase):
         self.assertIsNotNone(v("wave", {"arm": "middle"}))
         self.assertIsNotNone(v("fly", {}))
         names = {t["name"] for t in self.brain_mod.TOOLS}
-        self.assertEqual(names, {"wave", "nod", "walk", "turn", "look"})     # all handled by Robot.act
+        self.assertEqual(names, {"wave", "nod", "walk", "turn", "look", "eyes"})   # Robot.act, and main's eyes
+        self.assertIsNone(v("eyes", {"mood": "happy"}))
+        self.assertIsNotNone(v("eyes", {"mood": "purple"}))
 
     def test_tool_runs_and_result_returns(self):
         b = self.make([(["Sure, walking. ", "Here I go!"], [text("Sure, walking. Here I go!"), tool("walk", {"steps": 4, "direction": "forward"})], "tool_use"),
@@ -454,7 +456,8 @@ class MainProgram(unittest.TestCase):
 
         def brain_factory(act, on_sentence):
             return brain_mod.Brain(act=act, on_sentence=on_sentence, client=FakeClient([
-                (["Okay, walking. "], [text("Okay, walking."), tool("walk", {"steps": 2, "direction": "forward"})], "tool_use"),
+                (["Okay, walking. "], [text("Okay, walking."), tool("walk", {"steps": 2, "direction": "forward"}),
+                                        tool("eyes", {"mood": "happy"})], "tool_use"),
                 (["Done!"], [text("Done!")], "end_turn")]))
 
         lines = iter(["walk forward two steps"])
@@ -465,18 +468,51 @@ class MainProgram(unittest.TestCase):
             except StopIteration:
                 raise EOFError
 
-        saved = (main_mod.SimIO, main_mod.Brain, main_mod.print_and_say, builtins.input, sys.argv)
-        main_mod.SimIO, main_mod.Brain = TestSimIO, brain_factory
+        from jx0bot.eyes import Eyes
+
+        class TestEyes(Eyes):
+            def __init__(self, cfg, hardware=True):
+                super().__init__(cfg, hardware=False)
+                captured["eyes"] = self
+
+        saved = (main_mod.SimIO, main_mod.Brain, main_mod.print_and_say, builtins.input, sys.argv, main_mod.Eyes)
+        main_mod.SimIO, main_mod.Brain, main_mod.Eyes = TestSimIO, brain_factory, TestEyes
         main_mod.print_and_say = lambda: said.append
         builtins.input, sys.argv = fake_input, ["jx0bot.main", "--sim", "--text", "--no-viewer"]
         try:
             main_mod.main()
         finally:
-            main_mod.SimIO, main_mod.Brain, main_mod.print_and_say, builtins.input, sys.argv = saved
+            main_mod.SimIO, main_mod.Brain, main_mod.print_and_say, builtins.input, sys.argv, main_mod.Eyes = saved
         self.assertIn("Okay, walking.", said)
         self.assertIn("Done!", said)
         self.assertGreater(captured["x"], 0.009)          # two 1.5 cm steps from standing: it moved forward
         self.assertGreater(captured["z"], 0.11)           # and it is still upright (pelvis height, v0.4 legs)
+        self.assertEqual(captured["eyes"].mood_name, "happy")   # the eyes tool reached the eyes
+        self.assertEqual(captured["eyes"].state, "idle")        # and they went back to idle after the reply
+
+
+class EyesTests(unittest.TestCase):
+    """The LED-ring eyes without hardware: 24 LEDs, brightness cap, states and moods, unknown names refused."""
+
+    def test_frames(self):
+        from jx0bot.eyes import Eyes, MOODS
+        e = Eyes({"eyes": {"brightness": 0.3, "blink_every_s": 4.0}}, hardware=False)
+        f = e.frame(1.0)
+        self.assertEqual(len(f), 24)
+        self.assertTrue(all(max(c) <= int(255 * 0.3) for c in f))           # capped (power budget)
+        self.assertEqual(e.frame(0.05)[0], (0, 0, 0))                         # a blink at the start of each 4 s
+        e.set_state("thinking")
+        f = e.frame(0.0)
+        self.assertGreater(sum(f[0]), sum(f[1]))                              # one dot runs round each ring
+        self.assertEqual(f[0], f[12])                                         # both eyes alike
+        e.mood("angry")
+        e.set_state("speaking")
+        self.assertEqual(e.frame(1.0)[0][1:], (0, 0))                         # red while it speaks
+        with self.assertRaises(ValueError):
+            e.mood("purple")
+        with self.assertRaises(ValueError):
+            e.set_state("dancing")
+        self.assertEqual(set(MOODS), {"normal", "happy", "sad", "angry", "surprised", "sleepy", "love"})
 
 
 import numpy as np  # noqa: E402
@@ -484,7 +520,7 @@ import numpy as np  # noqa: E402
 
 class PolicyRunner(unittest.TestCase):
     """jx0bot.policy builds the trained policy's observation and targets the way the training / test code does."""
-    BUNDLE = ROOT / "jx0" / "rl" / "policies" / "jx0_walk17_v7"
+    BUNDLE = ROOT / "jx0" / "rl" / "policies" / "jx0_walk17_v8"
 
     def test_gravity_from_imu_angles(self):
         from jx0bot.policy import gravity_body

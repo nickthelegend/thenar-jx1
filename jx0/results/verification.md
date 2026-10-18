@@ -1,37 +1,37 @@
 # JX0 verification report
 
-Generated 2026-10-17 by `jx0/verify/run_all.py` from the CAD geometry, the MuJoCo model and the robot software in this repository (design v0.4: double-sided legs like the reference robot, every part fitted to the real STS3215). Everything here is simulation and analysis: the physical robot is not built yet, so the numbers say the design should work, not that it has been seen working.
+Generated 2026-10-18 by `jx0/verify/run_all.py` from the CAD geometry, the MuJoCo model and the robot software in this repository (design v0.4: double-sided legs like the reference robot, every part fitted to the real STS3215). Everything here is simulation and analysis: the physical robot is not built yet, so the numbers say the design should work, not that it has been seen working.
 
 ## Summary
 
 | Check | Result |
 |---|---|
 | Servo sizing (every leg joint, 5 gaits + 8 static cases, 1.25–1.5x margins) | **ALL PASS** |
-| The 14 robot gaits, closed loop on the servo model (100 Hz) | **14/14 pass**, peak servo load 63% of stall |
+| The 14 robot gaits, closed loop on the servo model (100 Hz) | **14/14 pass**, peak servo load 64% of stall |
 | The real STS3215 (Feetech factory model and SO-ARM100 model) and its cables at all 17 joints, against every printed part | 0 clashes |
 | Every screw (182): plate under the head, thread in the horn / case / insert, tip clear, on a real hole, head room | 0 problems |
 | Assembly in the build guide's order: 42 slide-in steps, a screwdriver on all 182 screws | 0 slides blocked, 0 screws unreachable (11 need a PH bit by hand) |
-| Endurance: the robot program for 60 s (walk, turn, side-step, back, wave, look) with a 0.48 N.s push every 7 s, on 12 robots with random model errors | **12/12** stayed up, worst mean servo torque 0.698 N.m (rated 0.98) |
+| Endurance: the robot program for 60 s (walk, turn, side-step, back, wave, look) with a 0.48 N.s push every 7 s, on 12 robots with random model errors | **12/12** stayed up, worst mean servo torque 0.716 N.m (rated 0.98) |
 | Robot description: URDF and MJCF vs the verified model (mass, inertia, centre of mass and soles in 200 random poses, limits of all 17 joints) | **PASS**: centre of mass within 0.0 mm |
 | Joint stops: the whole commanded range (2170 poses: hip yaw x pitch x roll, ankle pitch x roll, shoulder x elbow) | 0 contacts |
 | Joint stops: past each servo's own limit (EEPROM, 1 deg outside config.yaml), the first contact is printed bracket on printed bracket, 2-41 deg further (42 cases) | 0 problems |
-| Parts, servos, cables and screw heads colliding, standing (all 3403 pairs) | 0 clashes |
+| Parts, servos, cables and screw heads colliding, standing (all 3486 pairs) | 0 clashes |
 | Parts colliding in motion (1373 poses: every gait frame + every action) | 0 clashes |
 | Joint limits inside the collision-free range | 17/17 joints |
-| Leg joints: single-sided (v0.3) vs double-sided (v0.4), beam model, fatigue safety factor | v0.3 0.18–0.50 (**would break**) → v0.4 **5.2–8.2** |
-| Printed leg brackets, voxel FEA under the simulated loads, worst bracket | fatigue SF **1.8**, strength SF **3.3** |
-| Walking with realistic model errors (latency 0–20 ms), all gaits | **137/140 (98 %)** |
-| Same, stress test with 40 ms latency | 128/140 (91 %) |
+| Leg joints: single-sided (v0.3) vs double-sided (v0.4), beam model, fatigue safety factor | v0.3 0.18–0.46 (**would break**) → v0.4 **5.4–8.6** |
+| Printed leg brackets, voxel FEA under the simulated loads, worst bracket | fatigue SF **1.5**, strength SF **3.2** |
+| Walking with realistic model errors (latency 0–20 ms), all gaits | **138/140 (99 %)** |
+| Same, stress test with 40 ms latency | 130/140 (93 %) |
 | Sideways push of 0.24 N.s mid-walk (24 moments × 2 directions): stayed up | 48/48 (100 %) |
 | Sideways push of 0.48 N.s mid-walk (24 moments × 2 directions): stayed up | 48/48 (100 %) |
 | Sideways push of 0.72 N.s mid-walk (24 moments × 2 directions): stayed up | 48/48 (100 %) |
 | Sideways push of 0.96 N.s mid-walk (24 moments × 2 directions): stayed up | 40/48 (83 %) |
-| Sideways push of 1.20 N.s mid-walk (24 moments × 2 directions): stayed up | 29/48 (60 %) |
-| Sideways push of 1.44 N.s mid-walk (24 moments × 2 directions): stayed up | 10/48 (21 %) |
+| Sideways push of 1.20 N.s mid-walk (24 moments × 2 directions): stayed up | 30/48 (62 %) |
+| Sideways push of 1.44 N.s mid-walk (24 moments × 2 directions): stayed up | 11/48 (23 %) |
 | Whole robot program, 8-step mission, random realistic errors | **24/24 (100 %)** |
-| Battery current walking (servos + Pi) | 1.72 A average, 2.67 A peak → about 61 min walking per charge |
+| Battery current walking (servos + Pi) | 1.75 A average, 2.72 A peak → about 60 min walking per charge |
 | 100 Hz control loop on a Raspberry Pi 4 (estimated) | 1.79 ms of 10 ms |
-| Software unit tests | Ran 25 tests in 5.831s: OK |
+| Software unit tests | Ran 26 tests in 5.861s: OK |
 
 ## Leg joints: why double-sided
 
@@ -39,12 +39,12 @@ Every leg joint's load from the simulation (14 gaits, 42 walks with model errors
 
 | Joint | Torque N·m | Bending at the horn N·m | v0.3 plate MPa (fatigue SF) | v0.4 MPa (fatigue SF) | Servo shaft bending N·m, v0.3 → v0.4 |
 |---|---|---|---|---|---|
-| hip yaw | 0.80 | 2.86 | 51.8 (0.29) | ring + keeper: 124 / 100 N pushes on the disc rim (FEA below) | 2.86 → 2.32 (ring only) → 0.5 |
-| hip roll | 2.88 | 2.25 | 36.1 (0.42) | 1.8 (8.2) | 2.25 → 0.0 |
-| hip pitch | 1.87 | 3.72 | 36.3 (0.41) | 2.8 (5.3) | 3.72 → 0.0 |
-| knee | 2.83 | 3.18 | 30.3 (0.5) | 2.9 (5.2) | 3.18 → 0.0 |
-| ankle pitch | 2.17 | 2.69 | 46.0 (0.33) | 2.5 (6.0) | 2.69 → 0.0 |
-| ankle roll | 1.76 | 2.93 | 81.3 (0.18) | 2.5 (6.1) | 2.93 → 0.0 |
+| hip yaw | 0.95 | 2.79 | 51.7 (0.29) | ring + keeper: 126 / 100 N pushes on the disc rim (FEA below) | 2.79 → 2.24 (ring only) → 0.48 |
+| hip roll | 2.80 | 2.19 | 36.2 (0.41) | 1.7 (8.6) | 2.2 → 0.0 |
+| hip pitch | 1.81 | 3.56 | 38.1 (0.39) | 2.7 (5.6) | 3.56 → 0.0 |
+| knee | 2.79 | 3.04 | 32.5 (0.46) | 2.8 (5.4) | 3.04 → 0.0 |
+| ankle pitch | 2.19 | 2.66 | 47.1 (0.32) | 2.3 (6.4) | 2.66 → 0.0 |
+| ankle roll | 1.70 | 3.29 | 81.6 (0.18) | 2.3 (6.4) | 3.29 → 0.0 |
 
 ## Printed leg brackets: finite elements
 
@@ -52,14 +52,14 @@ Voxel FEA (`calculations/structural/voxel_fea.py`, 0.7 mm hexahedra with bending
 
 | Bracket | Elements | Walking MPa (fatigue SF) | Worst with pushes MPa (strength SF) |
 |---|---|---|---|
-| pelvis | 213,378 | 6.26 (2.4) | 10.62 (4.7) |
-| yaw keeper | 8,142 | 7.32 (2.0) | 10.4 (4.8) |
-| hip yaw bracket | 150,640 | 8.25 (1.8) | 15.25 (3.3) |
-| hip roll bracket | 90,818 | 4.87 (3.1) | 9.94 (5.0) |
-| thigh | 150,150 | 5.33 (2.8) | 10.72 (4.7) |
-| shin | 89,454 | 6.25 (2.4) | 14.64 (3.4) |
-| ankle bracket | 109,478 | 7.31 (2.1) | 11.65 (4.3) |
-| foot | 143,340 | 3.25 (4.6) | 6.1 (8.2) |
+| pelvis | 213,378 | 7.8 (1.9) | 10.8 (4.6) |
+| yaw keeper | 8,142 | 9.68 (1.5) | 10.4 (4.8) |
+| hip yaw bracket | 150,640 | 9.63 (1.6) | 15.72 (3.2) |
+| hip roll bracket | 90,818 | 4.9 (3.1) | 11.3 (4.4) |
+| thigh | 150,150 | 5.42 (2.8) | 11.3 (4.4) |
+| shin | 89,454 | 6.4 (2.3) | 15.0 (3.3) |
+| ankle bracket | 109,478 | 7.49 (2.0) | 12.85 (3.9) |
+| foot | 143,340 | 3.36 (4.5) | 6.39 (7.8) |
 
 Stress maps: `images/fea_*.png`.
 
@@ -76,13 +76,13 @@ Stress maps: `images/fea_*.png`.
 
 ### v0.4 (double-sided legs, 2026-10-05)
 
-- **Single-sided joints would break** (the builder's own call, confirmed): with v0.4's loads, a v0.3-style joint's printed plate sees 30–81 MPa every step, above PETG's fatigue strength at every leg joint, and the servo's output shaft carries up to 3.7 N·m of bending. Every leg pitch and roll joint is now a U-bracket on the servo's horn and rear hub, the servo body screwed into a cage, like the reference robot.
+- **Single-sided joints would break** (the builder's own call, confirmed): with v0.4's loads, a v0.3-style joint's printed plate sees 32–82 MPa every step, above PETG's fatigue strength at every leg joint, and the servo's output shaft carries up to 3.6 N·m of bending. Every leg pitch and roll joint is now a U-bracket on the servo's horn and rear hub, the servo body screwed into a cage, like the reference robot.
 - **The first U-brackets had weak joints between the arms and the next servo's cage** (voxel FEA): the shin's arms met the ankle cage through two 18 × 3 mm tabs, the ankle bracket through 2.5 mm bands, the hip-yaw disc through a thin plate. Solid plates now join each arm to its cage over the whole overlap; cage rear plates went from 2.4 to 4 mm (screw heads counterbored), arms from 3.5 to 4.5 mm; the hip-yaw bracket got a 7 mm disc, a keel and a solid block; the hip-roll bracket a 10 × 16 mm bridge.
 - **The final masses (2.85 kg) raised the loads by about a tenth**, and two spots fell below a safety factor of 2: the shin's back plate beside the ankle servo's hub hole (strength 1.9: a screw counterbore 0.1 mm from the hole, no side wall at that corner) and the ankle bracket's inboard arm where it meets the roll cage (fatigue 1.8). The shin's plate is now 4 mm everywhere the ankle bracket's boss does not slide, with a 20 mm hub hole and that one screw left out; the ankle bracket's inboard arm reaches 4.5 mm lower (the foot's bracket only comes within 12 mm below the axis there): shin 2.5 / 3.2, ankle bracket 2.4 / 3.0.
-- **The hip-yaw servo's shaft still carried the leg's bending** (the builder asked for the retainer lip): a thrust ring alone left it 1.3 N·m in normal walking and 2.3 N·m in the hardest pushes. Now the pelvis holds the yaw disc from both sides: a printed keeper (one per leg, 4 M2 screws into a new boss on the pelvis) puts a lip under the disc's 3 mm flange on the arc where the load needs it. The first keeper failed its own check (fatigue SF 0.5: a 2.2 mm lip, then notches at its ends), so it became a solid C-section clamped to the boss; the pelvis's yaw cages got 5 mm front and back walls to carry its pull (SF 1.3 → 2.5). The hip-yaw range is now ±12° (the gaits use ±5°): over ±30° the hip-roll bracket would reach the keeper, and the legs touched each other beyond 18°.
+- **The hip-yaw servo's shaft still carried the leg's bending** (the builder asked for the retainer lip): a thrust ring alone left it 1.3 N·m in normal walking and 2.2 N·m in the hardest pushes. Now the pelvis holds the yaw disc from both sides: a printed keeper (one per leg, 4 M2 screws into a new boss on the pelvis) puts a lip under the disc's 3 mm flange on the arc where the load needs it. The first keeper failed its own check (fatigue SF 0.5: a 2.2 mm lip, then notches at its ends), so it became a solid C-section clamped to the boss; the pelvis's yaw cages got 5 mm front and back walls to carry its pull (SF 1.3 → 2.5). The hip-yaw range is now ±12° (the gaits use ±5°): over ±30° the hip-roll bracket would reach the keeper, and the legs touched each other beyond 18°.
 - **Assembly**: plates that cover a cage would have locked the servo out. The knee cage is open at the front and the ankle cage at the bottom (the servos slide in there), with screwdriver holes through the arms for the far case screws.
 - **Shorter legs swayed 26° sideways and pushed the ankle-roll servo against its stop** (100 % of stall): the gaits now keep the zero-moment point 20 mm inside each foot (planner option `zmp_offset_y`, chosen by Monte Carlo over 0–20 mm and 0.45–0.6 s steps): 15° at most, 50 % peak load.
-- **Knee speed**: with 62/58 mm leg links the knee swings faster; 0.5 s steps reach the servo's no-load speed. The gaits keep 0.6 s steps (sizing: 61% of the torque-speed line at 0.55 s).
+- **Knee speed**: with 62/58 mm leg links the knee swings faster; 0.5 s steps reach the servo's no-load speed. The gaits keep 0.6 s steps (sizing: 62% of the torque-speed line at 0.55 s).
 - **Collision ranges re-measured** for every joint; limits set inside them (left leg: hip roll −20…22°, hip pitch −70…8°, knee 0…84°, ankle roll ±20°; every range the gaits use is inside).
 
 ### v0.3 (2026-10-04)
@@ -91,8 +91,8 @@ Stress maps: `images/fea_*.png`.
 
 ## Honest limits
 
-- **Pushes**: 0.24 N.s stays up 100 %, 0.48 N.s stays up 100 %, 0.72 N.s stays up 100 %, 0.96 N.s stays up 83 %, 1.20 N.s stays up 60 %, 1.44 N.s stays up 21 % of 48 timed pushes mid-walk. Harder shoves need a step to a new place; the gait player does not re-plan its steps (a capture-point stepper is in `jx0bot/stepper.py`, not yet enabled).
-- **The hip-yaw keeper only works without play**: the analysis assumes the ring and the keeper's lip touch the yaw disc (PTFE tape on the flange, added until the leg turns freely with no wobble). With the keeper, the yaw servo's shaft is left about 0.12 N·m in normal walking and 0.50 N·m in the hardest pushes (ring alone: 1.3 / 2.3); if the play is left in, the shaft takes the bending until it closes. Feetech publishes no bending rating for the STS3215. The yaw range is ±12°.
+- **Pushes**: 0.24 N.s stays up 100 %, 0.48 N.s stays up 100 %, 0.72 N.s stays up 100 %, 0.96 N.s stays up 83 %, 1.20 N.s stays up 62 %, 1.44 N.s stays up 23 % of 48 timed pushes mid-walk. Harder shoves need a step to a new place; the gait player does not re-plan its steps (a capture-point stepper is in `jx0bot/stepper.py`, not yet enabled).
+- **The hip-yaw keeper only works without play**: the analysis assumes the ring and the keeper's lip touch the yaw disc (PTFE tape on the flange, added until the leg turns freely with no wobble). With the keeper, the yaw servo's shaft is left about 0.15 N·m in normal walking and 0.48 N·m in the hardest pushes (ring alone: 1.3 / 2.2); if the play is left in, the shaft takes the bending until it closes. Feetech publishes no bending rating for the STS3215. The yaw range is ±12°.
 - **Material and servo data are assumed**: PETG strengths (50 / 15 MPa) and the servo stiffness (60 N·m/rad, 0.6–1.4x tested). The servo's shape comes from two models that differ by up to 0.65 mm (horn height) and 0.3 mm (its rear cover): the fit check uses the larger of them, the shims and PTFE tape take up the rest. The cables are assumed to bend flat within 4 mm of the rear face. Printers make holes and pockets a little small: print the shin first and fit a servo to it (build guide); measure the servo stiffness (bringup.md step 5).
 - **Speed**: about 5 cm/s. The short legs make the knee the speed limit of the STS3215 at 12 V.
 - **Latency**: the robot needs its control loop to react within about 20 ms (estimate on the Pi: about 8 ms). At 40 ms, long walks often fail; 2- and 4-step blocks mostly survive.

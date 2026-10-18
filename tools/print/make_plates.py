@@ -7,7 +7,7 @@ Every part is the SolidWorks STL with its lettering (jx0/cad/stl_engraved, from 
 each plate. Settings are the printer's own system profiles (inheritance resolved here, because the slicers' command
 lines do not resolve it) with the build guide's on top:
     PETG (pelvis, leg parts, shims): 0.2 mm layers, 6 walls, 6 top and 6 bottom layers, 40 % gyroid, 240 C / 80 C
-    PLA (body, head, arms):          0.2 mm layers, 3 walls, 25 % gyroid, 210 C / 60 C
+    PETG-body (body, head, arms):    0.2 mm layers, 3 walls, 25 % gyroid, 240 C / 80 C (PLA: the same at 210 C / 60 C)
     tree supports wherever the part overhangs, a brim on PETG plates.
 
     python tools/print/make_plates.py            (all plates)
@@ -37,7 +37,7 @@ DOWN = {"JX0_Pelvis": (0, 0, 1), "JX0_YawKeeper_L": (0, 0, 1), "JX0_YawKeeper_R"
         "JX0_HipRollBracket_L": (-1, 0, 0), "JX0_HipRollBracket_R": (-1, 0, 0),
         "JX0_Thigh_L": (0, 1, 0), "JX0_Thigh_R": (0, -1, 0), "JX0_Shin_L": (0, 1, 0), "JX0_Shin_R": (0, -1, 0),
         "JX0_AnkleBracket_L": (0, 1, 0), "JX0_AnkleBracket_R": (0, -1, 0), "JX0_Foot": (0, 0, -1),
-        "JX0_HornShim": (0, 0, -1), "JX0_Torso": (0, 0, -1), "JX0_ChestCap": (0, 0, 1), "JX0_Head": (0, 0, -1), "JX0_Visor": (-1, 0, 0),
+        "JX0_HornShim": (0, 0, -1), "JX0_Torso": (0, 0, -1), "JX0_ChestCap": (0, 0, 1), "JX0_Head": (0, 0, -1), "JX0_EyeLens": (-1, 0, 0),
         "JX0_NeckHub": (0, 0, -1), "JX0_UpperArm_L": (0, -1, 0), "JX0_UpperArm_R": (0, 1, 0),
         "JX0_ArmBlade_L": (0, -1, 0), "JX0_ArmBlade_R": (0, 1, 0)}
 
@@ -51,10 +51,10 @@ PLATES = {
     "P1S-3_shin_shims": ("P1S", "PETG", [("JX0_Shin_R", 1), ("JX0_HornShim", 40)]),
     "i7-1_thighs_ankles": ("i7", "PETG", [("JX0_Thigh_L", 1), ("JX0_Thigh_R", 1), ("JX0_AnkleBracket_L", 1),
                                           ("JX0_AnkleBracket_R", 1)]),
-    "i7-2_torso_head": ("i7", "PLA", [("JX0_Torso", 1), ("JX0_Head", 1), ("JX0_NeckHub", 1)]),
-    "P1S-4_chest_arms": ("P1S", "PLA", [("JX0_ChestCap", 1), ("JX0_UpperArm_L", 1), ("JX0_UpperArm_R", 1)]),
-    "P1S-6_blades": ("P1S", "PLA", [("JX0_ArmBlade_L", 1), ("JX0_ArmBlade_R", 1)]),   # v0.5's 120 mm blades
-    "P1S-5_visor_black": ("P1S", "PLA", [("JX0_Visor", 1)]),                  # black PLA (gloss black if you have it)
+    "i7-2_torso_head": ("i7", "PETG-body", [("JX0_Torso", 1), ("JX0_Head", 1), ("JX0_NeckHub", 1)]),
+    "P1S-4_chest_arms": ("P1S", "PETG-body", [("JX0_ChestCap", 1), ("JX0_UpperArm_L", 1), ("JX0_UpperArm_R", 1)]),
+    "P1S-6_blades": ("P1S", "PETG-body", [("JX0_ArmBlade_L", 1), ("JX0_ArmBlade_R", 1)]),   # v0.5's 120 mm blades
+    "P1S-5_eye_lenses": ("P1S", "PETG-body", [("JX0_EyeLens", 2)]),                # transparent PETG
 }
 
 PROFILES = {
@@ -120,6 +120,8 @@ PROCESS = {
     "PLA": {"layer_height": "0.2", "wall_loops": "3", "top_shell_layers": "4", "bottom_shell_layers": "4",
             "sparse_infill_density": "25%", "sparse_infill_pattern": "gyroid"},
 }
+# body parts (torso, head, chest, arms, lenses) in PETG: the PLA shell (3 walls, 25 %) at PETG's temperatures
+PROCESS["PETG-body"] = {**PROCESS["PLA"], "brim_type": "auto_brim"}
 SUPPORT = {"enable_support": "1", "support_type": "tree(auto)", "support_threshold_angle": "40",
            "support_on_build_plate_only": "0"}
 FILAMENT = {"PETG": {"nozzle_temperature": ["240"], "nozzle_temperature_initial_layer": ["240"],
@@ -130,6 +132,7 @@ FILAMENT = {"PETG": {"nozzle_temperature": ["240"], "nozzle_temperature_initial_
                     "cool_plate_temp": ["60"], "cool_plate_temp_initial_layer": ["60"],
                     "hot_plate_temp": ["60"], "hot_plate_temp_initial_layer": ["60"],
                     "textured_plate_temp": ["60"], "textured_plate_temp_initial_layer": ["60"]}}
+FILAMENT["PETG-body"] = FILAMENT["PETG"]
 
 
 def resolve(path: Path, kind_dir: Path) -> dict:
@@ -155,7 +158,7 @@ def settings(printer, material, work: Path, plate=""):
         mach["machine_start_gcode"], mach["machine_end_gcode"] = I7_START, I7_END
         mach["name"] = "SPARKX i7 0.4 nozzle (from Creality Print 7.3)"
     proc = resolve(pr["dir"] / pr["process"], pr["dir"] / "process")
-    fil = resolve(pr["dir"] / pr["filament"][material], pr["dir"] / "filament")
+    fil = resolve(pr["dir"] / pr["filament"][material.split("-")[0]], pr["dir"] / "filament")
     proc.update(PROCESS[material])
     proc.update(SUPPORT)
     proc["curr_bed_type"] = "Textured PEI Plate"                     # the PEI plates both printers ship with

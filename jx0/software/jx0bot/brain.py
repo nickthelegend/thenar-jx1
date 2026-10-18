@@ -53,6 +53,10 @@ TOOLS = [
     {"name": "look", "description": "Turn the head to look left, right or straight ahead.", "eager_input_streaming": True,
      "input_schema": {"type": "object", "properties": {"direction": {"type": "string", "enum": ["left", "right", "center"]}},
                       "required": ["direction"], "additionalProperties": False}},
+    {"name": "eyes", "description": "Change the colour of your two LED-ring eyes to show a feeling; they keep it until changed.",
+     "eager_input_streaming": True,
+     "input_schema": {"type": "object", "properties": {"mood": {"type": "string", "enum": ["normal", "happy", "sad", "angry", "surprised", "sleepy", "love"]}},
+                      "required": ["mood"], "additionalProperties": False}},
 ]
 _SCHEMAS = {t["name"]: t["input_schema"] for t in TOOLS}
 

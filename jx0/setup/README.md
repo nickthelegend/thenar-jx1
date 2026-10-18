@@ -63,7 +63,7 @@ python jx0\rl\play_jx0.py --policy jx0\rl\policies\jx0_walk17_isaac
 
 ## What to expect
 
-The same task trained in MuJoCo on the design laptop gave `jx0_walk17_v7` (the 55 cm v0.5 robot), which passes the whole test suite and the parts clearance check after 4000 iterations (1024 robots). With 4096 robots, Isaac Lab sees 4× more data per iteration, so 1500–3000 iterations should be plenty. Isaac's physics differs from MuJoCo's, so check the `sim2sim.json` that `train_isaac.bat` writes. If it says FAIL, train longer (`train_isaac.bat 5000`).
+The same task trained in MuJoCo on the design laptop gave `jx0_walk17_v8` (the 55 cm v0.5 robot), which passes the whole test suite and the parts clearance check after 4000 iterations (1024 robots). With 4096 robots, Isaac Lab sees 4× more data per iteration, so 1500–3000 iterations should be plenty. Isaac's physics differs from MuJoCo's, so check the `sim2sim.json` that `train_isaac.bat` writes. If it says FAIL, train longer (`train_isaac.bat 5000`).
 
 ## How long training takes (estimate)
 

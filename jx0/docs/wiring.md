@@ -84,6 +84,7 @@ leg, and the arms into the chest.
 | I2S word select | 19 (35) | INMP441 WS and MAX98357A LRC |
 | I2S data in | 20 (38) | INMP441 SD (L/R pin to GND = left channel) |
 | I2S data out | 21 (40) | MAX98357A DIN (Vin from 5 V, speaker on + / −) |
+| LED eyes data | 10 (19) | left eye ring DI (SPI MOSI; enable SPI in raspi-config). 5 V and GND from the UBEC, not the Pi's 5 V pins: the rings draw up to ~0.5 A at the program's brightness cap |
 
 The servos need no GPIO at all: they're all on the USB servo bus.
 
@@ -96,5 +97,6 @@ The servos need no GPIO at all: they're all on the USB servo bus.
   servos are in the arms' hoods, their horns bolted to the pads on the cap's side walls.
 - **Pelvis:** the MPU6050, as close to the hip centre as you can, **x arrow forward, y arrow to the robot's left**
   (otherwise set `imu.mount` in config.yaml).
-- **Head:** the INMP441 microphone glued behind the four face holes. Its cable goes down through the hole in the head
-  floor, with a loop of slack for the ±80° neck turn.
+- **Head:** the INMP441 microphone glued behind the three holes between the eyes, and the two WS2812 12-LED ring
+  eyes (left ring first in the chain). The microphone cable and the eyes' three wires go down through the hole in the
+  head floor, with a loop of slack for the ±80° neck turn.

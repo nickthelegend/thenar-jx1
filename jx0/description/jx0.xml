@@ -17,6 +17,7 @@
     <mesh name="m_JX0_ArmBlade_L" file="JX0_ArmBlade_L.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_ArmBlade_R" file="JX0_ArmBlade_R.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_ChestCap" file="JX0_ChestCap.stl" scale="0.001 0.001 0.001"/>
+    <mesh name="m_JX0_EyeLens" file="JX0_EyeLens.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_Foot" file="JX0_Foot.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_Head" file="JX0_Head.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_HipRollBracket_L" file="JX0_HipRollBracket_L.stl" scale="0.001 0.001 0.001"/>
@@ -33,7 +34,6 @@
     <mesh name="m_JX0_Torso" file="JX0_Torso.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_UpperArm_L" file="JX0_UpperArm_L.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_UpperArm_R" file="JX0_UpperArm_R.stl" scale="0.001 0.001 0.001"/>
-    <mesh name="m_JX0_Visor" file="JX0_Visor.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_YawKeeper_L" file="JX0_YawKeeper_L.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_YawKeeper_R" file="JX0_YawKeeper_R.stl" scale="0.001 0.001 0.001"/>
     <mesh name="m_JX0_YawRing_L" file="JX0_YawRing_L.stl" scale="0.001 0.001 0.001"/>
@@ -60,7 +60,7 @@
       <geom pos="0 -0.045 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_YawRing_R"/>
       <site name="imu" pos="0 0 0.03" group="4"/>
       <body name="torso_link">
-        <inertial pos="0.005 0 0.16" mass="0.739" diaginertia="0.00503752 0.00365189 0.00217389"/>
+        <inertial pos="0.005 0 0.16" mass="0.796" diaginertia="0.00542607 0.00393357 0.00234157"/>
         <geom type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Torso"/>
         <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_ChestCap"/>
         <geom pos="0 0 0.2516" quat="0.707107 0 0 0.707107" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Servo_STS3215"/>
@@ -93,10 +93,11 @@
           </body>
         </body>
         <body name="head_link" pos="0 0 0.2704">
-          <inertial pos="0 0 0.033" mass="0.077" diaginertia="4e-05 4e-05 4e-05"/>
+          <inertial pos="0 0 0.035" mass="0.077" diaginertia="4e-05 4e-05 4e-05"/>
           <joint name="neck_yaw_joint" range="-1.39626 1.39626" armature="0.0005" damping="0.01" limited="true"/>
           <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Head"/>
-          <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.12 0.12 0.14 1" mesh="m_JX0_Visor"/>
+          <geom pos="0.0358 0.028 0.035" type="mesh" contype="0" conaffinity="0" rgba="0.85 0.92 1 0.5" mesh="m_JX0_EyeLens"/>
+          <geom pos="0.0358 -0.028 0.035" type="mesh" contype="0" conaffinity="0" rgba="0.85 0.92 1 0.5" mesh="m_JX0_EyeLens"/>
           <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_NeckHub"/>
         </body>
       </body>

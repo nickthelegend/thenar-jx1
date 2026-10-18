@@ -10,6 +10,7 @@ import argparse
 import threading
 
 from .brain import Brain
+from .eyes import Eyes
 from .robot import REST_ARMS, HardwareIO, Robot, SimIO, load_config
 
 
@@ -33,7 +34,25 @@ def main():
         from .voice import Speaker
         speak = Speaker().say
 
-    brain = Brain(act=robot.act, on_sentence=speak)
+    eyes = Eyes(cfg, hardware=not a.sim).start()
+    say_aloud = speak
+
+    def speak(sentence):                               # the eyes pulse while JX0 talks
+        eyes.set_state("speaking")
+        say_aloud(sentence)
+        eyes.set_state("idle")
+
+    def act(name, args):
+        return eyes.mood(args["mood"]) if name == "eyes" else robot.act(name, args)
+
+    def reply(text):
+        eyes.set_state("thinking")
+        try:
+            brain.reply(text)
+        finally:
+            eyes.set_state("idle")
+
+    brain = Brain(act=act, on_sentence=speak)
     speak("Hi, I am J X zero. Ask me anything, or tell me to wave or walk.")
 
     if a.text:
@@ -43,7 +62,7 @@ def main():
             except (EOFError, KeyboardInterrupt):
                 break
             if line:
-                brain.reply(line)
+                reply(line)
     else:
         from gpiozero import Button
         from .voice import Listener
@@ -51,10 +70,13 @@ def main():
         button = Button(cfg["voice"]["talk_button_gpio"], pull_up=True)
         while True:
             rest = listener.wait_for_wake(button)
+            eyes.set_state("listening")
             text = rest or listener.listen(timeout_s=8.0)
+            eyes.set_state("idle")
             if text:
                 print(f"heard: {text}")
-                brain.reply(text)
+                reply(text)
+    eyes.close()
     io.close()
 
 

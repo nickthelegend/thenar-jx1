@@ -146,6 +146,7 @@ EXPECT = {"PETG": dict(nozzle=240.0, bed=80.0, filament_type="PETG", wall_loops=
                        bottom_shell_layers="6", sparse_infill_density="40%"),
           "PLA": dict(nozzle=210.0, bed=60.0, filament_type="PLA", wall_loops="3", top_shell_layers="4",
                       bottom_shell_layers="4", sparse_infill_density="25%")}
+EXPECT["PETG-body"] = {**EXPECT["PLA"], "nozzle": 240.0, "bed": 80.0, "filament_type": "PETG"}
 
 
 def check_plate(name):
@@ -250,7 +251,7 @@ def main():
     for name, (printer, material, items) in mp.PLATES.items():
         for part, n in items:
             q, mats = on_plates.get(part, (0, set()))
-            on_plates[part] = (q + n, mats | {material})
+            on_plates[part] = (q + n, mats | {material.split("-")[0]})
     cover = []
     for part, (n, mat) in guide.items():
         q, mats = on_plates.get(part, (0, set()))

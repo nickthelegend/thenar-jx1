@@ -3,20 +3,20 @@
   "links": 21,
   "joints": 20,
   "revolute": 17,
-  "meshes": 47
+  "meshes": 48
  },
  "urdf": {
-  "mass_kg": 2.991,
-  "verified_mass_kg": 2.991,
-  "composite_inertia_rel_err": 1.8694592162597846e-16,
+  "mass_kg": 3.048,
+  "verified_mass_kg": 3.048,
+  "composite_inertia_rel_err": 1.8218119640501394e-16,
   "poses": 200,
   "worst_com_mm": 0.0,
   "worst_sole_mm": 0.0,
   "left_sole_travel_mm": 240.9
  },
  "mjcf": {
-  "mass_kg": 2.991,
-  "verified_mass_kg": 2.991,
+  "mass_kg": 3.048,
+  "verified_mass_kg": 3.048,
   "composite_inertia_rel_err": 0.0,
   "poses": 200,
   "worst_com_mm": 0.0,
