@@ -69,7 +69,7 @@ Horizontal shoves on the torso: 0.1 s pulses from the front, back, left and righ
 - On the real robot (`python -m jx0bot.policy --bundle ../rl/policies/jx0_walk17_v7`).
 - In Isaac Sim: the same task (`Isaac-Velocity-Flat-JX0-Full-v0`) has not been run here.
 
-Video: `media/jx0_rl_walk17_v7.mp4` (the endurance run). Drive it live:
+Video: not kept (see jx0_walk17_v8, the current policy: `media/jx0_rl_walk17_v8.mp4`). Drive it live:
 
 ```bash
 rl/.venv/Scripts/python jx0/rl/play_jx0.py --policy jx0/rl/policies/jx0_walk17_v7
