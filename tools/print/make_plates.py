@@ -44,12 +44,11 @@ DOWN = {"JX0_Pelvis": (0, 0, 1), "JX0_YawKeeper_L": (0, 0, 1), "JX0_YawKeeper_R"
 # plate -> (printer, material, [(part, count)])
 PLATES = {
     # i7: red PETG - the pelvis and every leg part (strength: verify_fea's PETG)
-    "i7-0_test_shin": ("i7", "PETG", [("JX0_Shin_L", 1)]),
     "i7-1_pelvis_hip_yaw": ("i7", "PETG", [("JX0_Pelvis", 1), ("JX0_HipYawBracket_L", 1), ("JX0_HipYawBracket_R", 1),
                                            ("JX0_YawKeeper_L", 1), ("JX0_YawKeeper_R", 1), ("JX0_YawRing_L", 1),
                                            ("JX0_YawRing_R", 1)]),
     "i7-2_feet_hip_roll": ("i7", "PETG", [("JX0_Foot", 2), ("JX0_HipRollBracket_L", 1), ("JX0_HipRollBracket_R", 1)]),
-    "i7-3_shin_shims": ("i7", "PETG", [("JX0_Shin_R", 1), ("JX0_HornShim", 40)]),
+    "i7-3_shins_shims": ("i7", "PETG", [("JX0_Shin_L", 1), ("JX0_Shin_R", 1), ("JX0_HornShim", 40)]),
     "i7-4_thighs_ankles": ("i7", "PETG", [("JX0_Thigh_L", 1), ("JX0_Thigh_R", 1), ("JX0_AnkleBracket_L", 1),
                                           ("JX0_AnkleBracket_R", 1)]),
     "i7-5_eye_lenses": ("i7", "PETG-body", [("JX0_EyeLens", 2)]),             # clear PETG: swap the filament for it

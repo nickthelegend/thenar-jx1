@@ -28,10 +28,9 @@ The sliced files are not in git; re-run the script to make them. Each plate fold
 
 | Order | Plate | Printer | Filament | Time | Parts |
 |---|---|---|---|---|---|
-| 1 | i7-0_test_shin | i7 | PETG (red) | 2.3 h | Shin L. **Fit a servo in it before printing the rest** |
 | 2 | i7-1_pelvis_hip_yaw | i7 | PETG (red) | 9.2 h | Pelvis, hip-yaw brackets, keepers, yaw rings |
 | 3 | i7-2_feet_hip_roll | i7 | PETG (red) | 8.4 h | Feet, hip-roll brackets |
-| 4 | i7-3_shin_shims | i7 | PETG (red) | 2.7 h | Shin R, 40 horn shims |
+| 4 | i7-3_shins_shims | i7 | PETG (red) | 4.9 h | Both shins, 40 horn shims |
 | 5 | i7-4_thighs_ankles | i7 | PETG (red) | 11.7 h | Thighs, ankle brackets |
 | 6 | i7-5_eye_lenses | i7 | PETG, **clear** (swap the spool) | 0.2 h | The two eye lenses |
 | 1 | P1S-1_torso_head | P1S | PLA (white) | 16.2 h | Torso (camera shelves inside), head, neck hub |

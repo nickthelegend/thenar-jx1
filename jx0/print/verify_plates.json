@@ -246,24 +246,6 @@
   }
  },
  "plates": {
-  "i7-0_test_shin": {
-   "printer": "i7",
-   "material": "PETG",
-   "parts": 1,
-   "bodies": 1,
-   "time": "2h 16m 24s",
-   "grams": 45.11,
-   "nozzle": [
-    240.0
-   ],
-   "bed": [
-    80.0
-   ],
-   "height_mm": 48.8,
-   "min_gap_mm": 99.0,
-   "min_edge_mm": 73.4,
-   "problems": []
-  },
   "i7-1_pelvis_hip_yaw": {
    "printer": "i7",
    "material": "PETG",
@@ -300,13 +282,13 @@
    "min_edge_mm": 29.1,
    "problems": []
   },
-  "i7-3_shin_shims": {
+  "i7-3_shins_shims": {
    "printer": "i7",
    "material": "PETG",
-   "parts": 41,
-   "bodies": 41,
-   "time": "2h 40m 19s",
-   "grams": 49.39,
+   "parts": 42,
+   "bodies": 42,
+   "time": "4h 54m 19s",
+   "grams": 93.9,
    "nozzle": [
     240.0
    ],
@@ -413,7 +395,7 @@
   }
  },
  "filament_g": {
-  "PETG": 713.8,
+  "PETG": 713.1,
   "PETG-body": 5.8,
   "PLA": 626.1
  },
