@@ -95,15 +95,15 @@ If your printer prints holes or pockets small, set its hole compensation now, be
 | JX0_AnkleBracket_L / _R | 1 + 1 | 37.8 g each | 74 × 62 × 39 | PETG near-solid; outer arm down |
 | JX0_Foot | 2 | 50.7 g each | 124 × 70 × 46 | PETG near-solid; sole down |
 | JX0_HornShim (0.4 mm, under a horn arm) | 40 | 0.1 g each | Ø19.6 | PETG; two 0.2 mm layers, flat |
-| JX0_Torso (lower shell with the skirt, the camera window and shelves) | 1 | 132.0 g | 84 × 120 × 162 | PETG (white); floor down |
-| JX0_ChestCap | 1 | 45.3 g | 84 × 126 × 42 | PETG (white); upside down (top face on the bed), chamfers 45° |
-| JX0_Head (two pockets for the WS2812 12-LED ring eyes, wire slots behind them, ear pods) | 1 | 157.4 g | 70 × 124 × 70 | PETG (white); upright on the flat rim of its open bottom, tree supports inside the top |
+| JX0_Torso (lower shell with the skirt, the camera window and shelves) | 1 | 132.0 g | 84 × 120 × 162 | PLA (white); floor down |
+| JX0_ChestCap | 1 | 45.3 g | 84 × 126 × 42 | PLA (white); upside down (top face on the bed), chamfers 45° |
+| JX0_Head (two pockets for the WS2812 12-LED ring eyes, wire slots behind them, ear pods) | 1 | 157.4 g | 70 × 124 × 70 | PLA (white); upright on the flat rim of its open bottom, tree supports inside the top |
 | JX0_EyeLens (over each LED ring, flush with the face) | 2 | 1.6 g each | Ø50.4 × 1.2 | PETG, **transparent**; flat |
-| JX0_CamClamp (holds the chest webcam on its shelves) | 1 | 8.6 g | 4 × 69 × 48 | PETG (white); flat, countersinks up |
-| JX0_NeckHub (on the neck horn, the head slides over it) | 1 | 10.7 g | 52 × 48 × 12 | PETG (white); flat plate down |
-| JX0_UpperArm_L / _R (shoulder hood + elbow box) | 1 + 1 | 21.7 g each | 54 × 35 × 85 | PETG (white); inner side (the shoulder horn's) down: on the outer plate it would tip |
-| JX0_ArmBlade_L / _R | 1 + 1 | 17.3 g each | 36 × 8 × 136 | PETG (white); lying flat |
-| **Total** | **28 + 40 shims** | **1035 g** | | all PETG: 599 g grey (pelvis and legs) + 435 g white (body, head, arms; the lenses clear) |
+| JX0_CamClamp (holds the chest webcam on its shelves) | 1 | 8.6 g | 4 × 69 × 48 | PLA (white); flat, countersinks up |
+| JX0_NeckHub (on the neck horn, the head slides over it) | 1 | 10.7 g | 52 × 48 × 12 | PLA (white); flat plate down |
+| JX0_UpperArm_L / _R (shoulder hood + elbow box) | 1 + 1 | 21.7 g each | 54 × 35 × 85 | PLA (white); inner side (the shoulder horn's) down: on the outer plate it would tip |
+| JX0_ArmBlade_L / _R | 1 + 1 | 17.3 g each | 36 × 8 × 136 | PLA (white); lying flat |
+| **Total** | **28 + 40 shims** | **1035 g** | | 599 g PETG (pelvis and legs, red) + 435 g PLA (body, head, arms, white; the lenses clear PETG) |
 
 ## Joint stops
 

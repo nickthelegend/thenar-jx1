@@ -43,18 +43,20 @@ DOWN = {"JX0_Pelvis": (0, 0, 1), "JX0_YawKeeper_L": (0, 0, 1), "JX0_YawKeeper_R"
 
 # plate -> (printer, material, [(part, count)])
 PLATES = {
-    "P1S-0_test_shin": ("P1S", "PETG", [("JX0_Shin_L", 1)]),
-    "P1S-1_pelvis_hip_yaw": ("P1S", "PETG", [("JX0_Pelvis", 1), ("JX0_HipYawBracket_L", 1), ("JX0_HipYawBracket_R", 1),
-                                              ("JX0_YawKeeper_L", 1), ("JX0_YawKeeper_R", 1), ("JX0_YawRing_L", 1),
-                                              ("JX0_YawRing_R", 1)]),
-    "P1S-2_feet_hip_roll": ("P1S", "PETG", [("JX0_Foot", 2), ("JX0_HipRollBracket_L", 1), ("JX0_HipRollBracket_R", 1)]),
-    "P1S-3_shin_shims": ("P1S", "PETG", [("JX0_Shin_R", 1), ("JX0_HornShim", 40)]),
-    "i7-1_thighs_ankles": ("i7", "PETG", [("JX0_Thigh_L", 1), ("JX0_Thigh_R", 1), ("JX0_AnkleBracket_L", 1),
+    # i7: red PETG - the pelvis and every leg part (strength: verify_fea's PETG)
+    "i7-0_test_shin": ("i7", "PETG", [("JX0_Shin_L", 1)]),
+    "i7-1_pelvis_hip_yaw": ("i7", "PETG", [("JX0_Pelvis", 1), ("JX0_HipYawBracket_L", 1), ("JX0_HipYawBracket_R", 1),
+                                           ("JX0_YawKeeper_L", 1), ("JX0_YawKeeper_R", 1), ("JX0_YawRing_L", 1),
+                                           ("JX0_YawRing_R", 1)]),
+    "i7-2_feet_hip_roll": ("i7", "PETG", [("JX0_Foot", 2), ("JX0_HipRollBracket_L", 1), ("JX0_HipRollBracket_R", 1)]),
+    "i7-3_shin_shims": ("i7", "PETG", [("JX0_Shin_R", 1), ("JX0_HornShim", 40)]),
+    "i7-4_thighs_ankles": ("i7", "PETG", [("JX0_Thigh_L", 1), ("JX0_Thigh_R", 1), ("JX0_AnkleBracket_L", 1),
                                           ("JX0_AnkleBracket_R", 1)]),
-    "i7-2_torso_head": ("i7", "PETG-body", [("JX0_Torso", 1), ("JX0_Head", 1), ("JX0_NeckHub", 1)]),
-    "P1S-4_chest_arms": ("P1S", "PETG-body", [("JX0_ChestCap", 1), ("JX0_UpperArm_L", 1), ("JX0_UpperArm_R", 1)]),
-    "P1S-6_blades": ("P1S", "PETG-body", [("JX0_ArmBlade_L", 1), ("JX0_ArmBlade_R", 1), ("JX0_CamClamp", 1)]),   # + the camera clamp
-    "P1S-5_eye_lenses": ("P1S", "PETG-body", [("JX0_EyeLens", 2)]),                # transparent PETG
+    "i7-5_eye_lenses": ("i7", "PETG-body", [("JX0_EyeLens", 2)]),             # clear PETG: swap the filament for it
+    # P1S: white PLA - the body, head and arms
+    "P1S-1_torso_head": ("P1S", "PLA", [("JX0_Torso", 1), ("JX0_Head", 1), ("JX0_NeckHub", 1)]),
+    "P1S-2_chest_arms": ("P1S", "PLA", [("JX0_ChestCap", 1), ("JX0_UpperArm_L", 1), ("JX0_UpperArm_R", 1)]),
+    "P1S-3_blades_clamp": ("P1S", "PLA", [("JX0_ArmBlade_L", 1), ("JX0_ArmBlade_R", 1), ("JX0_CamClamp", 1)]),
 }
 
 PROFILES = {

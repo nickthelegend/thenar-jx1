@@ -246,13 +246,13 @@
   }
  },
  "plates": {
-  "P1S-0_test_shin": {
-   "printer": "P1S",
+  "i7-0_test_shin": {
+   "printer": "i7",
    "material": "PETG",
    "parts": 1,
    "bodies": 1,
-   "time": "2h 13m 21s",
-   "grams": 44.08,
+   "time": "2h 16m 24s",
+   "grams": 45.11,
    "nozzle": [
     240.0
    ],
@@ -261,16 +261,16 @@
    ],
    "height_mm": 48.8,
    "min_gap_mm": 99.0,
-   "min_edge_mm": 71.4,
+   "min_edge_mm": 73.4,
    "problems": []
   },
-  "P1S-1_pelvis_hip_yaw": {
-   "printer": "P1S",
+  "i7-1_pelvis_hip_yaw": {
+   "printer": "i7",
    "material": "PETG",
    "parts": 7,
    "bodies": 7,
-   "time": "7h 42m 29s",
-   "grams": 200.12,
+   "time": "9h 14m 13s",
+   "grams": 202.06,
    "nozzle": [
     240.0
    ],
@@ -279,16 +279,16 @@
    ],
    "height_mm": 46.0,
    "min_gap_mm": 8.0,
-   "min_edge_mm": 20.2,
+   "min_edge_mm": 22.2,
    "problems": []
   },
-  "P1S-2_feet_hip_roll": {
-   "printer": "P1S",
+  "i7-2_feet_hip_roll": {
+   "printer": "i7",
    "material": "PETG",
    "parts": 4,
    "bodies": 4,
-   "time": "7h 12m 23s",
-   "grams": 183.86,
+   "time": "8h 26m 57s",
+   "grams": 183.38,
    "nozzle": [
     240.0
    ],
@@ -297,16 +297,16 @@
    ],
    "height_mm": 98.4,
    "min_gap_mm": 8.0,
-   "min_edge_mm": 27.1,
+   "min_edge_mm": 29.1,
    "problems": []
   },
-  "P1S-3_shin_shims": {
-   "printer": "P1S",
+  "i7-3_shin_shims": {
+   "printer": "i7",
    "material": "PETG",
    "parts": 41,
    "bodies": 41,
-   "time": "2h 42m 47s",
-   "grams": 49.06,
+   "time": "2h 40m 19s",
+   "grams": 49.39,
    "nozzle": [
     240.0
    ],
@@ -315,10 +315,10 @@
    ],
    "height_mm": 48.8,
    "min_gap_mm": 8.0,
-   "min_edge_mm": 7.8,
+   "min_edge_mm": 9.8,
    "problems": []
   },
-  "i7-1_thighs_ankles": {
+  "i7-4_thighs_ankles": {
    "printer": "i7",
    "material": "PETG",
    "parts": 4,
@@ -336,67 +336,13 @@
    "min_edge_mm": 20.4,
    "problems": []
   },
-  "i7-2_torso_head": {
+  "i7-5_eye_lenses": {
    "printer": "i7",
-   "material": "PETG-body",
-   "parts": 3,
-   "bodies": 3,
-   "time": "18h 40m 13s",
-   "grams": 428.91,
-   "nozzle": [
-    240.0
-   ],
-   "bed": [
-    80.0
-   ],
-   "height_mm": 162.0,
-   "min_gap_mm": 8.0,
-   "min_edge_mm": 19.1,
-   "problems": []
-  },
-  "P1S-4_chest_arms": {
-   "printer": "P1S",
-   "material": "PETG-body",
-   "parts": 3,
-   "bodies": 3,
-   "time": "4h 40m 17s",
-   "grams": 139.6,
-   "nozzle": [
-    240.0
-   ],
-   "bed": [
-    80.0
-   ],
-   "height_mm": 42.0,
-   "min_gap_mm": 8.0,
-   "min_edge_mm": 8.9,
-   "problems": []
-  },
-  "P1S-6_blades": {
-   "printer": "P1S",
-   "material": "PETG-body",
-   "parts": 3,
-   "bodies": 3,
-   "time": "1h 33m 37s",
-   "grams": 43.74,
-   "nozzle": [
-    240.0
-   ],
-   "bed": [
-    80.0
-   ],
-   "height_mm": 8.0,
-   "min_gap_mm": 8.0,
-   "min_edge_mm": 32.2,
-   "problems": []
-  },
-  "P1S-5_eye_lenses": {
-   "printer": "P1S",
    "material": "PETG-body",
    "parts": 2,
    "bodies": 2,
-   "time": "15m 23s",
-   "grams": 5.86,
+   "time": "9m 55s",
+   "grams": 5.84,
    "nozzle": [
     240.0
    ],
@@ -405,13 +351,71 @@
    ],
    "height_mm": 1.2,
    "min_gap_mm": 8.0,
-   "min_edge_mm": 73.6,
+   "min_edge_mm": 75.6,
+   "problems": []
+  },
+  "P1S-1_torso_head": {
+   "printer": "P1S",
+   "material": "PLA",
+   "parts": 3,
+   "bodies": 3,
+   "time": "16h 12m 58s",
+   "grams": 441.53,
+   "nozzle": [
+    210.0,
+    215.0
+   ],
+   "bed": [
+    60.0
+   ],
+   "height_mm": 162.0,
+   "min_gap_mm": 8.0,
+   "min_edge_mm": 17.1,
+   "problems": []
+  },
+  "P1S-2_chest_arms": {
+   "printer": "P1S",
+   "material": "PLA",
+   "parts": 3,
+   "bodies": 3,
+   "time": "4h 35m 5s",
+   "grams": 140.6,
+   "nozzle": [
+    210.0,
+    215.0
+   ],
+   "bed": [
+    60.0
+   ],
+   "height_mm": 42.0,
+   "min_gap_mm": 8.0,
+   "min_edge_mm": 8.9,
+   "problems": []
+  },
+  "P1S-3_blades_clamp": {
+   "printer": "P1S",
+   "material": "PLA",
+   "parts": 3,
+   "bodies": 3,
+   "time": "1h 32m 6s",
+   "grams": 44.05,
+   "nozzle": [
+    210.0,
+    215.0
+   ],
+   "bed": [
+    60.0
+   ],
+   "height_mm": 8.0,
+   "min_gap_mm": 8.0,
+   "min_edge_mm": 32.2,
    "problems": []
   }
  },
  "filament_g": {
-  "PETG": 711.0,
-  "PETG-body": 618.1
+  "PETG": 713.8,
+  "PETG-body": 5.8,
+  "PLA": 626.1
  },
  "problems": 0
 }
