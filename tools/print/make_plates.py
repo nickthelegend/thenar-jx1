@@ -46,12 +46,11 @@ PLATES = {
     # i7: red PETG - the pelvis and every leg part (strength: verify_fea's PETG)
     "i7-1_pelvis_hip_yaw": ("i7", "PETG", [("JX0_Pelvis", 1), ("JX0_HipYawBracket_L", 1), ("JX0_HipYawBracket_R", 1),
                                            ("JX0_YawKeeper_L", 1), ("JX0_YawKeeper_R", 1), ("JX0_YawRing_L", 1),
-                                           ("JX0_YawRing_R", 1)]),
+                                           ("JX0_YawRing_R", 1), ("JX0_Shin_L", 1), ("JX0_Shin_R", 1)]),   # + both shins
     "i7-2_feet_hip_roll": ("i7", "PETG", [("JX0_Foot", 2), ("JX0_HipRollBracket_L", 1), ("JX0_HipRollBracket_R", 1)]),
-    "i7-3_shins_shims": ("i7", "PETG", [("JX0_Shin_L", 1), ("JX0_Shin_R", 1), ("JX0_HornShim", 40)]),
-    "i7-4_thighs_ankles": ("i7", "PETG", [("JX0_Thigh_L", 1), ("JX0_Thigh_R", 1), ("JX0_AnkleBracket_L", 1),
-                                          ("JX0_AnkleBracket_R", 1)]),
-    "i7-5_eye_lenses": ("i7", "PETG-body", [("JX0_EyeLens", 2)]),             # clear PETG: swap the filament for it
+    "i7-3_thighs_ankles_shims": ("i7", "PETG", [("JX0_Thigh_L", 1), ("JX0_Thigh_R", 1), ("JX0_AnkleBracket_L", 1),
+                                          ("JX0_AnkleBracket_R", 1), ("JX0_HornShim", 40)]),
+    "i7-4_eye_lenses": ("i7", "PETG-body", [("JX0_EyeLens", 2)]),             # clear PETG: swap the filament for it
     # P1S: white PLA - the body, head and arms
     "P1S-1_torso_head": ("P1S", "PLA", [("JX0_Torso", 1), ("JX0_Head", 1), ("JX0_NeckHub", 1)]),
     "P1S-2_chest_arms": ("P1S", "PLA", [("JX0_ChestCap", 1), ("JX0_UpperArm_L", 1), ("JX0_UpperArm_R", 1),
