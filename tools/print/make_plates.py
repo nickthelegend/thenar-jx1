@@ -54,8 +54,8 @@ PLATES = {
     "i7-5_eye_lenses": ("i7", "PETG-body", [("JX0_EyeLens", 2)]),             # clear PETG: swap the filament for it
     # P1S: white PLA - the body, head and arms
     "P1S-1_torso_head": ("P1S", "PLA", [("JX0_Torso", 1), ("JX0_Head", 1), ("JX0_NeckHub", 1)]),
-    "P1S-2_chest_arms": ("P1S", "PLA", [("JX0_ChestCap", 1), ("JX0_UpperArm_L", 1), ("JX0_UpperArm_R", 1)]),
-    "P1S-3_blades_clamp": ("P1S", "PLA", [("JX0_ArmBlade_L", 1), ("JX0_ArmBlade_R", 1), ("JX0_CamClamp", 1)]),
+    "P1S-2_chest_arms": ("P1S", "PLA", [("JX0_ChestCap", 1), ("JX0_UpperArm_L", 1), ("JX0_UpperArm_R", 1),
+                                        ("JX0_ArmBlade_L", 1), ("JX0_ArmBlade_R", 1), ("JX0_CamClamp", 1)]),
 }
 
 PROFILES = {
@@ -191,6 +191,50 @@ GAP, MARGIN = 8.0, 6.0                                               # between p
 
 
 def pack(meshes, bed):
+    """Shelf packing (below); when that does not fit, bottom-left packing (pack_bl). Raises if neither fits."""
+    try:
+        return pack_shelf([(n, m.copy()) for n, m in meshes], bed)
+    except ValueError:
+        return pack_bl(meshes, bed)
+
+
+def pack_bl(meshes, bed):
+    """Bottom-left packing of the parts' footprints: each part, in turn and turned 0 or 90 deg, goes to the lowest then
+    leftmost free spot next to the parts already placed; several part orders are tried."""
+    usable = bed - 2 * MARGIN
+    orders = [lambda e: -(e[0] * e[1]), lambda e: -max(e), lambda e: -e[1], lambda e: -e[0]]
+    for key in orders:
+        items = sorted(meshes, key=lambda nm: key(nm[1].extents[:2]))
+        placed, out, ok = [], [], True
+        for name, m in items:
+            best = None
+            for turn in (False, True):
+                w, d = (m.extents[1], m.extents[0]) if turn else (m.extents[0], m.extents[1])
+                cands = [(0.0, 0.0)] + [(x + pw + GAP, y) for x, y, pw, pd in placed] +                         [(x, y + pd + GAP) for x, y, pw, pd in placed]
+                for cx, cy in cands:
+                    if cx + w > usable + 1e-6 or cy + d > usable + 1e-6:
+                        continue
+                    if any(cx < x + pw + GAP - 1e-6 and x < cx + w + GAP - 1e-6 and cy < y + pd + GAP - 1e-6 and
+                           y < cy + d + GAP - 1e-6 for x, y, pw, pd in placed):
+                        continue
+                    if best is None or (cy, cx) < (best[1], best[0]):
+                        best = (cx, cy, w, d, turn)
+            if best is None:
+                ok = False
+                break
+            cx, cy, w, d, turn = best
+            mm = m.copy()
+            if turn:
+                mm.apply_transform(trimesh.transformations.rotation_matrix(np.pi / 2, [0, 0, 1]))
+            mm.apply_translation([MARGIN + cx - mm.bounds[0][0], MARGIN + cy - mm.bounds[0][1], -mm.bounds[0][2]])
+            placed.append((cx, cy, w, d))
+            out.append((name, mm))
+        if ok:
+            return out
+    raise ValueError(f"{', '.join(n for n, _ in meshes)} do not fit the {bed:.0f} mm bed together")
+
+
+def pack_shelf(meshes, bed):
     """Shelf packing, largest footprint first: rows along x, each part turned 90 deg if that fits the row better.
     Returns the meshes moved into place; raises if the plate does not fit the bed."""
     usable = bed - 2 * MARGIN

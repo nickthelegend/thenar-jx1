@@ -358,10 +358,10 @@
   "P1S-2_chest_arms": {
    "printer": "P1S",
    "material": "PLA",
-   "parts": 3,
-   "bodies": 3,
-   "time": "4h 35m 5s",
-   "grams": 140.6,
+   "parts": 6,
+   "bodies": 6,
+   "time": "6h 1m 3s",
+   "grams": 184.72,
    "nozzle": [
     210.0,
     215.0
@@ -373,31 +373,12 @@
    "min_gap_mm": 8.0,
    "min_edge_mm": 8.9,
    "problems": []
-  },
-  "P1S-3_blades_clamp": {
-   "printer": "P1S",
-   "material": "PLA",
-   "parts": 3,
-   "bodies": 3,
-   "time": "1h 32m 6s",
-   "grams": 44.05,
-   "nozzle": [
-    210.0,
-    215.0
-   ],
-   "bed": [
-    60.0
-   ],
-   "height_mm": 8.0,
-   "min_gap_mm": 8.0,
-   "min_edge_mm": 32.2,
-   "problems": []
   }
  },
  "filament_g": {
   "PETG": 713.1,
   "PETG-body": 5.8,
-  "PLA": 626.1
+  "PLA": 626.2
  },
  "problems": 0
 }
