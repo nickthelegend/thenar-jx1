@@ -32,8 +32,8 @@ The sliced files are not in git; re-run the script to make them. Each plate fold
 | 2 | i7-2_feet_hip_roll | i7 | PETG (red) | 8.4 h | Feet, hip-roll brackets |
 | 3 | i7-3_thighs_ankles_shims | i7 | PETG (red) | 12.0 h | Thighs, ankle brackets, 40 horn shims |
 | 4 | i7-4_eye_lenses | i7 | PETG, **clear** (swap the spool) | 0.2 h | The two eye lenses |
-| 1 | P1S-1_torso_head | P1S | PLA (white) | 16.2 h | Torso (camera shelves inside), head, neck hub |
-| 2 | P1S-2_chest_arms | P1S | PLA (white) | 6.0 h | Chest cap, upper arms, arm blades, camera clamp |
+| 1 | P1S-1_torso_head | P1S | PLA (white) | 15.0 h | Torso (camera shelf inside), head, neck hub, camera cradle |
+| 2 | P1S-2_chest_arms | P1S | PLA (white) | 6.0 h | Chest cap, upper arms, arm blades (printed 2026-10-20 with the old flat camera clamp: not needed now) |
 
 How to print on each printer:
 - **P1S:** open the `.gcode.3mf` in Bambu Studio, then Print plate.

@@ -440,19 +440,19 @@
    199.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 188.95,
-  "solid_mass_g_petg": 240.0,
-  "printed_mass_g": 132.0,
+  "volume_cm3": 200.85,
+  "solid_mass_g_petg": 255.1,
+  "printed_mass_g": 140.3,
   "print_fill": 0.55,
-  "features": 34,
-  "triangles": 2574,
+  "features": 47,
+  "triangles": 2670,
   "com_mm": [
-   2.51,
+   4.52,
    0.0,
-   117.48
+   114.49
   ],
   "quantity": 1,
-  "build_s": 64.0
+  "build_s": 96.8
  },
  "JX0_Head": {
   "part": "JX0_Head",
@@ -952,31 +952,31 @@
    10.2,
    -34.5,
    126.2,
-   14.2,
+   29.2,
    34.5,
-   173.8
+   170.8
   ],
   "bbox_expected_mm": [
    10.2,
    -34.5,
    126.2,
-   14.2,
+   29.2,
    34.5,
-   173.8
+   170.8
   ],
   "bbox_ok": true,
-  "volume_cm3": 12.33,
-  "solid_mass_g_petg": 15.7,
-  "printed_mass_g": 8.6,
+  "volume_cm3": 14.67,
+  "solid_mass_g_petg": 18.6,
+  "printed_mass_g": 10.3,
   "print_fill": 0.55,
-  "features": 10,
-  "triangles": 812,
+  "features": 7,
+  "triangles": 428,
   "com_mm": [
-   12.21,
+   14.21,
    0.0,
-   150.97
+   153.74
   ],
   "quantity": 1,
-  "build_s": 13.0
+  "build_s": 13.5
  }
 }

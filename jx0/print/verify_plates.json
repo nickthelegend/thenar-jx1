@@ -38,12 +38,12 @@
    "problems": []
   },
   "JX0_CamClamp": {
-   "contact_mm2": 3098.5,
+   "contact_mm2": 2876.5,
    "com_over_contact": true,
-   "supported_mm2": 0.0,
-   "height_mm": 4.0,
+   "supported_mm2": 23.9,
+   "height_mm": 19.0,
    "watertight": true,
-   "volume_cm3": 12.33,
+   "volume_cm3": 14.68,
    "problems": []
   },
   "JX0_ChestCap": {
@@ -184,10 +184,10 @@
   "JX0_Torso": {
    "contact_mm2": 905.6,
    "com_over_contact": true,
-   "supported_mm2": 12435.8,
+   "supported_mm2": 11808.0,
    "height_mm": 162.0,
    "watertight": true,
-   "volume_cm3": 188.79,
+   "volume_cm3": 200.69,
    "problems": []
   },
   "JX0_UpperArm_L": {
@@ -321,10 +321,10 @@
   "P1S-1_torso_head": {
    "printer": "P1S",
    "material": "PLA",
-   "parts": 3,
-   "bodies": 3,
-   "time": "16h 12m 58s",
-   "grams": 441.53,
+   "parts": 4,
+   "bodies": 4,
+   "time": "15h 1m 59s",
+   "grams": 433.48,
    "nozzle": [
     210.0,
     215.0
@@ -334,16 +334,16 @@
    ],
    "height_mm": 162.0,
    "min_gap_mm": 8.0,
-   "min_edge_mm": 17.1,
+   "min_edge_mm": 20.7,
    "problems": []
   },
   "P1S-2_chest_arms": {
    "printer": "P1S",
    "material": "PLA",
-   "parts": 6,
-   "bodies": 6,
-   "time": "6h 1m 3s",
-   "grams": 184.72,
+   "parts": 5,
+   "bodies": 5,
+   "time": "5h 42m 46s",
+   "grams": 174.85,
    "nozzle": [
     210.0,
     215.0
@@ -360,7 +360,7 @@
  "filament_g": {
   "PETG": 712.7,
   "PETG-body": 5.8,
-  "PLA": 626.2
+  "PLA": 608.4
  },
  "problems": 0
 }

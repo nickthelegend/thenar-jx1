@@ -808,7 +808,11 @@ def torso():
                   "heat-set insert; its tip goes on into the hole through the rib below")
     p += [("lprism", "z", oct_inset(w - 0.5), (TZS - 6.0, TZS)),                               # lip, fused to the wall
           ("lprism", "z", oct_inset(w + 0.2), (TZS - 0.1, TZS + 5.0)),                         # lip above the seam
-          ("lpcut", "z", oct_inset(w + 2.2), (TZS - 6.1, TZS + 5.1))]
+          ("lpcut", "z", oct_inset(w + 2.2), (TZS - 3.8, TZS + 5.1))]
+    # the lip's underside steps in at 45 deg, one 0.2 mm layer per 0.2 mm, so it prints without supports (a flat
+    # 2.2 mm ledge grew 125 mm trees from the floor)
+    for k in range(11):
+        p.append(("lpcut", "z", oct_inset(w + 0.2 * k + 0.02), (TZS - 6.1 + 0.2 * k, TZS - 6.0 + 0.2 * (k + 1))))
     for x in (TD, -TD):
         sgn = 1 if x > 0 else -1
         for y in (-15.0, 15.0):
@@ -816,6 +820,8 @@ def torso():
     for y in (-29.0, 29.0):                                                                     # Raspberry Pi standoffs
         for z in (96.0, 145.0):                                                                 # (M2 x 8 CSK through the
             p.append(("lcyl", "x", (y, z), 3.2, (-TD + w - 0.5, -TD + w + 6.0)))               # board's 2.7 mm holes)
+            p.append(("lprism", "x", [(y - 2.26, z - 2.26), (y + 2.26, z - 2.26), (y, z - 4.53)],   # teardrop: prints
+                      (-TD + w - 0.5, -TD + w + 6.0)))                                       # without supports
             p.append(("lhole", "x", (y, z), 1.8, (-TD + 1.4, -TD + w + 6.1)))
     p += webcam_mount()
     return p
@@ -829,19 +835,22 @@ CAM_SHELF_T, CAM_GAP = 6.0, 0.3
 
 
 def webcam_mount():
-    """Inside the torso's front wall: a shelf under and over the webcam's head, its face against the wall and its lens
-    at the window; the clamp plate (JX0_CamClamp) screws onto the shelves' back ends with 4 M2 x 10 CSK and holds it
-    there. The bottom shelf is split in the middle for the USB cable (take the webcam off its clip; the cable goes
-    down to the Raspberry Pi)."""
+    """Inside the torso's front wall: a shelf under the webcam's head (a 45 deg gusset under it), its face against the
+    wall and its lens at the window; the cradle (JX0_CamClamp) holds its back and top and screws onto the shelf's back
+    end with 2 M2 x 10 CSK. The USB cable runs back along a 10 x 4 mm groove in the bottom shelf's top, out under the clamp (take the
+    webcam off its clip), then down to the Raspberry Pi."""
     W, H, D, zc, lens = CAM
     xf = TD - TWALL                                                  # inner face of the front wall
     xb = xf - CAM_GAP - D                                            # the webcam's back = the clamp plate's front
     hw = W / 2 - 8.0                                                 # the shelves stay on the wall's flat front
     zlo, zhi = zc - H / 2 - CAM_GAP, zc + H / 2 + CAM_GAP
     p = [("lhole", "x", (0.0, zc), lens, (xf - 0.5, TD + 0.1)),                              # the lens window
-         ("lbox", (xb, xf + 0.5), (-hw, -7.0), (zlo - CAM_SHELF_T, zlo)),                   # bottom shelf, split for
-         ("lbox", (xb, xf + 0.5), (7.0, hw), (zlo - CAM_SHELF_T, zlo)),                     # the cable
-         ("lbox", (xb, xf + 0.5), (-hw, hw), (zhi, zhi + CAM_SHELF_T))]                     # top shelf
+         ("lbox", (xb, xf + 0.5), (-hw, hw), (zlo - CAM_SHELF_T, zlo))]                     # the shelf it stands on
+    gusset = [(xb, zlo - CAM_SHELF_T + 0.05), (xf + 0.5, zlo - CAM_SHELF_T + 0.05), (xf + 0.5, zlo - CAM_SHELF_T - (xf + 0.5 - xb))]
+    p += [("lprism", "y", gusset, (-hw, hw)),                                       # 45 deg under the bottom shelf:
+          #                                                                           it prints without supports
+          ("lcut", (xb - 0.1, xf - 0.5), (-5.0, 5.0), (zlo - 4.0, zlo + 0.1))]           # the cable's groove (solid
+    #                       underneath, so no support tree climbs through it to the top shelf)
     for y, z in cam_screws():
         p.append(("lhole", "x", (y, z), 1.8, (xb - 0.1, xb + 9.0)))                         # M2 pilots, 9 mm deep
     return p
@@ -849,19 +858,21 @@ def webcam_mount():
 
 def cam_screws():
     W, H, D, zc, lens = CAM
-    zlo, zhi = zc - H / 2 - CAM_GAP, zc + H / 2 + CAM_GAP
-    return [(y, z) for y in (-22.0, 22.0) for z in (zlo - CAM_SHELF_T / 2, zhi + CAM_SHELF_T / 2)]
+    zlo = zc - H / 2 - CAM_GAP
+    return [(y, zlo - CAM_SHELF_T / 2) for y in (-22.0, 22.0)]
 
 
 def cam_clamp():
-    """The webcam's clamp plate (torso frame): 4 mm, over the shelves' back ends and the webcam's back, a notch at the
-    bottom for its cable; 4 M2 x 10 CSK through it into the shelves."""
+    """The webcam's cradle (torso frame): a 4 mm plate over the shelf's back end and the webcam's back, a 3 mm lip over
+    its top (no top shelf in the torso: its underside needed 100 mm support trees), a notch for its cable; the webcam
+    sits in it and both go down onto the shelf, 2 M2 x 10 CSK through it into the shelf. Prints on its back."""
     W, H, D, zc, lens = CAM
     xb = TD - TWALL - CAM_GAP - D
     hw = W / 2 - 8.0
     zlo, zhi = zc - H / 2 - CAM_GAP, zc + H / 2 + CAM_GAP
     t = 4.0
-    p = [("box", (xb - t, xb), (-hw, hw), (zlo - CAM_SHELF_T, zhi + CAM_SHELF_T)),
+    p = [("box", (xb - t, xb), (-hw, hw), (zlo - CAM_SHELF_T, zhi + 3.0)),                  # back plate
+         ("box", (xb - t, xb + 15.0), (-hw, hw), (zhi, zhi + 3.0)),                          # lip over the head's top
          ("cut", (xb - t - 0.1, xb + 0.1), (-7.0, 7.0), (zlo - CAM_SHELF_T - 0.1, zlo + 6.0))]   # the cable's notch
     for y, z in cam_screws():
         p += [("hole", "x", (y, z), M2["hole"] + 0.2, (xb - t - 0.1, xb + 0.1)),

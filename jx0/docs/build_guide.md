@@ -95,11 +95,11 @@ If your printer prints holes or pockets small, set its hole compensation now, be
 | JX0_AnkleBracket_L / _R | 1 + 1 | 37.8 g each | 74 × 62 × 39 | PETG near-solid; outer arm down |
 | JX0_Foot | 2 | 50.7 g each | 124 × 70 × 46 | PETG near-solid; sole down |
 | JX0_HornShim (0.4 mm, under a horn arm) | 40 | 0.1 g each | Ø19.6 | PETG; two 0.2 mm layers, flat |
-| JX0_Torso (lower shell with the skirt, the camera window and shelves) | 1 | 132.0 g | 84 × 120 × 162 | PLA (white); floor down |
+| JX0_Torso (lower shell with the skirt, the camera window and its shelf) | 1 | 140.3 g | 84 × 120 × 162 | PLA (white); floor down |
 | JX0_ChestCap | 1 | 45.3 g | 84 × 126 × 42 | PLA (white); upside down (top face on the bed), chamfers 45° |
 | JX0_Head (two pockets for the WS2812 12-LED ring eyes, wire slots behind them, ear pods) | 1 | 157.4 g | 70 × 124 × 70 | PLA (white); upright on the flat rim of its open bottom, tree supports inside the top |
 | JX0_EyeLens (over each LED ring, flush with the face) | 2 | 1.6 g each | Ø50.4 × 1.2 | PETG, **transparent**; flat |
-| JX0_CamClamp (holds the chest webcam on its shelves) | 1 | 8.6 g | 4 × 69 × 48 | PLA (white); flat, countersinks up |
+| JX0_CamClamp (the chest webcam's cradle) | 1 | 10.3 g | 19 × 69 × 45 | PLA (white); on its back, lip up |
 | JX0_NeckHub (on the neck horn, the head slides over it) | 1 | 10.7 g | 52 × 48 × 12 | PLA (white); flat plate down |
 | JX0_UpperArm_L / _R (shoulder hood + elbow box) | 1 + 1 | 21.7 g each | 54 × 35 × 85 | PLA (white); inner side (the shoulder horn's) down: on the outer plate it would tip |
 | JX0_ArmBlade_L / _R | 1 + 1 | 17.3 g each | 36 × 8 × 136 | PLA (white); lying flat |
@@ -246,10 +246,12 @@ Body, arms and head:
       their own thread in the lip's 1.8 mm holes; do not overtighten).
 13b. **Chest camera** (a USB webcam head, about 85 × 35 × 25 mm: measure yours first):
     - Take the webcam off its clip so only the head and its cable are left.
-    - From inside the torso, slide the head between the two shelves behind the front wall, lens in the round window,
-      cable down through the gap in the bottom shelf.
-    - Put the clamp plate over the shelves' back ends and fix it with 4 × M2 × 10 CSK; it presses the head against the
-      wall. If the head is thinner than 25 mm, add foam tape behind it.
+    - Put the head into the cradle (JX0_CamClamp): its back against the plate, its top under the lip, the cable down
+      through the notch.
+    - From the top of the torso, lower the cradle with the head onto the shelf behind the front wall, lens in the round
+      window, the cable in the groove along the shelf.
+    - Fix the cradle with 2 × M2 × 10 CSK into the shelf's back end. If the head is thinner than 25 mm, add foam tape
+      behind it.
     - Plug the cable into one of the Raspberry Pi's USB ports.
 14. **Head**:
     - Fit the neck horn's centre screw first.
@@ -283,7 +285,7 @@ that it doesn't bottom out. These are the screws bought on 2026-10-15; nothing e
 | Item | Where | Notes |
 |---|---|---|
 | M2 × 6 CSK (56 of the 70 bought) | every servo case screw | the head bears on the hole's edge in the plate's recess, 2.2 mm into the case's Ø1.6 × 2.9 mm holes |
-| M2 × 10 CSK (16 of 70) | hip-yaw keepers (10), head into the neck hub (2), camera clamp (4) | into 1.8 mm printed pilots |
+| M2 × 10 CSK (14 of 70) | hip-yaw keepers (10), head into the neck hub (2), camera cradle (2) | into 1.8 mm printed pilots |
 | M2 × 8 CSK (8 of 40) | Raspberry Pi (4), chest cap into the torso lip (4) | into 1.8 mm printed pilots |
 | M3 × 6 horn screws from the servo bags (64) | U-bracket horn arms (40), hip-yaw discs (8), shoulder pads (8), arm blades (8) | 3.0 mm into the POM drive horn; on the hip-roll arms the heads must be 2.4 mm high or less |
 | M3 × 8 pan head (44 of 45) | through each U-bracket's boss into the passive horn (40), neck hub onto the neck horn (4) | 2.3 mm into the passive horn |
