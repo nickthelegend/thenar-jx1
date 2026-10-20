@@ -29,9 +29,8 @@ The sliced files are not in git; re-run the script to make them. Each plate fold
 | Order | Plate | Printer | Filament | Time | Parts |
 |---|---|---|---|---|---|
 | 1 | i7-1_pelvis_hip_yaw | i7 | PETG (red) | 13.9 h | Pelvis, hip-yaw brackets, keepers, yaw rings, both shins |
-| 2 | i7-2_feet_hip_roll | i7 | PETG (red) | 8.4 h | Feet, hip-roll brackets |
-| 3 | i7-3_thighs_ankles_shims | i7 | PETG (red) | 12.0 h | Thighs, ankle brackets, 40 horn shims |
-| 4 | i7-4_eye_lenses | i7 | PETG, **clear** (swap the spool) | 0.2 h | The two eye lenses |
+| 2 | i7-2_legs | i7 | PETG (red) | 20.1 h | Thighs, ankle brackets, both feet, hip-roll brackets (every red part left) |
+| 3 | i7-3_lenses_shims | i7 | PETG, **clear** (swap the spool) | 0.5 h | The two eye lenses, 40 horn shims |
 | 1 | P1S-1_torso_head | P1S | PLA (white) | 15.0 h | Torso (camera shelf inside), head, neck hub, camera cradle |
 | 2 | P1S-2_chest_arms | P1S | PLA (white) | 6.0 h | Chest cap, upper arms, arm blades (printed 2026-10-20 with the old flat camera clamp: not needed now) |
 
