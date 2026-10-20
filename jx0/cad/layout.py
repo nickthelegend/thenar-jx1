@@ -131,4 +131,5 @@ def keepouts():
             out.append((f"screws:{key}", [q for s in G.SCREWS[part] for q in G.screw_head(s)], M, key))
     # the webcam head behind the chest window (geometry.webcam_envelope): nothing but its mount may enter it
     out.append(("webcam", G.webcam_envelope(), np.eye(4), "cam_clamp"))   # it goes in with its cradle
+    out.append(("raspberry_pi", G.pi_envelope(), np.eye(4), "torso"))    # on its standoffs on the back wall
     return out

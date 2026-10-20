@@ -817,14 +817,44 @@ def torso():
         sgn = 1 if x > 0 else -1
         for y in (-15.0, 15.0):
             p.append(("lhole", "x", (y, TZS + 2.5), 1.8, tuple(sorted((sgn * (TD - w - 2.4), sgn * (TD - w + 0.3))))))
-    for y in (-29.0, 29.0):                                                                     # Raspberry Pi standoffs
-        for z in (96.0, 145.0):                                                                 # (M2 x 8 CSK through the
-            p.append(("lcyl", "x", (y, z), 3.2, (-TD + w - 0.5, -TD + w + 6.0)))               # board's 2.7 mm holes)
-            p.append(("lprism", "x", [(y - 2.26, z - 2.26), (y + 2.26, z - 2.26), (y, z - 4.53)],   # teardrop: prints
-                      (-TD + w - 0.5, -TD + w + 6.0)))                                       # without supports
-            p.append(("lhole", "x", (y, z), 1.8, (-TD + 1.4, -TD + w + 6.1)))
+    p += pi_mount()
     p += webcam_mount()
     return p
+
+
+# the Raspberry Pi 4: standing on the inside of the back wall, its USB / Ethernet end up (the webcam plugs into a
+# USB 3.0 port inside), its long port edge (USB-C power, 2 micro-HDMI, audio) toward the back-right corner, where a
+# service slot lets the plugs in from outside. PI = (PCB's back face x, port edge y, bottom end z); the board is
+# 85 x 56 x 1.6 mm, holes 58 x 49 mm, 3.5 mm in from the edges; ports along the long edge at these mm from the board's
+# bottom end: USB-C 11.2, micro-HDMI 26.0 and 39.5, audio 53.5 (Raspberry Pi 4 Model B mechanical drawing)
+PI = (-35.5, 45.5, 100.0)
+PI_PORTS = (11.2, 26.0, 39.5, 53.5)
+
+
+def pi_holes():
+    xb, ye, zb = PI
+    return [(y, z) for y in (ye - 3.5, ye - 52.5) for z in (zb + 3.5, zb + 61.5)]
+
+
+def pi_mount():
+    """4 standoffs (4 mm, with teardrop bottoms so they print without supports; the board's M2 x 8 CSK cut their
+    thread in them) and the service slot through the back-right corner for the plugs."""
+    xb, ye, zb = PI
+    w = TWALL
+    p = []
+    for y, z in pi_holes():
+        p += [("lcyl", "x", (y, z), 3.2, (-TD + w - 0.5, xb)),
+              ("lprism", "x", [(y - 2.26, z - 2.26), (y + 2.26, z - 2.26), (y, z - 4.53)], (-TD + w - 0.5, xb)),
+              ("lhole", "x", (y, z), 1.8, (-TD + 1.4, xb + 0.1))]
+    xp = xb + 1.6 + 1.6                                              # the ports' centre line, off the PCB
+    p.append(("cut", (xp - 5.0, xp + 5.0), (ye - 6.0, TW + 1.0), (zb + PI_PORTS[0] - 7.0, zb + PI_PORTS[-1] + 7.0)))
+    return p
+
+
+def pi_envelope():
+    """The Raspberry Pi 4 with its connectors (torso frame), a keep-out for the fit and interference checks."""
+    xb, ye, zb = PI
+    return [("box", (xb + 0.3, xb + 1.6 + 16.0), (ye - 56.0, ye + 0.8), (zb, zb + 85.0 + 2.5))]
 
 
 # the chest camera: a USB webcam head (Lapcare Lapcam HD 720M P: about 85 x 35 x 25 mm, a pill with the lens in the

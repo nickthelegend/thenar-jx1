@@ -90,7 +90,10 @@ The servos need no GPIO at all: they're all on the USB servo bus.
 
 ## Where things sit
 
-- **Lower torso:** the Raspberry Pi on the 4 standoffs on the back wall, the battery on the floor, the servo driver and
+- **Lower torso:** the Raspberry Pi 4 standing on the 4 standoffs on the back wall (M2 × 8 CSK into them), its
+  USB / Ethernet end up and its USB-C, micro-HDMI and audio side toward the back-right corner, where the service slot
+  lets those plugs in from outside; the webcam plugs into one of its blue USB 3.0 ports from inside. The battery on the
+  floor in front of it, the servo driver and
   the UBEC beside it. The push-to-talk button goes in the hole in the back wall, and the leg cables come up through the
   slot in the floor.
 - **Chest cap:** the speaker under the round grille on top and the neck servo standing on top. The two shoulder

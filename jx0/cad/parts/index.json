@@ -440,19 +440,19 @@
    199.0
   ],
   "bbox_ok": true,
-  "volume_cm3": 200.85,
-  "solid_mass_g_petg": 255.1,
-  "printed_mass_g": 140.3,
+  "volume_cm3": 198.58,
+  "solid_mass_g_petg": 252.2,
+  "printed_mass_g": 138.7,
   "print_fill": 0.55,
-  "features": 47,
-  "triangles": 2670,
+  "features": 48,
+  "triangles": 2716,
   "com_mm": [
-   4.52,
-   0.0,
-   114.49
+   4.94,
+   -0.48,
+   114.33
   ],
   "quantity": 1,
-  "build_s": 96.8
+  "build_s": 100.2
  },
  "JX0_Head": {
   "part": "JX0_Head",
