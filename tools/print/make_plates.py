@@ -47,9 +47,9 @@ PLATES = {
     "i7-1_pelvis_hip_yaw": ("i7", "PETG", [("JX0_Pelvis", 1), ("JX0_HipYawBracket_L", 1), ("JX0_HipYawBracket_R", 1),
                                            ("JX0_YawKeeper_L", 1), ("JX0_YawKeeper_R", 1), ("JX0_YawRing_L", 1),
                                            ("JX0_YawRing_R", 1), ("JX0_Shin_L", 1), ("JX0_Shin_R", 1)]),   # + both shins
-    "i7-2_legs": ("i7", "PETG", [("JX0_Thigh_L", 1), ("JX0_Thigh_R", 1), ("JX0_AnkleBracket_L", 1),
-                                 ("JX0_AnkleBracket_R", 1), ("JX0_Foot", 2), ("JX0_HipRollBracket_L", 1),
-                                 ("JX0_HipRollBracket_R", 1)]),                  # every red part left, one plate
+    "i7-2_thighs_ankles": ("i7", "PETG", [("JX0_Thigh_L", 1), ("JX0_Thigh_R", 1), ("JX0_AnkleBracket_L", 1),
+                                          ("JX0_AnkleBracket_R", 1)]),          # under 12 h each: the builder cuts
+    "i7-2b_feet_hip_roll": ("i7", "PETG", [("JX0_Foot", 2), ("JX0_HipRollBracket_L", 1), ("JX0_HipRollBracket_R", 1)]),
     "i7-3_eye_lenses": ("i7", "PETG-body", [("JX0_EyeLens", 2)]),             # clear PETG: swap the filament for it
     "i7-4_shims_optional": ("i7", "PETG", [("JX0_HornShim", 40)]),   # only if a bracket sits loose on its horn
     # P1S: white PLA - the body, head and arms
