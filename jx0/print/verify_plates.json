@@ -300,36 +300,19 @@
    "min_edge_mm": 29.1,
    "problems": []
   },
-  "i7-3_eye_lenses": {
+  "i7-3_shims_optional": {
    "printer": "i7",
-   "material": "PETG-body",
-   "parts": 2,
-   "bodies": 2,
-   "time": "9m 55s",
-   "grams": 5.84,
-   "nozzle": [
-    240.0
-   ],
-   "bed": [
-    80.0
-   ],
-   "height_mm": 1.2,
-   "min_gap_mm": 8.0,
-   "min_edge_mm": 75.6,
-   "problems": []
-  },
-  "i7-4_shims_optional": {
-   "printer": "i7",
-   "material": "PETG",
+   "material": "PLA",
    "parts": 40,
    "bodies": 40,
-   "time": "23m 20s",
-   "grams": 4.27,
+   "time": "22m 38s",
+   "grams": 4.37,
    "nozzle": [
-    240.0
+    210.0,
+    215.0
    ],
    "bed": [
-    80.0
+    60.0
    ],
    "height_mm": 0.4,
    "min_gap_mm": 8.0,
@@ -355,6 +338,24 @@
    "min_edge_mm": 20.7,
    "problems": []
   },
+  "P1S-3_eye_lenses": {
+   "printer": "P1S",
+   "material": "PETG-body",
+   "parts": 2,
+   "bodies": 2,
+   "time": "15m 23s",
+   "grams": 5.86,
+   "nozzle": [
+    240.0
+   ],
+   "bed": [
+    80.0
+   ],
+   "height_mm": 1.2,
+   "min_gap_mm": 8.0,
+   "min_edge_mm": 73.6,
+   "problems": []
+  },
   "P1S-2_chest_arms": {
    "printer": "P1S",
    "material": "PLA",
@@ -376,9 +377,9 @@
   }
  },
  "filament_g": {
-  "PETG": 714.2,
-  "PETG-body": 5.8,
-  "PLA": 614.0
+  "PETG": 709.9,
+  "PLA": 618.4,
+  "PETG-body": 5.9
  },
  "problems": 0
 }

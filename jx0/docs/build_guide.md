@@ -94,7 +94,7 @@ If your printer prints holes or pockets small, set its hole compensation now, be
 | JX0_Shin_L / _R | 1 + 1 | 31.9 g each | 31 × 49 × 113 | PETG near-solid; outer arm down |
 | JX0_AnkleBracket_L / _R | 1 + 1 | 37.8 g each | 74 × 62 × 39 | PETG near-solid; outer arm down |
 | JX0_Foot | 2 | 50.7 g each | 124 × 70 × 46 | PETG near-solid; sole down |
-| JX0_HornShim (0.4 mm, under a horn arm) | 40 | 0.1 g each | Ø19.6 | PETG; two 0.2 mm layers, flat |
+| JX0_HornShim (0.4 mm, under a horn arm; optional) | 40 | 0.1 g each | Ø19.6 | PLA (any colour); two 0.2 mm layers, flat |
 | JX0_Torso (lower shell with the skirt, the camera window and shelf, the Pi's standoffs and service slot, the battery's floor pocket) | 1 | 141.4 g | 84 × 120 × 162 | PLA (white); floor down |
 | JX0_ChestCap | 1 | 45.3 g | 84 × 126 × 42 | PLA (white); upside down (top face on the bed), chamfers 45° |
 | JX0_Head (two pockets for the WS2812 12-LED ring eyes, wire slots behind them, ear pods) | 1 | 157.4 g | 70 × 124 × 70 | PLA (white); upright on the flat rim of its open bottom, tree supports inside the top |
@@ -132,7 +132,7 @@ Every STS3215 ships as ID 1. Set the IDs one servo at a time and write each on i
 2. Measure across the two horn faces with calipers.
 3. The brackets are built for 36.55 mm. The passive horn is not screwed down: it slides on its boss, so tightening the
    bracket's screws pulls the bracket onto the drive horn and the passive horn follows. The shims are **optional**:
-   print them (plate i7-4_shims_optional) only if a bracket still sits loose, and put them between the drive horn and
+   print them (plate i7-3_shims_optional) only if a bracket still sits loose, and put them between the drive horn and
    whatever bolts to it:
 
 | Measured across both horns | Shims under the drive horn's arm |

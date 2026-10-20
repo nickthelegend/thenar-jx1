@@ -50,10 +50,11 @@ PLATES = {
     "i7-2_thighs_ankles": ("i7", "PETG", [("JX0_Thigh_L", 1), ("JX0_Thigh_R", 1), ("JX0_AnkleBracket_L", 1),
                                           ("JX0_AnkleBracket_R", 1)]),          # under 12 h each: the builder cuts
     "i7-2b_feet_hip_roll": ("i7", "PETG", [("JX0_Foot", 2), ("JX0_HipRollBracket_L", 1), ("JX0_HipRollBracket_R", 1)]),
-    "i7-3_eye_lenses": ("i7", "PETG-body", [("JX0_EyeLens", 2)]),             # clear PETG: swap the filament for it
-    "i7-4_shims_optional": ("i7", "PETG", [("JX0_HornShim", 40)]),   # only if a bracket sits loose on its horn
+    "i7-3_shims_optional": ("i7", "PLA", [("JX0_HornShim", 40)]),    # only if a bracket sits loose on its horn; the
+    #                                                                   builder's orange PLA
     # P1S: white PLA - the body, head and arms
     "P1S-1_torso_head": ("P1S", "PLA", [("JX0_Torso", 1), ("JX0_Head", 1), ("JX0_NeckHub", 1), ("JX0_CamClamp", 1)]),
+    "P1S-3_eye_lenses": ("P1S", "PETG-body", [("JX0_EyeLens", 2)]),            # clear PETG: swap the filament for it
     "P1S-2_chest_arms": ("P1S", "PLA", [("JX0_ChestCap", 1), ("JX0_UpperArm_L", 1), ("JX0_UpperArm_R", 1),
                                         ("JX0_ArmBlade_L", 1), ("JX0_ArmBlade_R", 1)]),   # printed 2026-10-20 (its flat camera
     #                                                                       clamp is replaced by the cradle on P1S-1)
