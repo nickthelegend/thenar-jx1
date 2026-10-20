@@ -95,7 +95,7 @@ If your printer prints holes or pockets small, set its hole compensation now, be
 | JX0_AnkleBracket_L / _R | 1 + 1 | 37.8 g each | 74 × 62 × 39 | PETG near-solid; outer arm down |
 | JX0_Foot | 2 | 50.7 g each | 124 × 70 × 46 | PETG near-solid; sole down |
 | JX0_HornShim (0.4 mm, under a horn arm) | 40 | 0.1 g each | Ø19.6 | PETG; two 0.2 mm layers, flat |
-| JX0_Torso (lower shell with the skirt, the camera window and shelf, the Pi's standoffs and service slot) | 1 | 138.7 g | 84 × 120 × 162 | PLA (white); floor down |
+| JX0_Torso (lower shell with the skirt, the camera window and shelf, the Pi's standoffs and service slot, the battery's floor pocket) | 1 | 141.4 g | 84 × 120 × 162 | PLA (white); floor down |
 | JX0_ChestCap | 1 | 45.3 g | 84 × 126 × 42 | PLA (white); upside down (top face on the bed), chamfers 45° |
 | JX0_Head (two pockets for the WS2812 12-LED ring eyes, wire slots behind them, ear pods) | 1 | 157.4 g | 70 × 124 × 70 | PLA (white); upright on the flat rim of its open bottom, tree supports inside the top |
 | JX0_EyeLens (over each LED ring, flush with the face) | 2 | 1.6 g each | Ø50.4 × 1.2 | PETG, **transparent**; flat |
@@ -103,7 +103,7 @@ If your printer prints holes or pockets small, set its hole compensation now, be
 | JX0_NeckHub (on the neck horn, the head slides over it) | 1 | 10.7 g | 52 × 48 × 12 | PLA (white); flat plate down |
 | JX0_UpperArm_L / _R (shoulder hood + elbow box) | 1 + 1 | 21.7 g each | 54 × 35 × 85 | PLA (white); inner side (the shoulder horn's) down: on the outer plate it would tip |
 | JX0_ArmBlade_L / _R | 1 + 1 | 17.3 g each | 36 × 8 × 136 | PLA (white); lying flat |
-| **Total** | **28 + 40 shims** | **1035 g** | | 599 g PETG (pelvis and legs, red) + 435 g PLA (body, head, arms, white; the lenses clear PETG) |
+| **Total** | **28 + 40 shims** | **1038 g** | | 599 g PETG (pelvis and legs, red) + 438 g PLA (body, head, arms, white; the lenses clear PETG) |
 
 ## Joint stops
 
@@ -228,7 +228,12 @@ Body, arms and head:
 
     Inside:
     - the Raspberry Pi on the back-wall standoffs (4 × M2 × 8 CSK, cutting their own thread);
-    - the battery on the floor, with the servo driver and the UBEC beside it;
+    - the battery (3S 2200 mAh) standing in the pocket on the floor, in the middle between the Pi and the camera:
+      a strip of foam tape under it and a zip tie round it through the pocket's two slots. Its XT60 and balance
+      leads go up and out through the 9 mm hole in the back wall, right of the Pi, so it charges (and the robot runs
+      from a 12.6 V supply) without opening the torso. Not the 4400 mAh pack: at 306 g it overloads the hip-yaw
+      keeper (fatigue safety factor 1.9 -> 1.2) wherever it goes;
+    - the servo driver and the UBEC on the floor beside it;
     - the push-to-talk button in the back wall.
 12. **Arms**, each side, on the bench:
     - Shoulder servo into the hood from the chest side, horn side first. Its cables go out through the window in the

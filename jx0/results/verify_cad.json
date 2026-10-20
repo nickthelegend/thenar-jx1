@@ -1,11 +1,11 @@
 {
  "clash_threshold_mm3": 1.0,
  "static_zero_pose": {
-  "pairs_checked": 3828,
+  "pairs_checked": 3916,
   "clashes": []
  },
  "static_walking_stance": {
-  "pairs_checked": 3828,
+  "pairs_checked": 3916,
   "clashes": []
  },
  "motion": {
@@ -409,6 +409,6 @@
    "ok": true
   }
  },
- "seconds": 289.2,
+ "seconds": 327.3,
  "pass": true
 }

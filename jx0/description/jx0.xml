@@ -61,7 +61,7 @@
       <geom pos="0 -0.045 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="3" rgba="0.5 0.5 0.5 0" density="0" mesh="m_JX0_YawRing_R"/>
       <site name="imu" pos="0 0 0.03" group="4"/>
       <body name="torso_link">
-        <inertial pos="0.005 0 0.16" mass="0.846" diaginertia="0.0057669 0.00418065 0.00248865"/>
+        <inertial pos="0.0044 0 0.1653" mass="0.852" diaginertia="0.0058078 0.0042103 0.0025063"/>
         <geom type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_Torso"/>
         <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_ChestCap"/>
         <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" rgba="0.74 0.86 0.58 1" mesh="m_JX0_CamClamp"/>

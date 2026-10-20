@@ -797,7 +797,8 @@ def torso():
          ("pcut", "z", oct_inset(w), (TZ0 + w, TZS + 0.1)),
          ("pcut", "z", oct_inset(w), (TZB - 0.1, TZ0)),                                          # the skirt (open below)
          ("cut", (-34.0, -26.0), (-14.0, 14.0), (TZ0 - 0.1, TZ0 + w + 0.1)),                    # leg cables up
-         ("hole", "x", (0.0, 88.0), 12.0, (-TD - 0.1, -TD + w + 0.1))]                          # push-to-talk button
+         ("hole", "x", BUTTON, 12.0, (-TD - 0.1, -TD + w + 0.1)),                               # push-to-talk button
+         ("hole", "x", BAT_LEAD[:2], BAT_LEAD[2], (-TD - 0.1, -TD + w + 0.1))]                  # the battery's XT60 lead
     for sy in (1, -1):                                                                          # yaw servos' cables up
         ys = sorted((sy * (HIP_Y - ST["SOCKET"][0] + 0.5), sy * (HIP_Y - ST["SOCKET"][1] - 0.5)))
         p.append(("cut", (-WIN_W, WIN_W), tuple(ys), (TZ0 - 0.1, TZ0 + w + 0.1)))
@@ -819,11 +820,12 @@ def torso():
             p.append(("lhole", "x", (y, TZS + 2.5), 1.8, tuple(sorted((sgn * (TD - w - 2.4), sgn * (TD - w + 0.3))))))
     p += pi_mount()
     p += webcam_mount()
+    p += battery_pocket()
     return p
 
 
 # the Raspberry Pi 4: standing on the inside of the back wall, its USB / Ethernet end up (the webcam plugs into a
-# USB 3.0 port inside), its long port edge (USB-C power, 2 micro-HDMI, audio) toward the back-right corner, where a
+# USB 3.0 port inside), its long port edge (USB-C power, 2 micro-HDMI, audio) toward the back-left corner, where a
 # service slot lets the plugs in from outside. PI = (PCB's back face x, port edge y, bottom end z); the board is
 # 85 x 56 x 1.6 mm, holes 58 x 49 mm, 3.5 mm in from the edges; ports along the long edge at these mm from the board's
 # bottom end: USB-C 11.2, micro-HDMI 26.0 and 39.5, audio 53.5 (Raspberry Pi 4 Model B mechanical drawing)
@@ -838,7 +840,7 @@ def pi_holes():
 
 def pi_mount():
     """4 standoffs (4 mm, with teardrop bottoms so they print without supports; the board's M2 x 8 CSK cut their
-    thread in them) and the service slot through the back-right corner for the plugs."""
+    thread in them) and the service slot through the back-left corner for the plugs."""
     xb, ye, zb = PI
     w = TWALL
     p = []
@@ -917,6 +919,36 @@ def webcam_envelope():
     W, H, D, zc, lens = CAM
     xf = TD - TWALL
     return [("box", (xf - CAM_GAP - D + 0.2, xf - 0.2), (-W / 2 + 0.5, W / 2 - 0.5), (zc - H / 2 + 0.2, zc + H / 2 - 0.2))]
+
+
+# the battery: a 3S 2200 mAh LiPo (Bonka, about 106 x 34 x 24 mm, 185 g: measure yours) standing on the torso floor in
+# the middle, between the Raspberry Pi (back wall) and the webcam (front wall), where its weight sits near the robot's
+# centre (the battery placement study: a 306 g 4400 mAh pack anywhere, or the 2200 hung on the back, takes the hip-yaw
+# keeper's fatigue safety factor from 1.9 to 1.2 and the knee under its continuous rating). A pocket on the floor holds
+# its base, a zip tie through the pocket's slots holds it upright. Its XT60 and balance leads go up and out through the
+# hole in the back wall (BAT_LEAD), right of the Pi: the robot charges, and runs from a bench supply, without opening it.
+BAT = (24.0, 34.0, 106.0)                  # thickness (x), width (y), length (z)
+BAT_X = -4.0                               # its centre (x)
+BAT_POCKET = (1.5, 2.0, 15.0)              # clearance per side, wall, height
+BAT_LEAD = (-34.0, 180.0, 9.0)             # the leads' hole in the back wall (y, z, d)
+BUTTON = (0.0, 88.0)                       # push-to-talk (y, z)
+
+
+def battery_pocket():
+    """On the torso floor: a 2 mm wall round the battery's base, 15 mm high, a zip-tie slot through each side."""
+    c, t, h = BAT_POCKET
+    z0 = TZ0 + TWALL
+    hx, hy = BAT[0] / 2 + c, BAT[1] / 2 + c
+    p = [("lbox", (BAT_X - hx - t, BAT_X + hx + t), (-hy - t, hy + t), (z0 - 0.05, z0 + h)),
+         ("lcut", (BAT_X - hx, BAT_X + hx), (-hy, hy), (z0, z0 + h + 0.1))]
+    p.append(("lcut", (BAT_X - 2.0, BAT_X + 2.0), (-hy - t - 0.1, hy + t + 0.1), (z0 + h - 6.0, z0 + h - 3.0)))
+    return p
+
+
+def battery_envelope():
+    """The battery standing in its pocket (torso frame), a keep-out for the fit and interference checks."""
+    z0 = TZ0 + TWALL + 0.1
+    return [("box", (BAT_X - BAT[0] / 2, BAT_X + BAT[0] / 2), (-BAT[1] / 2, BAT[1] / 2), (z0, z0 + BAT[2]))]
 
 
 def chest_cap():

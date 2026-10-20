@@ -4847,7 +4847,7 @@
     "cam_clamp",
     "torso"
    ],
-   "at_mm": 1.0,
+   "at_mm": 5.0,
    "ok": true
   },
   {
@@ -7570,6 +7570,6 @@
   }
  ],
  "screws_never_reached": [],
- "seconds": 7.8,
+ "seconds": 9.9,
  "pass": true
 }

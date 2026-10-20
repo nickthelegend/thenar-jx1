@@ -77,8 +77,8 @@
    "fell": false,
    "achieved": [
     0.094,
-    0.001,
-    0.076
+    0.002,
+    0.056
    ],
    "peak_torque_of_stall": 1.0,
    "peak_speed_of_no_load": 0.99,
@@ -108,7 +108,7 @@
    ],
    "fell": false,
    "achieved": [
-    -0.001,
+    -0.0,
     0.026,
     -0.021
    ],
@@ -862,11 +862,11 @@
   "ms_at_a_printed_stop": 0,
   "worst_past_limit_deg": 0.0,
   "worst_past_limit_joint": "left_shoulder_pitch_joint",
-  "worst_mean_torque_nm": 0.588,
-  "worst_joint": "left_hip_roll_joint",
+  "worst_mean_torque_nm": 0.59,
+  "worst_joint": "right_knee_joint",
   "rated_torque_nm": 0.98,
   "peak_torque_of_stall": 1.0,
-  "real_time_factor": 4.17,
+  "real_time_factor": 2.89,
   "pass": true
  },
  "latency": {
@@ -894,9 +894,9 @@
    ],
    "fell": false,
    "achieved": [
-    0.002,
-    0.029,
-    -0.003
+    0.001,
+    0.028,
+    -0.005
    ],
    "peak_torque_of_stall": 1.0,
    "peak_speed_of_no_load": 0.69,
@@ -934,5 +934,5 @@
   "latency": true
  },
  "pass": true,
- "wall_s": 259.2
+ "wall_s": 325.1
 }

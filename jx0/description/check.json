@@ -6,17 +6,17 @@
   "meshes": 49
  },
  "urdf": {
-  "mass_kg": 3.098,
-  "verified_mass_kg": 3.098,
-  "composite_inertia_rel_err": 8.919279768817003e-17,
+  "mass_kg": 3.104,
+  "verified_mass_kg": 3.104,
+  "composite_inertia_rel_err": 1.7465125087039235e-16,
   "poses": 200,
   "worst_com_mm": 0.0,
   "worst_sole_mm": 0.0,
   "left_sole_travel_mm": 240.9
  },
  "mjcf": {
-  "mass_kg": 3.098,
-  "verified_mass_kg": 3.098,
+  "mass_kg": 3.104,
+  "verified_mass_kg": 3.104,
   "composite_inertia_rel_err": 0.0,
   "poses": 200,
   "worst_com_mm": 0.0,

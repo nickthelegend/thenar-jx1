@@ -97,8 +97,8 @@ mass_budget:
     carries: [hip_yaw, hip_yaw]
     com_m: [0.002, 0.0, 0.050]
   upper_body:
-    mass_kg: {value: 1.363, label: ESTIMATED, note: "v0.5: chest webcam head ~40 g + its clamp 9 g; torso 26 mm taller (119 g), blades 120 mm (17.3 g each), two-eye head 157 g + 2 lenses 3 g + 2 WS2812 12-LED rings ~10 g (v0.4 head 56 g); v0.4: CAD printed torso with skirt 103 g + chest cap 45 g + head 60 g + neck hub 11 g + arms 73 g (hood/elbow box 21.5 + blade 14.8 g per side); 5 STS3215 (neck, 2 shoulder, 2 elbow: the shoulder and elbow servos ride in the arms) 445 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, servo driver + UBEC 30 g, IMU/mic/amp/speaker/button 20 g, switch 10 g, wiring 70 g, screws 25 g"}
-    com_m: [0.005, 0.0, 0.160]
+    mass_kg: {value: 1.369, label: ESTIMATED, note: "v0.5 battery: the 3S 2200 mAh LiPo ~185 g now stands in a floor pocket (6 g) in the middle, centre x -4 mm z 127 mm (was lying on the floor; the battery placement study chose it); chest webcam head ~40 g + its clamp 9 g; torso 26 mm taller (119 g), blades 120 mm (17.3 g each), two-eye head 157 g + 2 lenses 3 g + 2 WS2812 12-LED rings ~10 g (v0.4 head 56 g); v0.4: CAD printed torso with skirt 103 g + chest cap 45 g + head 60 g + neck hub 11 g + arms 73 g (hood/elbow box 21.5 + blade 14.8 g per side); 5 STS3215 (neck, 2 shoulder, 2 elbow: the shoulder and elbow servos ride in the arms) 445 g; Pi 4 + case 86 g, 3S 2200 mAh LiPo ~185 g, servo driver + UBEC 30 g, IMU/mic/amp/speaker/button 20 g, switch 10 g, wiring 70 g, screws 25 g"}
+    com_m: [0.0044, 0.0, 0.1653]
     inertia_box_m: [0.08, 0.17, 0.23]
   hip_yaw_link:
     structure_kg: {value: 0.056, label: ESTIMATED, note: "v0.4 fitted to the real STS3215: hip-yaw bracket 50.9 g printed (disc with the keeper's groove under its rim, keel, solid block, roll-servo cage) + screws"}
