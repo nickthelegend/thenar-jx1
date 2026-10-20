@@ -23,13 +23,13 @@
    "seconds": 65.9,
    "actions": 8,
    "pushes": 9,
-   "max_tilt_deg": 2.7,
+   "max_tilt_deg": 2.8,
    "distance_from_start_m": 0.17,
-   "worst_mean_torque_nm": 0.59,
+   "worst_mean_torque_nm": 0.587,
    "worst_joint": "r_knee",
    "latency_ms": 0,
    "stiffness_x": 1.0,
-   "real_time_factor": 2.93
+   "real_time_factor": 2.87
   },
   {
    "seed": 1,
@@ -37,27 +37,27 @@
    "seconds": 63.0,
    "actions": 7,
    "pushes": 9,
-   "max_tilt_deg": 5.3,
-   "distance_from_start_m": 0.14,
-   "worst_mean_torque_nm": 0.556,
+   "max_tilt_deg": 5.4,
+   "distance_from_start_m": 0.15,
+   "worst_mean_torque_nm": 0.558,
    "worst_joint": "l_knee",
    "latency_ms": 40,
    "stiffness_x": 0.86,
-   "real_time_factor": 2.9
+   "real_time_factor": 2.85
   },
   {
    "seed": 2,
    "fell": false,
-   "seconds": 63.0,
-   "actions": 7,
+   "seconds": 69.1,
+   "actions": 8,
    "pushes": 9,
-   "max_tilt_deg": 4.3,
-   "distance_from_start_m": 0.13,
-   "worst_mean_torque_nm": 0.53,
+   "max_tilt_deg": 5.0,
+   "distance_from_start_m": 0.29,
+   "worst_mean_torque_nm": 0.535,
    "worst_joint": "r_knee",
    "latency_ms": 40,
    "stiffness_x": 1.22,
-   "real_time_factor": 3.02
+   "real_time_factor": 2.89
   },
   {
    "seed": 3,
@@ -65,27 +65,27 @@
    "seconds": 69.1,
    "actions": 8,
    "pushes": 9,
-   "max_tilt_deg": 3.2,
+   "max_tilt_deg": 3.3,
    "distance_from_start_m": 0.15,
-   "worst_mean_torque_nm": 0.547,
+   "worst_mean_torque_nm": 0.548,
    "worst_joint": "r_knee",
    "latency_ms": 20,
    "stiffness_x": 1.33,
-   "real_time_factor": 3.06
+   "real_time_factor": 2.97
   },
   {
    "seed": 4,
    "fell": false,
-   "seconds": 63.0,
-   "actions": 7,
+   "seconds": 63.1,
+   "actions": 6,
    "pushes": 9,
-   "max_tilt_deg": 5.5,
+   "max_tilt_deg": 5.2,
    "distance_from_start_m": 0.07,
-   "worst_mean_torque_nm": 0.605,
+   "worst_mean_torque_nm": 0.613,
    "worst_joint": "l_knee",
    "latency_ms": 20,
    "stiffness_x": 0.63,
-   "real_time_factor": 2.91
+   "real_time_factor": 2.82
   },
   {
    "seed": 5,
@@ -93,13 +93,13 @@
    "seconds": 69.1,
    "actions": 8,
    "pushes": 9,
-   "max_tilt_deg": 2.2,
-   "distance_from_start_m": 0.13,
-   "worst_mean_torque_nm": 0.728,
+   "max_tilt_deg": 3.0,
+   "distance_from_start_m": 0.12,
+   "worst_mean_torque_nm": 0.726,
    "worst_joint": "r_knee",
    "latency_ms": 0,
    "stiffness_x": 1.04,
-   "real_time_factor": 3.0
+   "real_time_factor": 2.92
   },
   {
    "seed": 6,
@@ -107,13 +107,13 @@
    "seconds": 69.1,
    "actions": 8,
    "pushes": 9,
-   "max_tilt_deg": 4.8,
+   "max_tilt_deg": 5.1,
    "distance_from_start_m": 0.17,
-   "worst_mean_torque_nm": 0.622,
+   "worst_mean_torque_nm": 0.625,
    "worst_joint": "l_knee",
    "latency_ms": 20,
    "stiffness_x": 0.88,
-   "real_time_factor": 3.05
+   "real_time_factor": 2.92
   },
   {
    "seed": 7,
@@ -123,11 +123,11 @@
    "pushes": 9,
    "max_tilt_deg": 3.4,
    "distance_from_start_m": 0.2,
-   "worst_mean_torque_nm": 0.444,
+   "worst_mean_torque_nm": 0.446,
    "worst_joint": "r_knee",
    "latency_ms": 20,
    "stiffness_x": 0.76,
-   "real_time_factor": 2.96
+   "real_time_factor": 2.95
   },
   {
    "seed": 8,
@@ -135,13 +135,13 @@
    "seconds": 69.1,
    "actions": 8,
    "pushes": 9,
-   "max_tilt_deg": 7.1,
+   "max_tilt_deg": 5.2,
    "distance_from_start_m": 0.18,
-   "worst_mean_torque_nm": 0.579,
+   "worst_mean_torque_nm": 0.581,
    "worst_joint": "r_knee",
    "latency_ms": 40,
    "stiffness_x": 1.06,
-   "real_time_factor": 2.98
+   "real_time_factor": 3.01
   },
   {
    "seed": 9,
@@ -150,12 +150,12 @@
    "actions": 8,
    "pushes": 9,
    "max_tilt_deg": 5.4,
-   "distance_from_start_m": 0.22,
-   "worst_mean_torque_nm": 0.461,
+   "distance_from_start_m": 0.23,
+   "worst_mean_torque_nm": 0.465,
    "worst_joint": "l_knee",
    "latency_ms": 20,
    "stiffness_x": 0.87,
-   "real_time_factor": 3.03
+   "real_time_factor": 2.93
   },
   {
    "seed": 10,
@@ -163,13 +163,13 @@
    "seconds": 63.0,
    "actions": 7,
    "pushes": 9,
-   "max_tilt_deg": 5.2,
+   "max_tilt_deg": 5.3,
    "distance_from_start_m": 0.07,
-   "worst_mean_torque_nm": 0.499,
+   "worst_mean_torque_nm": 0.501,
    "worst_joint": "r_knee",
    "latency_ms": 20,
    "stiffness_x": 0.73,
-   "real_time_factor": 2.87
+   "real_time_factor": 2.9
   },
   {
    "seed": 11,
@@ -177,18 +177,18 @@
    "seconds": 63.0,
    "actions": 7,
    "pushes": 9,
-   "max_tilt_deg": 5.8,
+   "max_tilt_deg": 6.1,
    "distance_from_start_m": 0.12,
-   "worst_mean_torque_nm": 0.472,
+   "worst_mean_torque_nm": 0.475,
    "worst_joint": "l_knee",
    "latency_ms": 0,
    "stiffness_x": 0.69,
-   "real_time_factor": 2.89
+   "real_time_factor": 2.95
   }
  ],
  "stayed_up": 12,
  "of": 12,
  "rated_torque_nm": 0.98,
  "pass": true,
- "wall_s": 25.8
+ "wall_s": 26.3
 }
