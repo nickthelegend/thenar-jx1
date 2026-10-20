@@ -50,8 +50,8 @@ PLATES = {
     "i7-2_legs": ("i7", "PETG", [("JX0_Thigh_L", 1), ("JX0_Thigh_R", 1), ("JX0_AnkleBracket_L", 1),
                                  ("JX0_AnkleBracket_R", 1), ("JX0_Foot", 2), ("JX0_HipRollBracket_L", 1),
                                  ("JX0_HipRollBracket_R", 1)]),                  # every red part left, one plate
-    "i7-3_lenses_shims": ("i7", "PETG-body", [("JX0_EyeLens", 2), ("JX0_HornShim", 40)]),   # clear PETG: swap the
-    #                                                   filament for it (the 0.4 mm shims are 2 solid layers in any profile)
+    "i7-3_eye_lenses": ("i7", "PETG-body", [("JX0_EyeLens", 2)]),             # clear PETG: swap the filament for it
+    "i7-4_shims_optional": ("i7", "PETG", [("JX0_HornShim", 40)]),   # only if a bracket sits loose on its horn
     # P1S: white PLA - the body, head and arms
     "P1S-1_torso_head": ("P1S", "PLA", [("JX0_Torso", 1), ("JX0_Head", 1), ("JX0_NeckHub", 1), ("JX0_CamClamp", 1)]),
     "P1S-2_chest_arms": ("P1S", "PLA", [("JX0_ChestCap", 1), ("JX0_UpperArm_L", 1), ("JX0_UpperArm_R", 1),

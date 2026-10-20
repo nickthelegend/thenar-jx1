@@ -130,7 +130,9 @@ Every STS3215 ships as ID 1. Set the IDs one servo at a time and write each on i
 **Horn height, every servo.**
 1. Put the drive horn on its spline and the passive horn on the rear boss.
 2. Measure across the two horn faces with calipers.
-3. The brackets are built for 36.55 mm. Put the right number of 0.4 mm shims (JX0_HornShim) between the drive horn and
+3. The brackets are built for 36.55 mm. The passive horn is not screwed down: it slides on its boss, so tightening the
+   bracket's screws pulls the bracket onto the drive horn and the passive horn follows. The shims are **optional**:
+   print them (plate i7-4_shims_optional) only if a bracket still sits loose, and put them between the drive horn and
    whatever bolts to it:
 
 | Measured across both horns | Shims under the drive horn's arm |
