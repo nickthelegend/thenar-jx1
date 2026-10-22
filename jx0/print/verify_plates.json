@@ -4,6 +4,7 @@
   "JX0_AnkleBracket_L": {
    "contact_mm2": 2325.0,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 1536.1,
    "height_mm": 61.5,
    "watertight": true,
@@ -13,6 +14,7 @@
   "JX0_AnkleBracket_R": {
    "contact_mm2": 2325.0,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 1536.1,
    "height_mm": 61.5,
    "watertight": true,
@@ -22,6 +24,7 @@
   "JX0_ArmBlade_L": {
    "contact_mm2": 4076.1,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 0.0,
    "height_mm": 8.0,
    "watertight": true,
@@ -31,6 +34,7 @@
   "JX0_ArmBlade_R": {
    "contact_mm2": 4076.1,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 0.0,
    "height_mm": 8.0,
    "watertight": true,
@@ -40,6 +44,7 @@
   "JX0_CamClamp": {
    "contact_mm2": 2876.5,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 23.9,
    "height_mm": 19.0,
    "watertight": true,
@@ -49,6 +54,7 @@
   "JX0_ChestCap": {
    "contact_mm2": 5833.2,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 3942.4,
    "height_mm": 42.0,
    "watertight": true,
@@ -58,6 +64,7 @@
   "JX0_EyeLens": {
    "contact_mm2": 1990.4,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 0.0,
    "height_mm": 1.15,
    "watertight": true,
@@ -67,6 +74,7 @@
   "JX0_Foot": {
    "contact_mm2": 8048.6,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 278.6,
    "height_mm": 46.0,
    "watertight": true,
@@ -76,6 +84,7 @@
   "JX0_Head": {
    "contact_mm2": 3995.0,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 8867.9,
    "height_mm": 70.0,
    "watertight": true,
@@ -83,19 +92,21 @@
    "problems": []
   },
   "JX0_HipRollBracket_L": {
-   "contact_mm2": 1118.9,
-   "com_over_contact": true,
-   "supported_mm2": 1980.2,
-   "height_mm": 98.35,
+   "contact_mm2": 542.0,
+   "com_over_contact": false,
+   "com_over_supports": true,
+   "supported_mm2": 1458.9,
+   "height_mm": 55.7,
    "watertight": true,
    "volume_cm3": 30.05,
    "problems": []
   },
   "JX0_HipRollBracket_R": {
-   "contact_mm2": 1118.9,
-   "com_over_contact": true,
-   "supported_mm2": 1980.2,
-   "height_mm": 98.35,
+   "contact_mm2": 542.0,
+   "com_over_contact": false,
+   "com_over_supports": true,
+   "supported_mm2": 1458.9,
+   "height_mm": 55.7,
    "watertight": true,
    "volume_cm3": 30.05,
    "problems": []
@@ -103,6 +114,7 @@
   "JX0_HipYawBracket_L": {
    "contact_mm2": 2789.8,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 1895.0,
    "height_mm": 45.9,
    "watertight": true,
@@ -112,6 +124,7 @@
   "JX0_HipYawBracket_R": {
    "contact_mm2": 2789.8,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 1895.0,
    "height_mm": 45.9,
    "watertight": true,
@@ -121,6 +134,7 @@
   "JX0_HornShim": {
    "contact_mm2": 226.9,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 0.0,
    "height_mm": 0.4,
    "watertight": true,
@@ -130,6 +144,7 @@
   "JX0_NeckHub": {
    "contact_mm2": 2352.4,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 16.9,
    "height_mm": 12.0,
    "watertight": true,
@@ -139,6 +154,7 @@
   "JX0_Pelvis": {
    "contact_mm2": 3974.4,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 1713.9,
    "height_mm": 38.83,
    "watertight": true,
@@ -148,6 +164,7 @@
   "JX0_Shin_L": {
    "contact_mm2": 2031.2,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 2507.7,
    "height_mm": 48.75,
    "watertight": true,
@@ -157,6 +174,7 @@
   "JX0_Shin_R": {
    "contact_mm2": 2031.2,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 2507.7,
    "height_mm": 48.75,
    "watertight": true,
@@ -164,19 +182,21 @@
    "problems": []
   },
   "JX0_Thigh_L": {
-   "contact_mm2": 4188.5,
-   "com_over_contact": true,
-   "supported_mm2": 4652.1,
-   "height_mm": 48.75,
+   "contact_mm2": 1028.2,
+   "com_over_contact": false,
+   "com_over_supports": true,
+   "supported_mm2": 1634.3,
+   "height_mm": 52.2,
    "watertight": true,
    "volume_cm3": 53.35,
    "problems": []
   },
   "JX0_Thigh_R": {
-   "contact_mm2": 4188.5,
-   "com_over_contact": true,
-   "supported_mm2": 4652.1,
-   "height_mm": 48.75,
+   "contact_mm2": 1028.2,
+   "com_over_contact": false,
+   "com_over_supports": true,
+   "supported_mm2": 1633.0,
+   "height_mm": 52.2,
    "watertight": true,
    "volume_cm3": 53.35,
    "problems": []
@@ -184,6 +204,7 @@
   "JX0_Torso": {
    "contact_mm2": 905.6,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 11799.6,
    "height_mm": 162.0,
    "watertight": true,
@@ -193,6 +214,7 @@
   "JX0_UpperArm_L": {
    "contact_mm2": 494.2,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 1115.8,
    "height_mm": 41.3,
    "watertight": true,
@@ -202,6 +224,7 @@
   "JX0_UpperArm_R": {
    "contact_mm2": 494.2,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 1115.8,
    "height_mm": 41.3,
    "watertight": true,
@@ -211,6 +234,7 @@
   "JX0_YawKeeper_L": {
    "contact_mm2": 410.1,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 208.5,
    "height_mm": 8.6,
    "watertight": true,
@@ -220,6 +244,7 @@
   "JX0_YawKeeper_R": {
    "contact_mm2": 410.1,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 208.5,
    "height_mm": 8.6,
    "watertight": true,
@@ -229,6 +254,7 @@
   "JX0_YawRing_L": {
    "contact_mm2": 305.1,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 0.0,
    "height_mm": 2.75,
    "watertight": true,
@@ -238,6 +264,7 @@
   "JX0_YawRing_R": {
    "contact_mm2": 305.1,
    "com_over_contact": true,
+   "com_over_supports": true,
    "supported_mm2": 0.0,
    "height_mm": 2.75,
    "watertight": true,
@@ -269,8 +296,8 @@
    "material": "PETG",
    "parts": 4,
    "bodies": 4,
-   "time": "11h 42m 5s",
-   "grams": 233.75,
+   "time": "9h 31m 15s",
+   "grams": 243.5,
    "nozzle": [
     240.0
    ],
@@ -287,15 +314,15 @@
    "material": "PETG",
    "parts": 4,
    "bodies": 4,
-   "time": "8h 27m 1s",
-   "grams": 183.38,
+   "time": "7h 53m 5s",
+   "grams": 190.64,
    "nozzle": [
     240.0
    ],
    "bed": [
     80.0
    ],
-   "height_mm": 98.4,
+   "height_mm": 55.6,
    "min_gap_mm": 8.0,
    "min_edge_mm": 29.1,
    "problems": []
@@ -377,7 +404,7 @@
   }
  },
  "filament_g": {
-  "PETG": 709.9,
+  "PETG": 726.8,
   "PLA": 618.4,
   "PETG-body": 5.9
  },

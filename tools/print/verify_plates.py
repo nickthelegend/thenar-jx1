@@ -59,7 +59,13 @@ def orientation(part):
     com = m.center_mass if m.is_watertight else m.centroid
     stable = bool(hull is not None and hull.buffer(0.01).contains(MultiPoint([tuple(com[:2])]).centroid))
     down = (n[:, 2] < -np.sin(np.radians(SUPPORT_ANGLE))) & ~on_bed
-    return dict(contact_mm2=round(contact, 1), com_over_contact=stable, supported_mm2=round(float(a[down].sum()), 1),
+    # the supports under it stand on the bed and prop the part up: its centre of mass must be over the bed face, or
+    # over the bed face plus the footprint of the overhangs the slicer supports (the leaning side's own supports)
+    propped = stable
+    if not stable and down.any():
+        prop = MultiPoint([tuple(p) for p in np.vstack([pts, m.triangles[down].reshape(-1, 3)[:, :2]])]).convex_hull
+        propped = bool(prop.buffer(0.01).contains(MultiPoint([tuple(com[:2])]).centroid))
+    return dict(contact_mm2=round(contact, 1), com_over_contact=stable, com_over_supports=propped, supported_mm2=round(float(a[down].sum()), 1),
                 height_mm=round(float(m.extents[2]), 2), watertight=bool(m.is_watertight),
                 volume_cm3=round(float(m.volume) / 1000, 2))
 
@@ -269,7 +275,7 @@ def main():
     for part in sorted(on_plates):
         o = orientation(part)
         o["problems"] = ([] if o["contact_mm2"] >= MIN_CONTACT else [f"only {o['contact_mm2']} mm^2 on the bed"]) + \
-                        ([] if o["com_over_contact"] else ["centre of mass not over its bed face (it would tip)"]) + \
+                        ([] if o["com_over_supports"] else ["centre of mass not over its bed face or its supports (it would tip)"]) + \
                         ([] if o["watertight"] else ["mesh not watertight"])
         orient[part] = o
         print(f"  {part:22s} bed {o['contact_mm2']:7.1f} mm2  supported {o['supported_mm2']:7.1f} mm2  "

@@ -8,7 +8,7 @@ each plate. Settings are the printer's own system profiles (inheritance resolved
 lines do not resolve it) with the build guide's on top:
     PETG (pelvis, leg parts, shims): 0.2 mm layers, 6 walls, 6 top and 6 bottom layers, 40 % gyroid, 240 C / 80 C
     PETG-body (body, head, arms):    0.2 mm layers, 3 walls, 25 % gyroid, 240 C / 80 C (PLA: the same at 210 C / 60 C)
-    tree supports wherever the part overhangs, a brim on PETG plates.
+    tree supports wherever the part overhangs (PETG leg plates: grid supports, 8 mm brim, 0.4 mm z hop).
 
     python tools/print/make_plates.py            (all plates)
     python tools/print/make_plates.py P1S-0      (one plate)
@@ -34,8 +34,9 @@ CREALITY = Path(r"C:\Program Files\Creality\Creality Print 7.3")
 DOWN = {"JX0_Pelvis": (0, 0, 1), "JX0_YawKeeper_L": (0, 0, 1), "JX0_YawKeeper_R": (0, 0, 1),
         "JX0_YawRing_L": (0, 0, -1), "JX0_YawRing_R": (0, 0, -1),
         "JX0_HipYawBracket_L": (0, 0, 1), "JX0_HipYawBracket_R": (0, 0, 1),
-        "JX0_HipRollBracket_L": (-1, 0, 0), "JX0_HipRollBracket_R": (-1, 0, 0),
-        "JX0_Thigh_L": (0, 1, 0), "JX0_Thigh_R": (0, -1, 0), "JX0_Shin_L": (0, 1, 0), "JX0_Shin_R": (0, -1, 0),
+        "JX0_HipRollBracket_L": (0, -1, 0), "JX0_HipRollBracket_R": (0, 1, 0),   # on its side: 1/3 the support
+        "JX0_Thigh_L": (-1, 0, 0), "JX0_Thigh_R": (-1, 0, 0),   # on its back edge: 1/10 the support of lying on an arm (trees failed there)
+        "JX0_Shin_L": (0, 1, 0), "JX0_Shin_R": (0, -1, 0),
         "JX0_AnkleBracket_L": (0, 1, 0), "JX0_AnkleBracket_R": (0, -1, 0), "JX0_Foot": (0, 0, -1),
         "JX0_HornShim": (0, 0, -1), "JX0_Torso": (0, 0, -1), "JX0_ChestCap": (0, 0, 1), "JX0_Head": (0, 0, -1), "JX0_EyeLens": (-1, 0, 0), "JX0_CamClamp": (-1, 0, 0),
         "JX0_NeckHub": (0, 0, -1), "JX0_UpperArm_L": (0, -1, 0), "JX0_UpperArm_R": (0, 1, 0),
@@ -127,6 +128,10 @@ PROCESS = {
 PROCESS["PETG-body"] = {**PROCESS["PLA"], "brim_type": "auto_brim"}
 SUPPORT = {"enable_support": "1", "support_type": "tree(auto)", "support_threshold_angle": "40",
            "support_on_build_plate_only": "0"}
+# PETG leg plates: grid supports with a 3-layer interface under the flat overhangs, an 8 mm outer brim, and a 0.4 mm
+# lift on every travel so the nozzle cannot knock a support over
+PETG_SUPPORT = {"support_type": "normal(auto)", "support_style": "grid", "support_interface_top_layers": "3",
+                "support_top_z_distance": "0.2", "brim_type": "outer_only", "brim_width": "8"}
 FILAMENT = {"PETG": {"nozzle_temperature": ["240"], "nozzle_temperature_initial_layer": ["240"],
                      "cool_plate_temp": ["80"], "cool_plate_temp_initial_layer": ["80"],
                      "hot_plate_temp": ["80"], "hot_plate_temp_initial_layer": ["80"],
@@ -164,6 +169,9 @@ def settings(printer, material, work: Path, plate=""):
     fil = resolve(pr["dir"] / pr["filament"][material.split("-")[0]], pr["dir"] / "filament")
     proc.update(PROCESS[material])
     proc.update(SUPPORT)
+    if material == "PETG":                                           # the leg parts: tree tips under the U-brackets'
+        proc.update(PETG_SUPPORT)                                    # arms broke off on the i7 (2026-10-21)
+        mach["z_hop"] = ["0.4"]
     proc["curr_bed_type"] = "Textured PEI Plate"                     # the PEI plates both printers ship with
     if any(part == "JX0_HornShim" for part, _ in PLATES[plate][2]):
         proc["brim_type"] = "no_brim"                                # (0.4 mm discs: a brim would only crowd them)
