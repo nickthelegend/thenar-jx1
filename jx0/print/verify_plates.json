@@ -291,13 +291,13 @@
    "min_edge_mm": 12.8,
    "problems": []
   },
-  "i7-2_thighs_ankles": {
+  "i7-2_legs": {
    "printer": "i7",
    "material": "PETG",
-   "parts": 4,
-   "bodies": 4,
-   "time": "9h 31m 15s",
-   "grams": 243.5,
+   "parts": 8,
+   "bodies": 8,
+   "time": "17h 32m 21s",
+   "grams": 435.59,
    "nozzle": [
     240.0
    ],
@@ -306,25 +306,7 @@
    ],
    "height_mm": 61.4,
    "min_gap_mm": 8.0,
-   "min_edge_mm": 20.4,
-   "problems": []
-  },
-  "i7-2b_feet_hip_roll": {
-   "printer": "i7",
-   "material": "PETG",
-   "parts": 4,
-   "bodies": 4,
-   "time": "7h 53m 5s",
-   "grams": 190.64,
-   "nozzle": [
-    240.0
-   ],
-   "bed": [
-    80.0
-   ],
-   "height_mm": 55.6,
-   "min_gap_mm": 8.0,
-   "min_edge_mm": 29.1,
+   "min_edge_mm": 9.6,
    "problems": []
   },
   "i7-3_shims_optional": {
@@ -404,7 +386,7 @@
   }
  },
  "filament_g": {
-  "PETG": 726.8,
+  "PETG": 728.3,
   "PLA": 618.4,
   "PETG-body": 5.9
  },
